@@ -33,7 +33,17 @@ Le badge vert désigne cette référence textuelle fixée au commit. Il ne certi
 
 Le badge bleu « En surveillance » désigne le suivi des objections, reformulations et cas-limites. Les retours sont consignés dans [VERSIONS.md — Unreleased](VERSIONS.md#unreleased), avec leur source, leur portée et la suite proposée. Le badge ne configure aucune automatisation.
 
-Après trois ou quatre retours documentés, nous examinerons l’intérêt d’une annexe de cas-limites ou d’une v0.2. Ce point de revue ne constitue pas une validation scientifique. Les désaccords restent recevables et une nouvelle version ne présume pas l’accord de tous.
+Après trois ou quatre retours indépendants documentés, nous examinerons l’intérêt d’une annexe de cas-limites ou d’une v0.2. Ce point de revue ne constitue pas une validation scientifique. Les désaccords restent recevables et une nouvelle version ne présume pas l’accord de tous.
+
+## Cas-limite nº 1 — Partir après s’être engagé
+
+Le [cas et ses clarifications](https://github.com/talkus/harmonie-libre/discussions/1) explorent les responsabilités après un départ. Les deux clarifications sont des essais éditoriaux internes élaborés avec une IA, sans modification de l’archive v0.1.
+
+- [Réponses candidates : consignation, médiation, tiers et calendrier](discussions/001-reponses-objections.md).
+- [Modèle vide de consignation](discussions/001-consignation-modele.md) : facultatif, à remplir dans un espace adapté à la confidentialité du cas.
+- [Outils de publication et de vérification de la lecture publique](discussions/OUTILS.md).
+
+L’aide à la transition est délimitée dans son objet et sa durée. Son échéance ne conditionne pas le départ et n’efface pas automatiquement les responsabilités restantes.
 
 ## Mémoire du projet
 
