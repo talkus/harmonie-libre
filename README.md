@@ -41,6 +41,8 @@ Après trois ou quatre retours indépendants documentés, nous examinerons l’i
 
 Le [cas et ses clarifications](https://github.com/talkus/harmonie-libre/discussions/1) explorent les responsabilités après un départ. Les deux clarifications sont des essais éditoriaux internes élaborés avec une IA, sans modification de l’archive v0.1.
 
+- [Protocole d’épreuve extérieure gelé au commit `4001a645`](https://github.com/talkus/harmonie-libre/blob/4001a645e87055e23a7ef019aaaf37475bf14c59/discussions/001-epreuve-exterieure-2026-09-09.md) : référence non rétrospective de l’épreuve.
+- [Règles de suivi postérieures au gel](discussions/001-suivi-epreuve-exterieure.md) : distinguent le critère figé, le seuil d’indépendance plus strict utilisé pour la veille et les cas où l’indépendance n’est pas vérifiable.
 - [Réponses candidates : consignation, médiation, tiers et calendrier](discussions/001-reponses-objections.md).
 - [Modèle vide de consignation](discussions/001-consignation-modele.md) : facultatif, à remplir dans un espace adapté à la confidentialité du cas.
 - [Outils de publication et de vérification de la lecture publique](discussions/OUTILS.md).
