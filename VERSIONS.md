@@ -1,6 +1,31 @@
 # Versions de L’Harmonie libre
 
-## Version 0.1
+## Unreleased
+
+**Statut : suivi éditorial ouvert.**
+
+Aucun retour encore consigné dans cette section.
+
+Les objections, reformulations et cas-limites seront documentés avec la date, le lien vers leur source publique, une description fidèle et la suite proposée. Les témoignages personnels ne seront pas repris sans accord. Une objection ne présume ni une faute établie ni un accord collectif.
+
+Après trois ou quatre retours documentés, examiner l’intérêt d’une annexe de cas-limites ou d’une v0.2. Cette revue ne vaut pas validation scientifique ; elle peut aussi conclure au maintien du texte actuel.
+
+## Release v0.1 — manifeste verrouillé du 7 septembre 2026
+
+- **Date du manifeste :** 7 septembre 2026, date fournie par l’auteur.
+- **Archivage et publication de la Release :** 9 septembre 2026 (UTC).
+- **Commit de référence :** `6bf32fcdb83de61165763229be8281aa495a36d8`.
+- **Archive citable :** [docs/archive/manifeste-v0.1.md](https://github.com/talkus/harmonie-libre/blob/6bf32fcdb83de61165763229be8281aa495a36d8/docs/archive/manifeste-v0.1.md).
+- **Copie identique au même commit :** [docs/manifeste-v0.1.md](https://github.com/talkus/harmonie-libre/blob/6bf32fcdb83de61165763229be8281aa495a36d8/docs/manifeste-v0.1.md).
+- **Release :** [v0.1](https://github.com/talkus/harmonie-libre/releases/tag/v0.1).
+
+Le source intégral transmis par l’auteur a été conservé mot pour mot dans les deux fichiers, puis vérifié après publication. Le tag de la Release vise ce commit, indépendamment des évolutions ultérieures de `main`.
+
+Le README a ensuite reçu les badges de référence textuelle et de suivi éditorial, la citation permanente et l’explication des dates. Ces ajouts au README et la présente section `Unreleased` sont postérieurs au commit archivé.
+
+Le contenu du manifeste reste conservé ; toute évolution sera identifiée et expliquée dans une version distincte.
+
+## Première publication — texte court du 8 septembre 2026
 
 - **Date de référence du texte :** 8 septembre 2026, date locale indiquée par l’auteur.
 - **Mise en ligne publique :** dépôt, Discussions et GitHub Pages publiés et vérifiés le 9 septembre 2026, date UTC.
