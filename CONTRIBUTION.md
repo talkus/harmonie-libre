@@ -4,7 +4,7 @@ Vous pouvez poser une question, exprimer un désaccord, relever une ambiguïté 
 
 ## Ouvrir un échange
 
-Utilisez les **Discussions** du dépôt lorsqu’elles sont activées. À défaut, ouvrez une **issue**. Vous pouvez simplement indiquer :
+Utilisez les [Discussions du dépôt](https://github.com/talkus/harmonie-libre/discussions) pour les échanges ouverts. Pour un problème concret à traiter, vous pouvez ouvrir une **issue**. Vous pouvez simplement indiquer :
 
 - le passage concerné ;
 - ce que vous comprenez et ce qui vous pose problème ;

@@ -3,7 +3,11 @@
 ## Version 0.1
 
 - **Date de référence du texte :** 8 septembre 2026, date locale indiquée par l’auteur.
-- **Mise en ligne publique :** non effectuée à la préparation de ce document ; date et liens à renseigner après vérification du dépôt et de la page.
+- **Mise en ligne publique :** dépôt, Discussions et GitHub Pages publiés et vérifiés le 9 septembre 2026, date UTC.
+- **Dépôt :** [talkus/harmonie-libre](https://github.com/talkus/harmonie-libre).
+- **Page publique :** [L’Harmonie libre](https://talkus.github.io/harmonie-libre/).
+- **Échanges :** [Discussions](https://github.com/talkus/harmonie-libre/discussions).
+- **Premier déploiement Pages :** [exécution GitHub Actions](https://github.com/talkus/harmonie-libre/actions/runs/34309063499).
 - **Texte :** [harmonie-libre-v0.1.md](harmonie-libre-v0.1.md).
 
 ### Contenu

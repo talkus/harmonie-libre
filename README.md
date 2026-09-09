@@ -4,6 +4,8 @@
 
 Une proposition éthique ouverte : créer du commun sans effacer le singulier. La version 0.1 invite aux objections et aux reformulations. Chacun reste libre de ne pas l’adopter.
 
+[Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions)
+
 ## Lire et participer
 
 - [Lire la version 0.1](harmonie-libre-v0.1.md).
@@ -17,7 +19,7 @@ Le « nous » du texte exprime une invitation. Il ne présume ni l’accord des 
 
 ## Mémoire du projet
 
-Le texte de référence porte la date locale du **8 septembre 2026**, indiquée par son auteur. La date de mise en ligne sera inscrite séparément dans [VERSIONS.md](VERSIONS.md) après publication effective. Les horodatages des commits retracent les opérations sur le dépôt.
+Le texte de référence porte la date locale du **8 septembre 2026**, indiquée par son auteur. La mise en ligne et sa vérification sont consignées séparément dans [VERSIONS.md](VERSIONS.md). Les horodatages des commits retracent les opérations sur le dépôt.
 
 Les versions du texte fondateur sont conservées. Toute évolution du sens donne lieu à un nouveau fichier de version et à une explication des changements.
 
@@ -25,7 +27,7 @@ Les versions du texte fondateur sont conservées. Toute évolution du sens donne
 
 [index.html](index.html) présente le texte sur une page adaptée aux téléphones et aux ordinateurs. Le contenu est lisible sans JavaScript. La page utilise les polices du système et ne contient ni suivi d’audience ni formulaire de collecte.
 
-## Mise en ligne sur GitHub
+## Publier une copie sur GitHub
 
 1. Créer le dépôt public `harmonie-libre` sur le compte retenu et y ajouter les fichiers.
 2. Dans **Settings → General → Features**, activer **Discussions** pour les questions, objections et reformulations.
