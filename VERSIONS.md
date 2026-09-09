@@ -10,6 +10,18 @@ Les objections, reformulations et cas-limites seront documentés avec la date, l
 
 Après trois ou quatre retours indépendants documentés, examiner l’intérêt d’une annexe de cas-limites ou d’une v0.2. Cette revue ne vaut pas validation scientifique ; elle peut aussi conclure au maintien du texte actuel.
 
+### Tableau de suivi — constat ponctuel
+
+Contrôle : **2026-09-09 à 05:11 UTC**, contenu public récupéré sans authentification (cas, deux commentaires, zéro réponse sous chacun). Ce tableau décrit ce contrôle, sans présumer l’absence de retours antérieurs ou ultérieurs.
+
+| Cas publié | Travail éditorial interne | Retours indépendants observés | Statut des réponses | Suite |
+| --- | --- | --- | --- | --- |
+| [#1 — Départ et responsabilités](https://github.com/talkus/harmonie-libre/discussions/1) | 1 essai, développé dans [2 commentaires](https://github.com/talkus/harmonie-libre/discussions/1#discussioncomment-18361660), dont une [version consolidée](https://github.com/talkus/harmonie-libre/discussions/1#discussioncomment-18361670) | 0 observé dans le périmètre lu | Clarification candidate publiée ; aucun consensus ni validation indépendante établi | Ouvert aux objections |
+
+Le nombre de commentaires ne mesure pas le nombre d’objections distinctes. Chaque retour reçu sera relié à sa source et distingué des essais internes. Une approbation éditoriale autorise une publication ; elle ne prouve pas l’accord du collectif ni l’efficacité du cadre.
+
+En cas de lecture partielle ou indisponible, inscrire « Non vérifiés » pour le périmètre concerné. Une observation ponctuelle ne permet pas d’écrire « aucun retour pendant sept jours ». Une telle note doit préciser les dates et les contrôles réellement effectués. Le tableau ne configure aucune veille automatique.
+
 ### 2026-09-09 — Responsabilités après un départ
 
 **Statut : clarification candidate, essai éditorial interne élaboré avec une IA.** Les deux commentaires documentent un même travail éditorial ; ils ne comptent pas comme deux retours indépendants. Leur publication ne vaut ni adoption collective ni validation scientifique. L’archive v0.1 reste inchangée.

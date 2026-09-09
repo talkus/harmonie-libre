@@ -52,6 +52,22 @@ Source : [manuel officiel de curl](https://curl.se/docs/manpage.html).
 
 Cette observation ponctuelle ne prouve ni l’absence de retours antérieurs ni l’accès sans incident pour tous les visiteurs. Elle ne vaut aucune adhésion.
 
+## Lire, commenter et recevoir des notifications
+
+La lecture et la participation sont deux opérations distinctes. Le texte public de la [Discussion nº 1](https://github.com/talkus/harmonie-libre/discussions/1) est récupérable sans authentification. Pour écrire un commentaire, la page demande un compte GitHub connecté. Désactiver JavaScript ne supprime pas cette condition.
+
+Contrôle complémentaire du **2026-09-09** :
+
+- À **05:11 UTC**, le contenu récupéré sans authentification affiche deux commentaires internes et zéro réponse sous chacun ; aucun retour indépendant n’y est observé. La page invite à se connecter pour commenter.
+- Dans Chrome, en session connectée, le cas et les deux clarifications sont lisibles après actualisation ; le formulaire de commentaire est présent. Les commandes « Unpin discussion » et « Lock conversation » indiquent une Discussion épinglée et non verrouillée.
+- Les messages génériques d’erreur trouvés dans le HTML brut ne sont pas visibles dans le relevé de l’interface connectée. Leur présence dans le source, à elle seule, ne démontre pas un bug ni sa cause.
+- Le rendu dans une fenêtre privée, dans Firefox ou Brave, et avec JavaScript désactivé n’a pas été testé. La récupération HTTP vérifie le texte reçu, sans simuler ces navigateurs.
+- Aucun commentaire de test n’a été envoyé ; la réception effective de notifications n’a pas été testée. Une boîte de notifications vide ne prouverait ni une panne ni un bon fonctionnement.
+
+Pour suivre une Discussion, vérifier l’abonnement à la conversation et les préférences de réception du compte. GitHub permet de choisir les événements suivis et les canaux de notification. Un test de réception nécessite ensuite un événement réel et sa réception constatée ; ce contrôle de lecture ne le remplace pas. Les paramètres de notification n’ont pas été modifiés.
+
+Références : [participation aux Discussions](https://docs.github.com/en/discussions/quickstart), [configuration des notifications](https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications). L’exigence de connexion pour commenter a aussi été observée dans le texte public de la Discussion.
+
 ## Consigner un contrôle ultérieur
 
 - Date, heure et fuseau : [à compléter].

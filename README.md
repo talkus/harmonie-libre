@@ -17,6 +17,8 @@ Une proposition éthique ouverte : créer du commun sans effacer le singulier. L
 - [Proposer une objection ou une modification](CONTRIBUTION.md).
 - [Lire le code de conduite](CODE-DE-CONDUITE.md).
 
+Pour commenter dans les Discussions, un compte GitHub et une connexion sont nécessaires. La lecture publique du cas et des deux clarifications a été contrôlée par récupération du texte sans authentification ; les limites de ce contrôle sont décrites dans le [guide d’accès](discussions/OUTILS.md#lire-commenter-et-recevoir-des-notifications).
+
 Une objection est recevable sans solution et sans récit personnel. La complémentarité demeure une possibilité librement explorée ; la dignité de chacun ne dépend pas de son utilité pour le projet.
 
 Le « nous » du texte exprime une invitation. Il ne présume ni l’accord des lecteurs ni un consensus entre les personnes qui participent.
