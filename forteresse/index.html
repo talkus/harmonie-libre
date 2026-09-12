@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Forteresse</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:17px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{background:#1a1a18;color:#e8e2d4;font-family:Georgia,"Times New Roman",serif;line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* SCREENS */
+.view{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;opacity:0;pointer-events:none;transition:opacity .7s ease;overflow-y:auto}
+.view.on{opacity:1;pointer-events:auto}
+
+/* SILENCE */
+#v-silence{background:#0c0c0a}
+
+/* SEUIL */
+#v-seuil h1{font-size:1.3rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:#b8b2a4;margin-bottom:2rem;opacity:.8}
+#v-seuil p{font-size:1.05rem;line-height:1.9;max-width:380px;margin-bottom:2.5rem;color:#e8e2d4}
+
+/* SCEAU */
+#v-sceau{padding-top:3rem}
+.seal{position:relative;width:min(280px,72vw);height:min(280px,72vw);margin:1rem auto}
+.seal svg{width:100%;height:100%}
+.seal .label{position:absolute;display:flex;flex-direction:column;align-items:center;gap:.2rem;cursor:pointer;background:none;border:none;color:#b8b2a4;font-family:Georgia,serif;transition:color .4s}
+.seal .label:hover{color:#c89958}
+.seal .label .wg{font-size:1.1rem;opacity:.5}
+.seal .label .nm{font-size:.85rem;letter-spacing:.06em}
+.seal .label.top{top:-10px;left:50%;transform:translateX(-50%)}
+.seal .label.right{top:50%;right:-15px;transform:translateY(-50%)}
+.seal .label.bottom{bottom:-10px;left:50%;transform:translateX(-50%)}
+.seal .label.left{top:50%;left:-15px;transform:translateY(-50%)}
+.seal-hint{font-size:.78rem;color:#5a5347;letter-spacing:.08em;margin-top:2.2rem;line-height:1.6}
+
+/* STATION */
+#v-station{max-width:460px}
+.st-wg{font-size:1.6rem;color:#8a6a3e;opacity:.4;margin-bottom:.8rem}
+.st-nm{font-size:1.25rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:#c89958;margin-bottom:.4rem}
+.st-par{font-size:1.02rem;line-height:1.85;color:#e8e2d4;margin-bottom:1rem;white-space:pre-line}
+.st-div{width:30px;height:1px;background:#5a5347;margin:1rem auto;opacity:.3}
+.st-prm{font-size:.88rem;font-style:italic;color:#b8b2a4;line-height:1.7;margin-bottom:1.2rem}
+.st-ta{width:100%;min-height:100px;background:#161613;border:1px solid #2e2b27;color:#e8e2d4;font-family:Georgia,serif;font-size:.98rem;line-height:1.6;padding:.9rem;border-radius:4px;resize:vertical;outline:none;transition:border-color .3s}
+.st-ta:focus{border-color:#8a6a3e}
+.st-ta::placeholder{color:#5a5347;font-style:italic}
+.st-garde{font-size:.8rem;color:#8a6a3e;margin-top:.6rem;line-height:1.5;font-style:italic;opacity:0;transition:opacity .4s;max-height:0;overflow:hidden}
+.st-garde.on{opacity:1;max-height:80px}
+
+/* ECRITOIRE */
+#v-ecr{max-width:460px}
+#v-ecr h2{font-size:1.1rem;color:#b8b2a4;letter-spacing:.08em;margin-bottom:.3rem;font-weight:400}
+#v-ecr .sub{font-size:.8rem;color:#5a5347;margin-bottom:1.2rem}
+.ecr-ta{width:100%;min-height:180px;background:#161613;border:1px solid #2e2b27;color:#e8e2d4;font-family:Georgia,serif;font-size:1rem;line-height:1.7;padding:1rem;border-radius:4px;resize:vertical;outline:none;transition:border-color .3s}
+.ecr-ta:focus{border-color:#8a6a3e}
+.ecr-ta::placeholder{color:#5a5347;font-style:italic}
+.ecr-meta{font-size:.74rem;color:#5a5347;text-align:right;margin-top:.3rem}
+
+/* MEMOIRE */
+#v-mem{max-width:480px}
+#v-mem h2{font-size:1.1rem;color:#b8b2a4;letter-spacing:.08em;margin-bottom:.3rem;font-weight:400}
+#v-mem .sub{font-size:.8rem;color:#5a5347;margin-bottom:1.2rem}
+.mem-list{width:100%;text-align:left;max-height:40vh;overflow-y:auto}
+.mem-item{background:#242320;border:1px solid #2e2b27;border-radius:4px;padding:.85rem 1rem;margin-bottom:.6rem;cursor:pointer;transition:border-color .3s}
+.mem-item:hover{border-color:#5a5347}
+.mem-item .d{font-size:.72rem;color:#5a5347;margin-bottom:.2rem}
+.mem-item .s{font-size:.78rem;color:#8a6a3e;margin-bottom:.15rem}
+.mem-item .p{font-size:.86rem;color:#b8b2a4;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mem-item .hint{font-size:.68rem;color:#5a5347;margin-top:.3rem}
+.mem-empty{color:#5a5347;font-style:italic;text-align:center;padding:2rem}
+
+/* A PROPOS */
+#v-about{max-width:420px}
+#v-about h2{font-size:1.15rem;color:#b8b2a4;letter-spacing:.1em;margin-bottom:1.2rem;font-weight:400}
+.about-p{font-size:.92rem;color:#e8e2d4;line-height:1.85;margin-bottom:1.5rem;text-align:left}
+.about-p p{margin-bottom:.6rem}
+.about-list{list-style:none;font-size:.86rem;color:#b8b2a4;line-height:2;text-align:left;margin-bottom:1.5rem}
+.about-list li{padding-left:1.2rem;position:relative}
+.about-list li::before{content:"◇";position:absolute;left:0;color:#5a5347}
+
+/* SORTIE */
+#v-out p{font-size:1rem;color:#b8b2a4;line-height:2;margin-bottom:2rem}
+
+/* BUTTONS */
+.r{display:flex;gap:.6rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
+.b{background:none;border:1px solid #5a5347;color:#b8b2a4;font-family:Georgia,serif;font-size:.86rem;padding:.6rem 1.2rem;cursor:pointer;border-radius:4px;transition:all .3s;letter-spacing:.03em}
+.b:hover,.b:focus{border-color:#8a6a3e;color:#c89958;outline:none}
+.b.p{border-color:#8a6a3e;color:#c89958}
+.b.d{border-color:#6b3a3a;color:#a06060}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:1rem;padding:.6rem;background:#1a1a18;border-top:1px solid #2e2b27;opacity:0;pointer-events:none;transition:opacity .4s;z-index:100}
+.nav.on{opacity:1;pointer-events:auto}
+.nav button{background:none;border:none;color:#5a5347;font-family:Georgia,serif;font-size:.78rem;cursor:pointer;transition:color .3s;padding:.2rem .4rem}
+.nav button:hover{color:#b8b2a4}
+
+/* TOAST */
+.toast{position:fixed;bottom:3rem;left:50%;transform:translateX(-50%);background:#161613;border:1px solid #5a5347;color:#b8b2a4;font-size:.82rem;padding:.55rem 1rem;border-radius:4px;opacity:0;transition:opacity .4s;z-index:200;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#1a1a18}
+::-webkit-scrollbar-thumb{background:#2e2b27;border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- SILENCE -->
+<div class="view on" id="v-silence"></div>
+
+<!-- SEUIL -->
+<div class="view" id="v-seuil">
+  <h1>Seuil</h1>
+  <p>Personne ici ne te juge.<br>Si tu entres, tu admets seulement<br>qu'un désalignement est possible.</p>
+  <div class="r">
+    <button class="b p" onclick="show('sceau')">Entrer</button>
+    <button class="b" onclick="show('silence');setTimeout(function(){show('seuil')},2500)">Sortir</button>
+  </div>
+</div>
+
+<!-- SCEAU -->
+<div class="view" id="v-sceau">
+  <div class="seal">
+    <svg viewBox="0 0 200 200" fill="none" stroke="#5a5347" stroke-width="0.5">
+      <circle cx="100" cy="100" r="85" opacity=".35"/>
+      <circle cx="100" cy="100" r="50" stroke="#8a6a3e" opacity=".2"/>
+      <circle cx="100" cy="100" r="3" fill="#8a6a3e" stroke="none" opacity=".4"/>
+      <line x1="100" y1="15" x2="100" y2="30" opacity=".2"/>
+      <line x1="100" y1="170" x2="100" y2="185" opacity=".2"/>
+      <line x1="15" y1="100" x2="30" y2="100" opacity=".2"/>
+      <line x1="170" y1="100" x2="185" y2="100" opacity=".2"/>
+    </svg>
+    <button class="label top" onclick="station('esperance')"><span class="wg">△</span><span class="nm">Espérance</span></button>
+    <button class="label right" onclick="station('pardon')"><span class="wg">▷</span><span class="nm">Pardon</span></button>
+    <button class="label bottom" onclick="station('repentance')"><span class="wg">▽</span><span class="nm">Repentance</span></button>
+    <button class="label left" onclick="station('gratitude')"><span class="wg">◁</span><span class="nm">Gratitude</span></button>
+  </div>
+  <p class="seal-hint">Tu peux entrer par n'importe quelle station.<br>Tu peux sortir à tout moment.</p>
+  <div class="r" style="margin-top:2rem">
+    <button class="b" onclick="show('ecr')">Écritoire</button>
+    <button class="b" onclick="show('mem')">Mémoire</button>
+    <button class="b" onclick="show('about')">À propos</button>
+  </div>
+</div>
+
+<!-- STATION -->
+<div class="view" id="v-station">
+  <div class="st-wg" id="f-wg"></div>
+  <div class="st-nm" id="f-nm"></div>
+  <div class="st-par" id="f-par"></div>
+  <div class="st-div"></div>
+  <div class="st-prm" id="f-prm"></div>
+  <textarea class="st-ta" id="f-ta" placeholder="Écrire, ou se taire. Rien n'est obligé."></textarea>
+  <div class="st-garde" id="f-garde"></div>
+  <div class="r">
+    <button class="b p" onclick="saveSt()">Garder ici</button>
+    <button class="b" onclick="clrSt()">Effacer</button>
+  </div>
+  <div class="r">
+    <button class="b" onclick="show('sceau')">← Sceau</button>
+    <button class="b" onclick="show('out')">Sortir</button>
+  </div>
+</div>
+
+<!-- ECRITOIRE -->
+<div class="view" id="v-ecr">
+  <h2>Écritoire</h2>
+  <div class="sub">Texte local. Rien n'est envoyé ailleurs.</div>
+  <textarea class="ecr-ta" id="ecr-ta" placeholder="Écris ce qui vient. Un écran, pas un roman."></textarea>
+  <div class="ecr-meta" id="ecr-meta">0 caractères</div>
+  <div class="r">
+    <button class="b p" onclick="saveEcr()">Garder ici</button>
+    <button class="b" onclick="clrEcr()">Effacer</button>
+  </div>
+  <div class="r">
+    <button class="b" onclick="show('sceau')">← Sceau</button>
+    <button class="b" onclick="show('out')">Sortir</button>
+  </div>
+</div>
+
+<!-- MEMOIRE -->
+<div class="view" id="v-mem">
+  <h2>Mémoire sobre</h2>
+  <div class="sub">Tes textes, ici. Pas de feed, pas de classement.</div>
+  <div class="mem-list" id="mem-list"></div>
+  <div class="r">
+    <button class="b" onclick="exportJSON()">Exporter</button>
+    <button class="b d" id="clr-all" onclick="confirmClear()">Tout effacer</button>
+  </div>
+  <div class="r">
+    <button class="b" onclick="show('sceau')">← Sceau</button>
+    <button class="b" onclick="show('out')">Sortir</button>
+  </div>
+</div>
+
+<!-- A PROPOS -->
+<div class="view" id="v-about">
+  <h2>À propos</h2>
+  <div class="about-p">
+    <p>Forteresse est un lieu, pas un maître.</p>
+    <p>Rien ici ne te juge, ne te note, ne te retient.</p>
+    <p>Tout ce que tu écris reste sur ton appareil.</p>
+  </div>
+  <ul class="about-list">
+    <li>Créer sans mentir</li>
+    <li>Agir sans forcer</li>
+    <li>Pouvoir sans écraser</li>
+    <li>Se tromper sans s'y enfermer</li>
+    <li>Recevoir sans posséder</li>
+    <li>Espérer sans imposer</li>
+  </ul>
+  <div class="r"><button class="b" onclick="show('sceau')">← Sceau</button></div>
+</div>
+
+<!-- SORTIE -->
+<div class="view" id="v-out">
+  <p>Tu peux repos.<br><br>Revenir n'est pas échouer.<br>Sortir n'est pas abandonner.</p>
+  <div class="r">
+    <button class="b p" onclick="show('sceau')">Revenir au sceau</button>
+    <button class="b" onclick="show('silence');setTimeout(function(){show('seuil')},2500)">Repos</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button onclick="show('sceau')">Sceau</button>
+  <button onclick="show('ecr')">Écritoire</button>
+  <button onclick="show('mem')">Mémoire</button>
+  <button onclick="show('about')">À propos</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Données des stations
+var S = {
+  repentance: {
+    n:"Repentance", w:"\u25BD",
+    p:"Reconna\u00EEtre. Corriger. Apprendre.\nNommer l\u2019\u00E9cart n\u2019est pas s\u2019enfermer dedans.",
+    q:"Quel geste r\u00E9el s\u2019\u00E9carte du vrai bien \u2014 sans mensonge, sans th\u00E9\u00E2tre ?",
+    g:"La repentance tourne. Elle ne broie pas. Tu peux t\u2019arr\u00EAter.",
+    b:true
+  },
+  pardon: {
+    n:"Pardon", w:"\u25B7",
+    p:"Ne verrouiller personne dans sa faute \u2014 toi non plus.\nPardonner n\u2019est pas r\u00E9concilier. Ce n\u2019est pas encore faire confiance.",
+    q:"Qui ne doit plus \u00EAtre r\u00E9duit \u00E0 sa pire heure \u2014 toi compris ?",
+    b:false
+  },
+  gratitude: {
+    n:"Gratitude", w:"\u25C1",
+    p:"Recevoir ce qui a \u00E9t\u00E9 donn\u00E9, sans le transformer en d\u00FB.",
+    q:"Qu\u2019est-ce qui t\u2019a \u00E9t\u00E9 donn\u00E9 aujourd\u2019hui, et que tu n\u2019as pas produit seul ?",
+    b:false
+  },
+  esperance: {
+    n:"Esp\u00E9rance", w:"\u25B3",
+    p:"Voir encore une voie bonne. La choisir. Agir un peu.\nSans imposer cette voie \u00E0 autrui. Sans se couronner.",
+    q:"Quelle petite voie encore possible sert le prochain mieux que ton confort ?",
+    b:false, v:true
+  }
+};
+
+var cur = null;
+var data = [];
+try { data = JSON.parse(localStorage.getItem("ft") || "[]"); } catch(e) { data = []; }
+
+// Navigation
+function show(id) {
+  var views = document.querySelectorAll(".view");
+  for (var i = 0; i < views.length; i++) views[i].classList.remove("on");
+  var el = document.getElementById("v-" + id);
+  if (el) el.classList.add("on");
+  var nav = document.getElementById("nav");
+  if (id === "silence" || id === "seuil") nav.classList.remove("on");
+  else nav.classList.add("on");
+  if (id === "mem") loadMem();
+}
+
+function station(k) {
+  cur = k;
+  var s = S[k];
+  document.getElementById("f-wg").textContent = s.w;
+  document.getElementById("f-nm").textContent = s.n;
+  document.getElementById("f-par").textContent = s.p;
+  document.getElementById("f-prm").textContent = s.q;
+  document.getElementById("f-ta").value = "";
+  document.getElementById("f-garde").classList.remove("on");
+  show("station");
+}
+
+// Détection de biais (Repentance)
+var BIAS = [
+  /je suis (nul|stupide|inutile|minable|path\u00E9tique)/i,
+  /je ne vaux rien/i,
+  /je ne m\u00E9rite (pas|rien)/i,
+  /je suis un \u00E9chec/i,
+  /je d\u00E9truis tout/i,
+  /je suis incapable/i,
+  /je suis (le|la) pire/i
+];
+
+// Vigilance (Espérance)
+var VIG = [/je dois/i, /il faut que/i, /tous doivent/i, /c.*est la seule/i, /absolu/i, /toujours/i, /jamais/i];
+
+function testPatterns(txt, arr) {
+  for (var i = 0; i < arr.length; i++) if (arr[i].test(txt)) return true;
+  return false;
+}
+
+document.addEventListener("input", function(e) {
+  if (!e.target) return;
+  if (e.target.id === "f-ta" && cur) {
+    var s = S[cur];
+    var g = document.getElementById("f-garde");
+    if (s.b && testPatterns(e.target.value, BIAS)) {
+      g.textContent = s.g;
+      g.classList.add("on");
+    } else if (s.v && e.target.value.length > 25 && testPatterns(e.target.value, VIG)) {
+      g.textContent = "L\u2019esp\u00E9rance propose. Elle n\u2019impose. Tu peux revenir au seuil d\u2019humilit\u00E9.";
+      g.classList.add("on");
+    } else {
+      g.classList.remove("on");
+    }
+  }
+  if (e.target.id === "ecr-ta") {
+    document.getElementById("ecr-meta").textContent = e.target.value.length + " caractères";
+  }
+});
+
+// Persistance
+function save() { try { localStorage.setItem("ft", JSON.stringify(data)); } catch(e) {} }
+
+function saveSt() {
+  var t = document.getElementById("f-ta").value.trim();
+  if (!t) { toast("Rien à garder. C'est bien aussi."); return; }
+  data.push({ s: S[cur].n, t: t, d: new Date().toISOString() });
+  save();
+  toast("Gardé ici. Rien n'est envoyé ailleurs.");
+  document.getElementById("f-ta").value = "";
+  document.getElementById("f-garde").classList.remove("on");
+}
+
+function clrSt() {
+  document.getElementById("f-ta").value = "";
+  document.getElementById("f-garde").classList.remove("on");
+}
+
+function saveEcr() {
+  var t = document.getElementById("ecr-ta").value.trim();
+  if (!t) { toast("Rien à garder."); return; }
+  data.push({ s: "Écritoire", t: t, d: new Date().toISOString() });
+  save();
+  toast("Gardé ici.");
+  document.getElementById("ecr-ta").value = "";
+  document.getElementById("ecr-meta").textContent = "0 caractères";
+}
+
+function clrEcr() {
+  document.getElementById("ecr-ta").value = "";
+  document.getElementById("ecr-meta").textContent = "0 caractères";
+}
+
+// Mémoire
+function loadMem() {
+  var list = document.getElementById("mem-list");
+  if (data.length === 0) {
+    list.innerHTML = '<div class="mem-empty">Rien ici pour l'instant. C'est bien.</div>';
+    return;
+  }
+  var sorted = data.slice().sort(function(a,b) { return new Date(b.d) - new Date(a.d); });
+  var html = "";
+  for (var i = 0; i < sorted.length; i++) {
+    var e = sorted[i];
+    var d = new Date(e.d);
+    var ds = d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}) + " · " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+    var idx = data.indexOf(e);
+    html += '<div class="mem-item" onclick="del(' + idx + ')">' +
+      '<div class="d">' + ds + '</div>' +
+      '<div class="s">' + esc(e.s) + '</div>' +
+      '<div class="p">' + esc(e.t.substring(0,180)) + '</div>' +
+      '<div class="hint">Toucher pour effacer</div></div>';
+  }
+  list.innerHTML = html;
+}
+
+function del(idx) {
+  data.splice(idx, 1);
+  save();
+  loadMem();
+  toast("Effacé.");
+}
+
+function confirmClear() {
+  if (data.length === 0) { toast("Rien à effacer."); return; }
+  var btn = document.getElementById("clr-all");
+  if (btn.dataset.c === "1") {
+    data = [];
+    save();
+    loadMem();
+    toast("Tout effacé.");
+    btn.dataset.c = "0";
+    btn.textContent = "Tout effacer";
+  } else {
+    btn.dataset.c = "1";
+    btn.textContent = "Confirmer ? Touche encore";
+    setTimeout(function() { btn.dataset.c = "0"; btn.textContent = "Tout effacer"; }, 3000);
+  }
+}
+
+// Export
+function exportJSON() {
+  if (data.length === 0) { toast("Rien à exporter."); return; }
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "forteresse-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("Exporté en JSON.");
+}
+
+// Utils
+function toast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.classList.remove("on"); }, 2800);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// Init
+setTimeout(function() { show("seuil"); }, 2000);
+</script>
+</body>
+</html>
