@@ -1,0 +1,17 @@
+-- ═══════════════════════════════════════════════════════════════════
+-- REGISTRE DE CONTINUITÉ GOUVERNÉ — Schéma DuckDB complet
+-- Validé contre l'Architecture de clôture (11 frontières)
+-- 11 workflows · 11 invariants · 3 niveaux de sortie
+-- ═══════════════════════════════════════════════════════════════════
+--
+-- Règle de continuité :
+-- Les originaux ne sont pas réécrits.
+-- Les inférences ne deviennent pas des faits par répétition.
+-- Les corrections ne sont pas des effacements.
+-- Les contradictions deviennent des objets de travail.
+-- Les décisions ont un auteur, une raison et une date.
+-- Les exports sont des instantanés vérifiables, non des vérités autonomes.
+--
+-- Règle unifiante (architecture de clôture) :
+-- Celui qui détecte ne décide pas. Celui qui décide n'a pas détecté.
+-- Aucun statut n'est acquis par défaut.
