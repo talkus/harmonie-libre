@@ -1,0 +1,19 @@
+{
+  "description": "Vecteur canonique RFC 8785 / Ed25519 - toute divergence casse ce test",
+  "private_key_hex_seed": "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60",
+  "envelope_inputs": {
+    "protocol": "Ed25519-JCS-Compact-v1",
+    "decision_id": "dec_golden_000001",
+    "subject_id": "rel_audit_40_semaines",
+    "actor_id": "mikael",
+    "key_id": "k_ca_central_1_2026",
+    "scope_relation_id": "rel_audit_40_semaines",
+    "policy_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "payload_hash": "5f4dcc3b5aa765d61d8327deb882cf99f57f4955b271d49e6d871787c89f5bc3",
+    "evidence_hash": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+    "nonce": "n_4a8f9c1d2e3f4a5b6c7d8e9f0a1b2c3d",
+    "issued_at": "2026-09-12T22:30:00.000000Z",
+    "expires_at": "2026-09-12T22:35:00.000000Z"
+  },
+  "expected_envelope_jcs_sha256": "3d50bfbf5335e3b5e408ec2d5e94bbfb1b72e50529d45e43c8d19736c0d82944"
+}
