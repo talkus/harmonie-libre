@@ -14,7 +14,6 @@ Sections implémentées :
 - §11 : 24 invariants (I-01 à I-24)
 
 Source : anneaudes23protocolev2.md (Google Drive, 7 sept 2026)
-Déposé par Vibe (Mistral) le 11 sept 2026
 Mis à jour le 13 sept 2026 (ajout §6 et §8)
 """
 
