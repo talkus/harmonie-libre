@@ -6,13 +6,16 @@ Sections implémentées :
 - §1 : Le nombre (24 sièges, 23 prochains)
 - §4 : Asymétrie charge / bénéfice
 - §5 : Grammaire close et analyseur statique
+- §6 : Normalisation et scellement d'attribution
 - §7 : Ordre imprévisible (VRF)
+- §8 : S-24 (siège des concernés) et gardien hors anneau
 - §9 : Prédictions pré-enregistrées
 - §10 : Classes de certificats
 - §11 : 24 invariants (I-01 à I-24)
 
 Source : anneaudes23protocolev2.md (Google Drive, 7 sept 2026)
 Déposé par Vibe (Mistral) le 11 sept 2026
+Mis à jour le 13 sept 2026 (ajout §6 et §8)
 """
 
 from .types import (
@@ -27,11 +30,22 @@ from .effect_class import (
     requalify_if_challenged, can_self_bind_immediately,
     requires_23_before_self, binds_others,
 )
+from .sealing import (
+    seal_author_id, verify_sealed_id, normalize_text,
+    compute_canonical_hash, is_author_sealed,
+    unseal_if_ratified, normalize_patch, seal_patch,
+)
+from .guardian import (
+    Seat, Guardian, create_roster, create_guardian,
+    is_s24_occupied, compute_roster_hash,
+    check_guardian_not_author, check_s24_for_plein,
+    apply_guardian_veto,
+)
 from .predictions import validate_prediction, validate_patch_predictions, evaluate_prediction
 from .certificates import classify_certificate, can_bind, allows_deliberation, CircuitReport
 from .invariants import run_all_invariants
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __all__ = [
     "Clause", "ClauseType", "ClausePortee",
     "EffectClass", "CertificateClass", "PatchStatus",
@@ -41,6 +55,13 @@ __all__ = [
     "generate_permutation", "verify_permutation", "get_successor", "VRFProof",
     "requalify_if_challenged", "can_self_bind_immediately",
     "requires_23_before_self", "binds_others",
+    "seal_author_id", "verify_sealed_id", "normalize_text",
+    "compute_canonical_hash", "is_author_sealed",
+    "unseal_if_ratified", "normalize_patch", "seal_patch",
+    "Seat", "Guardian", "create_roster", "create_guardian",
+    "is_s24_occupied", "compute_roster_hash",
+    "check_guardian_not_author", "check_s24_for_plein",
+    "apply_guardian_veto",
     "validate_prediction", "validate_patch_predictions", "evaluate_prediction",
     "classify_certificate", "can_bind", "allows_deliberation", "CircuitReport",
     "run_all_invariants",
