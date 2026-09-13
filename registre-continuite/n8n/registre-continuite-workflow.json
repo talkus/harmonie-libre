@@ -1,0 +1,282 @@
+{
+  "name": "Registre de continuite — ingestion + attestation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            30,
+            "minutes"
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "path": "/data/inbox"
+      },
+      "name": "Read Files",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.mimetype }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "application/pdf",
+              "outputKey": "pdf"
+            },
+            {
+              "value2": "application/vnd.openxmlformats",
+              "outputKey": "docx"
+            },
+            {
+              "value2": "text/html",
+              "outputKey": "html"
+            },
+            {
+              "value2": "text/markdown",
+              "outputKey": "md"
+            },
+            {
+              "value2": "application/json",
+              "outputKey": "json"
+            }
+          ]
+        }
+      },
+      "name": "Switch Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const crypto = require('crypto');\nconst content = $input.all().map(item => item.json.content || '').join('\\n');\nconst hash = crypto.createHash('sha256').update(content).digest('hex');\nreturn { id: 'doc_' + hash.substring(0, 16), source: 'inbox', timestamp: new Date().toISOString(), content: content, content_hash_sha256: hash };"
+      },
+      "name": "Normalisation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "prompt": "Analyse le texte. Retourne uniquement du JSON: { entities: [], relations: [] }. Types: Person, Project, Conversation, Document, Regulation, Incident, Evidence, Concept, Tool. Relations: WORKS_ON, MENTIONS, REFERENCES, CONCERNS, DESCRIBES, IMPLEMENTS, INSPIRED_BY. Ne rien inventer."
+      },
+      "name": "IA Extraction",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 init_db.py --db registre.duckdb --input"
+      },
+      "name": "DuckDB Insert",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 attest_cli.py attest --private-key $KEY_PATH --key-id $KEY_ID --actor-id $ACTOR_ID --actor-role lead_auditor --decision-id dec_{{ $json.id }} --decision-type status_transition --subject-type relation --subject-id {{ $json.relation_id }} --payload payload.json --policy-versions policies.json --out attestation_{{ $json.id }}.json"
+      },
+      "name": "Attestation CLI",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 authority/apply_transition.py --db registre.duckdb --attestation attestation_{{ $json.decision_id }}.json"
+      },
+      "name": "Apply Transition",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python3 attest/audit_chain.py --db registre.duckdb --json"
+      },
+      "name": "Audit Chain",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "COPY entities TO 'entities.parquet' (FORMAT PARQUET)"
+      },
+      "name": "Export Parquet",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Dans Relais : l'export JSON se telecharge. Pas d'execution distante.\nreturn { step: 'publish_tip', note: 'Publication manuelle du tip_hash dans tip_anchors' };"
+      },
+      "name": "Publish Tip",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Files": {
+      "main": [
+        [
+          {
+            "node": "Switch Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Type": {
+      "main": [
+        [
+          {
+            "node": "Normalisation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalisation": {
+      "main": [
+        [
+          {
+            "node": "IA Extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IA Extraction": {
+      "main": [
+        [
+          {
+            "node": "DuckDB Insert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DuckDB Insert": {
+      "main": [
+        [
+          {
+            "node": "Attestation CLI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attestation CLI": {
+      "main": [
+        [
+          {
+            "node": "Apply Transition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Transition": {
+      "main": [
+        [
+          {
+            "node": "Audit Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit Chain": {
+      "main": [
+        [
+          {
+            "node": "Export Parquet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Parquet": {
+      "main": [
+        [
+          {
+            "node": "Publish Tip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
