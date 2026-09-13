@@ -1,0 +1,4 @@
+duckdb>=0.10
+cryptography>=42.0
+rfc8785>=1.0
+pytest>=8.0
