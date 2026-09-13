@@ -1,0 +1,40 @@
+{
+  "protocol": "continuite-attestation-v1",
+  "attestation": {
+    "attestation_id": "att_00000000000000000000000000000000",
+    "key_id": "key_mikael_01",
+    "actor_id": "mikael",
+    "actor_role": "lead_auditor",
+    "attestation_method": "ed25519_jcs_rfc8785",
+    "issued_at": "2026-09-13T01:35:00.000000Z"
+  },
+  "signed_envelope": {
+    "protocol": "continuite-attestation-v1",
+    "attestation_id": "att_00000000000000000000000000000000",
+    "key_id": "key_mikael_01",
+    "actor_id": "mikael",
+    "actor_role": "lead_auditor",
+    "decision_id": "dec_001",
+    "decision_type": "status_transition",
+    "subject_type": "relation",
+    "subject_id": "rel_001",
+    "issued_at": "2026-09-13T01:35:00.000000Z",
+    "payload": {
+      "relation_id": "rel_001",
+      "old_status": "candidate",
+      "new_status": "documented",
+      "reason": "Verifie dans la source originale.",
+      "evidence_document_id": "doc_notion_transcription_2026-09-12"
+    },
+    "policy_versions": {
+      "transition": "v1",
+      "attestation": "v1",
+      "key_lifecycle": "nist_sp_800_57_rev5"
+    }
+  },
+  "signed_payload_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "signature_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "signature_algorithm": "Ed25519",
+  "canonicalization_scheme": "RFC8785-JCS",
+  "hash_algorithm": "sha256"
+}

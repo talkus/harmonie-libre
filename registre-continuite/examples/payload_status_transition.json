@@ -1,0 +1,10 @@
+{
+  "relation_id": "rel_001",
+  "old_status": "candidate",
+  "new_status": "documented",
+  "reason": "Entite et relation verifiees dans la source originale (transcription 12 sept 2026). La source nomme explicitement Mikael comme auteur du projet Forteresse.",
+  "evidence_document_id": "doc_notion_transcription_2026-09-12",
+  "review_kind": "human_source_check",
+  "reviewed_by": "mikael",
+  "reviewed_at": "2026-09-13T01:30:00Z"
+}

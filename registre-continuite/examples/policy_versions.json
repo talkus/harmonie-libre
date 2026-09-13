@@ -1,0 +1,8 @@
+{
+  "transition": "v1",
+  "attestation": "v1",
+  "key_lifecycle": "nist_sp_800_57_rev5",
+  "canonicalization": "rfc8785_jcs",
+  "signature": "ed25519",
+  "hash": "sha256"
+}
