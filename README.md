@@ -49,6 +49,10 @@ Le [cas et ses clarifications](https://github.com/talkus/harmonie-libre/discussi
 
 L’aide à la transition est délimitée dans son objet et sa durée. Son échéance ne conditionne pas le départ et n’efface pas automatiquement les responsabilités restantes.
 
+## Clarification — Que veut dire « réparer » ?
+
+Une [clarification candidate du 14 septembre 2026](discussions/002-clarification-reparer.md) propose un sens opérationnel du quatrième repère : reconnaître ses erreurs, faire mieux concrètement, sans demander l’oubli, et sans déclarer unilatéralement que tout est réparé. Elle ne modifie pas l’archive v0.1.
+
 ## Mémoire du projet
 
 Le manifeste archivé porte la date du **7 septembre 2026**, fournie par son auteur. Il a été reçu, comparé mot pour mot et ajouté au dépôt le **9 septembre 2026 (UTC)**. La Release `v0.1` désigne le commit de cette archive.
