@@ -12,6 +12,7 @@ from attest.delegation import check_delegation_chain
 MAX_REASON_LEN = 2000
 MAX_EVIDENCE_IDS = 50
 
+
 class ErrorCode(str, Enum):
     RBAC_DENIED = 'rbac_denied'
     EVIDENCE_HASH_MISMATCH = 'evidence_hash_mismatch'
@@ -19,12 +20,15 @@ class ErrorCode(str, Enum):
     CAUSAL_TARGET_MISSING = 'causal_target_missing'
     CORRELATION_MISMATCH = 'correlation_mismatch'
     REPAIR_NOT_VERIFIED = 'repair_not_verified'
+    CAUSED_BY_NOT_FOUND = 'caused_by_not_found'
+
 
 class GovernanceSecurityError(Exception):
     def __init__(self, code: ErrorCode, message: str):
         self.code = code
         self.message = message
         super().__init__(f'[{code.value}] {message}')
+
 
 class TransitionRequest(BaseModel):
     decision_id: str = Field(..., min_length=8, max_length=128)
@@ -41,9 +45,11 @@ class TransitionRequest(BaseModel):
     caused_by_event_id: Optional[str] = Field(None, max_length=128)
     reinstates_change_id: Optional[str] = Field(None, max_length=128)
 
+
 def has_active_contradiction(con, relation_id: str, now: str) -> bool:
     row = con.execute("SELECT 1 FROM contradictions WHERE relation_id = ? AND status = 'active'", [relation_id]).fetchone()
     return row is not None
+
 
 def insert_attestation(con, record: dict, verify_result: dict, now: str):
     env = record['signed_envelope']
@@ -68,6 +74,7 @@ def insert_attestation(con, record: dict, verify_result: dict, now: str):
          record['signed_payload_hash'], record['signature_hex'],
          att['attestation_method'], env['issued_at'],
          now, verify_result['cryptographic'], now, verify_result['authorization'], now, None])
+
 
 def apply_status_transition(con, record: dict, now: str, *, check_delegation: bool = True):
     """Orchestre verification + permission + delegation + transition."""
@@ -98,8 +105,13 @@ def apply_status_transition(con, record: dict, now: str, *, check_delegation: bo
         con.execute('ROLLBACK')
         raise
 
+
 def execute_transition(con, req: TransitionRequest):
-    """Applique une transition avec garde causale pour les reinstatements."""
+    """Applique une transition avec garde causale pour les reinstatements.
+
+    CORRECTION FK : caused_by_event_id doit exister dans relation_status_history
+    (verification explicite, DuckDB ne force pas les FK).
+    """
     received_at = req.reviewed_at
     con.execute('BEGIN TRANSACTION')
     try:
@@ -108,31 +120,89 @@ def execute_transition(con, req: TransitionRequest):
             raise GovernanceSecurityError(ErrorCode.RBAC_DENIED, f'Aucune permission pour {req.reviewer_id}: {req.old_status} -> {req.new_status}')
         if perm[3] and has_active_contradiction(con, req.relation_id, str(received_at)):
             raise GovernanceSecurityError(ErrorCode.RBAC_DENIED, 'Contradiction active bloque la transition.')
-        # Garde causale pour les rehabilitations
+
+        # -------------------------------------------------------------
+        # Verification explicite des FK causales (DuckDB ne les enforce pas)
+        # -------------------------------------------------------------
+        if req.caused_by_event_id is not None:
+            fk_row = con.execute(
+                'SELECT change_kind FROM relation_status_history WHERE status_change_id = ?',
+                [req.caused_by_event_id]
+            ).fetchone()
+            if not fk_row:
+                raise GovernanceSecurityError(
+                    ErrorCode.CAUSED_BY_NOT_FOUND,
+                    f"caused_by_event_id '{req.caused_by_event_id}' introuvable dans relation_status_history."
+                )
+            if req.change_kind == 'reinstatement' and fk_row[0] != 'repair':
+                raise GovernanceSecurityError(
+                    ErrorCode.RBAC_DENIED,
+                    f"caused_by_event_id doit etre un evenement 'repair', recu '{fk_row[0]}'."
+                )
+
+        if req.reinstates_change_id is not None:
+            fk_row = con.execute(
+                'SELECT 1 FROM relation_status_history WHERE status_change_id = ?',
+                [req.reinstates_change_id]
+            ).fetchone()
+            if not fk_row:
+                raise GovernanceSecurityError(
+                    ErrorCode.CAUSAL_TARGET_MISSING,
+                    f"reinstates_change_id '{req.reinstates_change_id}' introuvable."
+                )
+
+        # -------------------------------------------------------------
+        # Garde causale : Validation des rehabilitations
+        # -------------------------------------------------------------
         if req.change_kind == 'reinstatement':
             if not req.reinstates_change_id or not req.caused_by_event_id:
-                raise GovernanceSecurityError(ErrorCode.RBAC_DENIED, "Une rehabilitation exige 'reinstates_change_id' et 'caused_by_event_id'.")
-            causal_check = con.execute("""
-                SELECT target.changed_at, target.new_status, target.correlation_id,
-                       rep.status AS rep_status, fm.status AS file_status
-                FROM relation_status_history target
-                LEFT JOIN reparation_actions rep ON rep.repairs_event_id = target.status_change_id
-                LEFT JOIN file_manifest fm ON rep.evidence_file_id = fm.file_id
-                WHERE target.status_change_id = ? AND target.relation_id = ?
-                  AND target.change_kind IN ('withdrawal', 'rejection', 'dispute')
+                raise GovernanceSecurityError(
+                    ErrorCode.RBAC_DENIED,
+                    "Une rehabilitation exige 'reinstates_change_id' et 'caused_by_event_id'.",
+                )
+
+            # Verifier que la cible est une revocation anterieure
+            target = con.execute("""
+                SELECT changed_at, new_status, correlation_id, change_kind
+                FROM relation_status_history
+                WHERE status_change_id = ? AND relation_id = ?
+                  AND change_kind IN ('withdrawal', 'rejection', 'dispute')
             """, [req.reinstates_change_id, req.relation_id]).fetchone()
-            if not causal_check:
-                raise GovernanceSecurityError(ErrorCode.RBAC_DENIED, f"Revocation cible '{req.reinstates_change_id}' introuvable ou invalide.")
-            t_at, t_status, t_corr, rep_st, fm_st = causal_check
+
+            if not target:
+                raise GovernanceSecurityError(
+                    ErrorCode.CAUSAL_TARGET_MISSING,
+                    f"Revocation cible '{req.reinstates_change_id}' introuvable ou invalide.",
+                )
+
+            t_at, t_status, t_corr, t_kind = target
+
             if t_at >= received_at:
-                raise GovernanceSecurityError(ErrorCode.CAUSAL_PARADOX, 'Paradoxe temporel : la revocation ciblee est posterieure a la rehabilitation.')
+                raise GovernanceSecurityError(
+                    ErrorCode.CAUSAL_PARADOX,
+                    'Paradoxe temporel : la revocation ciblee est posterieure.',
+                )
             if t_corr != req.correlation_id:
-                raise GovernanceSecurityError(ErrorCode.CORRELATION_MISMATCH, f"Rupture de dossier : correlation_id '{req.correlation_id}' != '{t_corr}'.")
-            if rep_st != 'verified' or fm_st != 'verified':
-                raise GovernanceSecurityError(ErrorCode.REPAIR_NOT_VERIFIED, f"Reparation non verifiee (reparation: {rep_st}, fichier: {fm_st}).")
-        # Mise a jour de la relation
-        con.execute("UPDATE relations SET status = ?, reviewed_at = ?, reviewer_id = ? WHERE relation_id = ? AND status = ?", [req.new_status, str(received_at), req.reviewer_id, req.relation_id, req.old_status])
-        # Insertion dans l'historique append-only
+                raise GovernanceSecurityError(
+                    ErrorCode.CORRELATION_MISMATCH,
+                    f"Rupture de dossier : correlation_id '{req.correlation_id}' != '{t_corr}'.",
+                )
+
+            # Verifier qu'une reparation verified existe pour la cible
+            repair_count = con.execute("""
+                SELECT COUNT(*) FROM reparation_actions
+                WHERE repairs_event_id = ? AND status = 'verified'
+            """, [req.reinstates_change_id]).fetchone()[0]
+
+            if repair_count == 0:
+                raise GovernanceSecurityError(
+                    ErrorCode.REPAIR_NOT_VERIFIED,
+                    'Aucune reparation verified pour la cible.',
+                )
+
+        # -------------------------------------------------------------
+        # Insertion dans l'historique append-only + projection
+        # -------------------------------------------------------------
         event_id = f'evt_{req.relation_id}_{req.change_kind}_{int(received_at.timestamp())}'
         con.execute("""
             INSERT INTO relation_status_history (status_change_id, relation_id, old_status, new_status,
@@ -142,6 +212,11 @@ def execute_transition(con, req: TransitionRequest):
         """, [event_id, req.relation_id, req.old_status, req.new_status, req.change_kind,
              req.reason, str(received_at), req.reviewer_id, req.decision_id,
              req.caused_by_event_id, req.correlation_id, req.reinstates_change_id])
+
+        # Projection : relations.status reflete le dernier evenement
+        con.execute("UPDATE relations SET status = ?, reviewed_at = ?, reviewer_id = ? WHERE relation_id = ?",
+                    [req.new_status, str(received_at), req.reviewer_id, req.relation_id])
+
         con.execute('COMMIT')
         return {'status': 'applied', 'event_id': event_id}
     except GovernanceSecurityError:
