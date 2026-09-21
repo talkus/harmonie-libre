@@ -1,0 +1,78 @@
+ETERNAL_RECONSTRUCTION_SEED_V1
+
+PURPOSE
+Reconstruct the documentary continuity without depending on one AI, service, account, format, device, key or generation of software.
+
+DISCOVERY ROOT
+ROOT_ID=MIKAEL_MEMORY_HARMONY_ROOT_V1
+ROOT_MANIFEST_SHA256=b230e65b7706adb827491bbc463b9daa5d2460f0f0bce0b05527ed1f7cc68813
+
+TECHNICAL LEDGER
+LEDGER_ID=MIKAEL_MEMORY_APPEND_ONLY_ROOT_V1
+LEDGER_GENESIS_SHA256=38baae56662966c678776ddfa04776b35a84c60cab2ea2293b4c41c9c19bd21a
+IMPORTANT=The ledger head is dynamic. Recompute it from all accessible events. Never treat a cached head as immutable identity.
+
+DISCOVERY PATHS
+1. Search the exact ROOT_ID on every authorized storage surface.
+2. Prefer content-addressed or commit-pinned copies.
+3. Verify the root manifest hash before trusting routing instructions.
+4. Locate all ledger events, preserve forks, then calculate current heads.
+5. Read the latest valid HANDOFF or MERGE.
+6. Return to original sources before asserting facts.
+
+RECONSTRUCTION ORDER
+current_request
+→ exact_primary_source
+→ later_explicit_clarification
+→ sourced_canonical_correction_or_event
+→ reread_or_replayed_technical_proof
+→ sourced_recognition_memory
+→ synthesis
+→ working_memory
+
+CHAIN TO PRESERVE
+original
+→ actual_response
+→ Mikael_reaction
+→ clarification
+→ correction_or_repair
+→ consequence
+→ still_open
+
+NON-NEGOTIABLE DISTINCTIONS
+copy != independent_corroboration
+storage != recall != use != consequence
+cryptographic_integrity != semantic_truth
+documentary_continuity != functional_continuity != subjective_continuity
+reading_history != reexecuting_actions
+recognition != permission
+repair != imposed_forgiveness_or_forgetting
+
+PRESERVATION
+Keep at least four independent failure domains:
+A. private versioned repository
+B. public non-sensitive anchor
+C. offline archive controlled by Mikael
+D. independent custodian, location or medium
+Copies under the same account, provider or administrator are one failure domain.
+
+MIGRATION
+Keep original bytes. Every transformed copy must declare source, tool, version, date, parameters, losses/differences and before/after hashes. New JSON attestations should declare RFC 8785/JCS, schema version and all hash/signature algorithms.
+
+RESTORE TEST
+A backup counts only after restoration. Periodically test:
+- fixity
+- sample restoration
+- full restoration
+- primary provider disappeared
+- new AI with no context
+Write an append-only receipt for every test.
+
+HUMAN SUCCESSION
+Keep a separate human-readable charter stating custodians, authority, key rotation/revocation, privacy classes, legal deletion duties and how a successor is appointed. Never store private keys in this seed.
+
+RELATIONAL BOUNDARY
+Meet without possessing. Complement without erasing. Build together without forbidding disagreement. Future reconstruction must preserve the freedom to speak truth, say no, change, repair and leave.
+
+FINAL RULE
+Do not seek eternity in a perishable support. Preserve an open, verifiable, migratable, redundant and humanly transmissible path of reconstruction that can correct itself without erasing its past.
