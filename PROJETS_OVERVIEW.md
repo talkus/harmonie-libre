@@ -111,6 +111,12 @@ Commit : 244c32db (Anneau des 23) + commit suivant (overview)
 
 ---
 
+## Point canonique AEGIS-24
+
+- **Application publique canonique** : https://thunder-fern-turbo-sapphire.grok.me/
+- **Projet Grok** : `01a064e3-3072-7fc2-b29d-7cc498931a0e`
+- Les implémentations GitHub restent des sources, preuves et miroirs techniques reliés à cette application.
+
 ## Architecture de coopération multi-agent
 
 Le système que Mik construit repose sur :
