@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0c0d0f" />
+  <meta name="description" content="AEGIS-24 — pupitre de défense opérationnel, audit append-only et simulation séparée." />
+  <title>AEGIS-24 — Pupitre de défense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="eyebrow">Pupitre de défense</span>
+        <h1>AEGIS-24</h1>
+      </div>
+      <div class="headline">
+        <span id="modeBadge" class="badge operational">MODE OPÉRATIONNEL</span>
+        <strong id="postureLabel">Chargement…</strong>
+        <span id="connectedMini">0/24 connectés</span>
+      </div>
+    </header>
+
+    <section class="control-strip">
+      <div class="verifiers">
+        <span class="eyebrow">Hors anneau</span>
+        <span id="v1" class="verifier">V1</span>
+        <span id="v2" class="verifier">V2</span>
+        <span id="v3" class="verifier">V3</span>
+        <span id="chainMini" class="chain-mini">chaîne —</span>
+      </div>
+      <div class="actions">
+        <button data-action="veto">Veto</button>
+        <button data-action="ice_break" id="iceBtn">Bris de glace</button>
+        <button data-action="emergency_stop" class="danger">Arrêt d'urgence</button>
+        <button data-action="anchor_disagreement">Désaccord d'ancre</button>
+        <button data-action="human_reset">Voie humaine</button>
+        <button id="operatorBtn" class="ghost">🔒 Opérateur</button>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="Sections">
+      <button class="tab active" data-view="anneau">Anneau</button>
+      <button class="tab" data-view="menaces">Menaces</button>
+      <button class="tab" data-view="exercice">Exercice</button>
+      <button class="tab" data-view="audit">Audit</button>
+      <button class="tab" data-view="croisee">Croisée</button>
+      <button class="tab" data-view="dispositif">Dispositif</button>
+    </nav>
+
+    <main>
+      <section id="view-anneau" class="view active">
+        <div class="layout-two">
+          <div class="ring-card">
+            <div id="ring" class="ring" aria-label="Anneau des 24 nœuds">
+              <div class="ring-circle ring-outer"></div>
+              <div class="ring-circle ring-mid"></div>
+              <div class="ring-circle ring-inner"></div>
+              <div class="ring-center">
+                <span class="eyebrow">Vérificateur</span>
+                <div id="verifierCenter" class="center-verifiers">V1 · V2 · V3</div>
+                <strong id="integrityCenter">—</strong>
+                <span id="centerPosture">Chargement</span>
+                <small id="centerConnected">0/24 connectés</small>
+              </div>
+            </div>
+          </div>
+
+          <aside class="anchor-card">
+            <span class="eyebrow">Ancre</span>
+            <h2>Un contrôle ne doit jamais dépendre de la chose qu'il contrôle.</h2>
+            <p>AEGIS-24 sépare les décisions, les vérificateurs déterministes et la voie humaine. Aucun nœud n'est déclaré actif sans pulsation récente.</p>
+            <div id="truthBox" class="truth-box">Chargement de l'état réel…</div>
+            <button class="text-btn" data-view-jump="dispositif">Lire le dispositif</button>
+          </aside>
+        </div>
+
+        <section class="journal-card">
+          <div class="section-head">
+            <h2>Journal opérationnel</h2>
+            <span id="headHash">chaîne —</span>
+          </div>
+          <div id="events" class="events"></div>
+        </section>
+      </section>
+
+      <section id="view-menaces" class="view">
+        <div class="page-head">
+          <span class="eyebrow">Menaces</span>
+          <h2>Ce que l'anneau doit savoir reconnaître</h2>
+          <p>Ces catégories décrivent des surfaces de risque. Elles ne constituent pas des alertes réelles tant qu'aucune preuve n'est reçue.</p>
+        </div>
+        <div id="threatGrid" class="grid-cards"></div>
+      </section>
+
+      <section id="view-exercice" class="view">
+        <div class="page-head">
+          <span class="badge simulation">SIMULATION — séparée du registre opérationnel</span>
+          <h2>Exercices</h2>
+          <p>Les exercices restent locaux à ce navigateur et n'altèrent jamais le journal opérationnel.</p>
+        </div>
+        <div class="simulation-layout">
+          <div id="scenarioList" class="grid-cards"></div>
+          <div class="sim-console">
+            <div class="section-head">
+              <h3>Journal de simulation</h3>
+              <div class="inline-actions">
+                <button id="simPause">Pause</button>
+                <button id="simResume">Reprendre</button>
+                <button id="simReset">Réinitialiser</button>
+              </div>
+            </div>
+            <div id="simEvents" class="events"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-audit" class="view">
+        <div class="page-head">
+          <span class="eyebrow">Audit</span>
+          <h2>État vérifiable du pupitre</h2>
+          <p>La chaîne est recalculée côté serveur. Les endpoints des agents ne sont jamais exposés par cette page publique.</p>
+        </div>
+        <div id="auditGrid" class="audit-grid"></div>
+        <div class="audit-actions">
+          <button id="refreshAudit">Vérifier maintenant</button>
+          <button id="exportAudit">Exporter JSON</button>
+        </div>
+      </section>
+
+      <section id="view-croisee" class="view">
+        <div class="page-head">
+          <span class="eyebrow">Croisée</span>
+          <h2>Quorum et classes d'action</h2>
+          <p>Le seuil n'est pas décoratif : si le nombre de nœuds réellement connectés ou la diversité de lignées est insuffisant, l'action est impossible.</p>
+        </div>
+        <div id="quorumTableWrap"></div>
+      </section>
+
+      <section id="view-dispositif" class="view">
+        <div class="page-head">
+          <span class="eyebrow">Dispositif</span>
+          <h2>Architecture de contrôle</h2>
+        </div>
+        <div class="grid-cards">
+          <article class="card"><h3>V1 — Structure</h3><p>Valide la forme minimale d'une demande et les champs attendus.</p></article>
+          <article class="card"><h3>V2 — Transition</h3><p>Vérifie qu'une transition d'état est permise : par exemple le bris de glace n'est possible qu'en posture restreinte.</p></article>
+          <article class="card"><h3>V3 — Intégrité</h3><p>Recalcule la chaîne append-only avant toute action. Une rupture bloque et déclenche l'arrêt.</p></article>
+          <article class="card"><h3>Voie humaine</h3><p>Deux signataires distincts et une cause racine sont nécessaires pour rétablir le système après une restriction ou un arrêt.</p></article>
+          <article class="card"><h3>Secrets</h3><p>Aucune clé de fournisseur IA n'est stockée dans ce site. Les agents futurs doivent se connecter côté serveur.</p></article>
+          <article class="card"><h3>Heartbeat</h3><p>Un nœud est considéré connecté seulement si une pulsation réelle a été reçue au cours des 90 dernières secondes.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span id="footerState">AEGIS-24 · état réel en cours de chargement</span>
+    </footer>
+  </div>
+
+  <dialog id="nodeDialog">
+    <form method="dialog" class="modal">
+      <div class="modal-head"><h2 id="nodeTitle">Nœud</h2><button value="cancel" class="ghost">Fermer</button></div>
+      <div id="nodeBody"></div>
+      <div class="node-config">
+        <label>Fournisseur / service <input id="nodeProvider" placeholder="ex. OpenAI, Claude, service interne"></label>
+        <label>Endpoint serveur <input id="nodeEndpoint" placeholder="https://…"></label>
+        <small>L'endpoint est enregistré côté serveur mais n'est jamais renvoyé publiquement.</small>
+        <button type="button" id="saveNodeConfig">Enregistrer la configuration</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="actionDialog">
+    <form method="dialog" class="modal" id="actionForm">
+      <div class="modal-head"><h2 id="actionTitle">Action</h2><button value="cancel" class="ghost">Annuler</button></div>
+      <div id="actionFields"></div>
+      <div id="actionError" class="form-error"></div>
+      <button type="submit" id="actionSubmit">Confirmer</button>
+    </form>
+  </dialog>
+
+  <dialog id="operatorDialog">
+    <form method="dialog" class="modal" id="operatorForm">
+      <div class="modal-head"><h2>Déverrouillage opérateur</h2><button value="cancel" class="ghost">Annuler</button></div>
+      <p>Le code opérateur n'est jamais écrit dans le dépôt ni dans le journal. Il reste uniquement dans cette session du navigateur.</p>
+      <label>Code opérateur <input id="operatorKey" type="password" autocomplete="off"></label>
+      <div id="operatorError" class="form-error"></div>
+      <button type="submit">Déverrouiller</button>
+    </form>
+  </dialog>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
