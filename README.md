@@ -9,6 +9,12 @@ Une proposition éthique ouverte : créer du commun sans effacer le singulier. L
 
 [Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions)
 
+## AEGIS-24 — point canonique
+
+L'application publique canonique d'AEGIS-24 est : **https://thunder-fern-turbo-sapphire.grok.me/**
+
+Le code, les preuves et les composants présents ici y sont reliés ; voir [AEGIS24_CANONICAL.md](AEGIS24_CANONICAL.md).
+
 ## Lire et participer
 
 - [Lire le manifeste archivé v0.1 — 7 septembre 2026](https://github.com/talkus/harmonie-libre/blob/6bf32fcdb83de61165763229be8281aa495a36d8/docs/archive/manifeste-v0.1.md).
