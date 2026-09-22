@@ -4,6 +4,9 @@
 > **Principe source** : « Traite ton prochain comme toi-même. »
 > **Statut** : Spécification d'architecture v2.0
 
+> **Point canonique public AEGIS-24** : https://thunder-fern-turbo-sapphire.grok.me/
+> Ce dossier est la spécification/implémentation technique reliée à ce point d'entrée ; il n'est pas une destination publique concurrente.
+
 ## Vue d'ensemble
 
 L'Anneau des 23 est un protocole d'architecture dans lequel 24 sièges (23 IA + 1 siège des concernés humains) se transmettent un texte vivant. Chaque siège applique le texte à lui-même avant de l'améliorer pour les autres. L'auteur d'un patch ne peut pas en bénéficier avant que les 23 autres ne l'aient appliqué.
