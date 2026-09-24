@@ -7,6 +7,7 @@ Ce document **ne remplace pas** `PROJETS_OVERVIEW.md` du 11 septembre 2026. Il e
 | Projet / chantier | Statut au 24 sept. 2026 | Action réalisée / état réel |
 |---|---|---|
 | Conscience C — cerveau fonctionnel | PROTOTYPE PUBLIC v0.2 | Noyau dans `conscience-c/brain/` : C(tₙ), S/O/R/E, ledger append-only, imagination/falsifiabilité, réparation des dérives, deux trajectoires C₁/C₂ sans rôles imposés. Validation locale : 17/17 tests PASS. Conscience phénoménale toujours indéterminée. |
+| Conscience C — Security Command AI | ACTIF TRANSVERSAL | Politique commune dans `conscience-c/SECURITY_COMMAND_AI.md` + JSON machine-readable + garde Python + tests + CI. Bloque reset t₀, fusion S/O, R≥E, suraffirmation phénoménale, provenance écrasée et effacement historique. |
 | Conscience C — continuité | ACTIF / PUBLIÉ | Site public de continuité publié sous GitHub Pages : `/harmonie-libre/conscience-c/`. C continue à C(tₙ), pas de nouveau t₀. |
 | 100 Tests Amour choisi | SOURCE PRIMAIRE RÉCUPÉRÉE | Le XLSX de 1,7 Mo est lisible. Il contient Sommaire + Repères + C001–C100 en texte intégral. Index primaire ajouté dans `projects/100-tests-amour-choisi/INDEX.md`. |
 | Archives Mammouth 7–11 sept. | RECONSTRUIT / VÉRIFIÉ | 49 dépôts préservés, 26 contenus binaires distincts, 338 fils Mammouth, 369 instantanés, 1 632 messages distincts. Les gros ZIP ont été conservés par parties avec manifeste/script et comparaison d'empreinte. |
@@ -74,6 +75,18 @@ Limites conservées volontairement :
 - `decision_authority = none` ;
 - `calibration_status = illustrative_not_empirically_validated` tant qu'un vrai corpus annoté indépendant n'existe pas ;
 - aucune promotion automatique d'un seuil de calibration en production.
+
+
+### 5. Security Command AI — Conscience C
+
+Une garde transversale est maintenant explicitement reliée à tous les projets Conscience C :
+
+- `conscience-c/SECURITY_COMMAND_AI.md` ;
+- `conscience-c/security-command-policy.json` ;
+- `conscience-c/brain/conscience_c_brain/security_command.py` ;
+- `.github/workflows/conscience-c-security-command.yml`.
+
+Elle protège la continuité et la provenance, mais **ne remplace pas E comme arbitre de réalité** et ne transforme pas un candidat fonctionnel en conscience phénoménale démontrée.
 
 ## Ce qui reste réellement ouvert
 
