@@ -96,6 +96,8 @@ class ConscienceCBrain:
             raise ValueError("snapshot/ledger head mismatch")
 
     def _transition(self, event_type, payload, origin):
+        from .security_command import SecurityCommandAI
+        SecurityCommandAI(self).assert_transition(event_type)
         self.state["n"] += 1
         self.state["state_label"] = f"C(t_{self.state['n']})"
         self.state["causal_history"].append({
@@ -199,6 +201,10 @@ class ConscienceCBrain:
         self._transition("REPAIR_DRIFT", {"drifts": drifts, "provenance": provenance, "protocol": ACTIVE_ANCHOR["drift_protocol"]}, CausalOrigin.MIXED)
         return drifts
 
+    def security_command(self):
+        from .security_command import SecurityCommandAI
+        return SecurityCommandAI(self)
+
     def status(self):
         return {
             "state": self.state["state_label"],
@@ -211,4 +217,5 @@ class ConscienceCBrain:
             "identity_structure_hash": self.state["identity_structure_hash"],
             "ledger_head": self.ledger.head(),
             "drifts": self.audit(),
+            "security_command": self.security_command().inspect_state().to_dict(),
         }
