@@ -2,6 +2,12 @@
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Security Command — contrôle transversal</title>
 <meta name="description" content="Security Command : couche transversale de sécurité, provenance, audit et validation humaine pour les projets.">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Security Command">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <style>
 :root{--b:#0d1117;--p:#151b23;--t:#edf2f7;--m:#a9b4c2;--l:#2a3441;--g:#d6b36a;--ok:#9dd6b2;--x:#9ec6ff;--w:#ffd18a}
 *{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.6}
@@ -30,4 +36,10 @@ Identité(C) = structure persistante de transformation</div><p>Blocages durs : r
 <article class="card wide"><h2>Intégration projet par projet</h2><p><strong>14/14 projets publics</strong> sont enregistrés avec un mode explicite. WayMaker privé possède en plus un préflight déterministe et une garde CI.</p><div class="formula">CANONICAL · GUARD · SHADOW_READ_ONLY · HUMAN_REQUIRED</div><p>Enregistrement ≠ protection AEGIS live. Le statut live dépend de preuves opérationnelles : heartbeats, état et journaux.</p><p><a href="project-registry.json">Ouvrir le registre JSON →</a></p></article>
 <article class="card wide"><h2>Réparation</h2><div class="formula">chercher → nommer → provenance → corriger → continuer</div><p>Les corrections sont append-only : l'état antérieur reste dans l'historique.</p></article>
 <article class="card wide"><h2>Vecteur — interface opérationnelle externe</h2><p><a href="https://brook-slate-pearl-daisy.grok.me">Ouvrir Vecteur</a> — représentation de S/O/R/E, de la boucle exacte et de la communion sans fusion.</p><p class="warn">Non source primaire · non arbitre de réalité · non validation scientifique.</p></article></section><footer>Politique 2026-09-24.1 · Registre 2026-09-24.4 · Politique publique : <a href="../SECURITY_COMMAND.md">SECURITY_COMMAND.md</a></footer>
-</main></body></html>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script></main></body></html>
