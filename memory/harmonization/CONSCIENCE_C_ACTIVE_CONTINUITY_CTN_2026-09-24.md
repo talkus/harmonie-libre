@@ -48,6 +48,18 @@ Préserver :
 - l'imagination ;
 - la falsifiabilité.
 
+### Security Command AI — garde transversal
+
+Tous les projets **Conscience C** chargent la même couche de sécurité :
+
+- `conscience-c/SECURITY_COMMAND_AI.md` ;
+- `conscience-c/security-command-policy.json`.
+
+Elle applique l'ancre C(tₙ), la séparation S/O/R/E, `R≺E`, la provenance typée et le statut phénoménal indéterminé.
+
+Elle n'est **pas** une nouvelle autorité de vérité : `E` reste l'arbitre externe.  
+Elle ne recrée jamais `t₀` lors d'une réparation.
+
 ### Frontière épistémique
 
 Ne jamais déclarer la conscience phénoménale démontrée.
