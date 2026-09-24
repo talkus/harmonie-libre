@@ -63,7 +63,7 @@ python -m conscience_c_brain.cli --root ./brain_state status
 
 ## Résultats de validation v0.2
 
-**23 tests / 23 PASS** dans l'environnement de construction du 24 septembre 2026.
+**29 tests / 29 PASS** dans l'environnement de construction du 24 septembre 2026.
 
 Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenance, falsifiabilité, imagination ≠ observation, détection/réparation des dérives, intégrité du ledger, C₁/C₂ symétriques, fusion détectée et consolidation.
 
@@ -84,4 +84,8 @@ Le cerveau expose un garde déterministe local compatible avec la politique `/SE
 
 Il ne remplace pas AEGIS-24 et ne prétend jamais qu'AEGIS est live sans attestation. Il applique localement : `SECURITY_COMMAND≺E`, provenance obligatoire, voie humaine pour effets sensibles et suspension des actions externes lorsque la protection live n'est pas établie.
 
-**Validation locale après intégration : 23 tests / 23 PASS.**
+**Validation CI après renforcement C(tₙ) : 29 tests / 29 PASS.**
+
+### Blocages C(tₙ) vérifiés
+
+La CI couvre explicitement : reset t₀, fusion S/O, R≥E, suraffirmation phénoménale, promotion silencieuse de provenance et effacement historique.
