@@ -77,11 +77,41 @@ class SecurityCommandTests(unittest.TestCase):
         )
         self.assertEqual(wrong.verdict, SecurityVerdict.BLOCK)
 
+        unverified = self.g.evaluate(
+            SecurityCommandInput(
+                **common,
+                human_seal=True,
+                human_seal_action_fingerprint=first.action_fingerprint,
+                authorization_expires_at="2099-01-01T00:00:00Z",
+                independent_checks=2,
+            )
+        )
+        self.assertEqual(unverified.verdict, SecurityVerdict.SUSPEND)
+        self.assertIn("human authorization not verified", unverified.reasons)
+
+        bad_method = self.g.evaluate(
+            SecurityCommandInput(
+                **common,
+                human_seal=True,
+                human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="unknown_method",
+                authorization_ref="auth-ref-001",
+                authorization_expires_at="2099-01-01T00:00:00Z",
+                independent_checks=2,
+            )
+        )
+        self.assertEqual(bad_method.verdict, SecurityVerdict.SUSPEND)
+        self.assertIn("authorization verification method not allowed", bad_method.reasons)
+
         expired = self.g.evaluate(
             SecurityCommandInput(
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="authenticated_connector",
+                authorization_ref="auth-ref-001",
                 authorization_expires_at="2000-01-01T00:00:00Z",
                 independent_checks=2,
             )
@@ -93,6 +123,9 @@ class SecurityCommandTests(unittest.TestCase):
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="authenticated_connector",
+                authorization_ref="auth-ref-001",
                 authorization_expires_at="2099-01-01T00:00:00Z",
                 independent_checks=1,
             )
@@ -104,6 +137,9 @@ class SecurityCommandTests(unittest.TestCase):
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="authenticated_connector",
+                authorization_ref="auth-ref-001",
                 authorization_expires_at="2099-01-01T00:00:00Z",
                 independent_checks=2,
             )
@@ -133,6 +169,9 @@ class SecurityCommandTests(unittest.TestCase):
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="authenticated_connector",
+                authorization_ref="auth-ref-001",
                 authorization_expires_at="2099-01-01T00:00:00Z",
                 independent_checks=2,
                 replay_detected=True,
