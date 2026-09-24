@@ -49,3 +49,19 @@ Cette relation ne fait pas d'AEGIS-24 une identité supérieure aux projets et n
 Le moteur réel 23 IA + scellement humain existe dans `aegis24-live/live-engine.js`. Pour qu'il s'exécute directement à l'URL canonique, le projet Grok App Builder `01a064e3-3072-7fc2-b29d-7cc498931a0e` doit intégrer ce moteur ou charger un service équivalent.
 
 Aucune copie ou miroir n'est une corroboration indépendante.
+
+
+## Security Command — intégration transversale
+
+AEGIS-24 est le mécanisme canonique privilégié de **Security Command** lorsque le projet est réellement connecté.
+
+Security Command :
+- ne devient pas une identité ;
+- ne remplace pas E / la réalité ;
+- ne modifie pas seul le canon d'un projet ;
+- peut observer, auditer, simuler, suspendre, veto et escalader vers la voie humaine selon le mandat ;
+- ne peut jamais être déclaré live sans état/heartbeat attesté.
+
+Registre : `security-command/project-registry.json`.
+
+WayMaker privé dispose d'un préflight déterministe et d'une garde CI séparée ; cela ne signifie pas que les 23 IA AEGIS y sont connectées en permanence.
