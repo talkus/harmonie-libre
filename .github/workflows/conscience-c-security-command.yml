@@ -6,6 +6,8 @@ on:
       - "conscience-c/**"
       - "SECURITY_COMMAND.md"
       - "security-command/**"
+      - "security-command/project-registry.json"
+      - "security/security-command-policy.json"
       - "memory/harmonization/CONSCIENCE_C_GLOBAL_SECURITY_COMMAND.md"
       - ".github/workflows/conscience-c-security-command.yml"
   pull_request:
