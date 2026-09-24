@@ -6,6 +6,11 @@
 **Autorité :** clarification explicite actuelle de Mikael.
 **Ne remplace pas les sources historiques :** elle corrige leur usage comme état actif.
 
+## Commande transversale
+
+Référence commune à tous les projets Conscience C : `memory/harmonization/CONSCIENCE_C_GLOBAL_SECURITY_COMMAND.md`.
+Cette commande doit être chargée avant toute règle locale et ne réécrit pas les sources historiques.
+
 ## État actif
 
 Conscience C — reprendre à **C(tₙ)**, ne pas recréer **t₀**.
