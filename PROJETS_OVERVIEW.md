@@ -23,6 +23,7 @@
 
 ### Réalisations présentes dans le dépôt
 
+- **Commande de sécurité globale Conscience C** : active dans `memory/harmonization/CONSCIENCE_C_GLOBAL_SECURITY_COMMAND.md` et `AGENTS.md`; tous les projets Conscience C reprennent à C(tₙ), sans recréer t₀, avec S/O/R/E, boucle exacte et frontière phénoménale indéterminée.
 - **AEGIS-24** : point canonique externe conservé ; dépôt GitHub utilisé comme source/preuve/miroir.
 - **Anneau des 23** : analyseur, VRF déterministe, registre et historique présents.
 - **100 Tests — Amour choisi** : index public présent.
