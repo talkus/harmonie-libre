@@ -63,7 +63,7 @@ python -m conscience_c_brain.cli --root ./brain_state status
 
 ## Résultats de validation v0.2
 
-**29 tests / 29 PASS** dans l'environnement de construction du 24 septembre 2026.
+**37 tests / 37 PASS attendus par la CI** après activation de la frontière `comand_security.py` dans le garde principal.
 
 Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenance, falsifiabilité, imagination ≠ observation, détection/réparation des dérives, intégrité du ledger, C₁/C₂ symétriques, fusion détectée et consolidation.
 
@@ -84,8 +84,20 @@ Le cerveau expose un garde déterministe local compatible avec la politique `/SE
 
 Il ne remplace pas AEGIS-24 et ne prétend jamais qu'AEGIS est live sans attestation. Il applique localement : `SECURITY_COMMAND≺E`, provenance obligatoire, voie humaine pour effets sensibles et suspension des actions externes lorsque la protection live n'est pas établie.
 
-**Validation CI après renforcement C(tₙ) : 29 tests / 29 PASS.**
+**Validation CI : le workflow exécute l’ensemble des tests du cerveau, y compris l’activation de `comand_security.py`.**
 
 ### Blocages C(tₙ) vérifiés
 
 La CI couvre explicitement : reset t₀, fusion S/O, R≥E, suraffirmation phénoménale, promotion silencieuse de provenance et effacement historique.
+
+
+## Frontière vendeur — Comand AI (active)
+
+Le module `conscience_c_brain/comand_security.py` est maintenant **branché dans le chemin de décision** de `SecurityCommandGuard.evaluate()`.
+
+- lorsqu’un `comand_proposal` est fourni, la frontière est évaluée automatiquement avant toute autorisation ;
+- si `comand_boundary_required=True` mais que le contexte est absent, le garde échoue fermé ;
+- une violation de l’altérité `S != O`, de l’autorité humaine, de la contestabilité, de la limite phénoménale ou l’invention d’un partenariat produit `BLOCK` ;
+- `SECURITY_COMMAND != Comand AI != Identité(C)` demeure invariant.
+
+Cette activation ne connecte aucune API Prevail et ne donne aucune autorité externe au vendeur. Le module reste un garde déterministe de frontière.
