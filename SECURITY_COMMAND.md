@@ -123,3 +123,21 @@ Cette politique s'applique au minimum à :
 - tout nouveau projet ajouté au registre.
 
 Une intégration documentaire signifie que le projet reconnaît la politique. Une intégration exécutable doit en plus brancher ses actions réelles à un mécanisme de contrôle et d'audit.
+
+
+## Registre d’intégration
+
+Le registre machine de tous les projets est :
+`security-command/project-registry.json`.
+
+Modes :
+- `CANONICAL` — AEGIS-24 / ses composants canoniques ;
+- `GUARD` — préflight déterministe, suspension et escalade ;
+- `SHADOW_READ_ONLY` — observation/audit sans autorité d'exécution ;
+- `HUMAN_REQUIRED` — l'acte final reste humain.
+
+Au 24 septembre 2026, les 14 surfaces publiques du dépôt sont enregistrées.
+WayMaker privé possède en plus un garde déterministe et une garde CI dans `talkus/waymaker-core-private`.
+
+**Enregistrement ≠ protection AEGIS live.**
+La protection live doit être prouvée par l'état opérationnel, les heartbeats et les journaux.
