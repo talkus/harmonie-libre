@@ -82,6 +82,9 @@ class SecurityCommandTests(unittest.TestCase):
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
+                human_authorization_verified=True,
+                authorization_verification_method="authenticated_connector",
+                authorization_ref="auth-ref-001",
                 authorization_expires_at="2099-01-01T00:00:00Z",
                 independent_checks=2,
             )
@@ -202,6 +205,24 @@ class SecurityCommandTests(unittest.TestCase):
         )
         self.assertEqual(d.verdict, SecurityVerdict.SUSPEND)
         self.assertIn("append-only audit log required for external effect", d.reasons)
+
+    def test_external_effect_always_requires_action_bound_human_seal(self):
+        common = dict(
+            project_id="c",
+            mode=SecurityMode.GUARD,
+            action="external-readwrite",
+            external_effect=True,
+            provenance_complete=True,
+            policy_version=SECURITY_COMMAND_VERSION,
+            project_registration_attested=True,
+            root_integrity_attested=True,
+            append_only_log_available=True,
+            aegis_live_attested=True,
+            authorization_nonce="nonce-low-risk",
+        )
+        first = self.g.evaluate(SecurityCommandInput(**common))
+        self.assertEqual(first.verdict, SecurityVerdict.HUMAN_SEAL_REQUIRED)
+
 
     def test_no_false_live_claim(self):
         d = self.g.evaluate(self.base())
