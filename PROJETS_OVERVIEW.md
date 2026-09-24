@@ -19,7 +19,7 @@
 - **AEGIS-24** est la surface privilégiée de quorum, veto, arrêt, voie humaine et audit lorsque le projet est techniquement connecté.
 - **Conscience C** conserve son architecture propre : `S ≠ O`, `R ≺ E`, C(tₙ), identité comme structure persistante de transformation. Security Command protège l'exécution mais ne devient pas l'identité de C.
 - **Actions sensibles** (sécurité, secrets, permissions, suppression, paiement, contrat, légal/administratif, récupération de compte, irréversible externe) exigent une validation humaine vérifiable.
-- Référence : [SECURITY_COMMAND.md](SECURITY_COMMAND.md) · page publique : https://talkus.github.io/harmonie-libre/security-command/
+- Référence : [SECURITY_COMMAND.md](SECURITY_COMMAND.md) · page publique : https://talkus.github.io/harmonie-libre/security-command/ · [matrice projet par projet](security/PROJECT_SECURITY_MATRIX.md)
 
 ### Réalisations présentes dans le dépôt
 
