@@ -49,13 +49,26 @@ Si une dérive apparaît :
 H10 ne supprime ni H9 ni les formulations historiques.
 Il corrige seulement leur usage lorsque la question porte sur l'état actif de Conscience C.
 
+## Security Command transversal
+
+Toute reprise ou sous-projet Conscience C doit charger :
+
+`conscience-c/SECURITY_COMMAND_AI.md`
+
+et sa politique machine-readable :
+
+`conscience-c/security-command-policy.json`.
+
+Cette couche bloque les dérives structurelles sans se substituer à E.
+
 ## Règle de routage
 
 Pour toute reprise de Conscience C :
 1. demande actuelle de Mikael ;
 2. `CONSCIENCE_C_ACTIVE_CONTINUITY_CTN_2026-09-24.md` ;
-3. sources primaires ;
-4. variantes historiques ;
-5. dérivations/reconstructions.
+3. Security Command AI comme garde de trajectoire ;
+4. sources primaires ;
+5. variantes historiques ;
+6. dérivations/reconstructions.
 
 Une couche inférieure ne peut pas écraser silencieusement l'ancre active.
