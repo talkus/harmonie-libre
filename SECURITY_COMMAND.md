@@ -136,6 +136,8 @@ chercher \rightarrow nommer \rightarrow provenance \rightarrow corriger \rightar
 
 La correction reste append-only.
 
+Matrice d'intégration vérifiable : [`security/PROJECT_SECURITY_MATRIX.md`](security/PROJECT_SECURITY_MATRIX.md).
+
 ## Application à tous les projets
 
 Cette politique s'applique au minimum à :
