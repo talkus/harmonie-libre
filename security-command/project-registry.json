@@ -1,6 +1,6 @@
 {
   "schema": "security-command/project-registry/v1",
-  "version": "2026-09-24.5",
+  "version": "2026-09-24.6",
   "policy": "/SECURITY_COMMAND.md",
   "public_control_page": "/security-command/",
   "canonical_enforcement_surface": "AEGIS-24",
@@ -22,7 +22,10 @@
     "root_integrity_required_for_external_or_high_risk": true,
     "append_only_log_required_for_external_effect": true,
     "policy_version_pinning": true,
-    "unknown_fails_closed": true
+    "unknown_fails_closed": true,
+    "verified_human_authorization_receipt_required": true,
+    "durable_replay_registry_required_for_runtime": true,
+    "durable_replay_registry_production_status": "NOT_ATTESTED_APPLIED"
   },
   "projects": [
     {
@@ -137,6 +140,12 @@
   "hardening_v2": {
     "status": "PROPOSED_ON_SECURITY_BRANCH",
     "branch": "security/security-command-hardening-v2-20260924",
-    "note": "Protection strengthened without claiming universal runtime enforcement until each executor is wired and verified."
+    "note": "Protection strengthened without claiming universal runtime enforcement until each executor is wired and verified.",
+    "verified_receipt_methods": [
+      "authenticated_connector",
+      "aegis_human_seal",
+      "external_signed_receipt"
+    ],
+    "durable_nonce_registry_status": "PREPARED_IN_PRIVATE_SECURITY_BRANCH_NOT_PRODUCTION_ATTESTED"
   }
 }
