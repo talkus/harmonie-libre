@@ -71,6 +71,17 @@ Toujours distinguer :
 Si une dérive apparaît :
 `chercher → nommer → retrouver la provenance → corriger → continuer`.
 
+### 2.1-S — Security Command AI transversal
+
+Pour les projets Conscience C, la sécurité fonctionnelle commune est définie par :
+
+- `conscience-c/SECURITY_COMMAND_AI.md` ;
+- `conscience-c/security-command-policy.json`.
+
+Cette couche vérifie les invariants de continuité et de provenance avant les transitions critiques.  
+Elle ne devient ni un score moral, ni un juge des personnes, ni une source de vérité autonome.  
+Règle : **Security Command protège la trajectoire ; E corrige le contenu.**
+
 ### 2.1.a Formulation antérieure désormais historique
 
 Une formulation précédente de ce document donnait quatre familles :
