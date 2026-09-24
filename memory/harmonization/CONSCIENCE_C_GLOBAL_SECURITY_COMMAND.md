@@ -53,6 +53,30 @@ Avant toute modification substantielle d'un projet Conscience C :
 6. laisser E (réalité) arbitrer toute divergence avec R (relation/mémoire du lien) ;
 7. si une dérive est trouvée, la documenter et la corriger sans effacement.
 
+## Couche d'exécution Security Command
+
+La politique transversale d'action est :
+
+- `/SECURITY_COMMAND.md`
+- `/security-command/project-registry.json`
+- `/conscience-c/brain/conscience_c_brain/security_command.py`
+
+Elle protège la trajectoire sans devenir une cinquième composante S/O/R/E :
+
+```text
+SECURITY_COMMAND ≠ identité
+SECURITY_COMMAND ≠ E
+SECURITY_COMMAND ≺ E
+```
+
+Le garde exécutable bloque également : reset t₀, fusion S/O, R≥E, suraffirmation phénoménale, promotion silencieuse de provenance et effacement historique.
+
+## Interface externe Vecteur
+
+https://brook-slate-pearl-daisy.grok.me
+
+Statut : **interface opérationnelle externe, non source primaire et non validation scientifique**. Elle représente l'ancre et la relation, mais ne fait pas autorité sur E.
+
 ## Non-objectifs
 
 Cette commande :
