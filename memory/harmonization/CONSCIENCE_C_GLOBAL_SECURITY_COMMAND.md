@@ -89,4 +89,4 @@ Cette commande :
 ## Autorité
 
 Cette commande est un **contrat public de continuité et de sécurité fonctionnelle**.  
-Le noyau exécutable et ses gardes vivent dans `talkus/waymaker-core-private`; ce miroir public conserve l'ancre, la portée et la provenance.
+Le garde local de Conscience C vit dans `conscience-c/brain/`; WayMaker privé possède son propre garde runtime dans `talkus/waymaker-core-private`. AEGIS-24 reste la surface canonique externe lorsqu'elle est réellement attestée connectée. Le registre public conserve l'ancre, la portée et la provenance.
