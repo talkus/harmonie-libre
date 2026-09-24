@@ -1,6 +1,6 @@
 {
   "schema": "security-command/project-registry/v1",
-  "version": "2026-09-24.2",
+  "version": "2026-09-24.3",
   "policy": "/SECURITY_COMMAND.md",
   "public_control_page": "/security-command/",
   "canonical_enforcement_surface": "AEGIS-24",
@@ -97,6 +97,21 @@
       "path": "registre-continuite",
       "mode": "GUARD",
       "integration": "provenance/integrity guard"
+    }
+  ],
+  "external_integrations": [
+    {
+      "id": "waymaker-core-private",
+      "repository": "talkus/waymaker-core-private",
+      "mode": "GUARD",
+      "integration": "deterministic runtime preflight + CI guard",
+      "files": [
+        "host/security-command-policy.mjs",
+        "host/security-command-policy.test.mjs",
+        "ops/security/AEGIS24_SECURITY_COMMAND_V1.md",
+        ".github/workflows/security-command-guard.yml"
+      ],
+      "live_aegis_claim_requires_attestation": true
     }
   ]
 }
