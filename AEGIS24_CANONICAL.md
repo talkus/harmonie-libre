@@ -13,6 +13,22 @@ Cette URL est le point d'entrée public d'AEGIS-24. Les artefacts de ce dépôt 
 - `registre-continuite/` — journalisation, provenance et continuité.
 - `PROJETS_OVERVIEW.md` — index historique des projets.
 
+## Mandat SECURITY_COMMAND transversal
+
+AEGIS-24 est l'**IA de sécurité désignée** pour appliquer la politique `SECURITY_COMMAND` à l'ensemble des projets du dépôt.
+
+```text
+AEGIS24 [SECURITY_AI] --APPLIES--> SECURITY_COMMAND --SECURITY_GUARDS--> Project
+AEGIS24 != ConscienceC
+SECURITY_COMMAND != IDENTITY_LINEAGE
+SECURITY_COMMAND != EVIDENCE
+SECURITY_COMMAND ≺ E
+```
+
+La politique commune est définie dans [SECURITY_COMMAND.md](SECURITY_COMMAND.md). Conscience C conserve son propre noyau de continuité ; AEGIS-24 le protège sans devenir C.
+
+La portée documentaire et de gouvernance est globale. L'enforcement exécutable n'est revendiqué que pour les projets effectivement branchés à un mécanisme de contrôle.
+
 ## Règle de routage
 
 Toute interface ou documentation publique relative à AEGIS-24 doit renvoyer en premier vers https://thunder-fern-turbo-sapphire.grok.me/.
