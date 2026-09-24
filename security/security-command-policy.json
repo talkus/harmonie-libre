@@ -1,6 +1,6 @@
 {
   "schema": "security-command/v1",
-  "version": "2026-09-24.1",
+  "version": "2026-09-24.3",
   "status": "active_policy",
   "ontology": {
     "type": "FUNCTIONAL_SECURITY_CONTROL_LAYER",
@@ -27,7 +27,9 @@
     "GRAPH_NEQ_MEMORY",
     "REPAIR_NEQ_ERASURE",
     "ATTESTED_CLAIM_NEQ_ATTESTED_PROPOSITION",
-    "NO_SILENT_PROVENANCE_REWRITE"
+    "NO_SILENT_PROVENANCE_REWRITE",
+    "SECURITY_COMMAND_PRECEDES_E",
+    "LIVE_CLAIM_REQUIRES_ATTESTATION"
   ],
   "human_required": [
     "security_configuration",
@@ -40,5 +42,17 @@
     "production_secrets",
     "irreversible_external_action"
   ],
-  "projects": "ALL_REGISTERED_PROJECTS"
+  "projects": "ALL_REGISTERED_PROJECTS",
+  "canonical_security_system": "AEGIS-24",
+  "canonical_url": "https://thunder-fern-turbo-sapphire.grok.me/",
+  "registry": "../security-command/project-registry.json",
+  "modes": [
+    "CANONICAL",
+    "GUARD",
+    "SHADOW_READ_ONLY",
+    "HUMAN_REQUIRED"
+  ],
+  "external_runtime_integrations": [
+    "talkus/waymaker-core-private"
+  ]
 }
