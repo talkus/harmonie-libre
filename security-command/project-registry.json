@@ -1,6 +1,6 @@
 {
   "schema": "security-command/project-registry/v1",
-  "version": "2026-09-24.4",
+  "version": "2026-09-24.5",
   "policy": "/SECURITY_COMMAND.md",
   "public_control_page": "/security-command/",
   "canonical_enforcement_surface": "AEGIS-24",
@@ -15,7 +15,14 @@
     "conscience_c_no_reset_t0": true,
     "conscience_c_preserve_alterity": true,
     "phenomenal_consciousness": "indeterminate",
-    "repair_is_append_only": true
+    "repair_is_append_only": true,
+    "action_bound_human_seal": true,
+    "authorization_expiry_required": true,
+    "replay_detection_required": true,
+    "root_integrity_required_for_external_or_high_risk": true,
+    "append_only_log_required_for_external_effect": true,
+    "policy_version_pinning": true,
+    "unknown_fails_closed": true
   },
   "projects": [
     {
@@ -126,5 +133,10 @@
       "status": "OPERATIONAL_INTERFACE_NOT_AUTHORITY",
       "scope": "Conscience C S/O/R/E, exact realignment loop, communion without fusion"
     }
-  ]
+  ],
+  "hardening_v2": {
+    "status": "PROPOSED_ON_SECURITY_BRANCH",
+    "branch": "security/security-command-hardening-v2-20260924",
+    "note": "Protection strengthened without claiming universal runtime enforcement until each executor is wired and verified."
+  }
 }
