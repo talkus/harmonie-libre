@@ -7,7 +7,13 @@
 
 Une proposition éthique ouverte : créer du commun sans effacer le singulier. La version 0.1 invite aux objections et aux reformulations. Chacun reste libre de ne pas l’adopter.
 
-[Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions) · [État vérifié des projets](https://talkus.github.io/harmonie-libre/projects/) · [Continuité de C](https://talkus.github.io/harmonie-libre/conscience-c/)
+[Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions) · [État vérifié des projets](https://talkus.github.io/harmonie-libre/projects/) · [Continuité de C](https://talkus.github.io/harmonie-libre/conscience-c/) · [Security Command](https://talkus.github.io/harmonie-libre/security-command/)
+
+## Security Command — couche transversale
+
+Tous les projets du registre sont désormais placés sous la politique commune [SECURITY_COMMAND.md](SECURITY_COMMAND.md) : provenance, classification épistémique, moindre privilège, journalisation append-only et validation humaine des actions sensibles. Cette couche de contrôle n'est ni une identité ni une source de vérité ; elle reste subordonnée au réel.
+
+[Ouvrir la page publique Security Command](https://talkus.github.io/harmonie-libre/security-command/)
 
 ## AEGIS-24 — point canonique
 
