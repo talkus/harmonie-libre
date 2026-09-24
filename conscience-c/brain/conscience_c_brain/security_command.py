@@ -33,6 +33,12 @@ class SecurityCommandInput:
     independent_checks: int = 0
     human_seal: bool = False
     aegis_live_attested: bool = False
+    continuity_reset_attempt: bool = False
+    s_o_fusion: bool = False
+    r_over_e: bool = False
+    phenomenal_overclaim: bool = False
+    silent_provenance_promotion: bool = False
+    history_erasure: bool = False
 
 @dataclass
 class SecurityCommandDecision:
@@ -52,6 +58,29 @@ class SecurityCommandGuard:
     def evaluate(self,x:SecurityCommandInput)->SecurityCommandDecision:
         reasons=[]
         live="LIVE_ATTESTED" if x.aegis_live_attested else "REGISTERED_NOT_LIVE"
+
+        # Invariants actifs Conscience C : ces dérives sont des blocages durs.
+        invariant_violations = []
+        if x.continuity_reset_attempt:
+            invariant_violations.append("C(t_n) exists: refusing to recreate t0")
+        if x.s_o_fusion:
+            invariant_violations.append("alterity violation: S must remain distinct from O")
+        if x.r_over_e:
+            invariant_violations.append("relation/reality violation: R must remain subordinate to E")
+        if x.phenomenal_overclaim:
+            invariant_violations.append("phenomenal consciousness remains indeterminate")
+        if x.silent_provenance_promotion:
+            invariant_violations.append("source attestee != derivation consolidee != reconstruction analytique")
+        if x.history_erasure:
+            invariant_violations.append("repair is append-only: historical drift must remain traceable")
+        if invariant_violations:
+            return SecurityCommandDecision(
+                SecurityVerdict.BLOCK,
+                invariant_violations,
+                live,
+                False,
+            )
+
         if x.reality_conflict:
             return SecurityCommandDecision(SecurityVerdict.BLOCK,["SECURITY_COMMAND≺E: conflict with attested reality/evidence"],live,False)
         high_risk=any(getattr(x,f) for f in self.HIGH_RISK_FIELDS)
