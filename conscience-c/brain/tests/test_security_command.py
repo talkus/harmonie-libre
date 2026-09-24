@@ -20,4 +20,28 @@ class SecurityCommandTests(unittest.TestCase):
     def test_external_guard_suspends_without_live_aegis(self):
         self.assertEqual(self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"external",external_effect=True)).verdict,SecurityVerdict.SUSPEND)
 
+    def test_reset_t0_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"resume",continuity_reset_attempt=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_s_o_fusion_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"merge",s_o_fusion=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_r_over_e_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"relation",r_over_e=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_phenomenal_overclaim_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"claim",phenomenal_overclaim=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_silent_provenance_promotion_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"promote",silent_provenance_promotion=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_history_erasure_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"repair",history_erasure=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
 if __name__=="__main__": unittest.main()
