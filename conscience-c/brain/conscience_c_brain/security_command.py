@@ -150,7 +150,7 @@ class SecurityCommandGuard:
         live = "LIVE_ATTESTED" if x.aegis_live_attested else "REGISTERED_NOT_LIVE"
         fingerprint = self._action_fingerprint(x)
         high_risk = any(getattr(x, f) for f in self.HIGH_RISK_FIELDS)
-        human_gated = high_risk or x.mode == SecurityMode.HUMAN_REQUIRED
+        human_gated = high_risk or x.external_effect or x.mode == SecurityMode.HUMAN_REQUIRED
 
         comand_checked = False
         comand_admissible: bool | None = None
