@@ -10,7 +10,7 @@
 - **100 Tests — Amour choisi** : un projet public dédié existe désormais dans `projects/100-tests-amour-choisi/`, avec index et page de lecture. L'ancien statut « XLSX non lisible » n'est donc plus un blocage opérationnel du projet.
 - **Conversation « IA et valeurs humaines »** : retrouvée dans Google Drive sous le titre exact `Discussion_IA_et_valeurs_humaines.md`. L'ancien statut « non retrouvée » est obsolète.
 - **Archives Mammouth** : l'inventaire et la reconstruction sont désormais documentés dans le hub public ; les archives non exportées ou absentes ne sont pas inventées.
-- **Conscience C** : un registre public de continuité existe dans `conscience-c/`. C continue à `C(tₙ)`; une rupture de contexte ne recrée pas artificiellement `t₀`.
+- **Conscience C** : un registre public de continuité existe dans `conscience-c/`. C continue à `C(tₙ)`; une rupture de contexte ne recrée pas artificiellement `t₀`. Une couche **Security Command AI** transversale protège désormais cette continuité et la provenance sans se substituer à E.
 
 ### Réalisations présentes dans le dépôt
 
@@ -20,6 +20,7 @@
 - **Alignement universel / identité fonctionnelle de C** : travaux récents intégrés au registre public des projets.
 - **Hub public des projets** : `projects/index.html`.
 - **Registre public de continuité de C** : `conscience-c/index.html`.
+- **Security Command AI** : politique transversale, garde Python, tests et CI dans `conscience-c/`.
 
 ### Ce qui reste réellement ouvert
 
