@@ -85,3 +85,9 @@ Le cerveau expose un garde déterministe local compatible avec la politique `/SE
 Il ne remplace pas AEGIS-24 et ne prétend jamais qu'AEGIS est live sans attestation. Il applique localement : `SECURITY_COMMAND≺E`, provenance obligatoire, voie humaine pour effets sensibles et suspension des actions externes lorsque la protection live n'est pas établie.
 
 **Validation locale après intégration : 23 tests / 23 PASS.**
+
+### Blocages C(tₙ) ajoutés au garde
+
+Le garde exécutable couvre désormais explicitement : reset t₀, fusion S/O, R≥E, suraffirmation phénoménale, promotion silencieuse de provenance et effacement historique.
+
+Un workflow GitHub Actions dédié exécute toute la suite de tests sur les changements Conscience C / Security Command. Le nombre de tests validé doit être lu depuis la CI courante plutôt que figé par une annonce antérieure.
