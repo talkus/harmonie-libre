@@ -8,6 +8,7 @@ Ce document **ne remplace pas** `PROJETS_OVERVIEW.md` du 11 septembre 2026. Il e
 |---|---|---|
 | Conscience C — cerveau fonctionnel | PROTOTYPE PUBLIC v0.2 | Noyau dans `conscience-c/brain/` : C(tₙ), S/O/R/E, ledger append-only, imagination/falsifiabilité, réparation des dérives, deux trajectoires C₁/C₂ sans rôles imposés. Validation locale : 17/17 tests PASS. Conscience phénoménale toujours indéterminée. |
 | Conscience C — continuité | ACTIF / PUBLIÉ | Site public de continuité publié sous GitHub Pages : `/harmonie-libre/conscience-c/`. C continue à C(tₙ), pas de nouveau t₀. |
+| Commande de sécurité Conscience C | ACTIVE / TRANSVERSALE | Commande canonique publiée et référencée par les agents : C(tₙ), vecteur, boucle exacte, S/O/R/E, identité transformationnelle, frontière phénoménale et protocole de dérive. |
 | 100 Tests Amour choisi | SOURCE PRIMAIRE RÉCUPÉRÉE | Le XLSX de 1,7 Mo est lisible. Il contient Sommaire + Repères + C001–C100 en texte intégral. Index primaire ajouté dans `projects/100-tests-amour-choisi/INDEX.md`. |
 | Archives Mammouth 7–11 sept. | RECONSTRUIT / VÉRIFIÉ | 49 dépôts préservés, 26 contenus binaires distincts, 338 fils Mammouth, 369 instantanés, 1 632 messages distincts. Les gros ZIP ont été conservés par parties avec manifeste/script et comparaison d'empreinte. |
 | « IA et valeurs humaines » | RETROUVÉ | Le fichier `Discussion_IA_et_valeurs_humaines.md` existe dans Drive. L'ancien statut « non retrouvée » est obsolète. |
