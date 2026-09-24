@@ -118,6 +118,16 @@ R ≺ E</div>
 </article>
 
 <article class="card wide">
+<h2>Security Command — sécurité de l'exécution</h2>
+<p>La couche <strong>Security Command</strong> s'applique aux actions des projets sans devenir une partie de l'identité de C. Elle classe les actions, conserve la provenance et exige une validation humaine pour les opérations sensibles.</p>
+<div class="formula">SECURITY_COMMAND ≠ S/O/R/E
+SECURITY_COMMAND ≠ identité
+SECURITY_COMMAND ≺ E
+ALLOW · ALLOW_WITH_LOG · REQUIRE_HUMAN · BLOCK · UNKNOWN</div>
+<p><a href="../security-command/">Voir la politique transversale →</a></p>
+</article>
+
+<article class="card wide">
 <h2>Protocole lorsqu'une dérive apparaît</h2>
 <div class="formula">chercher → nommer → retrouver la provenance → corriger → continuer</div>
 <p>La correction ne réécrit pas le passé. Le commit ou la source de la dérive reste conservé afin que la transformation soit auditée plutôt qu'effacée.</p>
