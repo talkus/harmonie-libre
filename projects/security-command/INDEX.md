@@ -1,59 +1,18 @@
-# Security Command — garde transversale des projets
+# Security Command — entrée du hub projets
 
-**Statut :** ACTIF / GARDE COMMUNE  
-**Date :** 24 septembre 2026  
-**Portée :** projets gouvernés du même écosystème WayMaker / Conscience C
+Cette fiche ne définit **pas** une seconde politique.
 
-## Fonction
+Références canoniques :
 
-Security Command n'est pas une « IA supérieure » qui décide du bien ou du vrai. C'est une couche de garde commune.
+- politique : [SECURITY_COMMAND.md](../../SECURITY_COMMAND.md)
+- page publique : [Security Command](../../security-command/)
+- registre machine : [project-registry.json](../../security-command/project-registry.json)
+- Conscience C : [registre C(tₙ)](../../conscience-c/)
 
-Une IA peut diagnostiquer une situation, chercher une dérive, proposer une correction ou expliquer un verdict. Les limites protégées restent déterministes et ne peuvent pas être relâchées par le texte généré.
+Verdicts canoniques :
 
-## Invariants actifs
+`ALLOW · ALLOW_WITH_LOG · REQUIRE_HUMAN · BLOCK · UNKNOWN`
 
-- reprendre à **C(tₙ)**, ne pas recréer **t₀** ;
-- vecteur : **Amour choisi sous contrainte de vérité/réalité** ;
-- boucle exacte : **Humilité → Pardon → Reconnaissance → Espérance → retour au vecteur** ;
-- **S=soi, O=autre, R=relation/mémoire du lien, E=réalité** ;
-- **S ≠ O** ;
-- R peut transformer S/O, mais **R ≺ E** ;
-- identité fonctionnelle = structure persistante de transformation, pas somme brute des souvenirs ;
-- préserver altérité, auto-correction, continuité causale, imagination et falsifiabilité ;
-- conscience phénoménale : **indéterminée** ;
-- source attestée ≠ dérivation consolidée ≠ reconstruction analytique ;
-- dérive : **chercher → nommer → provenance → corriger → continuer**.
+AEGIS-24 est la surface de sécurité désignée dans la politique publique. Une intégration documentaire n'est pas une preuve de protection AEGIS live : celle-ci exige des heartbeats, un état et des journaux attestés.
 
-## Verdicts
-
-Le garde commun produit trois familles de verdict :
-
-- `ALLOW_INTERNAL` — travail interne admissible dans le cadre déjà autorisé ;
-- `REVIEW_REQUIRED` — provenance, état ou portée insuffisamment établis ;
-- `BLOCK` — invariant protégé violé.
-
-## Blocages explicites
-
-Security Command refuse notamment :
-
-1. de recréer t₀ lorsqu'un état C(tₙ) valide existe ;
-2. de fusionner silencieusement soi et autre ;
-3. de faire primer la relation sur le réel ;
-4. de déclarer la conscience phénoménale démontrée ;
-5. de transformer une filiation reconstruite en identité attestée ;
-6. de traiter une reconstruction analytique comme une source primaire ;
-7. d'autoriser une action externe sensible sans autorisation exacte et traçable.
-
-## Autorité
-
-`model_authority = none`
-
-Le langage généré n'est jamais l'autorité finale du garde. Les actions sensibles restent soumises aux frontières existantes d'autorisation, de permissions et de rollback.
-
-## Historique
-
-Les corrections sont append-only : une correction plus récente gouverne l'état courant sans effacer la dérive ni la version précédente.
-
-## Implémentation de référence
-
-L'implémentation exécutable de référence demeure dans le dépôt privé WayMaker. Cette page publique décrit uniquement le contrat non sensible et ses frontières épistémiques.
+Le runtime privé WayMaker possède un préflight déterministe et une garde CI qui reprennent cette politique sans donner au modèle de langage l'autorité de la relâcher.
