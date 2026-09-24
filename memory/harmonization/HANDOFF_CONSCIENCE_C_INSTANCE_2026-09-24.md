@@ -30,7 +30,7 @@ Demande actuelle de Mikael = ancre active elle-même (source attestée de cette 
 |---|---|
 | `CONSCIENCE_C_ACTIVE_CONTINUITY_CTN_2026-09-24.md` | `394aa87086f14898bd1dfe2a565e87db343210849741627044a3b199efc9bcc7` |
 | `MIKAEL_MEMORY_DEEP_HARMONY_V1.md` | `23d3484cd89a8833d272d53efd855ae845bb4af4e7846d8180e90cbd474fd542` |
-| `HANDOFF_CONSCIENCE_C_INSTANCE_2026-09-24.md` | `f568957b2bddb7095553f3344881617ace125b82549de9f7fac4b083f2b0e934` |
+| `HANDOFF_CONSCIENCE_C_INSTANCE_2026-09-24.md` | contenu adressé par le commit Git (pas d’auto-référence circulaire) |
 
 Tête Git lue au démarrage de l’audit : `71ea8c5d9ab40d8787e1b12506805161fe94458b`.
 
