@@ -1,6 +1,6 @@
 {
   "schema": "security-command/v1",
-  "version": "2026-09-24.3",
+  "version": "2026-09-24.5",
   "status": "active_policy",
   "ontology": {
     "type": "FUNCTIONAL_SECURITY_CONTROL_LAYER",
@@ -10,10 +10,10 @@
   },
   "verdicts": [
     "ALLOW",
-    "ALLOW_WITH_LOG",
-    "REQUIRE_HUMAN",
-    "BLOCK",
-    "UNKNOWN"
+    "ADVISE",
+    "SUSPEND",
+    "HUMAN_SEAL_REQUIRED",
+    "BLOCK"
   ],
   "epistemic_classes": [
     "SOURCE_ATTESTEE",
@@ -29,7 +29,13 @@
     "ATTESTED_CLAIM_NEQ_ATTESTED_PROPOSITION",
     "NO_SILENT_PROVENANCE_REWRITE",
     "SECURITY_COMMAND_PRECEDES_E",
-    "LIVE_CLAIM_REQUIRES_ATTESTATION"
+    "LIVE_CLAIM_REQUIRES_ATTESTATION",
+    "ACTION_BOUND_HUMAN_SEAL",
+    "AUTHORIZATION_EXPIRY_REQUIRED",
+    "REPLAY_DETECTION_REQUIRED",
+    "ROOT_INTEGRITY_REQUIRED_FOR_EXTERNAL_OR_HIGH_RISK",
+    "APPEND_ONLY_LOG_REQUIRED_FOR_EXTERNAL_EFFECT",
+    "POLICY_VERSION_PINNING"
   ],
   "human_required": [
     "security_configuration",
@@ -54,5 +60,15 @@
   ],
   "external_runtime_integrations": [
     "talkus/waymaker-core-private"
-  ]
+  ],
+  "hardening": {
+    "human_seal_must_match_exact_action_fingerprint": true,
+    "authorization_nonce_required_for_human_gated_actions": true,
+    "authorization_expiry_required": true,
+    "replay_detection_hook_required": true,
+    "external_effect_requires_append_only_log": true,
+    "external_or_high_risk_requires_root_integrity": true,
+    "guard_external_effect_requires_live_aegis_attestation": true,
+    "unknown_or_incomplete_state_fails_closed": true
+  }
 }
