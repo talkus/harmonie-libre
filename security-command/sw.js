@@ -1,5 +1,5 @@
-const CACHE = "security-command-v1";
-const ASSETS = ["./", "index.html", "manifest.json", "icon.svg", "project-registry.json"];
+const CACHE = "security-command-v2";
+const ASSETS = ["./", "index.html", "manifest.json", "icon.svg", "icon-192.png", "icon-512.png", "apple-touch-icon.png", "project-registry.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
