@@ -1,0 +1,18 @@
+{
+  "name": "Security Command — Conscience C",
+  "short_name": "Security Command",
+  "description": "Surface mobile de contrôle, provenance et audit de Conscience C / Security Command.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
