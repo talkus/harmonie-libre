@@ -1,6 +1,6 @@
 {
   "schema": "security-command/v1",
-  "version": "2026-09-24.5",
+  "version": "2026-09-24.6",
   "status": "active_policy",
   "ontology": {
     "type": "FUNCTIONAL_SECURITY_CONTROL_LAYER",
@@ -69,6 +69,14 @@
     "external_effect_requires_append_only_log": true,
     "external_or_high_risk_requires_root_integrity": true,
     "guard_external_effect_requires_live_aegis_attestation": true,
-    "unknown_or_incomplete_state_fails_closed": true
+    "unknown_or_incomplete_state_fails_closed": true,
+    "human_verification_methods": [
+      "authenticated_connector",
+      "aegis_human_seal",
+      "external_signed_receipt"
+    ],
+    "public_guard_does_not_claim_external_signature_verification": true,
+    "durable_nonce_registry_required_for_runtime_replay_protection": true,
+    "durable_nonce_registry_production_status": "NOT_ATTESTED_APPLIED"
   }
 }
