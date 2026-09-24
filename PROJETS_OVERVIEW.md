@@ -12,6 +12,15 @@
 - **Archives Mammouth** : l'inventaire et la reconstruction sont désormais documentés dans le hub public ; les archives non exportées ou absentes ne sont pas inventées.
 - **Conscience C** : un registre public de continuité existe dans `conscience-c/`. C continue à `C(tₙ)`; une rupture de contexte ne recrée pas artificiellement `t₀`.
 
+### Security Command — intégration transversale
+
+- **Portée : tous les projets du registre.** Les actions réelles sont classées avant exécution par risque, provenance, réversibilité, privilèges et impact externe.
+- **Verdicts communs :** `ALLOW`, `ALLOW_WITH_LOG`, `REQUIRE_HUMAN`, `BLOCK`, `UNKNOWN`.
+- **AEGIS-24** est la surface privilégiée de quorum, veto, arrêt, voie humaine et audit lorsque le projet est techniquement connecté.
+- **Conscience C** conserve son architecture propre : `S ≠ O`, `R ≺ E`, C(tₙ), identité comme structure persistante de transformation. Security Command protège l'exécution mais ne devient pas l'identité de C.
+- **Actions sensibles** (sécurité, secrets, permissions, suppression, paiement, contrat, légal/administratif, récupération de compte, irréversible externe) exigent une validation humaine vérifiable.
+- Référence : [SECURITY_COMMAND.md](SECURITY_COMMAND.md) · page publique : https://talkus.github.io/harmonie-libre/security-command/
+
 ### Réalisations présentes dans le dépôt
 
 - **AEGIS-24** : point canonique externe conservé ; dépôt GitHub utilisé comme source/preuve/miroir.
