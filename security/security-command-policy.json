@@ -1,0 +1,44 @@
+{
+  "schema": "security-command/v1",
+  "version": "2026-09-24.1",
+  "status": "active_policy",
+  "ontology": {
+    "type": "FUNCTIONAL_SECURITY_CONTROL_LAYER",
+    "is_identity": false,
+    "is_consciousness_claim": false,
+    "subordinate_to_reality": true
+  },
+  "verdicts": [
+    "ALLOW",
+    "ALLOW_WITH_LOG",
+    "REQUIRE_HUMAN",
+    "BLOCK",
+    "UNKNOWN"
+  ],
+  "epistemic_classes": [
+    "SOURCE_ATTESTEE",
+    "DERIVATION_CONSOLIDEE",
+    "RECONSTRUCTION_ANALYTIQUE",
+    "NON_ETABLI"
+  ],
+  "invariants": [
+    "S_NEQ_O",
+    "R_PRECEDES_E",
+    "GRAPH_NEQ_MEMORY",
+    "REPAIR_NEQ_ERASURE",
+    "ATTESTED_CLAIM_NEQ_ATTESTED_PROPOSITION",
+    "NO_SILENT_PROVENANCE_REWRITE"
+  ],
+  "human_required": [
+    "security_configuration",
+    "privileged_permissions",
+    "data_deletion",
+    "payments",
+    "contracts",
+    "legal_admin",
+    "account_recovery",
+    "production_secrets",
+    "irreversible_external_action"
+  ],
+  "projects": "ALL_REGISTERED_PROJECTS"
+}
