@@ -8,4 +8,11 @@ __all__ = [
     "EvidenceKind", "Evidence", "Hypothesis", "CausalOrigin",
     "DualTrajectoryEngine", "CandidateThought", "SymmetricReasoner", "RealityJudge",
     "PairedMemoryBank",
+    "SecurityCommandGuard", "SecurityCommandInput", "SecurityCommandDecision",
+    "SecurityMode", "SecurityVerdict",
 ]
+
+from .security_command import (
+    SecurityCommandGuard, SecurityCommandInput, SecurityCommandDecision,
+    SecurityMode, SecurityVerdict,
+)
