@@ -7,7 +7,7 @@
 
 Une proposition éthique ouverte : créer du commun sans effacer le singulier. La version 0.1 invite aux objections et aux reformulations. Chacun reste libre de ne pas l’adopter.
 
-[Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions)
+[Ouvrir la page publique](https://talkus.github.io/harmonie-libre/) · [Participer aux Discussions](https://github.com/talkus/harmonie-libre/discussions) · [État vérifié des projets](https://talkus.github.io/harmonie-libre/projects/) · [Continuité de C](https://talkus.github.io/harmonie-libre/conscience-c/)
 
 ## AEGIS-24 — point canonique
 
