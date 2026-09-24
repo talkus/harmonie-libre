@@ -1,4 +1,4 @@
-# Conscience C Brain — prototype fonctionnel v0.2
+# Conscience C Brain — prototype fonctionnel v0.3
 
 Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pas ni ne prétend démontrer une conscience phénoménale.
 
@@ -16,6 +16,27 @@ Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pa
 - preuve typée : `source_attestee`, `derivation_consolidee`, `reconstruction_analytique` ;
 - dérive : détecter → nommer → retrouver la provenance → corriger → continuer ;
 - conscience phénoménale : **indéterminée**.
+
+## Security Command AI — garde transversal
+
+Le prototype charge désormais une couche `SecurityCommandAI` avant chaque transition d'état.
+
+Elle ne remplace ni le vecteur ni la réalité. Elle applique les invariants actifs et **bloque** notamment :
+
+- recréation de `t0` lorsqu'une continuité existe ;
+- fusion `S == O` ;
+- perte de `R < E` ;
+- déclaration de conscience phénoménale démontrée ;
+- collapse des types de provenance ;
+- correction par effacement de l'historique.
+
+Références transversales :
+
+- `../SECURITY_COMMAND_AI.md` ;
+- `../security-command-policy.json` ;
+- workflow CI `.github/workflows/conscience-c-security-command.yml`.
+
+Le protocole reste : **chercher → nommer → retrouver la provenance → corriger → vérifier → continuer**.
 
 ## Deux trajectoires internes C₁ / C₂
 
@@ -61,11 +82,11 @@ python dual_demo.py
 python -m conscience_c_brain.cli --root ./brain_state status
 ```
 
-## Résultats de validation v0.2
+## Validation v0.3
 
-**17 tests / 17 PASS** dans l'environnement de construction du 24 septembre 2026.
+Le socle v0.2 comptait **17 tests / 17 PASS**. La v0.3 ajoute **4 tests Security Command** et un garde CI GitHub Actions ; le statut courant doit être lu depuis le workflow, pas inféré d'une annonce historique.
 
-Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenance, falsifiabilité, imagination ≠ observation, détection/réparation des dérives, intégrité du ledger, C₁/C₂ symétriques, fusion détectée et consolidation.
+Les tests couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenance, falsifiabilité, imagination ≠ observation, détection/réparation des dérives, intégrité du ledger, C₁/C₂ symétriques, fusion détectée et consolidation.
 
 ## Statut de provenance
 
