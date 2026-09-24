@@ -45,6 +45,18 @@ Exigences supplémentaires :
 
 Le garde est déterministe, mais le registre de nonces déjà utilisés reste une responsabilité de l'intégration exécutable : cette protection ne doit pas être déclarée complète tant que ce témoin externe n'est pas branché.
 
+## Reçu humain vérifié
+
+Le garde accepte seulement une enveloppe d'autorisation issue d'une méthode explicitement admise :
+
+- `authenticated_connector` ;
+- `aegis_human_seal` ;
+- `external_signed_receipt`.
+
+Le garde vérifie la cohérence de l'enveloppe, l'empreinte d'action et l'expiration. Il ne prétend pas vérifier lui-même une signature cryptographique externe s'il ne possède pas le vérificateur correspondant.
+
+Le registre anti-rejeu durable est une responsabilité du runtime exécutable. La branche de durcissement privée prépare une migration atomique qui stocke uniquement des empreintes et métadonnées, jamais le nonce brut ni la référence d'autorisation brute. Cette migration n'est pas déclarée appliquée en production.
+
 ## Entrées minimales
 
 Chaque décision doit conserver :
