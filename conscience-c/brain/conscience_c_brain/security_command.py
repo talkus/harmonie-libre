@@ -60,6 +60,9 @@ class SecurityCommandInput:
     authorization_nonce: str = ""
     human_seal_action_fingerprint: str = ""
     authorization_expires_at: str = ""
+    human_authorization_verified: bool = False
+    authorization_verification_method: str = ""
+    authorization_ref: str = ""
     replay_detected: bool = False
 
     # Comand AI remains O, never authority/identity.
@@ -95,6 +98,12 @@ class SecurityCommandGuard:
     A human seal is valid only when bound to the exact action fingerprint.
     Replay detection still requires an external used-nonce registry.
     """
+
+    ALLOWED_HUMAN_VERIFICATION_METHODS = {
+        "authenticated_connector",
+        "aegis_human_seal",
+        "external_signed_receipt",
+    }
 
     HIGH_RISK_FIELDS = (
         "irreversible",
@@ -290,6 +299,30 @@ class SecurityCommandGuard:
                     reasons + ["human seal not bound to exact action"],
                     True,
                     authorization_bound=False,
+                )
+
+            if not x.human_authorization_verified:
+                return decision(
+                    SecurityVerdict.SUSPEND,
+                    reasons + ["human authorization not verified"],
+                    True,
+                    authorization_bound=True,
+                )
+
+            if x.authorization_verification_method not in self.ALLOWED_HUMAN_VERIFICATION_METHODS:
+                return decision(
+                    SecurityVerdict.SUSPEND,
+                    reasons + ["authorization verification method not allowed"],
+                    True,
+                    authorization_bound=True,
+                )
+
+            if not x.authorization_ref.strip():
+                return decision(
+                    SecurityVerdict.SUSPEND,
+                    reasons + ["authorization reference required"],
+                    True,
+                    authorization_bound=True,
                 )
 
             expiry = self._authorization_expiry_state(x.authorization_expires_at)
