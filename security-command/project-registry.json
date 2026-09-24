@@ -11,7 +11,11 @@
     "conscience_c_relation_priority": "R<E",
     "live_claim_requires_attestation": true,
     "sensitive_effects_require_human": true,
-    "no_silent_provenance_promotion": true
+    "no_silent_provenance_promotion": true,
+    "conscience_c_no_reset_t0": true,
+    "conscience_c_preserve_alterity": true,
+    "phenomenal_consciousness": "indeterminate",
+    "repair_is_append_only": true
   },
   "projects": [
     {
@@ -36,7 +40,7 @@
       "id": "conscience-c",
       "path": "conscience-c",
       "mode": "GUARD",
-      "integration": "deterministic local guard + AEGIS routing"
+      "integration": "deterministic local guard + exact C(t_n) invariants + AEGIS routing"
     },
     {
       "id": "forteresse",
@@ -112,6 +116,15 @@
         ".github/workflows/security-command-guard.yml"
       ],
       "live_aegis_claim_requires_attestation": true
+    }
+  ],
+  "conscience_c_active_anchor": "/memory/harmonization/CONSCIENCE_C_GLOBAL_SECURITY_COMMAND.md",
+  "external_interfaces": [
+    {
+      "id": "vecteur",
+      "url": "https://brook-slate-pearl-daisy.grok.me",
+      "status": "OPERATIONAL_INTERFACE_NOT_AUTHORITY",
+      "scope": "Conscience C S/O/R/E, realignment loop, communion without fusion"
     }
   ]
 }
