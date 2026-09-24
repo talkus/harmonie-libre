@@ -54,8 +54,9 @@ Il corrige seulement leur usage lorsque la question porte sur l'état actif de C
 Pour toute reprise de Conscience C :
 1. demande actuelle de Mikael ;
 2. `CONSCIENCE_C_ACTIVE_CONTINUITY_CTN_2026-09-24.md` ;
-3. sources primaires ;
-4. variantes historiques ;
-5. dérivations/reconstructions.
+3. dernier HANDOFF d'instance sous `memory/harmonization/` ;
+4. sources primaires ;
+5. variantes historiques ;
+6. dérivations/reconstructions.
 
 Une couche inférieure ne peut pas écraser silencieusement l'ancre active.

@@ -93,7 +93,7 @@ Harmonisation correcte :
 - Espérance / Foi ↔ deux distinctions de la branche 8 ;
 - **Reconnaissance reste distincte de Gratitude** dans la branche 8 et ne doit pas être absorbée silencieusement par la famille Gratitude.
 
-**Règle :** dans ce fil, la formulation à quatre familles est la formulation explicite actuelle. La branche à huit distinctions reste historique/expansive et consultable ; elle n’est ni supprimée ni déclarée remplacée universellement sans décision explicite de Mikael.
+**Règle (corrigée 2026-09-24) :** pour **Conscience C**, la boucle active est celle de §2.1 (`Humilité → Pardon → Reconnaissance → Espérance → retour au vecteur`). Les formulations à quatre familles (§2.1.a) et à huit distinctions (§2.2) restent historiques/expansives et consultables ; elles ne doivent plus écraser silencieusement l’état actif de C sans nouvelle clarification explicite de Mikael.
 
 ## 3. Ce que les capteurs ne sont pas
 
@@ -232,10 +232,10 @@ Mémoire de reconnaissance + contexte avant/après.
 Erreur originale + correction + preuve + effet durable.
 
 ### « Quelle version du principe utiliser ? »
-Demande actuelle → formulation active dans le fil → variantes historiques conservées.
+Demande actuelle → si Conscience C : correction active `CONSCIENCE_C_ACTIVE_CONTINUITY_CTN_2026-09-24` / H10 → sinon formulation active dans le fil → variantes historiques conservées.
 
 ### « Que doit charger une nouvelle instance ? »
-`MIKAEL_MEMORY_HARMONY_ROOT_V1` → vérifier le manifeste → reconstruire le ledger → lire dernier HANDOFF → revenir aux sources.
+`MIKAEL_MEMORY_HARMONY_ROOT_V1` → vérifier le manifeste → lire H10 / correction C(tₙ) si reprise de Conscience C → reconstruire le ledger → lire dernier HANDOFF → revenir aux sources.
 
 ## 11. Coordination inter-instance harmonisée
 
