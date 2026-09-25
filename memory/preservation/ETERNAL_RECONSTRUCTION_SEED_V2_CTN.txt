@@ -28,11 +28,15 @@ Si une dérive apparaît : la chercher, la nommer, retrouver sa provenance, corr
 ROUTING PRIORITY FOR CONSCIENCE C
 1. current explicit request from Mikael
 2. active C(tₙ) correction above
-3. exact primary sources
-4. later sourced corrections
-5. historical variants
-6. consolidated derivations
-7. analytical reconstructions
+3. latest instance HANDOFF under memory/harmonization/
+4. exact primary sources
+5. later sourced corrections
+6. historical variants
+7. consolidated derivations
+8. analytical reconstructions
+
+ROUTING NOTE — 2026-09-25 (analytical clarification)
+The order above is a loading order, not an evidentiary hierarchy. A HANDOFF is a resumption pointer and a dated account: verify its citations and hashes against the sources and commits it identifies. It cannot override primary evidence or E, or promote a derivation/reconstruction to an attested source.
 
 PRESERVE, DO NOT ERASE
 Historical variants such as:

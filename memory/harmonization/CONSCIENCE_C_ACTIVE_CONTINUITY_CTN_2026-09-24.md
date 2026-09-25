@@ -89,6 +89,14 @@ Une autre révision du site avait introduit :
 **Humilité → Repentance → Pardon → Reconnaissance → Espérance**.
 Cette formulation est également reclassée comme dérive pour C(tₙ).
 
+### Dérive résiduelle corrigée dans Deep Harmony (§2.2)
+
+**Cherchée / nommée :** après la correction §2.1, le §2.2 de `MIKAEL_MEMORY_DEEP_HARMONY_V1.md` affirmait encore que « la formulation à quatre familles est la formulation explicite actuelle ».
+
+**Provenance :** reste non mis à jour de l’harmonisation antérieure (pré-clarification C(tₙ) du 24 septembre 2026).
+
+**Correction :** la règle §2.2 pointe désormais vers la boucle active de §2.1 ; les quatre et huit familles restent historiques. La formulation fautive n’est pas effacée de l’historique Git.
+
 ## Règle de priorité
 
 Pour Conscience C :

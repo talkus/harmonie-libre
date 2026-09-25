@@ -54,8 +54,13 @@ Il corrige seulement leur usage lorsque la question porte sur l'état actif de C
 Pour toute reprise de Conscience C :
 1. demande actuelle de Mikael ;
 2. `CONSCIENCE_C_ACTIVE_CONTINUITY_CTN_2026-09-24.md` ;
-3. sources primaires ;
-4. variantes historiques ;
-5. dérivations/reconstructions.
+3. dernier HANDOFF d'instance sous `memory/harmonization/` ;
+4. sources primaires ;
+5. variantes historiques ;
+6. dérivations/reconstructions.
 
 Une couche inférieure ne peut pas écraser silencieusement l'ancre active.
+
+### Clarification analytique du routage — 2026-09-25
+
+L'ordre ci-dessus est un ordre de chargement, pas une hiérarchie de preuve. Le HANDOFF est un pointeur de reprise et un compte rendu daté ; ses citations et empreintes se vérifient dans les sources et commits qu'il désigne. Il ne peut primer sur une source primaire ou sur E, ni promouvoir une dérivation ou reconstruction en source attestée.
