@@ -82,7 +82,7 @@ class SecurityCommandTests(unittest.TestCase):
                 **common,
                 human_seal=True,
                 human_seal_action_fingerprint=first.action_fingerprint,
-                human_authorization_verified=True,
+                human_authorization_verified=False,
                 authorization_verification_method="authenticated_connector",
                 authorization_ref="auth-ref-001",
                 authorization_expires_at="2099-01-01T00:00:00Z",
