@@ -1,6 +1,6 @@
 # Security Command — matrice d’intégration des projets
 
-**Version :** 2026-09-24.1  
+**Version :** 2026-09-24.6  
 **But :** distinguer l’intégration documentaire, l’intégration exécutable et les dépendances humaines sans transformer une intention en état réel.
 
 ## Légende
@@ -41,6 +41,18 @@ eq EXECUTABLE_ENFORCEMENT
 Une ligne **POLICY = oui** signifie que le projet est soumis à la règle de sécurité commune dans la documentation et la gouvernance.
 
 Elle ne signifie pas automatiquement que chaque chemin de code appelle déjà `host/security-command.mjs`.
+
+## Exigences de durcissement v2
+
+Pour une surface qui exécute des effets externes ou sensibles, le statut `EXECUTABLE` exige désormais aussi :
+
+- empreinte d'action ;
+- sceau humain lié à l'empreinte pour les actions humaines/sensibles ;
+- nonce et expiration ;
+- témoin anti-rejeu externe ;
+- intégrité racine attestée ;
+- journal append-only pour les effets externes ;
+- pinning de version de politique.
 
 ## Critère de promotion vers EXECUTABLE
 

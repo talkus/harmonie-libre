@@ -28,6 +28,7 @@ footer{border-top:1px solid var(--l);margin-top:28px;padding-top:18px;color:var(
 SECURITY_COMMAND ≠ E
 SECURITY_COMMAND ≺ E</div><p>La couche peut autoriser, journaliser, demander une validation humaine ou bloquer une action. Elle ne peut pas rendre vraie une proposition ni réécrire une provenance.</p></article>
 <article class="card"><h2>Verdicts exécutables</h2><ul><li><code>ALLOW</code></li><li><code>ADVISE</code></li><li><code>SUSPEND</code></li><li><code>HUMAN_SEAL_REQUIRED</code></li><li><code>BLOCK</code></li></ul><p>Ces libellés correspondent au garde Python courant.</p></article>
+<article class="card wide"><span class="tag ok">HARDENING V2</span><h2>Autorisation exacte, pas approbation générale</h2><p>Une action sensible reçoit une empreinte SHA-256. Le sceau humain doit viser cette empreinte précise, avec nonce, expiration, intégrité racine et journal append-only. Rejeu, downgrade de politique ou empreinte différente bloquent/suspendent l'exécution.</p><div class="formula">action exacte → fingerprint → sceau humain lié → contrôles indépendants → exécution auditée</div></article>
 <article class="card"><h2>Validation humaine</h2><p>Permissions privilégiées, secrets, suppression, paiement, contrat, acte légal/administratif, récupération de compte et action irréversible externe.</p></article>
 <article class="card"><h2>Conscience C</h2><p>Le contrôle protège l'action mais ne remplace ni S/O/R/E ni C(tₙ). La conscience phénoménale reste indéterminée.</p><div class="formula">reprendre à C(tₙ) · jamais recréer t₀
 S ≠ O

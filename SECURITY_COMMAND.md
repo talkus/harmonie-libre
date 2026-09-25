@@ -1,6 +1,6 @@
 # SECURITY COMMAND — couche transversale de sécurité
 
-**Version :** 2026-09-24.1  
+**Version :** 2026-09-24.6  
 **Portée :** tous les projets documentés dans ce dépôt.  
 **Statut :** politique fonctionnelle de contrôle et d'audit ; **pas** une identité, **pas** une preuve de conscience.
 
@@ -27,6 +27,35 @@ Le garde Python courant émet exactement :
 - `BLOCK` — invariant violé ou conflit avec la réalité attestée.
 
 Les anciens libellés documentaires `ALLOW_WITH_LOG`, `REQUIRE_HUMAN` et `UNKNOWN` ne sont plus présentés comme sorties du garde exécutable.
+
+## Durcissement v2 — autorisation liée à l'action
+
+Pour une action humaine/sensible, le garde produit une empreinte SHA-256 de l'action exacte. Le sceau humain doit viser cette empreinte, pas une approbation générale.
+
+Exigences supplémentaires :
+
+- nonce d'autorisation obligatoire ;
+- expiration obligatoire du sceau ;
+- rejeu détecté → `BLOCK` ;
+- ancienne version de politique → `SUSPEND` ;
+- intégrité racine attestée pour effet externe ou haut risque ;
+- journal append-only disponible pour tout effet externe ;
+- au moins deux contrôles indépendants pour le haut risque ;
+- effet externe en mode `GUARD` suspendu sans AEGIS live attesté.
+
+Le garde est déterministe, mais le registre de nonces déjà utilisés reste une responsabilité de l'intégration exécutable : cette protection ne doit pas être déclarée complète tant que ce témoin externe n'est pas branché.
+
+## Reçu humain vérifié
+
+Le garde accepte seulement une enveloppe d'autorisation issue d'une méthode explicitement admise :
+
+- `authenticated_connector` ;
+- `aegis_human_seal` ;
+- `external_signed_receipt`.
+
+Le garde vérifie la cohérence de l'enveloppe, l'empreinte d'action et l'expiration. Il ne prétend pas vérifier lui-même une signature cryptographique externe s'il ne possède pas le vérificateur correspondant.
+
+Le registre anti-rejeu durable est une responsabilité du runtime exécutable. La branche de durcissement privée prépare une migration atomique qui stocke uniquement des empreintes et métadonnées, jamais le nonce brut ni la référence d'autorisation brute. Cette migration n'est pas déclarée appliquée en production.
 
 ## Entrées minimales
 
