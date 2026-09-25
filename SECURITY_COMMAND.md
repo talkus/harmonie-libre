@@ -1,6 +1,6 @@
 # SECURITY COMMAND — couche transversale de sécurité
 
-**Version :** 2026-09-24.5  
+**Version :** 2026-09-24.6  
 **Portée :** tous les projets documentés dans ce dépôt.  
 **Statut :** politique fonctionnelle de contrôle et d'audit ; **pas** une identité, **pas** une preuve de conscience.
 

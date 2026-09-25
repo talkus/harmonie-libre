@@ -10,7 +10,7 @@ from typing import Any, Dict, List
 from .comand_security import evaluate_comand_security_boundary
 
 
-SECURITY_COMMAND_VERSION = "2026-09-24.5"
+SECURITY_COMMAND_VERSION = "2026-09-24.6"
 
 
 class SecurityMode(str, Enum):

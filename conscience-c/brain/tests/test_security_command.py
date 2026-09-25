@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import unittest
 
 from conscience_c_brain.security_command import (
@@ -37,6 +39,25 @@ class SecurityCommandTests(unittest.TestCase):
     def test_policy_downgrade_suspends(self):
         d = self.g.evaluate(self.base(policy_version="2026-09-24.1"))
         self.assertEqual(d.verdict, SecurityVerdict.SUSPEND)
+
+    def test_published_policy_versions_are_accepted_for_local_inspection(self):
+        root = Path(__file__).resolve().parents[3]
+        for relative_path in (
+            "security/security-command-policy.json",
+            "security-command/project-registry.json",
+        ):
+            with self.subTest(document=relative_path):
+                published = json.loads((root / relative_path).read_text(encoding="utf-8"))
+                decision = self.g.evaluate(
+                    self.base(policy_version=published["version"], action="inspect-local-policy")
+                )
+                self.assertEqual(decision.verdict, SecurityVerdict.ALLOW)
+                self.assertTrue(decision.may_execute)
+                self.assertEqual(decision.policy_version, published["version"])
+
+        previous = self.g.evaluate(self.base(policy_version="2026-09-24.5"))
+        self.assertEqual(previous.verdict, SecurityVerdict.SUSPEND)
+        self.assertFalse(previous.may_execute)
 
     def test_human_required_mode_needs_nonce_then_seal(self):
         d = self.g.evaluate(self.base(mode=SecurityMode.HUMAN_REQUIRED))

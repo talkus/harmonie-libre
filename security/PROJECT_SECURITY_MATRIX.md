@@ -1,6 +1,6 @@
 # Security Command — matrice d’intégration des projets
 
-**Version :** 2026-09-24.5  
+**Version :** 2026-09-24.6  
 **But :** distinguer l’intégration documentaire, l’intégration exécutable et les dépendances humaines sans transformer une intention en état réel.
 
 ## Légende
