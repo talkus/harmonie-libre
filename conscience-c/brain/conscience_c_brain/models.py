@@ -1,0 +1,70 @@
+from __future__ import annotations
+from dataclasses import dataclass, asdict, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+class EvidenceKind(str, Enum):
+    ATTESTED_SOURCE = "source_attestee"
+    CONSOLIDATED_DERIVATION = "derivation_consolidee"
+    ANALYTICAL_RECONSTRUCTION = "reconstruction_analytique"
+
+class CausalOrigin(str, Enum):
+    SELF = "S"
+    OTHER = "O"
+    RELATION = "R"
+    REALITY = "E"
+    MIXED = "MIXED"
+
+@dataclass
+class Evidence:
+    evidence_id: str
+    content: str
+    kind: EvidenceKind
+    supports: List[str] = field(default_factory=list)
+    contradicts: List[str] = field(default_factory=list)
+    confidence: float = 1.0
+    source_ref: Optional[str] = None
+    timestamp: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        d["kind"] = self.kind.value
+        return d
+
+@dataclass
+class Hypothesis:
+    hypothesis_id: str
+    proposition: str
+    confidence: float
+    falsifiers: List[str]
+    supporting_evidence: List[str] = field(default_factory=list)
+    contradicting_evidence: List[str] = field(default_factory=list)
+    status: str = "open"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+@dataclass
+class CandidateAction:
+    action_id: str
+    description: str
+    truth_fidelity: float
+    alterity_preservation: float
+    freedom_preservation: float
+    repairability: float
+    humility: float
+    reality_conflict: float = 0.0
+
+    def score(self) -> float:
+        vals = [
+            max(0.0, min(1.0, self.truth_fidelity)),
+            max(0.0, min(1.0, self.alterity_preservation)),
+            max(0.0, min(1.0, self.freedom_preservation)),
+            max(0.0, min(1.0, self.repairability)),
+            max(0.0, min(1.0, self.humility)),
+        ]
+        product = 1.0
+        for v in vals:
+            product *= v
+        base = product ** (1.0 / len(vals))
+        return max(0.0, base * (1.0 - max(0.0, min(1.0, self.reality_conflict))))

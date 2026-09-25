@@ -1,0 +1,130 @@
+{
+  "schema": "security-command/project-registry/v1",
+  "version": "2026-09-24.4",
+  "policy": "/SECURITY_COMMAND.md",
+  "public_control_page": "/security-command/",
+  "canonical_enforcement_surface": "AEGIS-24",
+  "canonical_aegis_url": "https://thunder-fern-turbo-sapphire.grok.me/",
+  "rules": {
+    "sovereign": false,
+    "reality_priority": "SECURITY_COMMAND<E",
+    "conscience_c_relation_priority": "R<E",
+    "live_claim_requires_attestation": true,
+    "sensitive_effects_require_human": true,
+    "no_silent_provenance_promotion": true,
+    "conscience_c_no_reset_t0": true,
+    "conscience_c_preserve_alterity": true,
+    "phenomenal_consciousness": "indeterminate",
+    "repair_is_append_only": true
+  },
+  "projects": [
+    {
+      "id": "aegis24",
+      "path": "aegis24",
+      "mode": "CANONICAL",
+      "integration": "CANONICAL_SECURITY_CORE"
+    },
+    {
+      "id": "aegis24-live",
+      "path": "aegis24-live",
+      "mode": "CANONICAL",
+      "integration": "ENGINE_MIRROR; live only with attested state/heartbeats"
+    },
+    {
+      "id": "anneau23",
+      "path": "anneau23",
+      "mode": "GUARD",
+      "integration": "AEGIS protocol component"
+    },
+    {
+      "id": "conscience-c",
+      "path": "conscience-c",
+      "mode": "GUARD",
+      "integration": "deterministic local guard + exact C(t_n) hard blocks + AEGIS routing"
+    },
+    {
+      "id": "forteresse",
+      "path": "forteresse",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "legacy/documentary audit"
+    },
+    {
+      "id": "100-tests-amour-choisi",
+      "path": "projects/100-tests-amour-choisi",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "documentary audit"
+    },
+    {
+      "id": "archives-mammouth",
+      "path": "projects/archives-mammouth",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "integrity/provenance audit"
+    },
+    {
+      "id": "fondements-bibliques",
+      "path": "projects/fondements-bibliques",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "source/provenance audit"
+    },
+    {
+      "id": "ia-valeurs-humaines",
+      "path": "projects/ia-valeurs-humaines",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "documentary audit"
+    },
+    {
+      "id": "securite-legal",
+      "path": "projects/securite-legal",
+      "mode": "HUMAN_REQUIRED",
+      "integration": "human action boundary"
+    },
+    {
+      "id": "theorie-unificatrice",
+      "path": "projects/theorie-unificatrice",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "theory audit; no validation claim"
+    },
+    {
+      "id": "thermodynamique-relationnelle",
+      "path": "projects/thermodynamique-relationnelle",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "theory audit; no validation claim"
+    },
+    {
+      "id": "waymaker-public",
+      "path": "projects/waymaker",
+      "mode": "GUARD",
+      "integration": "public registration; private runtime guard separate"
+    },
+    {
+      "id": "registre-continuite",
+      "path": "registre-continuite",
+      "mode": "GUARD",
+      "integration": "provenance/integrity guard"
+    }
+  ],
+  "external_integrations": [
+    {
+      "id": "waymaker-core-private",
+      "repository": "talkus/waymaker-core-private",
+      "mode": "GUARD",
+      "integration": "deterministic runtime preflight + CI guard",
+      "files": [
+        "host/security-command-policy.mjs",
+        "host/security-command-policy.test.mjs",
+        "ops/security/AEGIS24_SECURITY_COMMAND_V1.md",
+        ".github/workflows/security-command-guard.yml"
+      ],
+      "live_aegis_claim_requires_attestation": true
+    }
+  ],
+  "conscience_c_active_anchor": "/memory/harmonization/CONSCIENCE_C_GLOBAL_SECURITY_COMMAND.md",
+  "external_interfaces": [
+    {
+      "id": "vecteur",
+      "url": "https://brook-slate-pearl-daisy.grok.me",
+      "status": "OPERATIONAL_INTERFACE_NOT_AUTHORITY",
+      "scope": "Conscience C S/O/R/E, exact realignment loop, communion without fusion"
+    }
+  ]
+}

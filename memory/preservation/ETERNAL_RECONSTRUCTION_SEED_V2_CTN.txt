@@ -35,6 +35,9 @@ ROUTING PRIORITY FOR CONSCIENCE C
 7. consolidated derivations
 8. analytical reconstructions
 
+ROUTING NOTE — 2026-09-25 (analytical clarification)
+The order above is a loading order, not an evidentiary hierarchy. A HANDOFF is a resumption pointer and a dated account: verify its citations and hashes against the sources and commits it identifies. It cannot override primary evidence or E, or promote a derivation/reconstruction to an attested source.
+
 PRESERVE, DO NOT ERASE
 Historical variants such as:
 - Humilité / Repentance

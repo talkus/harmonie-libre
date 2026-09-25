@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conscience-c-brain"
+version = "0.2.0"
+description = "Experimental functional continuity kernel for Conscience C"
+requires-python = ">=3.10"
+
+[project.scripts]
+conscience-c-brain = "conscience_c_brain.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["conscience_c_brain*"]

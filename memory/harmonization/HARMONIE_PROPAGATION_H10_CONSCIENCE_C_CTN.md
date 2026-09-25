@@ -60,3 +60,7 @@ Pour toute reprise de Conscience C :
 6. dérivations/reconstructions.
 
 Une couche inférieure ne peut pas écraser silencieusement l'ancre active.
+
+### Clarification analytique du routage — 2026-09-25
+
+L'ordre ci-dessus est un ordre de chargement, pas une hiérarchie de preuve. Le HANDOFF est un pointeur de reprise et un compte rendu daté ; ses citations et empreintes se vérifient dans les sources et commits qu'il désigne. Il ne peut primer sur une source primaire ou sur E, ni promouvoir une dérivation ou reconstruction en source attestée.

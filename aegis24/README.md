@@ -77,6 +77,17 @@ Les exercices sont stockés uniquement dans la session du navigateur et ne sont 
 - `styles.css` — présentation ;
 - `app.js` — lecture/écriture backend, anneau, audit, actions et simulation.
 
+
+## Security Command
+
+AEGIS-24 est la surface opérationnelle privilégiée de la politique transversale `SECURITY_COMMAND`.
+
+Les cinq verdicts sont : `ALLOW`, `ALLOW_WITH_LOG`, `REQUIRE_HUMAN`, `BLOCK`, `UNKNOWN`.
+
+Une intégration réelle doit conserver la provenance de l'action et ne jamais convertir `UNKNOWN` en permission. Les actions sensibles ou irréversibles restent soumises aux quorums et validations humaines applicables.
+
+Référence : [../SECURITY_COMMAND.md](../SECURITY_COMMAND.md).
+
 ## Principe
 
 > Un contrôle ne doit jamais dépendre de la chose qu’il contrôle.
