@@ -924,6 +924,15 @@ class ConscienceCBrain:
         for eid, item in self.state.get("E", {}).get("evidence", {}).items():
             if item.get("kind") not in allowed:
                 drifts.append({"field": f"E.evidence.{eid}.kind", "expected": sorted(allowed), "observed": item.get("kind")})
+        graph_issues = self.evidence_graph_audit()
+        if graph_issues:
+            drifts.append({
+                "field": "E.derivation_graph",
+                "expected": "acyclic graph with existing parents",
+                "observed": graph_issues,
+            })
+        if not self.ledger.verify():
+            drifts.append({"field": "ledger", "expected": "valid append-only hash chain", "observed": "invalid"})
         return drifts
 
     def audit_or_raise(self):
