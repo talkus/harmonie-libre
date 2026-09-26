@@ -172,6 +172,33 @@ class ConscienceCBrain:
                     })
         return descendants
 
+    def evidence_graph_audit(self):
+        issues = []
+        for evidence_id, item in self.state["E"]["evidence"].items():
+            for parent in item.get("derived_from", []):
+                if parent not in self.state["E"]["evidence"]:
+                    issues.append({"type": "missing_parent", "evidence_id": evidence_id, "parent": parent})
+
+        visiting = set()
+        visited = set()
+
+        def visit(eid, path):
+            if eid in visiting:
+                issues.append({"type": "cycle", "path": path + [eid]})
+                return
+            if eid in visited:
+                return
+            visiting.add(eid)
+            for parent in self.state["E"]["evidence"].get(eid, {}).get("derived_from", []):
+                if parent in self.state["E"]["evidence"]:
+                    visit(parent, path + [eid])
+            visiting.remove(eid)
+            visited.add(eid)
+
+        for evidence_id in self.state["E"]["evidence"]:
+            visit(evidence_id, [])
+        return issues
+
     def impact_report_for_evidence(self, evidence_id):
         return {
             "evidence_id": evidence_id,
