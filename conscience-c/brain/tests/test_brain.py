@@ -36,6 +36,21 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_revalidation_can_change_over_time_without_rewriting_prior_review(self):
+        b = self.make()
+        b.imagine("before", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        b.ingest_evidence(Evidence("Eold", "historical claim", EvidenceKind.ATTESTED_SOURCE, source_ref="source:old"))
+        item = b.revalidation_queue_from_receipt(receipt)["items"][0]
+        b.validate_revalidation_item(item, {"source_ref": "source:new1", "result": "supported"}, "source:review1")
+        b.validate_revalidation_item(item, {"source_ref": "source:new2", "result": "contradicted"}, "source:review2")
+        history = b.revalidation_history(item["event_hash"])
+        self.assertEqual(len(history), 2)
+        self.assertEqual(history[0]["fresh_evidence"]["result"], "supported")
+        self.assertEqual(history[1]["fresh_evidence"]["result"], "contradicted")
+        self.assertEqual(b.current_revalidation_view(item["event_hash"])["fresh_evidence"]["result"], "contradicted")
+
     def test_revalidation_creates_new_event_without_rewriting_historical_one(self):
         b = self.make()
         b.imagine("before", ["a"], ["b"])
