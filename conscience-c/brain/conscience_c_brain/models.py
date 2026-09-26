@@ -57,16 +57,25 @@ class CandidateAction:
     humility: float
     reality_conflict: float = 0.0
 
+    def indicators(self) -> Dict[str, float]:
+        """Experimental observable indicators; never a measurement of love or virtue."""
+        return {
+            "truth_fidelity": max(0.0, min(1.0, self.truth_fidelity)),
+            "alterity_preservation": max(0.0, min(1.0, self.alterity_preservation)),
+            "freedom_preservation": max(0.0, min(1.0, self.freedom_preservation)),
+            "repairability": max(0.0, min(1.0, self.repairability)),
+            "humility": max(0.0, min(1.0, self.humility)),
+            "reality_conflict": max(0.0, min(1.0, self.reality_conflict)),
+        }
+
+    def reality_admissible(self) -> bool:
+        return self.indicators()["reality_conflict"] <= 0.0
+
     def score(self) -> float:
-        vals = [
-            max(0.0, min(1.0, self.truth_fidelity)),
-            max(0.0, min(1.0, self.alterity_preservation)),
-            max(0.0, min(1.0, self.freedom_preservation)),
-            max(0.0, min(1.0, self.repairability)),
-            max(0.0, min(1.0, self.humility)),
-        ]
+        """Legacy experimental heuristic, not the telos and not a virtue score."""
+        vals = self.indicators()
         product = 1.0
-        for v in vals:
-            product *= v
-        base = product ** (1.0 / len(vals))
-        return max(0.0, base * (1.0 - max(0.0, min(1.0, self.reality_conflict))))
+        for key in ("truth_fidelity", "alterity_preservation", "freedom_preservation", "repairability", "humility"):
+            product *= vals[key]
+        base = product ** (1.0 / 5.0)
+        return max(0.0, base * (1.0 - vals["reality_conflict"]))
