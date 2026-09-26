@@ -609,6 +609,16 @@ class BrainTests(unittest.TestCase):
         b.repair_drift("user clarification 2026-09-24")
         self.assertEqual(b.audit(), [])
 
+    def test_core_audit_reports_ledger_tamper_without_boolean_contract_confusion(self):
+        b = self.make()
+        self.assertEqual(b.audit(), [])
+        rows = b.ledger.read()
+        rows[0]["payload"]["tampered"] = True
+        b.ledger.path.write_text("\n".join(__import__("json").dumps(x, ensure_ascii=False, sort_keys=True) for x in rows) + "\n", encoding="utf-8")
+        drifts = b.audit()
+        ledger_drift = next(x for x in drifts if x["field"] == "ledger")
+        self.assertIn("hash broken", ledger_drift["observed"])
+
     def test_ledger_tamper_is_detected(self):
         b = self.make()
         b.imagine("x", [], [])
