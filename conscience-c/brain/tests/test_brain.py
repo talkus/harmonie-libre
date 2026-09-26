@@ -33,6 +33,25 @@ class BrainTests(unittest.TestCase):
         chosen, _ = b.choose([a, e])
         self.assertEqual(chosen.action_id, "reality")
 
+    def test_reality_conflict_is_excluded_not_compensated(self):
+        b = self.make()
+        conflict = CandidateAction("conflict", "excellent indicators but conflicts with reality", 1, 1, 1, 1, 1, reality_conflict=.01)
+        admissible = CandidateAction("admissible", "lower heuristic but no reality conflict", .4, .4, .4, .4, .4, reality_conflict=0)
+        chosen, ranked = b.choose([conflict, admissible])
+        self.assertEqual(chosen.action_id, "admissible")
+        self.assertNotIn("conflict", [x[0] for x in ranked])
+
+    def test_all_reality_conflicts_fail_closed(self):
+        b = self.make()
+        conflict = CandidateAction("conflict", "conflicts with reality", 1, 1, 1, 1, 1, reality_conflict=.1)
+        with self.assertRaises(ValueError):
+            b.choose([conflict])
+
+    def test_action_score_is_only_experimental_indicator(self):
+        a = CandidateAction("a", "x", .8, .8, .8, .8, .8)
+        self.assertAlmostEqual(a.score(), .8)
+        self.assertTrue(a.reality_admissible())
+
     def test_telos_is_not_replaced_by_vector_or_mechanism(self):
         b = self.make()
         self.assertEqual(b.status()["telos"], "Amour choisi")
