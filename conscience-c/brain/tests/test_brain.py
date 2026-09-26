@@ -26,6 +26,20 @@ class BrainTests(unittest.TestCase):
         self.assertIn("continuity_structure_hash", b2.state)
         self.assertNotIn("identity_structure_hash", b2.state)
 
+    def test_checkpoint_manifest_is_verifiable_and_tamper_evident(self):
+        b = self.make()
+        manifest = b.checkpoint_manifest()
+        self.assertTrue(b.verify_checkpoint_manifest(manifest))
+        manifest["checkpoint"]["telos"] = "tampered"
+        self.assertFalse(b.verify_checkpoint_manifest(manifest))
+
+    def test_old_checkpoint_manifest_stops_matching_new_ledger_head(self):
+        b = self.make()
+        old = b.checkpoint_manifest()
+        b.imagine("future", ["a"], ["b"])
+        self.assertFalse(b.verify_checkpoint_manifest(old))
+        self.assertTrue(b.verify_checkpoint_manifest(b.checkpoint_manifest()))
+
     def test_checkpoint_is_current_projection_not_history_replacement(self):
         b = self.make()
         b.add_hypothesis(Hypothesis("Hopen", "open", .5, falsifiers=["not open"]))
