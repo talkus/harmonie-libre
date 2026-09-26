@@ -609,6 +609,18 @@ class BrainTests(unittest.TestCase):
         b.repair_drift("user clarification 2026-09-24")
         self.assertEqual(b.audit(), [])
 
+    def test_integrity_recovery_plan_names_limits_without_fabricating_fix(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("GR1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:GR1"))
+        b.ingest_evidence(Evidence("GR2", "child", EvidenceKind.CONSOLIDATED_DERIVATION, derived_from=["GR1"]))
+        b.state["E"]["evidence"]["GR1"]["derived_from"] = ["GR2"]
+        plan = b.integrity_recovery_plan()
+        self.assertFalse(plan["integrity_ok"])
+        self.assertFalse(plan["automatic_repair_allowed"])
+        self.assertEqual(plan["steps"][0]["component"], "evidence_graph")
+        self.assertIn("authoritative parentage", plan["steps"][0]["required_action"])
+        self.assertEqual(b.state["E"]["evidence"]["GR1"]["derived_from"], ["GR2"])
+
     def test_integrity_corruption_is_not_auto_repaired(self):
         b = self.make()
         b.ingest_evidence(Evidence("G1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:G1"))
