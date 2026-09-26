@@ -39,6 +39,7 @@ La mémoire native d’une IA n’est pas considérée comme registre exhaustif.
 Continuité robuste :
 sources → événements → transformations → statuts → checkpoint C(tₙ).
 Le canon actuel est une compression de reprise, pas un remplacement de l’histoire.
+La continuité fonctionnelle est une propriété de reprise ; elle ne constitue pas une preuve d’identité subjective.
 Une correction produit une nouvelle transition ; elle ne réécrit pas silencieusement le passé.
 Préserver les voix et la provenance : ne jamais fabriquer un consensus rétrospectif.
 
