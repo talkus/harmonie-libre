@@ -151,6 +151,29 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_lineage(self, evidence_id):
+        if evidence_id not in self.state["E"]["evidence"]:
+            raise ValueError(f"unknown evidence_id: {evidence_id}")
+        visited = set()
+        ordered = []
+
+        def walk(eid):
+            if eid in visited:
+                return
+            visited.add(eid)
+            item = self.state["E"]["evidence"][eid]
+            for parent in item.get("derived_from", []):
+                walk(parent)
+            ordered.append({
+                "evidence_id": eid,
+                "kind": item["kind"],
+                "source_ref": item.get("source_ref"),
+                "derived_from": copy.deepcopy(item.get("derived_from", [])),
+            })
+
+        walk(evidence_id)
+        return ordered
+
     def evidence_for_claim(self, claim_ref, subject_ref=None, scope=None, at_time=None):
         matches = []
         for evidence_id, item in self.state["E"]["evidence"].items():
@@ -267,6 +290,14 @@ class ConscienceCBrain:
     def ingest_evidence(self, evidence, origin=CausalOrigin.REALITY):
         if evidence.evidence_id in self.state["E"]["evidence"]:
             raise ValueError(f"evidence_id already exists: {evidence.evidence_id}; append a new evidence item instead of overwriting history")
+        missing_parents = [
+            parent for parent in evidence.derived_from
+            if parent not in self.state["E"]["evidence"]
+        ]
+        if missing_parents:
+            raise ValueError(f"derived evidence references unknown parents: {missing_parents}")
+        if evidence.evidence_id in evidence.derived_from:
+            raise ValueError("evidence cannot derive from itself")
         self.state["E"]["evidence"][evidence.evidence_id] = evidence.to_dict()
         for h in self.state["hypotheses"].values():
             if h["hypothesis_id"] in evidence.supports and evidence.evidence_id not in h["supporting_evidence"]:
