@@ -65,9 +65,21 @@ class BrainTests(unittest.TestCase):
         b = self.make()
         pending = b.record_repair("O1", "issue", "corrective action", "source:repair")
         self.assertEqual(pending["status"], "pending_verification")
-        verified = b.record_repair("O1", "issue2", "corrective action2", "source:repair2", verification={"source_ref": "source:verification"})
+        with self.assertRaises(ValueError):
+            b.record_repair("O1", "issue2", "corrective action2", "source:repair2", verification={"source_ref": "source:verification"})
+        verified = b.verify_repair("RP0001", {"source_ref": "source:verification"}, "source:verifier")
         self.assertEqual(verified["status"], "verified")
-        self.assertEqual(len(b.state["R"]["repairs"]), 2)
+        self.assertEqual(len(b.state["R"]["repairs"]), 1)
+        self.assertEqual(b.ledger.read()[-1]["event_type"], "VERIFY_REPAIR")
+
+    def test_repair_cannot_be_verified_twice_or_without_provenance(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        with self.assertRaises(ValueError):
+            b.verify_repair("RP0001", {"source_ref": "v"}, "")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        with self.assertRaises(ValueError):
+            b.verify_repair("RP0001", {"source_ref": "v2"}, "source:verifier2")
 
     def test_relation_event_requires_provenance(self):
         b = self.make()
