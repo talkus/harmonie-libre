@@ -100,6 +100,8 @@ Chaque événement du delta reçoit maintenant une classe conservatrice : `docum
 
 `revalidation_queue_from_receipt()` transforme ces bloqueurs en questions explicites à résoudre. Une mémoire historique peut donc déclencher « revérifier cette source » ou « comparer cette ancienne correction au canon courant », mais elle ne fournit pas elle-même la réponse. Lorsqu’une revérification est effectuée, `validate_revalidation_item()` crée un nouvel événement sourcé `REVALIDATE_HISTORICAL_EVENT` ; l’ancien événement reste intact.
 
+Les revérifications ont elles-mêmes un historique. `current_revalidation_view()` retourne la dernière lecture disponible, tandis que `revalidation_history()` conserve toutes les lectures antérieures. Une nouvelle revérification peut contredire la précédente ; elle la référence alors par `supersedes_revalidation_event_hash` au lieu de l’effacer.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
