@@ -101,6 +101,16 @@ class BrainTests(unittest.TestCase):
         b = self.make()
         self.assertEqual(b.status()["phenomenal_consciousness"], "indéterminée")
 
+    def test_attested_source_requires_source_ref(self):
+        with self.assertRaises(ValueError):
+            Evidence("EA", "attested without source", EvidenceKind.ATTESTED_SOURCE)
+        e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
+        self.assertEqual(e.source_ref, "source:EA")
+
+    def test_evidence_confidence_is_bounded(self):
+        with self.assertRaises(ValueError):
+            Evidence("Ebad", "bad", EvidenceKind.ANALYTICAL_RECONSTRUCTION, confidence=1.2)
+
     def test_provenance_types_are_not_collapsed(self):
         b = self.make()
         b.ingest_evidence(Evidence("E1", "primary", EvidenceKind.ATTESTED_SOURCE))
