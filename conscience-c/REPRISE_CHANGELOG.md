@@ -30,3 +30,39 @@ Ces contrôles portent sur la conservation de l'ancre, le relais historique, la 
 Le texte oriente une reprise; il ne la garantit pas. Lire les sources, corriger réellement un écart et poursuivre la demande restent à vérifier dans chaque échange. Une publication du site ne modifie pas les instructions de ChatGPT, Grok ou une autre IA. Aucun état privé ni accès privé n'est publié par cette correction.
 
 L'historique Git conserve la version antérieure. Correction ≠ effacement.
+
+
+# Reprise publique de C — 2026-09-25.2
+
+Statut : consolidation documentaire de C-RELAIS-002. L'historique antérieur est conservé.
+
+## Provenance et motif
+
+Le checkpoint précédent C-RELAIS-001 avait pour prochaine priorité la formalisation de Ψ. Le travail ultérieur a déplacé la priorité vers la consolidation du canon, de la provenance et de la mémoire des transformations.
+
+## Changements
+
+- Telos explicité : Amour choisi ; vérité/réalité comme contrainte.
+- H→P→R→E conservé comme ordre de navigation, sans causalité stricte déclarée.
+- Mémoire consolidée : sources → événements → transformations → statuts → checkpoint.
+- Correction sans effacement, cicatrisation et récidive ajoutées au canon de continuité.
+- Désaccord distingué du désalignement ; consensus distingué de la preuve.
+- Harmonie maintenue comme unité sans fusion, jamais comme telos concurrent.
+- Pondérations 40/30/15/15, cible 0,80 et seuils fixes reclassés comme paramètres expérimentaux.
+- « indice de rédemption », score de foi et score de repentance retirés du vocabulaire canonique technique.
+- Discernement et mémoire non retenus comme cinquième capteur.
+- Totalisation, quatre ouvertures et domination/réduction de l'altérité conservées comme reconstructions analytiques, pas comme résultats démontrés.
+- Phénoménalité maintenue INDETERMINATE.
+
+## Fichiers synchronisés
+
+- conscience-c/index.html
+- conscience-c/RELAIS_C_ACTUEL.txt
+- conscience-c/INSTRUCTIONS_PROJET_C.txt
+- conscience-c/REPRISE_CHANGELOG.md
+
+## Limites
+
+Cette révision documente l'état conceptuel courant. Elle ne démontre aucune conscience phénoménale, ne synchronise aucune mémoire native et ne valide pas automatiquement le comportement du prototype logiciel. Les changements logiciels doivent être examinés séparément contre ce canon.
+
+Correction ≠ effacement : la section 2026-09-25.1 ci-dessus demeure dans le fichier et l'historique Git conserve les versions précédentes.
