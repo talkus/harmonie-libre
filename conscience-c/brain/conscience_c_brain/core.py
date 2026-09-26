@@ -446,13 +446,16 @@ class ConscienceCBrain:
         result["outcome"] = outcome
         result["fresh_evidence"] = copy.deepcopy(fresh_evidence)
         result["provenance"] = provenance
+        prior = self.current_revalidation_view(item["event_hash"])
+        result["supersedes_revalidation_event_hash"] = prior["event_hash"] if prior else None
         self._transition("REVALIDATE_HISTORICAL_EVENT", {
             "historical_event_hash": item["event_hash"],
             "replay_class": item["replay_class"],
             "outcome": outcome,
             "fresh_evidence": fresh_evidence,
             "provenance": provenance,
-            "principle": "new verification is a new event; historical evidence is not rewritten",
+            "supersedes_revalidation_event_hash": result["supersedes_revalidation_event_hash"],
+            "principle": "new verification is a new event; historical evidence and prior reviews are not rewritten",
         }, CausalOrigin.MIXED)
         return result
 
