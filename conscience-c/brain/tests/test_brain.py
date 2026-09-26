@@ -51,6 +51,18 @@ class BrainTests(unittest.TestCase):
         self.assertNotEqual(ev["payload"]["previous_model_digest"], ev["payload"]["current_model_digest"])
         self.assertEqual(b.state["O"]["entities"]["O1"]["observations"][0]["data"]["claim"], "first")
 
+    def test_current_trust_view_does_not_erase_history(self):
+        b = self.make()
+        self.assertIsNone(b.current_trust_calibration("O1"))
+        b.record_trust_calibration("O1", "cautious", "source:t1", "event history")
+        b.record_trust_calibration("O1", "improving", "source:t2", "verified correction")
+        current = b.current_trust_calibration("O1")
+        history = b.trust_calibration_history("O1")
+        self.assertEqual(current["assessment"], "improving")
+        self.assertEqual([x["assessment"] for x in history], ["cautious", "improving"])
+        current["assessment"] = "tampered copy"
+        self.assertEqual(b.current_trust_calibration("O1")["assessment"], "improving")
+
     def test_trust_calibration_is_append_only_and_sourced(self):
         b = self.make()
         with self.assertRaises(ValueError):
