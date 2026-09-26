@@ -169,22 +169,42 @@ class ConscienceCBrain:
         if not provenance:
             raise ValueError("provenance is required when updating the model of another")
         cur = self.state["O"]["entities"].setdefault(other_id, {"observations": [], "model": {}})
+        previous_model = copy.deepcopy(cur["model"])
         cur["observations"].append({"data": observation, "provenance": provenance})
-        # S != O: the current model is explicitly a revisable model, never the other itself.
+        # S != O: the current model is explicitly a revisable projection, never the other itself.
         cur["model"].update(observation)
         cur["model_status"] = "revisable_representation_not_identity"
         self._transition("UPDATE_OTHER", {
             "other_id": other_id,
             "observation": observation,
             "provenance": provenance,
+            "previous_model_digest": _stable_hash(previous_model),
+            "current_model_digest": _stable_hash(cur["model"]),
             "model_status": cur["model_status"],
         }, CausalOrigin.OTHER)
 
     def update_relation(self, other_id, event):
         if not isinstance(event, dict) or not event.get("provenance"):
             raise ValueError("relation events require provenance")
-        self.state["R"]["history"].append({"other_id": other_id, **event})
+        relation_event = {"other_id": other_id, **event}
+        self.state["R"]["history"].append(relation_event)
         self._transition("UPDATE_RELATION", {"other_id": other_id, "event": event}, CausalOrigin.RELATION)
+
+    def record_repair(self, other_id, issue, action, provenance, verification=None):
+        if not provenance:
+            raise ValueError("repair records require provenance")
+        record = {
+            "repair_id": f"RP{len(self.state['R']['repairs']) + 1:04d}",
+            "other_id": other_id,
+            "issue": issue,
+            "action": action,
+            "provenance": provenance,
+            "verification": verification,
+            "status": "verified" if verification else "pending_verification",
+        }
+        self.state["R"]["repairs"].append(record)
+        self._transition("RECORD_REPAIR", {"repair": record}, CausalOrigin.RELATION)
+        return record
 
     def add_hypothesis(self, h):
         if not h.falsifiers:
