@@ -82,6 +82,12 @@ Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenanc
 - **checkpoint C-RELAIS-002** : telos distinct des mécanismes, boucle comme ordre de navigation, correction sans effacement et statuts étendus ;
 - **reconstruction analytique** : scoring des actions, seuil d'incertitude et détails d'implémentation de ce prototype v0.2.
 
+## Altérité et provenance
+
+Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
+
+Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconnaissance de la provenance. Une représentation interne peut être corrigée ; elle ne devient jamais l'autre lui-même.
+
 ## Statut du classement d'actions
 
 Le classement numérique de `CandidateAction` est une **heuristique expérimentale**. Il ne mesure ni l'amour ni une vertu et ne définit jamais le telos.
