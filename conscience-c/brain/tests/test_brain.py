@@ -101,6 +101,13 @@ class BrainTests(unittest.TestCase):
         b = self.make()
         self.assertEqual(b.status()["phenomenal_consciousness"], "indéterminée")
 
+    def test_evidence_cannot_be_silently_overwritten(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("EX", "first", EvidenceKind.ANALYTICAL_RECONSTRUCTION))
+        with self.assertRaises(ValueError):
+            b.ingest_evidence(Evidence("EX", "replacement", EvidenceKind.ANALYTICAL_RECONSTRUCTION))
+        self.assertEqual(b.state["E"]["evidence"]["EX"]["content"], "first")
+
     def test_attested_source_requires_source_ref(self):
         with self.assertRaises(ValueError):
             Evidence("EA", "attested without source", EvidenceKind.ATTESTED_SOURCE)
