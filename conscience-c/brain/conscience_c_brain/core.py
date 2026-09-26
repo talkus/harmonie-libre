@@ -406,6 +406,34 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def validate_revalidation_item(self, item, fresh_evidence, provenance):
+        if item.get("status") != "pending":
+            raise ValueError("only pending revalidation items can be evaluated")
+        if not provenance:
+            raise ValueError("revalidation requires provenance")
+        if item.get("replay_class") == "requires_external_reverification":
+            if not fresh_evidence:
+                raise ValueError("fresh external evidence is required")
+            outcome = "revalidated_with_fresh_evidence"
+        elif item.get("replay_class") == "requires_current_canon_check":
+            outcome = "revalidated_against_current_canon"
+        else:
+            raise ValueError("this replay class cannot be automatically revalidated")
+        result = copy.deepcopy(item)
+        result["status"] = "resolved"
+        result["outcome"] = outcome
+        result["fresh_evidence"] = copy.deepcopy(fresh_evidence)
+        result["provenance"] = provenance
+        self._transition("REVALIDATE_HISTORICAL_EVENT", {
+            "historical_event_hash": item["event_hash"],
+            "replay_class": item["replay_class"],
+            "outcome": outcome,
+            "fresh_evidence": fresh_evidence,
+            "provenance": provenance,
+            "principle": "new verification is a new event; historical evidence is not rewritten",
+        }, CausalOrigin.MIXED)
+        return result
+
     def revalidation_queue_from_receipt(self, receipt):
         plan = self.replay_plan_from_receipt(receipt)
         queue = []
