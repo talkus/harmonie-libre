@@ -88,7 +88,7 @@ Le modèle interne de `O` est explicitement une **représentation révisable**, 
 
 Les identifiants de preuve et d’hypothèse sont append-only : un identifiant existant ne peut pas être silencieusement réutilisé pour remplacer son contenu. Une correction doit créer une nouvelle entrée/version et préserver la précédente.
 
-Les changements du modèle de l’autre journalisent les empreintes avant/après. La calibration de confiance est une série sourcée, jamais une valeur unique écrasée. Une réparation est `pending_verification` tant qu’une vérification distincte n’est pas fournie ; l’auteur de la correction ne s’auto-déclare donc pas réparé par le seul enregistrement de son action.
+Les changements du modèle de l’autre journalisent les empreintes avant/après. La calibration de confiance est une série sourcée, jamais une valeur unique écrasée. Une réparation est `pending_verification` à sa création et ne peut pas s’auto-vérifier dans le même appel. Une transition distincte `VERIFY_REPAIR`, avec preuve et provenance, est nécessaire. Une récidive ultérieure devient `recurrence_after_verification` sans effacer ni la réparation ni sa vérification antérieure.
 
 Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconnaissance de la provenance. Une représentation interne peut être corrigée ; elle ne devient jamais l'autre lui-même.
 
