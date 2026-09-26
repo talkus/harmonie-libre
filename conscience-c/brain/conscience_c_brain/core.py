@@ -204,6 +204,28 @@ class ConscienceCBrain:
         self._transition("TRUST_CALIBRATION", {"other_id": other_id, "record": record}, CausalOrigin.RELATION)
         return record
 
+    def record_recurrence(self, repair_id, event, provenance):
+        if not provenance:
+            raise ValueError("recurrence requires provenance")
+        for record in self.state["R"]["repairs"]:
+            if record["repair_id"] == repair_id:
+                recurrence = {
+                    "event": event,
+                    "provenance": provenance,
+                    "prior_repair_status": record["status"],
+                }
+                record.setdefault("recurrences", []).append(recurrence)
+                if record["status"] == "verified":
+                    record["status"] = "recurrence_after_verification"
+                self._transition("RECORD_RECURRENCE", {
+                    "repair_id": repair_id,
+                    "recurrence": recurrence,
+                    "new_status": record["status"],
+                    "principle": "recurrence is information about durability; it does not erase prior repair history",
+                }, CausalOrigin.MIXED)
+                return record
+        raise ValueError(f"unknown repair_id: {repair_id}")
+
     def verify_repair(self, repair_id, verification, provenance):
         if not verification or not provenance:
             raise ValueError("repair verification requires verification evidence and provenance")
