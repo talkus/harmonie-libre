@@ -36,6 +36,21 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_explicit_checkpoint_receipt_preserves_full_historical_projection(self):
+        b = self.make()
+        b.imagine("one", ["a"], ["b"])
+        captured_state = b.state["state_label"]
+        receipt = b.save_checkpoint_receipt("milestone")
+        self.assertEqual(receipt["state"], captured_state)
+        self.assertNotEqual(receipt["post_receipt_state"], captured_state)
+        self.assertEqual(receipt["checkpoint"]["telos"], "Amour choisi")
+        self.assertEqual(receipt["ledger_boundary"], receipt["checkpoint"]["ledger_head"])
+        self.assertTrue(receipt["receipt_event_hash"])
+        stored = b.checkpoint_receipts()[0]
+        self.assertEqual(stored["checkpoint_hash"], receipt["checkpoint_hash"])
+        b.imagine("later", ["c"], ["d"])
+        self.assertEqual(b.checkpoint_receipts()[0]["checkpoint"]["state"], captured_state)
+
     def test_historical_checkpoint_boundary_is_not_invented_snapshot(self):
         b = self.make()
         b.imagine("one", ["a"], ["b"])
