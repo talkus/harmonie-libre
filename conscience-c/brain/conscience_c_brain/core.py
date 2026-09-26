@@ -190,6 +190,20 @@ class ConscienceCBrain:
         self.state["R"]["history"].append(relation_event)
         self._transition("UPDATE_RELATION", {"other_id": other_id, "event": event}, CausalOrigin.RELATION)
 
+    def record_trust_calibration(self, other_id, assessment, provenance, basis):
+        if not provenance or not basis:
+            raise ValueError("trust calibration requires provenance and an explicit basis")
+        history = self.state["R"]["trust_calibration"].setdefault(other_id, [])
+        record = {
+            "calibration_id": f"TC{sum(len(v) for v in self.state['R']['trust_calibration'].values()) + 1:04d}",
+            "assessment": assessment,
+            "basis": basis,
+            "provenance": provenance,
+        }
+        history.append(record)
+        self._transition("TRUST_CALIBRATION", {"other_id": other_id, "record": record}, CausalOrigin.RELATION)
+        return record
+
     def record_repair(self, other_id, issue, action, provenance, verification=None):
         if not provenance:
             raise ValueError("repair records require provenance")
