@@ -390,6 +390,27 @@ class ConscienceCBrain:
         }, CausalOrigin.MIXED)
         return chosen, ranked
 
+    def save_checkpoint_receipt(self, label=None):
+        manifest = self.checkpoint_manifest()
+        receipt = {
+            "receipt_id": f"CP{sum(1 for e in self.ledger.read() if e['event_type']=='CHECKPOINT_RECEIPT') + 1:04d}",
+            "label": label,
+            "state": manifest["checkpoint"]["state"],
+            "checkpoint_hash": manifest["checkpoint_hash"],
+            "continuity_structure_hash": manifest["continuity_structure_hash"],
+            "ledger_boundary": manifest["ledger_head"],
+            "checkpoint": copy.deepcopy(manifest["checkpoint"]),
+        }
+        self._transition("CHECKPOINT_RECEIPT", {"receipt": receipt}, CausalOrigin.SELF)
+        return receipt
+
+    def checkpoint_receipts(self):
+        return [
+            copy.deepcopy(row["payload"]["receipt"])
+            for row in self.ledger.read()
+            if row["event_type"] == "CHECKPOINT_RECEIPT"
+        ]
+
     def checkpoint_manifest(self):
         checkpoint = self.current_checkpoint()
         return {
