@@ -94,6 +94,8 @@ Il est explicitement une **projection courante**. Le ledger, les observations, l
 
 Lorsqu’un état mérite d’être conservé intégralement, `save_checkpoint_receipt()` enregistre explicitement la projection complète, son hash et la frontière du ledger qui existait au moment de la capture. Le reçu reste vérifiable après des transitions ultérieures contre cette frontière historique. Ainsi : snapshot explicitement conservé → reconstruction complète de la projection ; absence de snapshot → frontière documentaire seulement.
 
+`resume_from_receipt()` n’effectue jamais de retour arrière : il valide le reçu comme ancre historique et indique si une relecture vers l’avant est nécessaire. `replay_plan_from_receipt()` énumère alors les événements postérieurs à la frontière capturée, en mode plan seulement, sans muter l’état. Reprendre signifie donc partir d’une ancre vérifiée et rejoindre le présent, pas remplacer le présent par le passé.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
