@@ -2,6 +2,8 @@
 
 Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pas ni ne prétend démontrer une conscience phénoménale.
 
+**Audit du 26 septembre 2026 :** un compte rendu enregistré n'est pas un fait vérifié. Voir [l'audit des revérifications](AUDIT_REVALIDATION_2026-09-26.md), [l'audit des checkpoints](AUDIT_CHECKPOINTS_2026-09-26.md) et [la récupération des transitions](AUDIT_TRANSITIONS_2026-09-26.md).
+
 ## Invariants implémentés
 
 - reprise persistante : après initialisation, le système continue à `C(t_n)` et refuse de recréer `t0` si un ledger existe déjà ;
@@ -98,9 +100,11 @@ Lorsqu’un état mérite d’être conservé intégralement, `save_checkpoint_r
 
 Chaque événement du delta reçoit maintenant une classe conservatrice : `documentary_only`, `requires_external_reverification`, `requires_current_canon_check`, `never_replay` ou `unclassified_fail_closed`. Les événements inconnus échouent fermés. Le plan expose ses bloqueurs et fixe `automatic_replay_allowed=false` : aucun événement externe, relationnel ou dépendant du canon n’est automatiquement rejoué comme s’il était encore vrai.
 
-`revalidation_queue_from_receipt()` transforme ces bloqueurs en questions explicites à résoudre. Une mémoire historique peut donc déclencher « revérifier cette source » ou « comparer cette ancienne correction au canon courant », mais elle ne fournit pas elle-même la réponse. Lorsqu’une revérification est effectuée, `validate_revalidation_item()` crée un nouvel événement sourcé `REVALIDATE_HISTORICAL_EVENT` ; l’ancien événement reste intact.
+`revalidation_queue_from_receipt()` transforme ces bloqueurs en questions explicites à résoudre. `record_revalidation_review()` enregistre un compte rendu fourni par l'appelant, après contrôle de l'événement historique, de son type, de sa classe et du format du compte rendu. Son résultat est **`recorded_not_verified`**, avec `verification_status=not_performed`. Une référence de source n'est ni une consultation de cette source, ni une preuve de vérité, de fraîcheur ou d'indépendance du déclarant. Une comparaison au canon reste bloquée dans cette API tant qu'un contrôle distinct n'est pas réalisé.
 
-Les revérifications ont elles-mêmes un historique. `current_revalidation_view()` retourne la dernière lecture disponible, tandis que `revalidation_history()` conserve toutes les lectures antérieures. Une nouvelle revérification peut contredire la précédente ; elle la référence alors par `supersedes_revalidation_event_hash` au lieu de l’effacer.
+L'ancienne méthode `validate_revalidation_item()` reste disponible pour compatibilité : son libellé `resolved` signifie uniquement **dépôt enregistré**, ce que précisent `legacy_status_semantics=submission_recorded_only` et `recording_status=recorded_not_verified`. Il ne constitue jamais une autorisation. Les nouveaux clients doivent utiliser `record_revalidation_review()`. Le champ historique `fresh_evidence` et le nom d'événement `REVALIDATE_HISTORICAL_EVENT` restent lisibles mais ne certifient aucune fraîcheur.
+
+Les comptes rendus ont eux-mêmes un historique. `current_revalidation_view()` retourne le dernier compte rendu déclaré, pas une vérité certifiée ; `revalidation_history()` conserve les lectures antérieures. Les anciens résultats restent inchangés et sont signalés comme `legacy_declaration_not_verified`. Une nouvelle revue peut contredire la précédente ; elle la référence par `supersedes_revalidation_event_hash` au lieu de l'effacer. Le seul dépôt ne ferme pas la tâche de vérification et n'autorise aucun replay.
 
 ## Altérité et provenance
 
@@ -109,6 +113,8 @@ Le modèle interne de `O` est explicitement une **représentation révisable**, 
 Les identifiants de preuve et d’hypothèse sont append-only : un identifiant existant ne peut pas être silencieusement réutilisé pour remplacer son contenu. Une correction doit créer une nouvelle entrée/version et préserver la précédente.
 
 Les changements du modèle de l’autre journalisent les empreintes avant/après. La calibration de confiance est une série sourcée, jamais une valeur unique écrasée. Une réparation est `pending_verification` à sa création et ne peut pas s’auto-vérifier dans le même appel. Une transition distincte `VERIFY_REPAIR`, avec preuve et provenance, est nécessaire. Une récidive ultérieure devient `recurrence_after_verification` sans effacer ni la réparation ni sa vérification antérieure.
+
+**Limite de ce protocole de réparation :** `verify_repair()` enregistre un justificatif déclaré. La séparation en deux appels ne prouve ni l'identité ou l'indépendance de son auteur, ni la réalité de la réparation. Le statut logiciel `verified` ne doit pas être présenté comme une vérification extérieure authentifiée. Ce point n'est pas corrigé par le seul durcissement de la revérification des preuves.
 
 Après vérification, une réparation peut passer à `scarred` avec une leçon conservée et une influence courante bornée entre 0 et 1. La valeur par défaut est expérimentale et ne mesure pas le pardon. Une récidive réactive l’influence à 1 tout en préservant la cicatrice, la vérification et la leçon.
 

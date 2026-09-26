@@ -1,8 +1,9 @@
 """Public brain with recoverable persistence around the existing state model.
 
 The previous model is preserved byte-for-byte in _state_model.py. Its public
-operations still call _transition; only the persistence boundary is replaced.
-No ethical policy, evidence interpretation, or external operation is replayed.
+operations still call _transition; the persistence boundary is coordinated.
+Revalidation admission is overridden to record declarations without certifying
+truth. No ethical policy or external operation is automatically replayed.
 """
 from __future__ import annotations
 
@@ -13,10 +14,11 @@ from ._state_model import ConscienceCBrain as _StateModel
 from ._state_model import ACTIVE_ANCHOR, _now, _stable_hash
 from .ledger import AppendOnlyLedger
 from .models import CandidateAction, CausalOrigin, Evidence, EvidenceKind
+from .revalidation import RevalidationMixin
 from .transition_store import TransitionStore, RecoveryRequired, atomic_write, snapshot_bytes, digest
 
 
-class ConscienceCBrain(_StateModel):
+class ConscienceCBrain(RevalidationMixin, _StateModel):
     def __init__(self, root: Path):
         self.root = Path(root)
         self.state_path = self.root / "state.json"
