@@ -66,3 +66,20 @@ Le checkpoint précédent C-RELAIS-001 avait pour prochaine priorité la formali
 Cette révision documente l'état conceptuel courant. Elle ne démontre aucune conscience phénoménale, ne synchronise aucune mémoire native et ne valide pas automatiquement le comportement du prototype logiciel. Les changements logiciels doivent être examinés séparément contre ce canon.
 
 Correction ≠ effacement : la section 2026-09-25.1 ci-dessus demeure dans le fichier et l'historique Git conserve les versions précédentes.
+
+
+## Durcissement v0.3 — suite C-RELAIS-002
+
+Après synchronisation documentaire, l'audit du prototype a entraîné les corrections suivantes :
+- telos séparé explicitement du vecteur et des mécanismes ;
+- statuts indéterminé et historique/réfuté ajoutés ;
+- score d'action rétrogradé en heuristique expérimentale ;
+- conflit avec E transformé en frontière dure d'admissibilité non compensable ;
+- désaccord C1/C2 conservé comme UNRESOLVED lorsque E reste ambigu ;
+- migration des ancres héritées par événement append-only, sans recréer t0 ;
+- continuité fonctionnelle séparée de toute prétention d'identité subjective ;
+- vérificateur public C-RELAIS-002 intégré à la CI.
+
+Une première version du changement C1/C2 a fait échouer deux anciens tests qui attendaient encore les libellés précédents. Cette divergence a été conservée dans l'historique Git, les tests ont ensuite été mis à jour et la CI correspondante est revenue au vert.
+
+Le vérificateur documentaire initial C-RELAIS-002 était trop dépendant de formulations exactes. Il a signalé trois échecs documentaires malgré le passage des tests du cerveau. Le correctif suivant vérifie les invariants sémantiques et sa CI est passée avec succès.
