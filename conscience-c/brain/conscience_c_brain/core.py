@@ -151,6 +151,39 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_for_claim(self, claim_ref, subject_ref=None, scope=None, at_time=None):
+        matches = []
+        for evidence_id, item in self.state["E"]["evidence"].items():
+            if item.get("claim_ref") != claim_ref:
+                continue
+            applicability = self.evidence_applicability(
+                evidence_id, subject_ref=subject_ref, scope=scope, at_time=at_time
+            )
+            matches.append({
+                "evidence_id": evidence_id,
+                "kind": item["kind"],
+                "content": item["content"],
+                "source_ref": item.get("source_ref"),
+                "applicability": applicability,
+            })
+        return matches
+
+    def claim_support_status(self, claim_ref, subject_ref=None, scope=None, at_time=None):
+        items = self.evidence_for_claim(claim_ref, subject_ref, scope, at_time)
+        applicable = [x for x in items if x["applicability"]["applicable"]]
+        if not applicable:
+            return {"claim_ref": claim_ref, "status": "unsupported_in_requested_context", "evidence": items}
+        kinds = {x["kind"] for x in applicable}
+        if EvidenceKind.HISTORICAL_REFUTED.value in kinds:
+            return {"claim_ref": claim_ref, "status": "historically_refuted_present", "evidence": applicable}
+        if EvidenceKind.ATTESTED_SOURCE.value in kinds:
+            return {"claim_ref": claim_ref, "status": "attested_source_present", "evidence": applicable}
+        if EvidenceKind.CONSOLIDATED_DERIVATION.value in kinds:
+            return {"claim_ref": claim_ref, "status": "consolidated_derivation_present", "evidence": applicable}
+        if EvidenceKind.ANALYTICAL_RECONSTRUCTION.value in kinds:
+            return {"claim_ref": claim_ref, "status": "analytical_only", "evidence": applicable}
+        return {"claim_ref": claim_ref, "status": "indeterminate", "evidence": applicable}
+
     def evidence_applicability(self, evidence_id, subject_ref=None, scope=None, at_time=None):
         item = self.state["E"]["evidence"].get(evidence_id)
         if item is None:
