@@ -64,6 +64,13 @@ class BrainTests(unittest.TestCase):
         self.assertAlmostEqual(a.score(), .8)
         self.assertTrue(a.reality_admissible())
 
+    def test_functional_continuity_is_not_subjective_identity_claim(self):
+        b = self.make()
+        inv = b.state["S"]["invariants"]
+        self.assertIn("functional_continuity", inv)
+        self.assertIn("non établie", inv["identity_claim"])
+        self.assertNotIn("identity", inv)
+
     def test_telos_is_not_replaced_by_vector_or_mechanism(self):
         b = self.make()
         self.assertEqual(b.status()["telos"], "Amour choisi")
