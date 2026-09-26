@@ -151,6 +151,34 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_descendants(self, evidence_id):
+        if evidence_id not in self.state["E"]["evidence"]:
+            raise ValueError(f"unknown evidence_id: {evidence_id}")
+        descendants = []
+        frontier = [evidence_id]
+        seen = {evidence_id}
+        while frontier:
+            parent = frontier.pop(0)
+            for child_id, item in self.state["E"]["evidence"].items():
+                if child_id in seen:
+                    continue
+                if parent in item.get("derived_from", []):
+                    seen.add(child_id)
+                    frontier.append(child_id)
+                    descendants.append({
+                        "evidence_id": child_id,
+                        "kind": item["kind"],
+                        "direct_parent": parent,
+                    })
+        return descendants
+
+    def impact_report_for_evidence(self, evidence_id):
+        return {
+            "evidence_id": evidence_id,
+            "descendants": self.evidence_descendants(evidence_id),
+            "principle": "a corrected premise triggers descendant review; descendants are not automatically false",
+        }
+
     def evidence_lineage(self, evidence_id):
         if evidence_id not in self.state["E"]["evidence"]:
             raise ValueError(f"unknown evidence_id: {evidence_id}")
