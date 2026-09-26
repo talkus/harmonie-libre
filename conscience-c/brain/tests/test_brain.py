@@ -26,6 +26,23 @@ class BrainTests(unittest.TestCase):
         self.assertIn("continuity_structure_hash", b2.state)
         self.assertNotIn("identity_structure_hash", b2.state)
 
+    def test_historical_checkpoint_boundary_is_not_invented_snapshot(self):
+        b = self.make()
+        b.imagine("one", ["a"], ["b"])
+        b.imagine("two", ["c"], ["d"])
+        old = b.checkpoint_at(1)
+        self.assertEqual(old["state"], "C(t_1)")
+        self.assertEqual(old["reconstruction_status"], "documentary_boundary_not_full_snapshot")
+        self.assertNotIn("telos", old)
+        self.assertEqual(old["event_hash"], b.ledger.read()[1]["event_hash"])
+
+    def test_checkpoint_at_current_returns_current_projection(self):
+        b = self.make()
+        b.imagine("one", ["a"], ["b"])
+        self.assertEqual(b.checkpoint_at(b.state["n"]), b.current_checkpoint())
+        with self.assertRaises(ValueError):
+            b.checkpoint_at(b.state["n"] + 1)
+
     def test_transition_report_connects_checkpoint_to_history(self):
         b = self.make()
         start = b.state["n"]
