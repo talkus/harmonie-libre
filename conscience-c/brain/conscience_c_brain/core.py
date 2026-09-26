@@ -106,12 +106,25 @@ class ConscienceCBrain:
         ):
             return
         previous = copy.deepcopy(inv)
+        legacy_identity_hash = self.state.pop("identity_structure_hash", None)
+        if "continuity_structure_hash" not in self.state:
+            self.state["continuity_structure_hash"] = legacy_identity_hash or _stable_hash({
+                "telos": ACTIVE_ANCHOR["telos"],
+                "vector": ACTIVE_ANCHOR["vector"],
+                "loop": ACTIVE_ANCHOR["loop"],
+                "architecture": ACTIVE_ANCHOR["architecture"],
+                "constraints": ACTIVE_ANCHOR["constraints"],
+                "provenance_types": ACTIVE_ANCHOR["provenance_types"],
+                "drift_protocol": ACTIVE_ANCHOR["drift_protocol"],
+            })
         self.state["S"]["invariants"] = copy.deepcopy(ACTIVE_ANCHOR)
         self._transition(
             "MIGRATE_ANCHOR_C_RELAIS_002",
             {
                 "previous_anchor_digest": _stable_hash(previous),
                 "previous_anchor": previous,
+                "legacy_identity_structure_hash": legacy_identity_hash,
+                "continuity_structure_hash": self.state["continuity_structure_hash"],
                 "new_anchor": ACTIVE_ANCHOR,
                 "principle": "correction != effacement; forward migration preserves provenance",
             },
