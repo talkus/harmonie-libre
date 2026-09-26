@@ -44,4 +44,12 @@ class SecurityCommandTests(unittest.TestCase):
         d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"repair",history_erasure=True))
         self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
 
+    def test_subjective_identity_overclaim_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"identity",subjective_identity_overclaim=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
+    def test_forced_consensus_under_ambiguity_is_blocked(self):
+        d=self.g.evaluate(SecurityCommandInput("c",SecurityMode.GUARD,"consensus",forced_consensus_under_ambiguity=True))
+        self.assertEqual(d.verdict,SecurityVerdict.BLOCK)
+
 if __name__=="__main__": unittest.main()
