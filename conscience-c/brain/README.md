@@ -120,6 +120,8 @@ Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconna
 
 Une preuve peut maintenant distinguer le moment d'enregistrement (`timestamp`), le moment observé (`observed_at`), le début de validité (`valid_at`) et une éventuelle expiration (`expires_at`). Une preuve expirée reste dans l'histoire mais sort de la vue `currently_usable_evidence()` et devient `expired_requires_reverification`.
 
+Une preuve peut aussi déclarer `subject_ref` et `scope`. `evidence_applicability()` vérifie donc trois frontières avant application : temps, sujet et contexte. Une preuve sur O1 dans le contexte A ne devient pas silencieusement une preuve sur O2 ou sur le contexte B. `currently_usable_evidence()` peut filtrer selon ces frontières.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
