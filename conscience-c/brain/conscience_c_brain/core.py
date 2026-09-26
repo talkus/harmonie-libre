@@ -429,6 +429,41 @@ class ConscienceCBrain:
             "memory_rule": self.state["S"]["invariants"]["memory_rule"],
         }
 
+    def checkpoint_at(self, n):
+        if not isinstance(n, int) or n < 0 or n > self.state["n"]:
+            raise ValueError("checkpoint index out of range")
+        if n == self.state["n"]:
+            return self.current_checkpoint()
+        # Historical checkpoints are reconstructed as documentary transition
+        # boundaries from the ledger, not as invented full snapshots.
+        rows = [
+            row for row in self.ledger.read()
+            if row.get("payload", {}).get("n") == n
+        ]
+        if n == 0:
+            bootstrap = next((row for row in self.ledger.read() if row["event_type"] == "BOOTSTRAP_T0"), None)
+            if bootstrap is None:
+                raise ValueError("bootstrap event missing")
+            return {
+                "state": "C(t_0)",
+                "n": 0,
+                "event_hash": bootstrap["event_hash"],
+                "ledger_boundary": bootstrap["event_hash"],
+                "reconstruction_status": "documentary_boundary_not_full_snapshot",
+            }
+        if not rows:
+            raise ValueError(f"no transition found for C(t_{n})")
+        row = rows[-1]
+        return {
+            "state": f"C(t_{n})",
+            "n": n,
+            "event_type": row["event_type"],
+            "origin": row["payload"].get("origin"),
+            "event_hash": row["event_hash"],
+            "ledger_boundary": row["event_hash"],
+            "reconstruction_status": "documentary_boundary_not_full_snapshot",
+        }
+
     def transition_report(self, since_n=0):
         events = []
         for row in self.ledger.read():
