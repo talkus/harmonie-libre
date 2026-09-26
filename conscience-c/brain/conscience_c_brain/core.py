@@ -190,6 +190,31 @@ class ConscienceCBrain:
         self.state["R"]["history"].append(relation_event)
         self._transition("UPDATE_RELATION", {"other_id": other_id, "event": event}, CausalOrigin.RELATION)
 
+    def current_other_model(self, other_id):
+        entity = self.state["O"]["entities"].get(other_id)
+        if not entity:
+            return None
+        return {
+            "model": copy.deepcopy(entity["model"]),
+            "model_status": entity.get("model_status", "revisable_representation_not_identity"),
+        }
+
+    def other_observation_history(self, other_id):
+        entity = self.state["O"]["entities"].get(other_id)
+        return copy.deepcopy(entity["observations"]) if entity else []
+
+    def repair_history(self, other_id=None):
+        records = self.state["R"]["repairs"]
+        if other_id is not None:
+            records = [r for r in records if r["other_id"] == other_id]
+        return copy.deepcopy(records)
+
+    def active_repairs(self, other_id=None):
+        return [
+            r for r in self.repair_history(other_id)
+            if r["status"] not in {"archived"}
+        ]
+
     def current_trust_calibration(self, other_id):
         history = self.state["R"]["trust_calibration"].get(other_id, [])
         if not history:
