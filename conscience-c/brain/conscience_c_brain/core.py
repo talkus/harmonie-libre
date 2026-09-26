@@ -406,6 +406,30 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def replay_plan_from_receipt(self, receipt):
+        resume = self.resume_from_receipt(receipt)
+        boundary = resume["captured_ledger_boundary"]
+        rows = self.ledger.read()
+        start = next((i for i, row in enumerate(rows) if row["event_hash"] == boundary), None)
+        if start is None:
+            raise ValueError("receipt boundary not found in ledger")
+        events = []
+        for row in rows[start + 1:]:
+            events.append({
+                "event_type": row["event_type"],
+                "event_hash": row["event_hash"],
+                "prev_hash": row["prev_hash"],
+                "n": row.get("payload", {}).get("n"),
+                "origin": row.get("payload", {}).get("origin"),
+            })
+        return {
+            **resume,
+            "events_to_replay": events,
+            "target_state": self.state["state_label"],
+            "target_ledger_head": self.ledger.head(),
+            "replay_status": "plan_only_no_state_mutation",
+        }
+
     def resume_from_receipt(self, receipt):
         """Validate a historical receipt as a resume anchor without rolling state backward."""
         if not self.verify_checkpoint_receipt(receipt):
