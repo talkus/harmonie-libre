@@ -72,6 +72,16 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(len(b.state["R"]["repairs"]), 1)
         self.assertEqual(b.ledger.read()[-1]["event_type"], "VERIFY_REPAIR")
 
+    def test_recurrence_preserves_verified_repair_history(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        out = b.record_recurrence("RP0001", {"event": "same issue returned"}, "source:recurrence")
+        self.assertEqual(out["status"], "recurrence_after_verification")
+        self.assertEqual(out["verification"]["source_ref"], "v")
+        self.assertEqual(len(out["recurrences"]), 1)
+        self.assertEqual(b.ledger.read()[-1]["event_type"], "RECORD_RECURRENCE")
+
     def test_repair_cannot_be_verified_twice_or_without_provenance(self):
         b = self.make()
         b.record_repair("O1", "issue", "action", "source:repair")
