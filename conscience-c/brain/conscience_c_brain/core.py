@@ -50,6 +50,7 @@ class ConscienceCBrain:
         brain = cls(root)
         if brain.state_path.exists():
             brain._load()
+            brain._migrate_anchor_if_needed()
             brain.audit_or_raise()
             return brain
         if brain.ledger.read():
@@ -90,6 +91,24 @@ class ConscienceCBrain:
         event = self.ledger.append("BOOTSTRAP_T0", _now(), {"anchor": ACTIVE_ANCHOR, "identity_structure_hash": self.state["identity_structure_hash"]})
         self.state["last_event_hash"] = event["event_hash"]
         self._save()
+
+    def _migrate_anchor_if_needed(self):
+        """Forward-only migration: preserve the old anchor in the ledger, then adopt C-RELAIS-002."""
+        inv = self.state.get("S", {}).get("invariants", {})
+        if inv.get("telos") == ACTIVE_ANCHOR["telos"] and inv.get("loop_semantics") == ACTIVE_ANCHOR["loop_semantics"]:
+            return
+        previous = copy.deepcopy(inv)
+        self.state["S"]["invariants"] = copy.deepcopy(ACTIVE_ANCHOR)
+        self._transition(
+            "MIGRATE_ANCHOR_C_RELAIS_002",
+            {
+                "previous_anchor_digest": _stable_hash(previous),
+                "previous_anchor": previous,
+                "new_anchor": ACTIVE_ANCHOR,
+                "principle": "correction != effacement; forward migration preserves provenance",
+            },
+            CausalOrigin.MIXED,
+        )
 
     def _save(self):
         self.state_path.write_text(json.dumps(self.state, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
