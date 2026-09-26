@@ -459,6 +459,9 @@ class BrainTests(unittest.TestCase):
         wrong_scope = b.evidence_applicability("Es", subject_ref="O1", scope="context:B")
         self.assertFalse(wrong_scope["applicable"])
         self.assertIn("scope_mismatch", wrong_scope["reasons"])
+        self.assertEqual(len(b.currently_usable_evidence(subject_ref="O1", scope="context:A")), 1)
+        self.assertEqual(len(b.currently_usable_evidence(subject_ref="O2", scope="context:A")), 0)
+        self.assertEqual(len(b.currently_usable_evidence(subject_ref="O1", scope="context:B")), 0)
 
     def test_evidence_time_distinguishes_recording_from_validity(self):
         b = self.make()
