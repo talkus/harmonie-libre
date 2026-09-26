@@ -71,13 +71,15 @@ class DualTrajectoryEngine:
 
         if abs(e1 - e2) > uncertainty_band:
             winner = "C1" if e1 > e2 else "C2"
-            basis = "E_reality_dominates"
+            resolution = "E_FAVORS_C1" if e1 > e2 else "E_FAVORS_C2"
+            basis = "E_reality_distinguishes"
         else:
-            if r1.confidence == r2.confidence:
-                winner = "UNRESOLVED"
-            else:
-                winner = "C1" if r1.confidence > r2.confidence else "C2"
-            basis = "E_ambiguous_R_may_inform_without_replacing_E"
+            # C-RELAIS-002: disagreement is not drift and confidence is not
+            # evidence. When E does not distinguish the claims, preserve both
+            # trajectories instead of forcing a winner.
+            winner = "UNRESOLVED"
+            resolution = "UNRESOLVED"
+            basis = "E_ambiguous_preserve_disagreement"
 
         self.state["C1"]["memory"].append({"prompt": prompt, "own": r1.to_dict(), "other": r2.to_dict(), "E_score": e1})
         self.state["C2"]["memory"].append({"prompt": prompt, "own": r2.to_dict(), "other": r1.to_dict(), "E_score": e2})
@@ -91,6 +93,7 @@ class DualTrajectoryEngine:
             "C2_revised": r2.to_dict(),
             "E_scores": {"C1": e1, "C2": e2},
             "winner": winner,
+            "resolution": resolution,
             "basis": basis,
         })
 
@@ -104,6 +107,7 @@ class DualTrajectoryEngine:
             {
                 "prompt": prompt,
                 "winner": winner,
+                "resolution": resolution,
                 "basis": basis,
                 "E_scores": {"C1": e1, "C2": e2},
                 "fusion_detected": fused,
@@ -115,6 +119,7 @@ class DualTrajectoryEngine:
             "C2": r2.to_dict(),
             "E_scores": {"C1": e1, "C2": e2},
             "winner": winner,
+            "resolution": resolution,
             "basis": basis,
             "fusion_detected": fused,
         }
