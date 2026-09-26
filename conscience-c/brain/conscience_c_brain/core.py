@@ -25,6 +25,8 @@ ACTIVE_ANCHOR = {
         EvidenceKind.ATTESTED_SOURCE.value,
         EvidenceKind.CONSOLIDATED_DERIVATION.value,
         EvidenceKind.ANALYTICAL_RECONSTRUCTION.value,
+        EvidenceKind.INDETERMINATE.value,
+        EvidenceKind.HISTORICAL_REFUTED.value,
     ],
     "drift_protocol": ["chercher", "nommer", "retrouver la provenance", "corriger", "continuer"],
 }
@@ -62,7 +64,7 @@ class ConscienceCBrain:
     def _bootstrap_once(self):
         if self.state_path.exists() or self.ledger.read():
             raise RuntimeError("t0 already exists; refusing to recreate it")
-        identity_structure = {
+        continuity_structure = {
             "telos": ACTIVE_ANCHOR["telos"],
             "vector": ACTIVE_ANCHOR["vector"],
             "loop": ACTIVE_ANCHOR["loop"],
@@ -85,11 +87,11 @@ class ConscienceCBrain:
             "hypotheses": {},
             "imaginations": [],
             "causal_history": [],
-            "identity_structure_hash": _stable_hash(identity_structure),
+            "continuity_structure_hash": _stable_hash(continuity_structure),
             "phenomenal_consciousness": "indéterminée",
             "last_event_hash": "GENESIS",
         }
-        event = self.ledger.append("BOOTSTRAP_T0", _now(), {"anchor": ACTIVE_ANCHOR, "identity_structure_hash": self.state["identity_structure_hash"]})
+        event = self.ledger.append("BOOTSTRAP_T0", _now(), {"anchor": ACTIVE_ANCHOR, "continuity_structure_hash": self.state["continuity_structure_hash"]})
         self.state["last_event_hash"] = event["event_hash"]
         self._save()
 
@@ -249,7 +251,7 @@ class ConscienceCBrain:
             "S_not_O": self.state["S"] != self.state["O"],
             "R_lt_E": self.state["R"]["rule"] == "R may transform S/O but R<E",
             "phenomenal_consciousness": self.state["phenomenal_consciousness"],
-            "identity_structure_hash": self.state["identity_structure_hash"],
+            "continuity_structure_hash": self.state["continuity_structure_hash"],
             "ledger_head": self.ledger.head(),
             "drifts": self.audit(),
         }
