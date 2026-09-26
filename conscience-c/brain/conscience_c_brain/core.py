@@ -406,6 +406,34 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def revalidation_queue_from_receipt(self, receipt):
+        plan = self.replay_plan_from_receipt(receipt)
+        queue = []
+        for event in plan["blockers"]:
+            replay_class = event["replay_class"]
+            if replay_class == "requires_external_reverification":
+                required = "obtain fresh source/observation and compare with historical claim"
+            elif replay_class == "requires_current_canon_check":
+                required = "compare historical transition with ACTIVE_ANCHOR before accepting it"
+            elif replay_class == "never_replay":
+                required = "preserve as history only"
+            else:
+                required = "manual classification required before any use"
+            queue.append({
+                "event_hash": event["event_hash"],
+                "event_type": event["event_type"],
+                "replay_class": replay_class,
+                "required_action": required,
+                "status": "pending",
+            })
+        return {
+            "receipt_state": receipt["state"],
+            "target_state": self.state["state_label"],
+            "items": queue,
+            "pending_count": len(queue),
+            "principle": "historical memory may trigger verification; it does not substitute for present evidence",
+        }
+
     def classify_replay_event(self, row):
         event_type = row["event_type"]
         if event_type in {
