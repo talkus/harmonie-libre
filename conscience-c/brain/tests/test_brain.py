@@ -449,21 +449,35 @@ class BrainTests(unittest.TestCase):
         b = self.make()
         b.ingest_evidence(Evidence(
             "EC1", "analytic candidate", EvidenceKind.ANALYTICAL_RECONSTRUCTION,
-            claim_ref="claim:X", subject_ref="O1", scope="A"
+            claim_ref="claim:X", subject_ref="O1", scope="A", stance="supports"
         ))
-        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "analytical_only")
+        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "analytical_support_only")
         self.assertEqual(b.claim_support_status("claim:X", "O2", "A")["status"], "unsupported_in_requested_context")
         b.ingest_evidence(Evidence(
-            "EC2", "attested source", EvidenceKind.ATTESTED_SOURCE,
-            source_ref="source:EC2", claim_ref="claim:X", subject_ref="O1", scope="A"
+            "EC2", "attested support", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:EC2", claim_ref="claim:X", subject_ref="O1", scope="A", stance="supports"
         ))
-        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "attested_source_present")
+        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "attested_support_present")
         self.assertEqual(b.state["E"]["evidence"]["EC1"]["kind"], "reconstruction_analytique")
         b.ingest_evidence(Evidence(
-            "EC3", "historical refutation", EvidenceKind.HISTORICAL_REFUTED,
-            claim_ref="claim:X", subject_ref="O1", scope="A"
+            "EC3", "attested contradiction", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:EC3", claim_ref="claim:X", subject_ref="O1", scope="A", stance="contradicts"
         ))
-        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "contested_requires_review")
+        out = b.claim_support_status("claim:X", "O1", "A")
+        self.assertEqual(out["status"], "contested_requires_review")
+        self.assertEqual(len(out["supports"]), 2)
+        self.assertEqual(len(out["contradicts"]), 1)
+
+    def test_context_evidence_does_not_become_support(self):
+        b = self.make()
+        b.ingest_evidence(Evidence(
+            "ECTX", "background only", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:ctx", claim_ref="claim:Y", stance="context"
+        ))
+        out = b.claim_support_status("claim:Y")
+        self.assertEqual(out["status"], "context_only_no_support_inference")
+        self.assertEqual(len(out["supports"]), 0)
+
 
     def test_evidence_does_not_silently_generalize_across_subject_or_scope(self):
         b = self.make()
