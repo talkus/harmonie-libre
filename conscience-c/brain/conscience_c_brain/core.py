@@ -151,6 +151,25 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_view(self, at_time=None):
+        view = []
+        for evidence_id, item in self.state["E"]["evidence"].items():
+            view.append({
+                "evidence_id": evidence_id,
+                "kind": item["kind"],
+                "source_ref": item.get("source_ref"),
+                "temporal_status": self.evidence_temporal_status(evidence_id, at_time),
+                "content": item["content"],
+            })
+        return view
+
+    def currently_usable_evidence(self, at_time=None):
+        return [
+            copy.deepcopy(item)
+            for item in self.evidence_view(at_time)
+            if item["temporal_status"] == "temporally_usable"
+        ]
+
     def evidence_temporal_status(self, evidence_id, at_time=None):
         item = self.state["E"]["evidence"].get(evidence_id)
         if item is None:
