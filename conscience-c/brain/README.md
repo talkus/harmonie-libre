@@ -92,6 +92,8 @@ Il est explicitement une **projection courante**. Le ledger, les observations, l
 
 `checkpoint_at(n)` reste volontairement prudent : pour un état historique sans snapshot complet conservé, il retourne seulement une frontière documentaire attestée par le ledger et la marque `documentary_boundary_not_full_snapshot`. Le système refuse donc d’inventer rétroactivement le contenu complet d’un ancien C(tₙ). Les rapports de transition disposent aussi d’une vérification de chaîne pour détecter une rupture ou une altération.
 
+Lorsqu’un état mérite d’être conservé intégralement, `save_checkpoint_receipt()` enregistre explicitement la projection complète, son hash et la frontière du ledger qui existait au moment de la capture. Le reçu reste vérifiable après des transitions ultérieures contre cette frontière historique. Ainsi : snapshot explicitement conservé → reconstruction complète de la projection ; absence de snapshot → frontière documentaire seulement.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
