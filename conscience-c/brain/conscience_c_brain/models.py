@@ -28,6 +28,12 @@ class Evidence:
     source_ref: Optional[str] = None
     timestamp: Optional[str] = None
 
+    def __post_init__(self):
+        if not 0.0 <= self.confidence <= 1.0:
+            raise ValueError("evidence confidence must be between 0 and 1")
+        if self.kind == EvidenceKind.ATTESTED_SOURCE and not self.source_ref:
+            raise ValueError("attested source requires source_ref")
+
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
         d["kind"] = self.kind.value
