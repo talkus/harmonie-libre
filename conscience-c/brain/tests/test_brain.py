@@ -445,6 +445,17 @@ class BrainTests(unittest.TestCase):
         e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
         self.assertEqual(e.source_ref, "source:EA")
 
+    def test_evidence_graph_audit_detects_legacy_corruption_without_rewriting_it(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("EG1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EG1"))
+        b.ingest_evidence(Evidence("EG2", "child", EvidenceKind.CONSOLIDATED_DERIVATION, derived_from=["EG1"]))
+        self.assertEqual(b.evidence_graph_audit(), [])
+        # Simulate legacy/corrupt persisted state bypassing the guarded API.
+        b.state["E"]["evidence"]["EG1"]["derived_from"] = ["EG2"]
+        issues = b.evidence_graph_audit()
+        self.assertTrue(any(x["type"] == "cycle" for x in issues))
+        self.assertEqual(b.state["E"]["evidence"]["EG1"]["derived_from"], ["EG2"])
+
     def test_evidence_derivation_requires_existing_parents_and_preserves_lineage(self):
         b = self.make()
         with self.assertRaises(ValueError):
