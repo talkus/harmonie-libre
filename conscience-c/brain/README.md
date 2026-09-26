@@ -88,6 +88,8 @@ Le cerveau expose maintenant un `current_checkpoint()` minimal pour reprendre à
 
 Il est explicitement une **projection courante**. Le ledger, les observations, les hypothèses rejetées, les réparations archivées et les calibrations historiques restent dans leurs historiques respectifs. Modifier l'objet retourné par le checkpoint ne modifie pas l'état interne.
 
+`checkpoint_manifest()` ajoute une empreinte du checkpoint, la tête du ledger et l’empreinte de continuité. Un checkpoint altéré ou devenu ancien après une nouvelle transition ne vérifie plus contre l’état courant. `transition_report(since_n)` relie ensuite un checkpoint à la suite d’événements qui conduit à l’état présent, sans prétendre que le checkpoint contient toute la mémoire.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
