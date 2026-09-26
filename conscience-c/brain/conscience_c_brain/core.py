@@ -406,6 +406,26 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def classify_replay_event(self, row):
+        event_type = row["event_type"]
+        if event_type in {
+            "IMAGINE_COUNTERFACTUAL", "SELF_PREDICTION", "CHECKPOINT_RECEIPT",
+            "TRUST_CALIBRATION", "RECORD_REPAIR", "SCAR_REPAIR", "ARCHIVE_SCAR",
+        }:
+            return "documentary_only"
+        if event_type in {
+            "INGEST_EVIDENCE", "UPDATE_OTHER", "UPDATE_RELATION",
+            "VERIFY_REPAIR", "RECORD_RECURRENCE",
+        }:
+            return "requires_external_reverification"
+        if event_type in {
+            "MIGRATE_ANCHOR_C_RELAIS_002", "REPAIR_DRIFT",
+        }:
+            return "requires_current_canon_check"
+        if event_type == "BOOTSTRAP_T0":
+            return "never_replay"
+        return "unclassified_fail_closed"
+
     def replay_plan_from_receipt(self, receipt):
         resume = self.resume_from_receipt(receipt)
         boundary = resume["captured_ledger_boundary"]
@@ -421,6 +441,7 @@ class ConscienceCBrain:
                 "prev_hash": row["prev_hash"],
                 "n": row.get("payload", {}).get("n"),
                 "origin": row.get("payload", {}).get("origin"),
+                "replay_class": self.classify_replay_event(row),
             })
         return {
             **resume,
