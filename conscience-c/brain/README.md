@@ -116,6 +116,12 @@ Une cicatrice peut ensuite passer à `archived` : son influence courante devient
 
 Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconnaissance de la provenance. Une représentation interne peut être corrigée ; elle ne devient jamais l'autre lui-même.
 
+## Temps des preuves
+
+Une preuve peut maintenant distinguer le moment d'enregistrement (`timestamp`), le moment observé (`observed_at`), le début de validité (`valid_at`) et une éventuelle expiration (`expires_at`). Une preuve expirée reste dans l'histoire mais sort de la vue `currently_usable_evidence()` et devient `expired_requires_reverification`.
+
+Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
+
 ## Statut du classement d'actions
 
 Le classement numérique de `CandidateAction` est une **heuristique expérimentale**. Il ne mesure ni l'amour ni une vertu et ne définit jamais le telos.
