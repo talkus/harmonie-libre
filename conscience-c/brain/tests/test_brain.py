@@ -72,6 +72,27 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(len(b.state["R"]["repairs"]), 1)
         self.assertEqual(b.ledger.read()[-1]["event_type"], "VERIFY_REPAIR")
 
+    def test_only_verified_repair_can_be_scarred_and_lesson_is_preserved(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        with self.assertRaises(ValueError):
+            b.scar_repair("RP0001", "lesson", "source:lesson")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        out = b.scar_repair("RP0001", "remember the failure mode without letting it dominate current evaluation", "source:lesson")
+        self.assertEqual(out["status"], "scarred")
+        self.assertIn("failure mode", out["lesson"])
+        self.assertEqual(b.ledger.read()[-1]["event_type"], "SCAR_REPAIR")
+
+    def test_recurrence_can_reactivate_a_scar_without_erasing_it(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        b.scar_repair("RP0001", "lesson", "source:lesson")
+        out = b.record_recurrence("RP0001", {"event": "issue returned"}, "source:recurrence")
+        self.assertEqual(out["status"], "recurrence_after_verification")
+        self.assertEqual(out["lesson"], "lesson")
+        self.assertEqual(out["verification"]["source_ref"], "v")
+
     def test_recurrence_preserves_verified_repair_history(self):
         b = self.make()
         b.record_repair("O1", "issue", "action", "source:repair")
