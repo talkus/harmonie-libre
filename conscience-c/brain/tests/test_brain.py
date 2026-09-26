@@ -609,6 +609,15 @@ class BrainTests(unittest.TestCase):
         b.repair_drift("user clarification 2026-09-24")
         self.assertEqual(b.audit(), [])
 
+    def test_integrity_corruption_is_not_auto_repaired(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("G1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:G1"))
+        b.ingest_evidence(Evidence("G2", "child", EvidenceKind.CONSOLIDATED_DERIVATION, derived_from=["G1"]))
+        b.state["E"]["evidence"]["G1"]["derived_from"] = ["G2"]
+        with self.assertRaises(ValueError):
+            b.repair_drift("operator:test")
+        self.assertEqual(b.state["E"]["evidence"]["G1"]["derived_from"], ["G2"])
+
     def test_core_audit_reports_ledger_tamper_without_boolean_contract_confusion(self):
         b = self.make()
         self.assertEqual(b.audit(), [])
