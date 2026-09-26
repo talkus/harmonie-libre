@@ -126,6 +126,8 @@ Une preuve peut aussi déclarer `subject_ref` et `scope`. `evidence_applicabilit
 
 Les éléments dérivés peuvent déclarer `derived_from`. Les parents doivent déjà exister et `evidence_lineage()` remonte jusqu’aux sources conservées. Inversement, `impact_report_for_evidence()` retrouve les descendants d’une prémisse à réexaminer lorsqu’elle change. Ce rapport déclenche une revue ; il ne déclare jamais automatiquement les descendants faux.
 
+Le graphe de dérivation doit rester acyclique. `evidence_graph_audit()` détecte parents manquants et cycles, y compris dans un ancien état corrompu chargé depuis disque, sans le réparer silencieusement. L’audit central vérifie désormais à la fois cette intégrité sémantique et la chaîne cryptographique du ledger.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
