@@ -443,9 +443,24 @@ class ConscienceCBrain:
                 "origin": row.get("payload", {}).get("origin"),
                 "replay_class": self.classify_replay_event(row),
             })
+        counts = {}
+        for event in events:
+            counts[event["replay_class"]] = counts.get(event["replay_class"], 0) + 1
+        blockers = [
+            event for event in events
+            if event["replay_class"] in {
+                "requires_external_reverification",
+                "requires_current_canon_check",
+                "never_replay",
+                "unclassified_fail_closed",
+            }
+        ]
         return {
             **resume,
             "events_to_replay": events,
+            "classification_counts": counts,
+            "blockers": blockers,
+            "automatic_replay_allowed": False,
             "target_state": self.state["state_label"],
             "target_ledger_head": self.ledger.head(),
             "replay_status": "plan_only_no_state_mutation",
