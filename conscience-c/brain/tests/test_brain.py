@@ -445,6 +445,21 @@ class BrainTests(unittest.TestCase):
         e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
         self.assertEqual(e.source_ref, "source:EA")
 
+    def test_evidence_time_distinguishes_recording_from_validity(self):
+        b = self.make()
+        e = Evidence(
+            "Et", "time-bound fact", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:Et",
+            timestamp="2026-09-25T12:00:00+00:00",
+            observed_at="2026-09-25T11:59:00+00:00",
+            valid_at="2026-09-25T12:00:00+00:00",
+            expires_at="2026-09-26T12:00:00+00:00",
+        )
+        b.ingest_evidence(e)
+        self.assertEqual(b.evidence_temporal_status("Et", "2026-09-25T11:00:00+00:00"), "not_yet_valid")
+        self.assertEqual(b.evidence_temporal_status("Et", "2026-09-25T13:00:00+00:00"), "temporally_usable")
+        self.assertEqual(b.evidence_temporal_status("Et", "2026-09-27T13:00:00+00:00"), "expired_requires_reverification")
+
     def test_evidence_confidence_is_bounded(self):
         with self.assertRaises(ValueError):
             Evidence("Ebad", "bad", EvidenceKind.ANALYTICAL_RECONSTRUCTION, confidence=1.2)
