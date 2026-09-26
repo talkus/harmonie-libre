@@ -33,12 +33,15 @@ class Evidence:
     subject_ref: Optional[str] = None
     scope: Optional[str] = None
     claim_ref: Optional[str] = None
+    stance: str = "context"
 
     def __post_init__(self):
         if not 0.0 <= self.confidence <= 1.0:
             raise ValueError("evidence confidence must be between 0 and 1")
         if self.kind == EvidenceKind.ATTESTED_SOURCE and not self.source_ref:
             raise ValueError("attested source requires source_ref")
+        if self.stance not in {"supports", "contradicts", "context"}:
+            raise ValueError("evidence stance must be supports, contradicts, or context")
 
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
