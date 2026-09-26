@@ -139,6 +139,15 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(b.state["E"]["evidence"]["E4"]["kind"], "indetermine")
         self.assertEqual(b.state["E"]["evidence"]["E5"]["kind"], "historique_refute")
 
+    def test_hypothesis_cannot_be_silently_overwritten(self):
+        b = self.make()
+        h1 = Hypothesis("HX", "first", .5, falsifiers=["not first"])
+        h2 = Hypothesis("HX", "replacement", .9, falsifiers=["not replacement"])
+        b.add_hypothesis(h1)
+        with self.assertRaises(ValueError):
+            b.add_hypothesis(h2)
+        self.assertEqual(b.state["hypotheses"]["HX"]["proposition"], "first")
+
     def test_falsifiable_hypothesis_can_be_rejected(self):
         b = self.make()
         b.add_hypothesis(Hypothesis("H1", "X est vrai", .8, ["preuve contraire de X"]))
