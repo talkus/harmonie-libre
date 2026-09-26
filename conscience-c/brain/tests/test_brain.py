@@ -42,6 +42,23 @@ class BrainTests(unittest.TestCase):
         b.update_other("O1", {"claim": "x"}, "source:1")
         self.assertEqual(b.state["O"]["entities"]["O1"]["model_status"], "revisable_representation_not_identity")
 
+    def test_other_model_transition_keeps_before_after_digests(self):
+        b = self.make()
+        b.update_other("O1", {"claim": "first"}, "source:1")
+        b.update_other("O1", {"claim": "revised"}, "source:2")
+        ev = b.ledger.read()[-1]
+        self.assertEqual(ev["event_type"], "UPDATE_OTHER")
+        self.assertNotEqual(ev["payload"]["previous_model_digest"], ev["payload"]["current_model_digest"])
+        self.assertEqual(b.state["O"]["entities"]["O1"]["observations"][0]["data"]["claim"], "first")
+
+    def test_repair_is_not_self_declared_verified(self):
+        b = self.make()
+        pending = b.record_repair("O1", "issue", "corrective action", "source:repair")
+        self.assertEqual(pending["status"], "pending_verification")
+        verified = b.record_repair("O1", "issue2", "corrective action2", "source:repair2", verification={"source_ref": "source:verification"})
+        self.assertEqual(verified["status"], "verified")
+        self.assertEqual(len(b.state["R"]["repairs"]), 2)
+
     def test_relation_event_requires_provenance(self):
         b = self.make()
         with self.assertRaises(ValueError):
