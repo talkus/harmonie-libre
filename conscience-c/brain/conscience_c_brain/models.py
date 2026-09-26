@@ -32,6 +32,7 @@ class Evidence:
     expires_at: Optional[str] = None
     subject_ref: Optional[str] = None
     scope: Optional[str] = None
+    claim_ref: Optional[str] = None
 
     def __post_init__(self):
         if not 0.0 <= self.confidence <= 1.0:
