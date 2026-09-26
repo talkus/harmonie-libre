@@ -130,6 +130,8 @@ Le graphe de dérivation doit rester acyclique. `evidence_graph_audit()` détect
 
 Ces deux intégrités sont non auto-réparables : `repair_drift()` refuse de modifier automatiquement un ledger altéré ou un graphe de preuve corrompu. Leur récupération doit être explicite et sourcée, car « réparer » silencieusement une provenance cassée détruirait précisément la preuve de ce qui s’est passé.
 
+`integrity_recovery_plan()` décrit les étapes nécessaires sans les exécuter. `recovery_receipt()` exige opérateur, provenance et notes et reste `proposed_not_applied`. Si le ledger lui-même est corrompu, le reçu ne peut pas y être ajouté : il doit être attesté extérieurement, car un registre corrompu ne peut pas certifier sa propre réparation.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
