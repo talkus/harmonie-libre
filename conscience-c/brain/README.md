@@ -128,6 +128,8 @@ Les éléments dérivés peuvent déclarer `derived_from`. Les parents doivent d
 
 Le graphe de dérivation doit rester acyclique. `evidence_graph_audit()` détecte parents manquants et cycles, y compris dans un ancien état corrompu chargé depuis disque, sans le réparer silencieusement. L’audit central vérifie désormais à la fois cette intégrité sémantique et la chaîne cryptographique du ledger.
 
+Ces deux intégrités sont non auto-réparables : `repair_drift()` refuse de modifier automatiquement un ledger altéré ou un graphe de preuve corrompu. Leur récupération doit être explicite et sourcée, car « réparer » silencieusement une provenance cassée détruirait précisément la preuve de ce qui s’est passé.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
