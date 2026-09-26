@@ -23,6 +23,8 @@ class BrainTests(unittest.TestCase):
         self.assertGreater(len(b2.ledger.read()), before_events)
         self.assertEqual(b2.ledger.read()[-1]["event_type"], "MIGRATE_ANCHOR_C_RELAIS_002")
         self.assertIn("previous_anchor", b2.ledger.read()[-1]["payload"])
+        self.assertIn("continuity_structure_hash", b2.state)
+        self.assertNotIn("identity_structure_hash", b2.state)
 
     def test_resume_tn_no_reset(self):
         b = self.make()
@@ -92,6 +94,12 @@ class BrainTests(unittest.TestCase):
         b.ingest_evidence(Evidence("E3", "analytic", EvidenceKind.ANALYTICAL_RECONSTRUCTION))
         kinds = {x["kind"] for x in b.state["E"]["evidence"].values()}
         self.assertEqual(kinds, {"source_attestee","derivation_consolidee","reconstruction_analytique"})
+
+    def test_extended_statuses_are_admitted_by_audit(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("EI", "insufficient", EvidenceKind.INDETERMINATE))
+        b.ingest_evidence(Evidence("ER", "refuted historical", EvidenceKind.HISTORICAL_REFUTED))
+        self.assertEqual(b.audit(), [])
 
     def test_extended_statuses_remain_distinct(self):
         b = self.make()
