@@ -174,6 +174,8 @@ class ConscienceCBrain:
         if not applicable:
             return {"claim_ref": claim_ref, "status": "unsupported_in_requested_context", "evidence": items}
         kinds = {x["kind"] for x in applicable}
+        if EvidenceKind.HISTORICAL_REFUTED.value in kinds and EvidenceKind.ATTESTED_SOURCE.value in kinds:
+            return {"claim_ref": claim_ref, "status": "contested_requires_review", "evidence": applicable}
         if EvidenceKind.HISTORICAL_REFUTED.value in kinds:
             return {"claim_ref": claim_ref, "status": "historically_refuted_present", "evidence": applicable}
         if EvidenceKind.ATTESTED_SOURCE.value in kinds:
