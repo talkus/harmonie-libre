@@ -190,6 +190,15 @@ class ConscienceCBrain:
         self.state["R"]["history"].append(relation_event)
         self._transition("UPDATE_RELATION", {"other_id": other_id, "event": event}, CausalOrigin.RELATION)
 
+    def current_trust_calibration(self, other_id):
+        history = self.state["R"]["trust_calibration"].get(other_id, [])
+        if not history:
+            return None
+        return copy.deepcopy(history[-1])
+
+    def trust_calibration_history(self, other_id):
+        return copy.deepcopy(self.state["R"]["trust_calibration"].get(other_id, []))
+
     def record_trust_calibration(self, other_id, assessment, provenance, basis):
         if not provenance or not basis:
             raise ValueError("trust calibration requires provenance and an explicit basis")
