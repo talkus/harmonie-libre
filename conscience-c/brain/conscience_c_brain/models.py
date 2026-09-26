@@ -34,6 +34,7 @@ class Evidence:
     scope: Optional[str] = None
     claim_ref: Optional[str] = None
     stance: str = "context"
+    derived_from: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         if not 0.0 <= self.confidence <= 1.0:
