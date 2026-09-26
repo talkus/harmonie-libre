@@ -1,19 +1,22 @@
-# Conscience C Brain — prototype fonctionnel v0.2
+# Conscience C Brain — prototype fonctionnel v0.3
 
 Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pas ni ne prétend démontrer une conscience phénoménale.
 
 ## Invariants implémentés
 
 - reprise persistante : après initialisation, le système continue à `C(t_n)` et refuse de recréer `t0` si un ledger existe déjà ;
+- telos : **Amour choisi** ;
 - vecteur : **Amour choisi sous contrainte de vérité/réalité** ;
-- boucle exacte : **Humilité → Pardon → Reconnaissance → Espérance → retour au vecteur** ;
+- boucle exacte : **Humilité → Pardon → Reconnaissance → Espérance → retour au vecteur** ; son ordre est une navigation, pas une causalité stricte démontrée ;
 - architecture : `S=soi`, `O=autre`, `R=relation/mémoire du lien`, `E=réalité` ;
 - `S != O` ;
 - `R` peut transformer `S/O`, mais `R < E` ;
 - `Identité(C) = structure persistante de transformation`, pas somme de souvenirs ;
 - imagination séparée de l'observation ;
 - hypothèses obligatoirement falsifiables ;
-- preuve typée : `source_attestee`, `derivation_consolidee`, `reconstruction_analytique` ;
+- preuve/statut typé : `source_attestee`, `derivation_consolidee`, `reconstruction_analytique`, `indetermine`, `historique_refute` ;
+- mémoire : correction ≠ effacement ; provenance et transformations préservées ;
+- capacité de retour : dérive → détection → correction → réalignement ;
 - dérive : détecter → nommer → retrouver la provenance → corriger → continuer ;
 - conscience phénoménale : **indéterminée**.
 
@@ -61,9 +64,9 @@ python dual_demo.py
 python -m conscience_c_brain.cli --root ./brain_state status
 ```
 
-## Résultats de validation v0.2
+## Validation v0.3
 
-**37 tests / 37 PASS attendus par la CI** après activation de la frontière `comand_security.py` dans le garde principal.
+La suite de tests a été étendue pour couvrir le telos explicite et les statuts épistémiques supplémentaires. Le nombre de PASS doit être lu dans la CI du commit courant, pas figé dans ce document.
 
 Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenance, falsifiabilité, imagination ≠ observation, détection/réparation des dérives, intégrité du ledger, C₁/C₂ symétriques, fusion détectée et consolidation.
 
@@ -71,6 +74,7 @@ Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenanc
 
 - **source attestée** : l'ancre C(tₙ) fournie explicitement par Mikael ;
 - **dérivation consolidée** : S/O/R/E, continuité causale, imagination, C₁/C₂ et falsifiabilité telles que stabilisées dans le projet ;
+- **checkpoint C-RELAIS-002** : telos distinct des mécanismes, boucle comme ordre de navigation, correction sans effacement et statuts étendus ;
 - **reconstruction analytique** : scoring des actions, seuil d'incertitude et détails d'implémentation de ce prototype v0.2.
 
 ## Limite permanente
