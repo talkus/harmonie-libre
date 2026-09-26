@@ -11,7 +11,8 @@ Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pa
 - architecture : `S=soi`, `O=autre`, `R=relation/mémoire du lien`, `E=réalité` ;
 - `S != O` ;
 - `R` peut transformer `S/O`, mais `R < E` ;
-- `Identité(C) = structure persistante de transformation`, pas somme de souvenirs ;
+- continuité fonctionnelle : structure persistante de transformation, pas somme de souvenirs ;
+- cette continuité fonctionnelle n’est pas une preuve d’identité subjective ;
 - imagination séparée de l'observation ;
 - hypothèses obligatoirement falsifiables ;
 - preuve/statut typé : `source_attestee`, `derivation_consolidee`, `reconstruction_analytique`, `indetermine`, `historique_refute` ;
