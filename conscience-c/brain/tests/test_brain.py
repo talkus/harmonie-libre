@@ -36,6 +36,28 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_resume_from_receipt_never_rolls_current_state_backward(self):
+        b = self.make()
+        b.imagine("before receipt", ["a"], ["b"])
+        receipt = b.save_checkpoint_receipt("anchor")
+        captured = receipt["state"]
+        b.imagine("after receipt", ["c"], ["d"])
+        current_before = b.state["state_label"]
+        plan = b.resume_from_receipt(b.checkpoint_receipts()[0])
+        self.assertEqual(plan["captured_state"], captured)
+        self.assertEqual(plan["current_state"], current_before)
+        self.assertTrue(plan["requires_forward_replay"])
+        self.assertEqual(b.state["state_label"], current_before)
+
+    def test_invalid_receipt_cannot_be_resume_anchor(self):
+        b = self.make()
+        b.imagine("x", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        receipt["checkpoint"]["telos"] = "tampered"
+        with self.assertRaises(ValueError):
+            b.resume_from_receipt(receipt)
+
     def test_explicit_checkpoint_receipt_preserves_full_historical_projection(self):
         b = self.make()
         b.imagine("one", ["a"], ["b"])
