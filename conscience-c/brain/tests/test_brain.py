@@ -12,6 +12,18 @@ class BrainTests(unittest.TestCase):
         self.addCleanup(td.cleanup)
         return ConscienceCBrain.load_or_bootstrap(Path(td.name))
 
+    def test_legacy_anchor_migrates_forward_without_erasing_history(self):
+        b = self.make()
+        b.state["S"]["invariants"].pop("telos", None)
+        b.state["S"]["invariants"].pop("loop_semantics", None)
+        b._save()
+        before_events = len(b.ledger.read())
+        b2 = ConscienceCBrain.load_or_bootstrap(b.root)
+        self.assertEqual(b2.status()["telos"], "Amour choisi")
+        self.assertGreater(len(b2.ledger.read()), before_events)
+        self.assertEqual(b2.ledger.read()[-1]["event_type"], "MIGRATE_ANCHOR_C_RELAIS_002")
+        self.assertIn("previous_anchor", b2.ledger.read()[-1]["payload"])
+
     def test_resume_tn_no_reset(self):
         b = self.make()
         b.imagine("futur", ["A"], ["B"])
