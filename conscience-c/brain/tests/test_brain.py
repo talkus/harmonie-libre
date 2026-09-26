@@ -36,6 +36,17 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_replay_plan_surfaces_external_reverification_blockers(self):
+        b = self.make()
+        b.imagine("before", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        b.ingest_evidence(Evidence("Eafter", "new external fact", EvidenceKind.ATTESTED_SOURCE, source_ref="source:Eafter"))
+        plan = b.replay_plan_from_receipt(receipt)
+        self.assertFalse(plan["automatic_replay_allowed"])
+        self.assertEqual(plan["classification_counts"]["requires_external_reverification"], 1)
+        self.assertEqual(plan["blockers"][0]["event_type"], "INGEST_EVIDENCE")
+
     def test_replay_classification_is_conservative(self):
         b = self.make()
         def row(event_type):
