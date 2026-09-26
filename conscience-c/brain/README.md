@@ -86,6 +86,8 @@ Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenanc
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
 
+Les identifiants de preuve et d’hypothèse sont append-only : un identifiant existant ne peut pas être silencieusement réutilisé pour remplacer son contenu. Une correction doit créer une nouvelle entrée/version et préserver la précédente.
+
 Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconnaissance de la provenance. Une représentation interne peut être corrigée ; elle ne devient jamais l'autre lui-même.
 
 ## Statut du classement d'actions
