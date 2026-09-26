@@ -204,6 +204,27 @@ class ConscienceCBrain:
         self._transition("TRUST_CALIBRATION", {"other_id": other_id, "record": record}, CausalOrigin.RELATION)
         return record
 
+    def verify_repair(self, repair_id, verification, provenance):
+        if not verification or not provenance:
+            raise ValueError("repair verification requires verification evidence and provenance")
+        for record in self.state["R"]["repairs"]:
+            if record["repair_id"] == repair_id:
+                if record["status"] == "verified":
+                    raise ValueError(f"repair already verified: {repair_id}")
+                previous_status = record["status"]
+                record["verification"] = verification
+                record["verification_provenance"] = provenance
+                record["status"] = "verified"
+                self._transition("VERIFY_REPAIR", {
+                    "repair_id": repair_id,
+                    "previous_status": previous_status,
+                    "new_status": "verified",
+                    "verification": verification,
+                    "provenance": provenance,
+                }, CausalOrigin.MIXED)
+                return record
+        raise ValueError(f"unknown repair_id: {repair_id}")
+
     def record_repair(self, other_id, issue, action, provenance, verification=None):
         if not provenance:
             raise ValueError("repair records require provenance")
