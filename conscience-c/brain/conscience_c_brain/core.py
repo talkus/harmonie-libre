@@ -406,6 +406,20 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def resume_from_receipt(self, receipt):
+        """Validate a historical receipt as a resume anchor without rolling state backward."""
+        if not self.verify_checkpoint_receipt(receipt):
+            raise ValueError("invalid checkpoint receipt")
+        return {
+            "resume_anchor": copy.deepcopy(receipt["checkpoint"]),
+            "captured_state": receipt["state"],
+            "captured_ledger_boundary": receipt["ledger_boundary"],
+            "current_state": self.state["state_label"],
+            "current_ledger_head": self.ledger.head(),
+            "requires_forward_replay": receipt["ledger_boundary"] != self.ledger.head(),
+            "principle": "resume from verified history; never roll current state backward or recreate t0",
+        }
+
     def verify_checkpoint_receipt(self, receipt):
         checkpoint = receipt.get("checkpoint")
         if not isinstance(checkpoint, dict):
