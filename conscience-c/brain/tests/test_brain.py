@@ -36,6 +36,18 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_revalidation_queue_turns_memory_into_questions_not_answers(self):
+        b = self.make()
+        b.imagine("before", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        b.ingest_evidence(Evidence("Efresh", "historical external claim", EvidenceKind.ATTESTED_SOURCE, source_ref="source:Efresh"))
+        queue = b.revalidation_queue_from_receipt(receipt)
+        self.assertEqual(queue["pending_count"], 1)
+        self.assertEqual(queue["items"][0]["status"], "pending")
+        self.assertIn("fresh source", queue["items"][0]["required_action"])
+        self.assertIn("does not substitute", queue["principle"])
+
     def test_replay_plan_surfaces_external_reverification_blockers(self):
         b = self.make()
         b.imagine("before", ["a"], ["b"])
