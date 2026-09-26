@@ -946,6 +946,30 @@ class ConscienceCBrain:
         if drifts:
             raise ValueError(f"drift detected: {drifts}")
 
+    def recovery_receipt(self, operator, provenance, notes):
+        if not operator or not provenance or not notes:
+            raise ValueError("recovery receipt requires operator, provenance and notes")
+        plan = self.integrity_recovery_plan()
+        if plan["integrity_ok"]:
+            raise ValueError("no integrity failure requires a recovery receipt")
+        receipt = {
+            "operator": operator,
+            "provenance": provenance,
+            "notes": notes,
+            "detected_failures": copy.deepcopy(plan["steps"]),
+            "status": "proposed_not_applied",
+        }
+        # If the ledger itself is corrupt, do not append into the corrupt ledger
+        # and pretend that this establishes trustworthy provenance.
+        if any(step["component"] == "ledger" for step in plan["steps"]):
+            return {
+                **receipt,
+                "recording": "external_receipt_required",
+                "principle": "a corrupt ledger cannot attest its own recovery",
+            }
+        event = self._transition("PROPOSE_INTEGRITY_RECOVERY", {"receipt": receipt}, CausalOrigin.MIXED)
+        return {**receipt, "recording": "ledger", "event_hash": event["event_hash"]}
+
     def integrity_recovery_plan(self):
         drifts = self.audit()
         integrity = [d for d in drifts if d["field"] in {"ledger", "E.derivation_graph"}]
