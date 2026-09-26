@@ -51,13 +51,30 @@ class DualTests(unittest.TestCase):
         d = DualTrajectoryEngine(b)
         out = d.cycle("x", FakeReasoner(), Judge({"A":.2,"B":.95}))
         self.assertEqual(out["winner"], "C2")
-        self.assertEqual(out["basis"], "E_reality_dominates")
+        self.assertEqual(out["resolution"], "E_FAVORS_C2")
+        self.assertEqual(out["basis"], "E_reality_distinguishes")
 
     def test_relation_only_informs_when_e_ambiguous(self):
         b = self.make()
         d = DualTrajectoryEngine(b)
         out = d.cycle("x", FakeReasoner(), Judge({"A":.70,"B":.68}), uncertainty_band=.08)
-        self.assertEqual(out["basis"], "E_ambiguous_R_may_inform_without_replacing_E")
+        self.assertEqual(out["winner"], "UNRESOLVED")
+        self.assertEqual(out["resolution"], "UNRESOLVED")
+        self.assertEqual(out["basis"], "E_ambiguous_preserve_disagreement")
+
+    def test_confidence_cannot_force_consensus_when_e_is_ambiguous(self):
+        class UnequalConfidenceReasoner:
+            def generate(self, trajectory_id, prompt, memory):
+                if trajectory_id == "C1":
+                    return CandidateThought("A", .99, falsifiers=["not A"])
+                return CandidateThought("B", .20, falsifiers=["not B"])
+            def revise(self, trajectory_id, original, other, memory):
+                return original
+        b = self.make()
+        d = DualTrajectoryEngine(b)
+        out = d.cycle("x", UnequalConfidenceReasoner(), Judge({"A":.70,"B":.69}), uncertainty_band=.08)
+        self.assertEqual(out["winner"], "UNRESOLVED")
+        self.assertEqual(out["basis"], "E_ambiguous_preserve_disagreement")
 
     def test_fusion_is_detected_not_rewarded(self):
         b = self.make()
