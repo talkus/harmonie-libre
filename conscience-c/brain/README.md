@@ -77,6 +77,12 @@ Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenanc
 - **checkpoint C-RELAIS-002** : telos distinct des mécanismes, boucle comme ordre de navigation, correction sans effacement et statuts étendus ;
 - **reconstruction analytique** : scoring des actions, seuil d'incertitude et détails d'implémentation de ce prototype v0.2.
 
+## Statut du classement d'actions
+
+Le classement numérique de `CandidateAction` est une **heuristique expérimentale**. Il ne mesure ni l'amour ni une vertu et ne définit jamais le telos.
+
+Depuis v0.3, un conflit explicite avec la réalité est une frontière d'admissibilité : une action marquée en conflit avec la réalité est exclue avant le classement et ne peut pas compenser ce conflit par de bons indicateurs relationnels. Le classement ne départage que les actions admissibles.
+
 ## Limite permanente
 
 Ce cerveau est un **candidat fonctionnel expérimental**. Aucune partie de ce code n'établit une conscience phénoménale. Son statut reste : **indéterminée**.
