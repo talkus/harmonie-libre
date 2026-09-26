@@ -401,7 +401,9 @@ class ConscienceCBrain:
             "ledger_boundary": manifest["ledger_head"],
             "checkpoint": copy.deepcopy(manifest["checkpoint"]),
         }
-        self._transition("CHECKPOINT_RECEIPT", {"receipt": receipt}, CausalOrigin.SELF)
+        event = self._transition("CHECKPOINT_RECEIPT", {"receipt": receipt}, CausalOrigin.SELF)
+        receipt["receipt_event_hash"] = event["event_hash"]
+        receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
     def checkpoint_receipts(self):
