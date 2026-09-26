@@ -609,6 +609,25 @@ class BrainTests(unittest.TestCase):
         b.repair_drift("user clarification 2026-09-24")
         self.assertEqual(b.audit(), [])
 
+    def test_recovery_receipt_is_proposal_not_silent_fix(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("RR1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:RR1"))
+        b.ingest_evidence(Evidence("RR2", "child", EvidenceKind.CONSOLIDATED_DERIVATION, derived_from=["RR1"]))
+        b.state["E"]["evidence"]["RR1"]["derived_from"] = ["RR2"]
+        receipt = b.recovery_receipt("operator:test", "source:recovery", "inspect authoritative parentage")
+        self.assertEqual(receipt["status"], "proposed_not_applied")
+        self.assertEqual(receipt["recording"], "ledger")
+        self.assertEqual(b.state["E"]["evidence"]["RR1"]["derived_from"], ["RR2"])
+
+    def test_corrupt_ledger_cannot_attest_its_own_recovery(self):
+        b = self.make()
+        rows = b.ledger.read()
+        rows[0]["payload"]["tampered"] = True
+        b.ledger.path.write_text("\n".join(__import__("json").dumps(x, ensure_ascii=False, sort_keys=True) for x in rows) + "\n", encoding="utf-8")
+        receipt = b.recovery_receipt("operator:test", "external:backup", "restore from independently verified copy")
+        self.assertEqual(receipt["recording"], "external_receipt_required")
+        self.assertIn("cannot attest its own recovery", receipt["principle"])
+
     def test_integrity_recovery_plan_names_limits_without_fabricating_fix(self):
         b = self.make()
         b.ingest_evidence(Evidence("GR1", "root", EvidenceKind.ATTESTED_SOURCE, source_ref="source:GR1"))
