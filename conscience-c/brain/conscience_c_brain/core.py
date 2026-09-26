@@ -228,14 +228,16 @@ class ConscienceCBrain:
     def record_repair(self, other_id, issue, action, provenance, verification=None):
         if not provenance:
             raise ValueError("repair records require provenance")
+        if verification is not None:
+            raise ValueError("record_repair cannot self-verify; record the repair first, then call verify_repair")
         record = {
             "repair_id": f"RP{len(self.state['R']['repairs']) + 1:04d}",
             "other_id": other_id,
             "issue": issue,
             "action": action,
             "provenance": provenance,
-            "verification": verification,
-            "status": "verified" if verification else "pending_verification",
+            "verification": None,
+            "status": "pending_verification",
         }
         self.state["R"]["repairs"].append(record)
         self._transition("RECORD_REPAIR", {"repair": record}, CausalOrigin.RELATION)
