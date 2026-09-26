@@ -122,6 +122,8 @@ Une preuve peut maintenant distinguer le moment d'enregistrement (`timestamp`), 
 
 Une preuve peut aussi déclarer `subject_ref` et `scope`. `evidence_applicability()` vérifie donc trois frontières avant application : temps, sujet et contexte. Une preuve sur O1 dans le contexte A ne devient pas silencieusement une preuve sur O2 ou sur le contexte B. `currently_usable_evidence()` peut filtrer selon ces frontières.
 
+`claim_ref` permet en plus de relier explicitement une preuve à la proposition qu’elle concerne. `claim_support_status()` conserve le niveau réel des éléments disponibles : analytique reste analytique, attesté reste attesté. La présence simultanée d’un élément attesté et d’une réfutation historique applicable produit `contested_requires_review` plutôt qu’un verdict forcé.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
