@@ -26,6 +26,18 @@ class BrainTests(unittest.TestCase):
         self.assertIn("continuity_structure_hash", b2.state)
         self.assertNotIn("identity_structure_hash", b2.state)
 
+    def test_transition_report_connects_checkpoint_to_history(self):
+        b = self.make()
+        start = b.state["n"]
+        b.imagine("one", ["a"], ["b"])
+        b.imagine("two", ["c"], ["d"])
+        report = b.transition_report(start)
+        self.assertEqual(report["from_n"], start)
+        self.assertEqual(report["to_n"], b.state["n"])
+        self.assertEqual([e["event_type"] for e in report["events"]], ["IMAGINE_COUNTERFACTUAL", "IMAGINE_COUNTERFACTUAL"])
+        self.assertEqual(report["ledger_head"], b.ledger.head())
+        self.assertEqual(report["checkpoint_hash"], b.checkpoint_manifest()["checkpoint_hash"])
+
     def test_checkpoint_manifest_is_verifiable_and_tamper_evident(self):
         b = self.make()
         manifest = b.checkpoint_manifest()
