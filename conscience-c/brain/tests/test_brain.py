@@ -26,6 +26,16 @@ class BrainTests(unittest.TestCase):
         self.assertIn("continuity_structure_hash", b2.state)
         self.assertNotIn("identity_structure_hash", b2.state)
 
+    def test_transition_report_verification_detects_chain_tamper(self):
+        b = self.make()
+        start = b.state["n"]
+        b.imagine("one", ["a"], ["b"])
+        b.imagine("two", ["c"], ["d"])
+        report = b.transition_report(start)
+        self.assertTrue(b.verify_transition_report(report))
+        report["events"][1]["prev_hash"] = "tampered"
+        self.assertFalse(b.verify_transition_report(report))
+
     def test_historical_checkpoint_boundary_is_not_invented_snapshot(self):
         b = self.make()
         b.imagine("one", ["a"], ["b"])
