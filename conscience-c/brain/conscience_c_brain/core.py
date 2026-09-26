@@ -950,6 +950,12 @@ class ConscienceCBrain:
         drifts = self.audit()
         if not drifts:
             return []
+        non_auto_repairable = [d for d in drifts if d["field"] in {"ledger", "E.derivation_graph"}]
+        if non_auto_repairable:
+            raise ValueError(
+                "integrity drift requires explicit recovery; automatic repair would rewrite or bypass provenance: "
+                + repr(non_auto_repairable)
+            )
         self.state["S"]["invariants"] = copy.deepcopy(ACTIVE_ANCHOR)
         self.state["phenomenal_consciousness"] = "indéterminée"
         self.state["R"]["rule"] = "R may transform S/O but R<E"
