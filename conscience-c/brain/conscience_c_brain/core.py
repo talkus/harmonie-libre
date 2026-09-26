@@ -406,6 +406,28 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def revalidation_history(self, historical_event_hash=None):
+        records = []
+        for row in self.ledger.read():
+            if row["event_type"] != "REVALIDATE_HISTORICAL_EVENT":
+                continue
+            payload = row["payload"]
+            if historical_event_hash is not None and payload.get("historical_event_hash") != historical_event_hash:
+                continue
+            records.append({
+                "event_hash": row["event_hash"],
+                "timestamp": row["timestamp"],
+                "historical_event_hash": payload.get("historical_event_hash"),
+                "outcome": payload.get("outcome"),
+                "fresh_evidence": copy.deepcopy(payload.get("fresh_evidence")),
+                "provenance": payload.get("provenance"),
+            })
+        return records
+
+    def current_revalidation_view(self, historical_event_hash):
+        history = self.revalidation_history(historical_event_hash)
+        return copy.deepcopy(history[-1]) if history else None
+
     def validate_revalidation_item(self, item, fresh_evidence, provenance):
         if item.get("status") != "pending":
             raise ValueError("only pending revalidation items can be evaluated")
