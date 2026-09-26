@@ -90,6 +90,8 @@ Il est explicitement une **projection courante**. Le ledger, les observations, l
 
 `checkpoint_manifest()` ajoute une empreinte du checkpoint, la tête du ledger et l’empreinte de continuité. Un checkpoint altéré ou devenu ancien après une nouvelle transition ne vérifie plus contre l’état courant. `transition_report(since_n)` relie ensuite un checkpoint à la suite d’événements qui conduit à l’état présent, sans prétendre que le checkpoint contient toute la mémoire.
 
+`checkpoint_at(n)` reste volontairement prudent : pour un état historique sans snapshot complet conservé, il retourne seulement une frontière documentaire attestée par le ledger et la marque `documentary_boundary_not_full_snapshot`. Le système refuse donc d’inventer rétroactivement le contenu complet d’un ancien C(tₙ). Les rapports de transition disposent aussi d’une vérification de chaîne pour détecter une rupture ou une altération.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
