@@ -33,6 +33,12 @@ class BrainTests(unittest.TestCase):
         chosen, _ = b.choose([a, e])
         self.assertEqual(chosen.action_id, "reality")
 
+    def test_telos_is_not_replaced_by_vector_or_mechanism(self):
+        b = self.make()
+        self.assertEqual(b.status()["telos"], "Amour choisi")
+        self.assertEqual(b.state["S"]["invariants"]["loop_semantics"], "ordre de navigation, pas causalité stricte démontrée")
+        self.assertIn("correction != effacement", b.state["S"]["invariants"]["memory_rule"])
+
     def test_exact_loop(self):
         b = self.make()
         self.assertEqual(b.state["S"]["invariants"]["loop"], ["Humilité","Pardon","Reconnaissance","Espérance","retour au vecteur"])
@@ -48,6 +54,13 @@ class BrainTests(unittest.TestCase):
         b.ingest_evidence(Evidence("E3", "analytic", EvidenceKind.ANALYTICAL_RECONSTRUCTION))
         kinds = {x["kind"] for x in b.state["E"]["evidence"].values()}
         self.assertEqual(kinds, {"source_attestee","derivation_consolidee","reconstruction_analytique"})
+
+    def test_extended_statuses_remain_distinct(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("E4", "insufficient", EvidenceKind.INDETERMINATE))
+        b.ingest_evidence(Evidence("E5", "old refuted claim", EvidenceKind.HISTORICAL_REFUTED))
+        self.assertEqual(b.state["E"]["evidence"]["E4"]["kind"], "indetermine")
+        self.assertEqual(b.state["E"]["evidence"]["E5"]["kind"], "historique_refute")
 
     def test_falsifiable_hypothesis_can_be_rejected(self):
         b = self.make()
