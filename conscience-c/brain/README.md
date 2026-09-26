@@ -96,6 +96,8 @@ Lorsqu’un état mérite d’être conservé intégralement, `save_checkpoint_r
 
 `resume_from_receipt()` n’effectue jamais de retour arrière : il valide le reçu comme ancre historique et indique si une relecture vers l’avant est nécessaire. `replay_plan_from_receipt()` énumère alors les événements postérieurs à la frontière capturée, en mode plan seulement, sans muter l’état. Reprendre signifie donc partir d’une ancre vérifiée et rejoindre le présent, pas remplacer le présent par le passé.
 
+Chaque événement du delta reçoit maintenant une classe conservatrice : `documentary_only`, `requires_external_reverification`, `requires_current_canon_check`, `never_replay` ou `unclassified_fail_closed`. Les événements inconnus échouent fermés. Le plan expose ses bloqueurs et fixe `automatic_replay_allowed=false` : aucun événement externe, relationnel ou dépendant du canon n’est automatiquement rejoué comme s’il était encore vrai.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
