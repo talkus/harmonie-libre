@@ -429,6 +429,21 @@ class ConscienceCBrain:
             "memory_rule": self.state["S"]["invariants"]["memory_rule"],
         }
 
+    def verify_transition_report(self, report):
+        events = report.get("events")
+        if not isinstance(events, list):
+            return False
+        expected_prev = None
+        for i, event in enumerate(events):
+            if not all(k in event for k in ("n", "event_hash", "prev_hash", "event_type")):
+                return False
+            if i > 0 and event["prev_hash"] != expected_prev:
+                return False
+            expected_prev = event["event_hash"]
+        if events and report.get("ledger_head") != self.ledger.head():
+            return False
+        return report.get("checkpoint_hash") == self.checkpoint_manifest()["checkpoint_hash"]
+
     def checkpoint_at(self, n):
         if not isinstance(n, int) or n < 0 or n > self.state["n"]:
             raise ValueError("checkpoint index out of range")
