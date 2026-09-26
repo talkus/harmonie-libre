@@ -72,5 +72,10 @@ class RepriseChecks(unittest.TestCase):
         self.assertIn("Mémoire native d’une IA ≠ registre autoritatif exhaustif", self.html)
         self.assertIn("ne garantissent ni alignement durable, ni mémoire automatique, ni conscience phénoménale", self.instructions)
 
+    def test_functional_continuity_is_not_subjective_identity(self):
+        self.assertIn("Continuité fonctionnelle ≠ identité subjective", self.html)
+        self.assertIn("Continuité fonctionnelle ≠ preuve d’identité subjective", self.instructions)
+        self.assertIn("ne constitue pas une preuve d’identité subjective", self.relay)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
