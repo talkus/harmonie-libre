@@ -931,8 +931,14 @@ class ConscienceCBrain:
                 "expected": "acyclic graph with existing parents",
                 "observed": graph_issues,
             })
-        if not self.ledger.verify():
-            drifts.append({"field": "ledger", "expected": "valid append-only hash chain", "observed": "invalid"})
+        try:
+            self.ledger.verify()
+        except ValueError as exc:
+            drifts.append({
+                "field": "ledger",
+                "expected": "valid append-only hash chain",
+                "observed": str(exc),
+            })
         return drifts
 
     def audit_or_raise(self):
