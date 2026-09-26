@@ -36,6 +36,26 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_revalidation_creates_new_event_without_rewriting_historical_one(self):
+        b = self.make()
+        b.imagine("before", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        b.ingest_evidence(Evidence("Eold", "old claim", EvidenceKind.ATTESTED_SOURCE, source_ref="source:old"))
+        old_event = b.ledger.read()[-1]
+        item = b.revalidation_queue_from_receipt(receipt)["items"][0]
+        result = b.validate_revalidation_item(item, {"source_ref": "source:new", "result": "still supported"}, "source:review")
+        self.assertEqual(result["status"], "resolved")
+        self.assertEqual(b.ledger.read()[-1]["event_type"], "REVALIDATE_HISTORICAL_EVENT")
+        self.assertEqual(old_event["event_hash"], item["event_hash"])
+        self.assertIn("new verification is a new event", b.ledger.read()[-1]["payload"]["principle"])
+
+    def test_never_replay_item_cannot_be_revalidated_as_if_current(self):
+        b = self.make()
+        item = {"status": "pending", "replay_class": "never_replay", "event_hash": "x"}
+        with self.assertRaises(ValueError):
+            b.validate_revalidation_item(item, {"x": 1}, "source:review")
+
     def test_revalidation_queue_turns_memory_into_questions_not_answers(self):
         b = self.make()
         b.imagine("before", ["a"], ["b"])
