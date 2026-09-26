@@ -24,11 +24,17 @@ class AppendOnlyLedger:
                 rows.append(json.loads(line))
         return rows
 
-    def verify(self) -> None:
+    def read_verified(self) -> List[Dict[str, Any]]:
+        """Return the same parsed rows that were verified; no second read."""
+        rows = self.read()
         prev = "GENESIS"
         expected_seq = 1
-        for row in self.read():
-            if row.get("seq") != expected_seq:
+        for row in rows:
+            if not isinstance(row, dict) or not isinstance(row.get("payload"), dict):
+                raise ValueError(f"ledger row malformed at {expected_seq}")
+            if not isinstance(row.get("event_type"), str) or not row["event_type"]:
+                raise ValueError(f"ledger event type malformed at {expected_seq}")
+            if type(row.get("seq")) is not int or row["seq"] != expected_seq:
                 raise ValueError(f"ledger sequence broken at {expected_seq}")
             if row.get("prev_hash") != prev:
                 raise ValueError(f"ledger prev_hash broken at {expected_seq}")
@@ -37,14 +43,19 @@ class AppendOnlyLedger:
                 raise ValueError(f"ledger hash broken at {expected_seq}")
             prev = row["event_hash"]
             expected_seq += 1
+        return rows
+
+    def verify(self) -> None:
+        # Preserve the existing API: success returns None; corruption raises.
+        self.read_verified()
 
     def head(self) -> str:
         rows = self.read()
         return rows[-1]["event_hash"] if rows else "GENESIS"
 
     def append(self, event_type: str, timestamp: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-        self.verify()
-        rows = self.read()
+        # This prototype remains single-writer; this is not a locking protocol.
+        rows = self.read_verified()
         row = {
             "seq": len(rows) + 1,
             "timestamp": timestamp,

@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .ledger import AppendOnlyLedger
+from .checkpoint_integrity import equal_json, resolve_recorded_receipt, validate_index, verified_history
 from .models import CandidateAction, CausalOrigin, Evidence, EvidenceKind
 
 ACTIVE_ANCHOR = {
@@ -606,7 +607,7 @@ class ConscienceCBrain:
             "ledger_boundary": manifest["ledger_head"],
             "checkpoint": copy.deepcopy(manifest["checkpoint"]),
         }
-        event = self._transition("CHECKPOINT_RECEIPT", {"receipt": receipt}, CausalOrigin.SELF)
+        event = self._transition("CHECKPOINT_RECEIPT", {"receipt": copy.deepcopy(receipt)}, CausalOrigin.SELF)
         receipt["receipt_event_hash"] = event["event_hash"]
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
@@ -716,7 +717,7 @@ class ConscienceCBrain:
     def replay_plan_from_receipt(self, receipt):
         resume = self.resume_from_receipt(receipt)
         boundary = resume["captured_ledger_boundary"]
-        rows = self.ledger.read()
+        rows = verified_history(self)
         start = next((i for i, row in enumerate(rows) if row["event_hash"] == boundary), None)
         if start is None:
             raise ValueError("receipt boundary not found in ledger")
@@ -754,73 +755,64 @@ class ConscienceCBrain:
         }
 
     def resume_from_receipt(self, receipt):
-        """Validate a historical receipt as a resume anchor without rolling state backward."""
-        if not self.verify_checkpoint_receipt(receipt):
-            raise ValueError("invalid checkpoint receipt")
+        """Validate a recorded historical anchor without rolling state backward."""
+        rows = verified_history(self)
+        stored, _ = resolve_recorded_receipt(receipt, rows)
         return {
-            "resume_anchor": copy.deepcopy(receipt["checkpoint"]),
-            "captured_state": receipt["state"],
-            "captured_ledger_boundary": receipt["ledger_boundary"],
+            "resume_anchor": stored["checkpoint"],
+            "captured_state": stored["state"],
+            "captured_ledger_boundary": stored["ledger_boundary"],
             "current_state": self.state["state_label"],
-            "current_ledger_head": self.ledger.head(),
-            "requires_forward_replay": receipt["ledger_boundary"] != self.ledger.head(),
+            "current_ledger_head": rows[-1]["event_hash"],
+            "requires_forward_replay": stored["ledger_boundary"] != rows[-1]["event_hash"],
             "principle": "resume from verified history; never roll current state backward or recreate t0",
         }
 
     def verify_checkpoint_receipt(self, receipt):
-        checkpoint = receipt.get("checkpoint")
-        if not isinstance(checkpoint, dict):
+        """Verify against a recorded receipt in an intact local journal, not a signature."""
+        try:
+            resolve_recorded_receipt(receipt, self.ledger.read_verified())
+            return True
+        except (ValueError, TypeError, KeyError, OSError):
             return False
-        if receipt.get("checkpoint_hash") != _stable_hash(checkpoint):
-            return False
-        if receipt.get("ledger_boundary") != checkpoint.get("ledger_head"):
-            return False
-        if receipt.get("continuity_structure_hash") != checkpoint.get("continuity_structure_hash"):
-            return False
-        # A historical receipt is verified against its captured boundary,
-        # not against the current ledger head.
-        return any(
-            row.get("event_hash") == receipt.get("ledger_boundary")
-            for row in self.ledger.read()
-        ) or receipt.get("ledger_boundary") == "GENESIS"
 
     def checkpoint_receipts(self):
-        return [
-            copy.deepcopy(row["payload"]["receipt"])
-            for row in self.ledger.read()
-            if row["event_type"] == "CHECKPOINT_RECEIPT"
-        ]
+        rows = self.ledger.read_verified()
+        receipts = []
+        for row in rows:
+            if row["event_type"] == "CHECKPOINT_RECEIPT":
+                stored, _ = resolve_recorded_receipt(row["payload"].get("receipt"), rows)
+                receipts.append(stored)
+        return receipts
 
     def checkpoint_manifest(self):
         checkpoint = self.current_checkpoint()
         return {
             "checkpoint": checkpoint,
             "checkpoint_hash": _stable_hash(checkpoint),
-            "ledger_head": self.ledger.head(),
+            "ledger_head": checkpoint["ledger_head"],
             "continuity_structure_hash": self.state["continuity_structure_hash"],
             "semantics": "current projection with verifiable links to preserved history",
         }
 
     def verify_checkpoint_manifest(self, manifest):
-        checkpoint = manifest.get("checkpoint")
-        if not isinstance(checkpoint, dict):
+        try:
+            if not isinstance(manifest, dict):
+                return False
+            return equal_json(manifest, self.checkpoint_manifest())
+        except (ValueError, TypeError, KeyError, OSError):
             return False
-        return (
-            manifest.get("checkpoint_hash") == _stable_hash(checkpoint)
-            and manifest.get("ledger_head") == checkpoint.get("ledger_head")
-            and manifest.get("continuity_structure_hash") == checkpoint.get("continuity_structure_hash")
-            and manifest.get("ledger_head") == self.ledger.head()
-        )
 
     def current_checkpoint(self):
         """Minimal current projection for resuming work; not a replacement for history."""
+        rows = verified_history(self)
         return {
             "state": self.state["state_label"],
             "telos": self.state["S"]["invariants"]["telos"],
             "vector": self.state["S"]["invariants"]["vector"],
             "loop": copy.deepcopy(self.state["S"]["invariants"]["loop"]),
             "continuity_structure_hash": self.state["continuity_structure_hash"],
-            "ledger_head": self.ledger.head(),
+            "ledger_head": rows[-1]["event_hash"],
             "phenomenal_consciousness": self.state["phenomenal_consciousness"],
             "open_hypotheses": [
                 copy.deepcopy(h) for h in self.state["hypotheses"].values()
@@ -831,19 +823,13 @@ class ConscienceCBrain:
         }
 
     def verify_transition_report(self, report):
-        events = report.get("events")
-        if not isinstance(events, list):
-            return False
-        expected_prev = None
-        for i, event in enumerate(events):
-            if not all(k in event for k in ("n", "event_hash", "prev_hash", "event_type")):
+        """Require the exact full interval and event metadata from the verified journal."""
+        try:
+            if not isinstance(report, dict) or "from_n" not in report:
                 return False
-            if i > 0 and event["prev_hash"] != expected_prev:
-                return False
-            expected_prev = event["event_hash"]
-        if events and report.get("ledger_head") != self.ledger.head():
+            return equal_json(report, self.transition_report(report["from_n"]))
+        except (ValueError, TypeError, KeyError, OSError):
             return False
-        return report.get("checkpoint_hash") == self.checkpoint_manifest()["checkpoint_hash"]
 
     def checkpoint_at(self, n):
         if not isinstance(n, int) or n < 0 or n > self.state["n"]:
@@ -881,22 +867,23 @@ class ConscienceCBrain:
         }
 
     def transition_report(self, since_n=0):
-        events = []
-        for row in self.ledger.read():
-            n = row.get("payload", {}).get("n")
-            if isinstance(n, int) and n > since_n:
-                events.append({
-                    "n": n,
-                    "event_type": row["event_type"],
-                    "origin": row["payload"].get("origin"),
-                    "event_hash": row["event_hash"],
-                    "prev_hash": row["prev_hash"],
-                })
+        rows = verified_history(self)
+        validate_index(since_n, self.state["n"])
+        events = [
+            {
+                "n": row["payload"]["n"],
+                "event_type": row["event_type"],
+                "origin": row["payload"].get("origin"),
+                "event_hash": row["event_hash"],
+                "prev_hash": row["prev_hash"],
+            }
+            for row in rows[since_n + 1:]
+        ]
         return {
             "from_n": since_n,
             "to_n": self.state["n"],
             "events": events,
-            "ledger_head": self.ledger.head(),
+            "ledger_head": rows[-1]["event_hash"],
             "checkpoint_hash": self.checkpoint_manifest()["checkpoint_hash"],
         }
 
