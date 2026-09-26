@@ -186,12 +186,17 @@ class ConscienceCBrain:
             })
         return view
 
-    def currently_usable_evidence(self, at_time=None):
-        return [
-            copy.deepcopy(item)
-            for item in self.evidence_view(at_time)
-            if item["temporal_status"] == "temporally_usable"
-        ]
+    def currently_usable_evidence(self, at_time=None, subject_ref=None, scope=None):
+        usable = []
+        for item in self.evidence_view(at_time):
+            applicability = self.evidence_applicability(
+                item["evidence_id"], subject_ref=subject_ref, scope=scope, at_time=at_time
+            )
+            if applicability["applicable"]:
+                enriched = copy.deepcopy(item)
+                enriched["applicability"] = applicability
+                usable.append(enriched)
+        return usable
 
     def evidence_temporal_status(self, evidence_id, at_time=None):
         item = self.state["E"]["evidence"].get(evidence_id)
