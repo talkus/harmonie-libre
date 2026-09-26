@@ -36,6 +36,19 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_replay_plan_lists_only_events_after_captured_boundary(self):
+        b = self.make()
+        b.imagine("before", ["a"], ["b"])
+        b.save_checkpoint_receipt("anchor")
+        receipt = b.checkpoint_receipts()[0]
+        b.imagine("after1", ["c"], ["d"])
+        b.imagine("after2", ["e"], ["f"])
+        plan = b.replay_plan_from_receipt(receipt)
+        types = [e["event_type"] for e in plan["events_to_replay"]]
+        self.assertEqual(types, ["CHECKPOINT_RECEIPT", "IMAGINE_COUNTERFACTUAL", "IMAGINE_COUNTERFACTUAL"])
+        self.assertEqual(plan["replay_status"], "plan_only_no_state_mutation")
+        self.assertEqual(plan["target_ledger_head"], b.ledger.head())
+
     def test_resume_from_receipt_never_rolls_current_state_backward(self):
         b = self.make()
         b.imagine("before receipt", ["a"], ["b"])
