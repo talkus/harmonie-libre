@@ -51,6 +51,30 @@ class BrainTests(unittest.TestCase):
         self.assertNotEqual(ev["payload"]["previous_model_digest"], ev["payload"]["current_model_digest"])
         self.assertEqual(b.state["O"]["entities"]["O1"]["observations"][0]["data"]["claim"], "first")
 
+    def test_current_other_model_is_projection_not_history(self):
+        b = self.make()
+        b.update_other("O1", {"claim": "first"}, "source:o1")
+        b.update_other("O1", {"claim": "revised"}, "source:o2")
+        current = b.current_other_model("O1")
+        history = b.other_observation_history("O1")
+        self.assertEqual(current["model"]["claim"], "revised")
+        self.assertEqual([x["data"]["claim"] for x in history], ["first", "revised"])
+        current["model"]["claim"] = "tampered copy"
+        self.assertEqual(b.current_other_model("O1")["model"]["claim"], "revised")
+
+    def test_active_repairs_are_projection_of_full_repair_history(self):
+        b = self.make()
+        b.record_repair("O1", "old", "action", "source:r1")
+        b.verify_repair("RP0001", {"source_ref": "v1"}, "source:v1")
+        b.scar_repair("RP0001", "lesson", "source:l1")
+        b.archive_scar("RP0001", "source:a1")
+        b.record_repair("O1", "current", "action2", "source:r2")
+        self.assertEqual(len(b.repair_history("O1")), 2)
+        active = b.active_repairs("O1")
+        self.assertEqual(len(active), 1)
+        self.assertEqual(active[0]["repair_id"], "RP0002")
+        self.assertEqual(b.repair_history("O1")[0]["status"], "archived")
+
     def test_current_trust_view_does_not_erase_history(self):
         b = self.make()
         self.assertIsNone(b.current_trust_calibration("O1"))
