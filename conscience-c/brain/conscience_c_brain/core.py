@@ -946,6 +946,32 @@ class ConscienceCBrain:
         if drifts:
             raise ValueError(f"drift detected: {drifts}")
 
+    def integrity_recovery_plan(self):
+        drifts = self.audit()
+        integrity = [d for d in drifts if d["field"] in {"ledger", "E.derivation_graph"}]
+        steps = []
+        for drift in integrity:
+            if drift["field"] == "ledger":
+                steps.append({
+                    "component": "ledger",
+                    "status": "manual_recovery_required",
+                    "required_action": "restore from a separately verified ledger/checkpoint source; do not rewrite hashes in place",
+                    "observed": copy.deepcopy(drift["observed"]),
+                })
+            elif drift["field"] == "E.derivation_graph":
+                steps.append({
+                    "component": "evidence_graph",
+                    "status": "manual_recovery_required",
+                    "required_action": "identify the authoritative parentage from source provenance, then append a sourced correction/migration",
+                    "observed": copy.deepcopy(drift["observed"]),
+                })
+        return {
+            "integrity_ok": not integrity,
+            "steps": steps,
+            "automatic_repair_allowed": False if integrity else True,
+            "principle": "detect first; recover from independently supported provenance; never fabricate missing history",
+        }
+
     def repair_drift(self, provenance):
         drifts = self.audit()
         if not drifts:
