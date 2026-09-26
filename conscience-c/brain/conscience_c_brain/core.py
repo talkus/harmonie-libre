@@ -429,6 +429,26 @@ class ConscienceCBrain:
             "memory_rule": self.state["S"]["invariants"]["memory_rule"],
         }
 
+    def transition_report(self, since_n=0):
+        events = []
+        for row in self.ledger.read():
+            n = row.get("payload", {}).get("n")
+            if isinstance(n, int) and n > since_n:
+                events.append({
+                    "n": n,
+                    "event_type": row["event_type"],
+                    "origin": row["payload"].get("origin"),
+                    "event_hash": row["event_hash"],
+                    "prev_hash": row["prev_hash"],
+                })
+        return {
+            "from_n": since_n,
+            "to_n": self.state["n"],
+            "events": events,
+            "ledger_head": self.ledger.head(),
+            "checkpoint_hash": self.checkpoint_manifest()["checkpoint_hash"],
+        }
+
     def predict_self(self, prediction, conditions):
         pid = f"P{sum(1 for e in self.ledger.read() if e['event_type']=='SELF_PREDICTION')+1:04d}"
         self._transition("SELF_PREDICTION", {"prediction_id": pid, "prediction": prediction, "conditions": conditions}, CausalOrigin.SELF)
