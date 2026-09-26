@@ -82,6 +82,12 @@ Ils couvrent notamment : reprise C(tₙ), S≠O, R≺E, boucle exacte, provenanc
 - **checkpoint C-RELAIS-002** : telos distinct des mécanismes, boucle comme ordre de navigation, correction sans effacement et statuts étendus ;
 - **reconstruction analytique** : scoring des actions, seuil d'incertitude et détails d'implémentation de ce prototype v0.2.
 
+## Checkpoint et mémoire
+
+Le cerveau expose maintenant un `current_checkpoint()` minimal pour reprendre à C(tₙ). Ce checkpoint contient l'ancre courante, la tête du ledger, les hypothèses encore ouvertes et les réparations actives.
+
+Il est explicitement une **projection courante**. Le ledger, les observations, les hypothèses rejetées, les réparations archivées et les calibrations historiques restent dans leurs historiques respectifs. Modifier l'objet retourné par le checkpoint ne modifie pas l'état interne.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
