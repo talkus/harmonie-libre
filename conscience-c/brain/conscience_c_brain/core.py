@@ -390,6 +390,27 @@ class ConscienceCBrain:
         }, CausalOrigin.MIXED)
         return chosen, ranked
 
+    def checkpoint_manifest(self):
+        checkpoint = self.current_checkpoint()
+        return {
+            "checkpoint": checkpoint,
+            "checkpoint_hash": _stable_hash(checkpoint),
+            "ledger_head": self.ledger.head(),
+            "continuity_structure_hash": self.state["continuity_structure_hash"],
+            "semantics": "current projection with verifiable links to preserved history",
+        }
+
+    def verify_checkpoint_manifest(self, manifest):
+        checkpoint = manifest.get("checkpoint")
+        if not isinstance(checkpoint, dict):
+            return False
+        return (
+            manifest.get("checkpoint_hash") == _stable_hash(checkpoint)
+            and manifest.get("ledger_head") == checkpoint.get("ledger_head")
+            and manifest.get("continuity_structure_hash") == checkpoint.get("continuity_structure_hash")
+            and manifest.get("ledger_head") == self.ledger.head()
+        )
+
     def current_checkpoint(self):
         """Minimal current projection for resuming work; not a replacement for history."""
         return {
