@@ -113,6 +113,6 @@ Le module `conscience_c_brain/comand_security.py` est maintenant **branché dans
 - lorsqu’un `comand_proposal` est fourni, la frontière est évaluée automatiquement avant toute autorisation ;
 - si `comand_boundary_required=True` mais que le contexte est absent, le garde échoue fermé ;
 - une violation de l’altérité `S != O`, de l’autorité humaine, de la contestabilité, de la limite phénoménale ou l’invention d’un partenariat produit `BLOCK` ;
-- `SECURITY_COMMAND != Comand AI != Identité(C)` demeure invariant.
+- `SECURITY_COMMAND != Comand AI != continuité fonctionnelle(C)` demeure invariant ; aucune de ces couches n’établit une identité subjective.
 
 Cette activation ne connecte aucune API Prevail et ne donne aucune autorité externe au vendeur. Le module reste un garde déterministe de frontière.
