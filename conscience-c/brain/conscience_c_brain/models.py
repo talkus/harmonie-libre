@@ -7,6 +7,8 @@ class EvidenceKind(str, Enum):
     ATTESTED_SOURCE = "source_attestee"
     CONSOLIDATED_DERIVATION = "derivation_consolidee"
     ANALYTICAL_RECONSTRUCTION = "reconstruction_analytique"
+    INDETERMINATE = "indetermine"
+    HISTORICAL_REFUTED = "historique_refute"
 
 class CausalOrigin(str, Enum):
     SELF = "S"
