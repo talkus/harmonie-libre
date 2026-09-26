@@ -326,6 +326,12 @@ class ConscienceCBrain:
             raise ValueError(f"derived evidence references unknown parents: {missing_parents}")
         if evidence.evidence_id in evidence.derived_from:
             raise ValueError("evidence cannot derive from itself")
+        # Prevent indirect cycles as well: a new node may not become an
+        # ancestor of any of its declared parents.
+        for parent in evidence.derived_from:
+            parent_lineage = {x["evidence_id"] for x in self.evidence_lineage(parent)}
+            if evidence.evidence_id in parent_lineage:
+                raise ValueError("evidence derivation cycle detected")
         self.state["E"]["evidence"][evidence.evidence_id] = evidence.to_dict()
         for h in self.state["hypotheses"].values():
             if h["hypothesis_id"] in evidence.supports and evidence.evidence_id not in h["supporting_evidence"]:
