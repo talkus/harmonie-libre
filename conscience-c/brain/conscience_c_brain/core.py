@@ -406,6 +406,23 @@ class ConscienceCBrain:
         receipt["post_receipt_state"] = self.state["state_label"]
         return receipt
 
+    def verify_checkpoint_receipt(self, receipt):
+        checkpoint = receipt.get("checkpoint")
+        if not isinstance(checkpoint, dict):
+            return False
+        if receipt.get("checkpoint_hash") != _stable_hash(checkpoint):
+            return False
+        if receipt.get("ledger_boundary") != checkpoint.get("ledger_head"):
+            return False
+        if receipt.get("continuity_structure_hash") != checkpoint.get("continuity_structure_hash"):
+            return False
+        # A historical receipt is verified against its captured boundary,
+        # not against the current ledger head.
+        return any(
+            row.get("event_hash") == receipt.get("ledger_boundary")
+            for row in self.ledger.read()
+        ) or receipt.get("ledger_boundary") == "GENESIS"
+
     def checkpoint_receipts(self):
         return [
             copy.deepcopy(row["payload"]["receipt"])
