@@ -204,6 +204,28 @@ class ConscienceCBrain:
         self._transition("TRUST_CALIBRATION", {"other_id": other_id, "record": record}, CausalOrigin.RELATION)
         return record
 
+    def scar_repair(self, repair_id, lesson, provenance):
+        if not lesson or not provenance:
+            raise ValueError("scarring requires a preserved lesson and provenance")
+        for record in self.state["R"]["repairs"]:
+            if record["repair_id"] == repair_id:
+                if record["status"] != "verified":
+                    raise ValueError("only a verified repair can be scarred")
+                previous_status = record["status"]
+                record["status"] = "scarred"
+                record["lesson"] = lesson
+                record["scar_provenance"] = provenance
+                self._transition("SCAR_REPAIR", {
+                    "repair_id": repair_id,
+                    "previous_status": previous_status,
+                    "new_status": "scarred",
+                    "lesson": lesson,
+                    "provenance": provenance,
+                    "principle": "trace preserved; current influence may decrease; lesson remains",
+                }, CausalOrigin.MIXED)
+                return record
+        raise ValueError(f"unknown repair_id: {repair_id}")
+
     def record_recurrence(self, repair_id, event, provenance):
         if not provenance:
             raise ValueError("recurrence requires provenance")
@@ -215,7 +237,7 @@ class ConscienceCBrain:
                     "prior_repair_status": record["status"],
                 }
                 record.setdefault("recurrences", []).append(recurrence)
-                if record["status"] == "verified":
+                if record["status"] in {"verified", "scarred"}:
                     record["status"] = "recurrence_after_verification"
                 self._transition("RECORD_RECURRENCE", {
                     "repair_id": repair_id,
