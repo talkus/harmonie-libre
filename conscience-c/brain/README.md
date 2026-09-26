@@ -92,6 +92,8 @@ Les changements du modèle de l’autre journalisent les empreintes avant/après
 
 Après vérification, une réparation peut passer à `scarred` avec une leçon conservée et une influence courante bornée entre 0 et 1. La valeur par défaut est expérimentale et ne mesure pas le pardon. Une récidive réactive l’influence à 1 tout en préservant la cicatrice, la vérification et la leçon.
 
+Une cicatrice peut ensuite passer à `archived` : son influence courante devient 0, mais aucune trace n’est supprimée. Une récidive peut réactiver une cicatrice archivée. Pour la confiance, l’API distingue maintenant la vue courante de l’historique complet : lire l’état actuel ne détruit jamais la trajectoire qui l’a produit.
+
 Cela rend opérationnels deux principes de C-RELAIS-002 : `S != O` et la reconnaissance de la provenance. Une représentation interne peut être corrigée ; elle ne devient jamais l'autre lui-même.
 
 ## Statut du classement d'actions
