@@ -83,3 +83,18 @@ Après synchronisation documentaire, l'audit du prototype a entraîné les corre
 Une première version du changement C1/C2 a fait échouer deux anciens tests qui attendaient encore les libellés précédents. Cette divergence a été conservée dans l'historique Git, les tests ont ensuite été mis à jour et la CI correspondante est revenue au vert.
 
 Le vérificateur documentaire initial C-RELAIS-002 était trop dépendant de formulations exactes. Il a signalé trois échecs documentaires malgré le passage des tests du cerveau. Le correctif suivant vérifie les invariants sémantiques et sa CI est passée avec succès.
+
+
+## Mémoire relationnelle exécutable — durcissement suivant
+
+Le prototype v0.3 applique désormais plusieurs règles auparavant seulement documentaires :
+- les modèles de O sont marqués représentations révisables et exigent une provenance ;
+- les changements de modèle conservent les empreintes avant/après ;
+- les événements de R exigent une provenance ;
+- preuves et hypothèses ne peuvent plus être écrasées sous un identifiant existant ;
+- la calibration de confiance est une trajectoire append-only sourcée ;
+- réparation et vérification sont deux transitions distinctes ;
+- une réparation vérifiée peut être cicatrisée avec leçon préservée et influence courante explicite ;
+- une récidive réactive l'influence sans effacer réparation, vérification ou cicatrice.
+
+Les valeurs numériques d'influence restent expérimentales : elles ne mesurent ni pardon, ni confiance humaine, ni vertu.
