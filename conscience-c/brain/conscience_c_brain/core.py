@@ -421,6 +421,7 @@ class ConscienceCBrain:
                 "outcome": payload.get("outcome"),
                 "fresh_evidence": copy.deepcopy(payload.get("fresh_evidence")),
                 "provenance": payload.get("provenance"),
+                "supersedes_revalidation_event_hash": payload.get("supersedes_revalidation_event_hash"),
             })
         return records
 
