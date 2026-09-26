@@ -113,7 +113,7 @@ class BrainTests(unittest.TestCase):
 
     def test_provenance_types_are_not_collapsed(self):
         b = self.make()
-        b.ingest_evidence(Evidence("E1", "primary", EvidenceKind.ATTESTED_SOURCE))
+        b.ingest_evidence(Evidence("E1", "primary", EvidenceKind.ATTESTED_SOURCE, source_ref="source:E1"))
         b.ingest_evidence(Evidence("E2", "derived", EvidenceKind.CONSOLIDATED_DERIVATION))
         b.ingest_evidence(Evidence("E3", "analytic", EvidenceKind.ANALYTICAL_RECONSTRUCTION))
         kinds = {x["kind"] for x in b.state["E"]["evidence"].values()}
@@ -135,7 +135,7 @@ class BrainTests(unittest.TestCase):
     def test_falsifiable_hypothesis_can_be_rejected(self):
         b = self.make()
         b.add_hypothesis(Hypothesis("H1", "X est vrai", .8, ["preuve contraire de X"]))
-        b.ingest_evidence(Evidence("E1", "X est faux", EvidenceKind.ATTESTED_SOURCE, contradicts=["H1"], confidence=.95))
+        b.ingest_evidence(Evidence("E1", "X est faux", EvidenceKind.ATTESTED_SOURCE, contradicts=["H1"], confidence=.95, source_ref="source:E1"))
         self.assertEqual(b.state["hypotheses"]["H1"]["status"], "rejected")
 
     def test_imagination_is_not_observation(self):
