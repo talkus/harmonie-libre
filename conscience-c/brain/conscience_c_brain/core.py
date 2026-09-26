@@ -154,13 +154,21 @@ class ConscienceCBrain:
     def choose(self, actions):
         if not actions:
             raise ValueError("at least one action is required")
-        ranked = sorted(((a.action_id, a.score()) for a in actions), key=lambda x: x[1], reverse=True)
-        action_map = {a.action_id: a for a in actions}
+        # C-RELAIS-002: a numerical heuristic is an instrument, never the telos.
+        # Reality conflict is a hard admissibility boundary: it cannot be
+        # compensated by high scores on other indicators.
+        admissible = [a for a in actions if a.reality_admissible()]
+        if not admissible:
+            raise ValueError("no action is admissible under the truth/reality constraint")
+        ranked = sorted(((a.action_id, a.score()) for a in admissible), key=lambda x: x[1], reverse=True)
+        action_map = {a.action_id: a for a in admissible}
         chosen = action_map[ranked[0][0]]
+        excluded = [a.action_id for a in actions if not a.reality_admissible()]
         self._transition("CHOOSE_ACTION", {
             "chosen": chosen.action_id,
-            "ranking": ranked,
-            "principle": "Amour choisi under truth/reality constraint; reality conflict cannot be compensated away",
+            "experimental_ranking": ranked,
+            "excluded_by_reality_constraint": excluded,
+            "principle": "Telos=Amour choisi; truth/reality is a hard constraint; heuristic ranking is only an instrument",
         }, CausalOrigin.MIXED)
         return chosen, ranked
 
