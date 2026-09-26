@@ -11,11 +11,12 @@ def _hash(obj: Dict[str, Any]) -> str:
     return hashlib.sha256(_canon(obj).encode("utf-8")).hexdigest()
 
 class AppendOnlyLedger:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, *, create: bool = True):
         self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        if not self.path.exists():
-            self.path.write_text("", encoding="utf-8")
+        if create:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            if not self.path.exists():
+                self.path.write_text("", encoding="utf-8")
 
     def read(self) -> List[Dict[str, Any]]:
         rows = []
@@ -54,7 +55,7 @@ class AppendOnlyLedger:
         return rows[-1]["event_hash"] if rows else "GENESIS"
 
     def append(self, event_type: str, timestamp: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-        # This prototype remains single-writer; this is not a locking protocol.
+        # This low-level API remains single-writer. Brain writes use TransitionStore.
         rows = self.read_verified()
         row = {
             "seq": len(rows) + 1,
