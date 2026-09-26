@@ -32,7 +32,9 @@ Le prototype contient `DualTrajectoryEngine` :
 - relation `R12` enregistrée comme état propre ;
 - détection de fusion ;
 - réalité `E` prioritaire lorsque les preuves distinguent clairement les propositions ;
-- `R` peut aider seulement dans une zone d'incertitude.
+- lorsque E distingue suffisamment les propositions, le résultat est noté `E_FAVORS_C1` ou `E_FAVORS_C2` ;
+- lorsque E reste ambigu, le résultat demeure `UNRESOLVED` : une différence de confiance ne force plus un gagnant ;
+- le désaccord est préservé comme information : désaccord ≠ désalignement, consensus ≠ preuve.
 
 ```text
 C1 != C2
