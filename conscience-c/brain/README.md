@@ -98,6 +98,8 @@ Lorsqu’un état mérite d’être conservé intégralement, `save_checkpoint_r
 
 Chaque événement du delta reçoit maintenant une classe conservatrice : `documentary_only`, `requires_external_reverification`, `requires_current_canon_check`, `never_replay` ou `unclassified_fail_closed`. Les événements inconnus échouent fermés. Le plan expose ses bloqueurs et fixe `automatic_replay_allowed=false` : aucun événement externe, relationnel ou dépendant du canon n’est automatiquement rejoué comme s’il était encore vrai.
 
+`revalidation_queue_from_receipt()` transforme ces bloqueurs en questions explicites à résoudre. Une mémoire historique peut donc déclencher « revérifier cette source » ou « comparer cette ancienne correction au canon courant », mais elle ne fournit pas elle-même la réponse. Lorsqu’une revérification est effectuée, `validate_revalidation_item()` crée un nouvel événement sourcé `REVALIDATE_HISTORICAL_EVENT` ; l’ancien événement reste intact.
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
