@@ -151,6 +151,29 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_applicability(self, evidence_id, subject_ref=None, scope=None, at_time=None):
+        item = self.state["E"]["evidence"].get(evidence_id)
+        if item is None:
+            raise ValueError(f"unknown evidence_id: {evidence_id}")
+        reasons = []
+        temporal = self.evidence_temporal_status(evidence_id, at_time)
+        if temporal != "temporally_usable":
+            reasons.append(temporal)
+        item_subject = item.get("subject_ref")
+        if subject_ref is not None and item_subject is not None and item_subject != subject_ref:
+            reasons.append("subject_mismatch")
+        item_scope = item.get("scope")
+        if scope is not None and item_scope is not None and item_scope != scope:
+            reasons.append("scope_mismatch")
+        return {
+            "evidence_id": evidence_id,
+            "applicable": not reasons,
+            "reasons": reasons,
+            "subject_ref": item_subject,
+            "scope": item_scope,
+            "temporal_status": temporal,
+        }
+
     def evidence_view(self, at_time=None):
         view = []
         for evidence_id, item in self.state["E"]["evidence"].items():
