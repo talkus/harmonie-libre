@@ -48,8 +48,13 @@ class BrainTests(unittest.TestCase):
         self.assertTrue(receipt["receipt_event_hash"])
         stored = b.checkpoint_receipts()[0]
         self.assertEqual(stored["checkpoint_hash"], receipt["checkpoint_hash"])
+        self.assertTrue(b.verify_checkpoint_receipt(stored))
         b.imagine("later", ["c"], ["d"])
-        self.assertEqual(b.checkpoint_receipts()[0]["checkpoint"]["state"], captured_state)
+        historical = b.checkpoint_receipts()[0]
+        self.assertEqual(historical["checkpoint"]["state"], captured_state)
+        self.assertTrue(b.verify_checkpoint_receipt(historical))
+        historical["checkpoint"]["telos"] = "tampered"
+        self.assertFalse(b.verify_checkpoint_receipt(historical))
 
     def test_historical_checkpoint_boundary_is_not_invented_snapshot(self):
         b = self.make()
