@@ -58,6 +58,8 @@ Le cerveau écrit :
 
 Si le ledger existe mais que le snapshot a disparu, le prototype **refuse de recréer t0**.
 
+Lorsqu'un snapshot v0.2 est encore valide mais porte l'ancienne ancre, v0.3 effectue une migration **vers l'avant** : l'ancienne ancre et son digest sont consignés dans un événement `MIGRATE_ANCHOR_C_RELAIS_002`, puis le checkpoint courant est adopté. L'histoire n'est pas réécrite.
+
 ## Exécution
 
 ```bash
