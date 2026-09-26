@@ -162,6 +162,7 @@ class ConscienceCBrain:
             matches.append({
                 "evidence_id": evidence_id,
                 "kind": item["kind"],
+                "stance": item.get("stance", "context"),
                 "content": item["content"],
                 "source_ref": item.get("source_ref"),
                 "applicability": applicability,
@@ -173,18 +174,35 @@ class ConscienceCBrain:
         applicable = [x for x in items if x["applicability"]["applicable"]]
         if not applicable:
             return {"claim_ref": claim_ref, "status": "unsupported_in_requested_context", "evidence": items}
-        kinds = {x["kind"] for x in applicable}
-        if EvidenceKind.HISTORICAL_REFUTED.value in kinds and EvidenceKind.ATTESTED_SOURCE.value in kinds:
-            return {"claim_ref": claim_ref, "status": "contested_requires_review", "evidence": applicable}
-        if EvidenceKind.HISTORICAL_REFUTED.value in kinds:
-            return {"claim_ref": claim_ref, "status": "historically_refuted_present", "evidence": applicable}
-        if EvidenceKind.ATTESTED_SOURCE.value in kinds:
-            return {"claim_ref": claim_ref, "status": "attested_source_present", "evidence": applicable}
-        if EvidenceKind.CONSOLIDATED_DERIVATION.value in kinds:
-            return {"claim_ref": claim_ref, "status": "consolidated_derivation_present", "evidence": applicable}
-        if EvidenceKind.ANALYTICAL_RECONSTRUCTION.value in kinds:
-            return {"claim_ref": claim_ref, "status": "analytical_only", "evidence": applicable}
-        return {"claim_ref": claim_ref, "status": "indeterminate", "evidence": applicable}
+
+        supports = [x for x in applicable if x["stance"] == "supports"]
+        contradicts = [x for x in applicable if x["stance"] == "contradicts"]
+        context_only = [x for x in applicable if x["stance"] == "context"]
+
+        attested_support = any(x["kind"] == EvidenceKind.ATTESTED_SOURCE.value for x in supports)
+        attested_contradiction = any(x["kind"] == EvidenceKind.ATTESTED_SOURCE.value for x in contradicts)
+        if attested_support and attested_contradiction:
+            status = "contested_requires_review"
+        elif attested_contradiction:
+            status = "attested_contradiction_present"
+        elif attested_support:
+            status = "attested_support_present"
+        elif supports and all(x["kind"] == EvidenceKind.ANALYTICAL_RECONSTRUCTION.value for x in supports):
+            status = "analytical_support_only"
+        elif contradicts:
+            status = "contradiction_present_requires_review"
+        elif context_only:
+            status = "context_only_no_support_inference"
+        else:
+            status = "indeterminate"
+        return {
+            "claim_ref": claim_ref,
+            "status": status,
+            "supports": supports,
+            "contradicts": contradicts,
+            "context": context_only,
+            "evidence": applicable,
+        }
 
     def evidence_applicability(self, evidence_id, subject_ref=None, scope=None, at_time=None):
         item = self.state["E"]["evidence"].get(evidence_id)
