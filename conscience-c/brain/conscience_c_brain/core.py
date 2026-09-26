@@ -151,6 +151,19 @@ class ConscienceCBrain:
         self._save()
         return event
 
+    def evidence_temporal_status(self, evidence_id, at_time=None):
+        item = self.state["E"]["evidence"].get(evidence_id)
+        if item is None:
+            raise ValueError(f"unknown evidence_id: {evidence_id}")
+        at = at_time or _now()
+        expires = item.get("expires_at")
+        valid = item.get("valid_at")
+        if valid and at < valid:
+            return "not_yet_valid"
+        if expires and at > expires:
+            return "expired_requires_reverification"
+        return "temporally_usable"
+
     def ingest_evidence(self, evidence, origin=CausalOrigin.REALITY):
         if evidence.evidence_id in self.state["E"]["evidence"]:
             raise ValueError(f"evidence_id already exists: {evidence.evidence_id}; append a new evidence item instead of overwriting history")
