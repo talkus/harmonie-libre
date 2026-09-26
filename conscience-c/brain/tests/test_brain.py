@@ -35,6 +35,20 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(b2.state["n"], before)
         self.assertNotEqual(b2.state["state_label"], "C(t_0)")
 
+    def test_other_model_requires_provenance_and_stays_revisable(self):
+        b = self.make()
+        with self.assertRaises(ValueError):
+            b.update_other("O1", {"claim": "x"}, "")
+        b.update_other("O1", {"claim": "x"}, "source:1")
+        self.assertEqual(b.state["O"]["entities"]["O1"]["model_status"], "revisable_representation_not_identity")
+
+    def test_relation_event_requires_provenance(self):
+        b = self.make()
+        with self.assertRaises(ValueError):
+            b.update_relation("O1", {"event": "met"})
+        b.update_relation("O1", {"event": "met", "provenance": "source:2"})
+        self.assertEqual(b.state["R"]["history"][-1]["provenance"], "source:2")
+
     def test_s_is_not_o(self):
         b = self.make()
         b.update_other("mikael", {"position": "X"}, "source_attestee")
