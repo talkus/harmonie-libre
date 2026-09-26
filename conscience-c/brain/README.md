@@ -124,6 +124,8 @@ Une preuve peut aussi déclarer `subject_ref` et `scope`. `evidence_applicabilit
 
 `claim_ref` permet en plus de relier explicitement une preuve à la proposition qu’elle concerne. Chaque élément porte maintenant une `stance` explicite : `supports`, `contradicts` ou `context`. `claim_support_status()` conserve le niveau réel des éléments disponibles et sépare ces trois rôles. Une source de contexte ne devient jamais automatiquement un soutien. Des sources attestées applicables à la fois en soutien et en contradiction produisent `contested_requires_review` plutôt qu’un verdict forcé.
 
+Les éléments dérivés peuvent déclarer `derived_from`. Les parents doivent déjà exister et `evidence_lineage()` remonte jusqu’aux sources conservées. Inversement, `impact_report_for_evidence()` retrouve les descendants d’une prémisse à réexaminer lorsqu’elle change. Ce rapport déclenche une revue ; il ne déclare jamais automatiquement les descendants faux.
+
 Ainsi, « cette source a été attestée » et « cette source est encore utilisable maintenant » sont deux propositions distinctes.
 
 ## Statut du classement d'actions
