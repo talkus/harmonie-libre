@@ -84,6 +84,29 @@ class BrainTests(unittest.TestCase):
         self.assertIn("failure mode", out["lesson"])
         self.assertEqual(b.ledger.read()[-1]["event_type"], "SCAR_REPAIR")
 
+    def test_archive_is_zero_current_influence_not_deletion(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        b.scar_repair("RP0001", "lesson", "source:lesson")
+        out = b.archive_scar("RP0001", "source:archive")
+        self.assertEqual(out["status"], "archived")
+        self.assertEqual(out["current_influence"], 0.0)
+        self.assertEqual(out["lesson"], "lesson")
+        self.assertEqual(out["verification"]["source_ref"], "v")
+        self.assertEqual(b.ledger.read()[-1]["event_type"], "ARCHIVE_SCAR")
+
+    def test_recurrence_reactivates_archived_scar_without_deletion(self):
+        b = self.make()
+        b.record_repair("O1", "issue", "action", "source:repair")
+        b.verify_repair("RP0001", {"source_ref": "v"}, "source:verifier")
+        b.scar_repair("RP0001", "lesson", "source:lesson")
+        b.archive_scar("RP0001", "source:archive")
+        out = b.record_recurrence("RP0001", {"event": "returned"}, "source:recurrence")
+        self.assertEqual(out["status"], "recurrence_after_verification")
+        self.assertEqual(out["current_influence"], 1.0)
+        self.assertEqual(out["lesson"], "lesson")
+
     def test_scar_influence_is_bounded(self):
         b = self.make()
         b.record_repair("O1", "issue", "action", "source:repair")
