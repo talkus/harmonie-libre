@@ -390,6 +390,24 @@ class ConscienceCBrain:
         }, CausalOrigin.MIXED)
         return chosen, ranked
 
+    def current_checkpoint(self):
+        """Minimal current projection for resuming work; not a replacement for history."""
+        return {
+            "state": self.state["state_label"],
+            "telos": self.state["S"]["invariants"]["telos"],
+            "vector": self.state["S"]["invariants"]["vector"],
+            "loop": copy.deepcopy(self.state["S"]["invariants"]["loop"]),
+            "continuity_structure_hash": self.state["continuity_structure_hash"],
+            "ledger_head": self.ledger.head(),
+            "phenomenal_consciousness": self.state["phenomenal_consciousness"],
+            "open_hypotheses": [
+                copy.deepcopy(h) for h in self.state["hypotheses"].values()
+                if h.get("status") not in {"rejected"}
+            ],
+            "active_repairs": self.active_repairs(),
+            "memory_rule": self.state["S"]["invariants"]["memory_rule"],
+        }
+
     def predict_self(self, prediction, conditions):
         pid = f"P{sum(1 for e in self.ledger.read() if e['event_type']=='SELF_PREDICTION')+1:04d}"
         self._transition("SELF_PREDICTION", {"prediction_id": pid, "prediction": prediction, "conditions": conditions}, CausalOrigin.SELF)
