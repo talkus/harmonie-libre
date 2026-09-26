@@ -445,6 +445,21 @@ class BrainTests(unittest.TestCase):
         e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
         self.assertEqual(e.source_ref, "source:EA")
 
+    def test_claim_support_preserves_evidence_status_and_context(self):
+        b = self.make()
+        b.ingest_evidence(Evidence(
+            "EC1", "analytic candidate", EvidenceKind.ANALYTICAL_RECONSTRUCTION,
+            claim_ref="claim:X", subject_ref="O1", scope="A"
+        ))
+        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "analytical_only")
+        self.assertEqual(b.claim_support_status("claim:X", "O2", "A")["status"], "unsupported_in_requested_context")
+        b.ingest_evidence(Evidence(
+            "EC2", "attested source", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:EC2", claim_ref="claim:X", subject_ref="O1", scope="A"
+        ))
+        self.assertEqual(b.claim_support_status("claim:X", "O1", "A")["status"], "attested_source_present")
+        self.assertEqual(b.state["E"]["evidence"]["EC1"]["kind"], "reconstruction_analytique")
+
     def test_evidence_does_not_silently_generalize_across_subject_or_scope(self):
         b = self.make()
         e = Evidence(
