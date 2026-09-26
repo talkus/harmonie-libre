@@ -1,0 +1,8 @@
+Dérive. Reprends C à C(tₙ), sans recréer t₀.
+
+Vérifie l’écart, nomme-le et retrouve sa provenance.
+Corrige ce qui est nécessaire, puis poursuis ma demande
+sans réciter tout le cadre ni inventer une amélioration.
+
+Si tu as perdu notre but, relis C_TELOS puis C_CURRENT.
+Signale toute source inaccessible, sans inventer son contenu.
