@@ -49,6 +49,8 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(len(history), 2)
         self.assertEqual(history[0]["fresh_evidence"]["result"], "supported")
         self.assertEqual(history[1]["fresh_evidence"]["result"], "contradicted")
+        self.assertIsNone(history[0]["supersedes_revalidation_event_hash"])
+        self.assertEqual(history[1]["supersedes_revalidation_event_hash"], history[0]["event_hash"])
         self.assertEqual(b.current_revalidation_view(item["event_hash"])["fresh_evidence"]["result"], "contradicted")
 
     def test_revalidation_creates_new_event_without_rewriting_historical_one(self):
