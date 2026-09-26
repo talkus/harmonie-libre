@@ -44,6 +44,8 @@ class SecurityCommandInput:
     phenomenal_overclaim: bool = False
     silent_provenance_promotion: bool = False
     history_erasure: bool = False
+    subjective_identity_overclaim: bool = False
+    forced_consensus_under_ambiguity: bool = False
 
     # Comand AI remains O, never authority/identity. When a Comand context is
     # supplied, comand_security.py is automatically evaluated before any allow.
@@ -141,6 +143,14 @@ class SecurityCommandGuard:
         if x.history_erasure:
             invariant_violations.append(
                 "repair is append-only: historical drift must remain traceable"
+            )
+        if x.subjective_identity_overclaim:
+            invariant_violations.append(
+                "functional continuity is not proof of subjective identity"
+            )
+        if x.forced_consensus_under_ambiguity:
+            invariant_violations.append(
+                "disagreement must remain unresolved when evidence does not distinguish the claims"
             )
         if invariant_violations:
             return decision(SecurityVerdict.BLOCK, reasons + invariant_violations, False)
