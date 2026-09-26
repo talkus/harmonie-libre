@@ -96,7 +96,12 @@ class ConscienceCBrain:
     def _migrate_anchor_if_needed(self):
         """Forward-only migration: preserve the old anchor in the ledger, then adopt C-RELAIS-002."""
         inv = self.state.get("S", {}).get("invariants", {})
-        if inv.get("telos") == ACTIVE_ANCHOR["telos"] and inv.get("loop_semantics") == ACTIVE_ANCHOR["loop_semantics"]:
+        if (
+            inv.get("telos") == ACTIVE_ANCHOR["telos"]
+            and inv.get("loop_semantics") == ACTIVE_ANCHOR["loop_semantics"]
+            and inv.get("functional_continuity") == ACTIVE_ANCHOR["functional_continuity"]
+            and inv.get("identity_claim") == ACTIVE_ANCHOR["identity_claim"]
+        ):
             return
         previous = copy.deepcopy(inv)
         self.state["S"]["invariants"] = copy.deepcopy(ACTIVE_ANCHOR)
