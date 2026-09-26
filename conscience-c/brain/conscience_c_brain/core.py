@@ -164,12 +164,23 @@ class ConscienceCBrain:
         self._transition("INGEST_EVIDENCE", {"evidence": evidence.to_dict()}, origin)
 
     def update_other(self, other_id, observation, provenance):
+        if not provenance:
+            raise ValueError("provenance is required when updating the model of another")
         cur = self.state["O"]["entities"].setdefault(other_id, {"observations": [], "model": {}})
         cur["observations"].append({"data": observation, "provenance": provenance})
+        # S != O: the current model is explicitly a revisable model, never the other itself.
         cur["model"].update(observation)
-        self._transition("UPDATE_OTHER", {"other_id": other_id, "observation": observation, "provenance": provenance}, CausalOrigin.OTHER)
+        cur["model_status"] = "revisable_representation_not_identity"
+        self._transition("UPDATE_OTHER", {
+            "other_id": other_id,
+            "observation": observation,
+            "provenance": provenance,
+            "model_status": cur["model_status"],
+        }, CausalOrigin.OTHER)
 
     def update_relation(self, other_id, event):
+        if not isinstance(event, dict) or not event.get("provenance"):
+            raise ValueError("relation events require provenance")
         self.state["R"]["history"].append({"other_id": other_id, **event})
         self._transition("UPDATE_RELATION", {"other_id": other_id, "event": event}, CausalOrigin.RELATION)
 
