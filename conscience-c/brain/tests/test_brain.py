@@ -459,6 +459,11 @@ class BrainTests(unittest.TestCase):
         self.assertEqual(b.evidence_temporal_status("Et", "2026-09-25T11:00:00+00:00"), "not_yet_valid")
         self.assertEqual(b.evidence_temporal_status("Et", "2026-09-25T13:00:00+00:00"), "temporally_usable")
         self.assertEqual(b.evidence_temporal_status("Et", "2026-09-27T13:00:00+00:00"), "expired_requires_reverification")
+        usable = b.currently_usable_evidence("2026-09-25T13:00:00+00:00")
+        self.assertEqual([x["evidence_id"] for x in usable], ["Et"])
+        expired_view = b.evidence_view("2026-09-27T13:00:00+00:00")
+        self.assertEqual(expired_view[0]["temporal_status"], "expired_requires_reverification")
+        self.assertEqual(b.state["E"]["evidence"]["Et"]["content"], "time-bound fact")
 
     def test_evidence_confidence_is_bounded(self):
         with self.assertRaises(ValueError):
