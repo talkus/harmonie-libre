@@ -51,6 +51,16 @@ class BrainTests(unittest.TestCase):
         self.assertNotEqual(ev["payload"]["previous_model_digest"], ev["payload"]["current_model_digest"])
         self.assertEqual(b.state["O"]["entities"]["O1"]["observations"][0]["data"]["claim"], "first")
 
+    def test_trust_calibration_is_append_only_and_sourced(self):
+        b = self.make()
+        with self.assertRaises(ValueError):
+            b.record_trust_calibration("O1", "cautious", "", "event history")
+        first = b.record_trust_calibration("O1", "cautious", "source:t1", "event history")
+        second = b.record_trust_calibration("O1", "improving", "source:t2", "verified correction")
+        self.assertEqual(len(b.state["R"]["trust_calibration"]["O1"]), 2)
+        self.assertEqual(first["assessment"], "cautious")
+        self.assertEqual(second["assessment"], "improving")
+
     def test_repair_is_not_self_declared_verified(self):
         b = self.make()
         pending = b.record_repair("O1", "issue", "corrective action", "source:repair")
