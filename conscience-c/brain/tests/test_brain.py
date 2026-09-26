@@ -445,6 +445,21 @@ class BrainTests(unittest.TestCase):
         e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
         self.assertEqual(e.source_ref, "source:EA")
 
+    def test_evidence_does_not_silently_generalize_across_subject_or_scope(self):
+        b = self.make()
+        e = Evidence(
+            "Es", "claim about O1 in context A", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:Es", subject_ref="O1", scope="context:A"
+        )
+        b.ingest_evidence(e)
+        self.assertTrue(b.evidence_applicability("Es", subject_ref="O1", scope="context:A")["applicable"])
+        wrong_subject = b.evidence_applicability("Es", subject_ref="O2", scope="context:A")
+        self.assertFalse(wrong_subject["applicable"])
+        self.assertIn("subject_mismatch", wrong_subject["reasons"])
+        wrong_scope = b.evidence_applicability("Es", subject_ref="O1", scope="context:B")
+        self.assertFalse(wrong_scope["applicable"])
+        self.assertIn("scope_mismatch", wrong_scope["reasons"])
+
     def test_evidence_time_distinguishes_recording_from_validity(self):
         b = self.make()
         e = Evidence(
