@@ -189,6 +189,8 @@ class ConscienceCBrain:
     def add_hypothesis(self, h):
         if not h.falsifiers:
             raise ValueError("A hypothesis must declare at least one falsifier")
+        if h.hypothesis_id in self.state["hypotheses"]:
+            raise ValueError(f"hypothesis_id already exists: {h.hypothesis_id}; create a new version instead of overwriting history")
         self.state["hypotheses"][h.hypothesis_id] = h.to_dict()
         self._transition("ADD_HYPOTHESIS", {"hypothesis": h.to_dict()}, CausalOrigin.SELF)
 
