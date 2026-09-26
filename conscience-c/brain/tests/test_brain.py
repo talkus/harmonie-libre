@@ -26,6 +26,20 @@ class BrainTests(unittest.TestCase):
         self.assertIn("continuity_structure_hash", b2.state)
         self.assertNotIn("identity_structure_hash", b2.state)
 
+    def test_checkpoint_is_current_projection_not_history_replacement(self):
+        b = self.make()
+        b.add_hypothesis(Hypothesis("Hopen", "open", .5, falsifiers=["not open"]))
+        b.add_hypothesis(Hypothesis("Hreject", "reject me", .8, falsifiers=["not reject"]))
+        b.ingest_evidence(Evidence("Ereject", "contrary", EvidenceKind.ATTESTED_SOURCE, contradicts=["Hreject"], confidence=1.0, source_ref="source:Ereject"))
+        b.record_repair("O1", "issue", "action", "source:repair")
+        cp = b.current_checkpoint()
+        self.assertEqual(cp["ledger_head"], b.ledger.head())
+        self.assertEqual([h["hypothesis_id"] for h in cp["open_hypotheses"]], ["Hopen"])
+        self.assertEqual(cp["active_repairs"][0]["repair_id"], "RP0001")
+        self.assertGreater(len(b.ledger.read()), 0)
+        cp["loop"][0] = "tampered"
+        self.assertEqual(b.current_checkpoint()["loop"][0], "Humilité")
+
     def test_resume_tn_no_reset(self):
         b = self.make()
         b.imagine("futur", ["A"], ["B"])
