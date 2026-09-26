@@ -36,6 +36,16 @@ class BrainTests(unittest.TestCase):
         report["events"][1]["prev_hash"] = "tampered"
         self.assertFalse(b.verify_transition_report(report))
 
+    def test_replay_classification_is_conservative(self):
+        b = self.make()
+        def row(event_type):
+            return {"event_type": event_type}
+        self.assertEqual(b.classify_replay_event(row("IMAGINE_COUNTERFACTUAL")), "documentary_only")
+        self.assertEqual(b.classify_replay_event(row("INGEST_EVIDENCE")), "requires_external_reverification")
+        self.assertEqual(b.classify_replay_event(row("REPAIR_DRIFT")), "requires_current_canon_check")
+        self.assertEqual(b.classify_replay_event(row("BOOTSTRAP_T0")), "never_replay")
+        self.assertEqual(b.classify_replay_event(row("FUTURE_UNKNOWN_EVENT")), "unclassified_fail_closed")
+
     def test_replay_plan_lists_only_events_after_captured_boundary(self):
         b = self.make()
         b.imagine("before", ["a"], ["b"])
@@ -46,6 +56,7 @@ class BrainTests(unittest.TestCase):
         plan = b.replay_plan_from_receipt(receipt)
         types = [e["event_type"] for e in plan["events_to_replay"]]
         self.assertEqual(types, ["CHECKPOINT_RECEIPT", "IMAGINE_COUNTERFACTUAL", "IMAGINE_COUNTERFACTUAL"])
+        self.assertTrue(all(e["replay_class"] == "documentary_only" for e in plan["events_to_replay"]))
         self.assertEqual(plan["replay_status"], "plan_only_no_state_mutation")
         self.assertEqual(plan["target_ledger_head"], b.ledger.head())
 
