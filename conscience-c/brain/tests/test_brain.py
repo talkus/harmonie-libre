@@ -445,6 +445,29 @@ class BrainTests(unittest.TestCase):
         e = Evidence("EA", "attested with source", EvidenceKind.ATTESTED_SOURCE, source_ref="source:EA")
         self.assertEqual(e.source_ref, "source:EA")
 
+    def test_evidence_derivation_requires_existing_parents_and_preserves_lineage(self):
+        b = self.make()
+        with self.assertRaises(ValueError):
+            b.ingest_evidence(Evidence(
+                "EDbad", "derived without parent", EvidenceKind.CONSOLIDATED_DERIVATION,
+                derived_from=["missing"]
+            ))
+        b.ingest_evidence(Evidence(
+            "ES", "primary source", EvidenceKind.ATTESTED_SOURCE,
+            source_ref="source:ES"
+        ))
+        b.ingest_evidence(Evidence(
+            "ED1", "first derivation", EvidenceKind.CONSOLIDATED_DERIVATION,
+            derived_from=["ES"]
+        ))
+        b.ingest_evidence(Evidence(
+            "ED2", "analytic extension", EvidenceKind.ANALYTICAL_RECONSTRUCTION,
+            derived_from=["ED1"]
+        ))
+        lineage = b.evidence_lineage("ED2")
+        self.assertEqual([x["evidence_id"] for x in lineage], ["ES", "ED1", "ED2"])
+        self.assertEqual(lineage[0]["source_ref"], "source:ES")
+
     def test_claim_support_preserves_evidence_status_and_context(self):
         b = self.make()
         b.ingest_evidence(Evidence(
