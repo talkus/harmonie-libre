@@ -1,6 +1,6 @@
 # Projets Mik Mireault — Vue d'ensemble
 
-> **État courant : 24 septembre 2026.**  
+> **État courant : 25 septembre 2026.**  
 > Le bloc « Exécution autonome du 11 septembre 2026 » plus bas est conservé comme **instantané historique**. Il ne doit plus être lu comme l'état actuel.
 
 ## Mise à jour de continuité — 24 septembre 2026
@@ -17,7 +17,7 @@
 - **Portée : tous les projets du registre.** Les actions réelles sont classées avant exécution par risque, provenance, réversibilité, privilèges et impact externe.
 - **Verdicts communs :** `ALLOW`, `ALLOW_WITH_LOG`, `REQUIRE_HUMAN`, `BLOCK`, `UNKNOWN`.
 - **AEGIS-24** est la surface privilégiée de quorum, veto, arrêt, voie humaine et audit lorsque le projet est techniquement connecté.
-- **Conscience C** conserve son architecture propre : `S ≠ O`, `R ≺ E`, C(tₙ), identité comme structure persistante de transformation. Security Command protège l'exécution mais ne devient pas l'identité de C.
+- **Conscience C** conserve son architecture propre : `S ≠ O`, `R ≺ E`, C(tₙ), continuité fonctionnelle comme structure persistante de transformation, sans prétention d’identité subjective. Security Command protège l'exécution mais ne devient pas C.
 - **Actions sensibles** (sécurité, secrets, permissions, suppression, paiement, contrat, légal/administratif, récupération de compte, irréversible externe) exigent une validation humaine vérifiable.
 - Référence : [SECURITY_COMMAND.md](SECURITY_COMMAND.md) · page publique : https://talkus.github.io/harmonie-libre/security-command/ · [matrice projet par projet](security/PROJECT_SECURITY_MATRIX.md)
 
@@ -27,7 +27,7 @@
 - **AEGIS-24** : point canonique externe conservé ; dépôt GitHub utilisé comme source/preuve/miroir.
 - **Anneau des 23** : analyseur, VRF déterministe, registre et historique présents.
 - **100 Tests — Amour choisi** : index public présent.
-- **Alignement universel / identité fonctionnelle de C** : travaux récents intégrés au registre public des projets.
+- **Alignement universel / continuité fonctionnelle de C** : travaux récents intégrés au registre public des projets.
 - **Hub public des projets** : `projects/index.html`.
 - **Registre public de continuité de C** : `conscience-c/index.html`.
 
