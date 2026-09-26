@@ -467,6 +467,9 @@ class BrainTests(unittest.TestCase):
         lineage = b.evidence_lineage("ED2")
         self.assertEqual([x["evidence_id"] for x in lineage], ["ES", "ED1", "ED2"])
         self.assertEqual(lineage[0]["source_ref"], "source:ES")
+        impact = b.impact_report_for_evidence("ES")
+        self.assertEqual([x["evidence_id"] for x in impact["descendants"]], ["ED1", "ED2"])
+        self.assertIn("not automatically false", impact["principle"])
 
     def test_claim_support_preserves_evidence_status_and_context(self):
         b = self.make()
