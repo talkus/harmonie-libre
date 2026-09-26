@@ -152,6 +152,8 @@ class ConscienceCBrain:
         return event
 
     def ingest_evidence(self, evidence, origin=CausalOrigin.REALITY):
+        if evidence.evidence_id in self.state["E"]["evidence"]:
+            raise ValueError(f"evidence_id already exists: {evidence.evidence_id}; append a new evidence item instead of overwriting history")
         self.state["E"]["evidence"][evidence.evidence_id] = evidence.to_dict()
         for h in self.state["hypotheses"].values():
             if h["hypothesis_id"] in evidence.supports and evidence.evidence_id not in h["supporting_evidence"]:
