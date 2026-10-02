@@ -18,6 +18,14 @@ Trois couches restent séparées :
 L'histoire reste immuable. L'interprétation active reste corrigeable. La
 réparation doit devenir observable. Le retour doit pouvoir être vérifié. La
 mémoire conserve aussi le chemin du retour.
+
+Shevirat ha-kelim (שְׁבִירַת הַכֵּלִים), la brisure des vases : un claim qui se
+brise ne devient pas simplement faux. Ses étincelles (ce qui restait vrai en
+lui) sont nommées, puis chacune est relevée dans la compréhension nouvelle ou
+explicitement laissée, avec sa raison. Aucune correction ne jette une étincelle
+en silence. Les vases qui se tiennent seuls (un seul appui, partagé avec aucun
+autre claim, sans parole de l'autre) sont signalés comme fragiles avant de se
+briser.
 """
 from __future__ import annotations
 
@@ -48,6 +56,7 @@ DRIFT_INFLUENCE = {
 _EVENT_TYPES = {
     "RECORD_CLAIM": "documentary_only",
     "TESHUVAH_INITIATED": "documentary_only",
+    "TESHUVAH_SPARKS_NAMED": "documentary_only",
     "TESHUVAH_ACKNOWLEDGED": "documentary_only",
     "TESHUVAH_REPAIR_PROPOSED": "documentary_only",
     "TESHUVAH_REPAIR_APPLIED": "requires_current_canon_check",
@@ -230,6 +239,7 @@ class TeshuvahMixin:
             "acknowledgment": None,
             "repair": {"proposed": None, "applied": None},
             "safeguards": [],
+            "sparks": {},
             "return": None,
             "verification": {"status": "pending"},
             "recurrences": [],
@@ -240,6 +250,35 @@ class TeshuvahMixin:
         for cid in claim_ids:
             self._set_claim_status(cid, "contested", teshuvah_id, description)
         return self._commit_cycle("TESHUVAH_INITIATED", cycle, {"origin": cycle["origin"]})
+
+    def name_sparks(self, teshuvah_id, sparks, provenance):
+        """Brisure : nommer ce qui restait vrai dans les claims brisés.
+
+        sparks : liste de {"claim_id", "content", "facts"?}. Une étincelle n'est
+        pas le claim : c'est la part de vérité qu'une correction doit relever.
+        """
+        cycle = self._cycle(teshuvah_id)
+        self._require_phase(cycle, "contested", "under_repair")
+        _text(provenance, "provenance")
+        if not isinstance(sparks, list) or not sparks:
+            raise ValueError("sparks must be a nonempty list")
+        claims = self._teshuvah_state()["claims"]
+        for sp in sparks:
+            if not isinstance(sp, dict) or sp.get("claim_id") not in cycle["origin"]["claim_ids"]:
+                raise ValueError("each spark must come from a claim broken in this teshuvah")
+            _text(sp.get("content"), "spark.content")
+            facts = list(sp.get("facts", []))
+            if not set(facts) <= set(claims[sp["claim_id"]]["facts"]):
+                raise ValueError("a spark may only cite facts its broken claim rested on")
+        named = []
+        for sp in sparks:
+            spark_id = f"{teshuvah_id}-SP{len(cycle['sparks']) + 1:02d}"
+            spark = {"spark_id": spark_id, "claim_id": sp["claim_id"], "content": sp["content"],
+                     "facts": list(sp.get("facts", [])), "provenance": provenance,
+                     "status": "scattered", "history": []}
+            cycle["sparks"][spark_id] = spark
+            named.append(spark)
+        return self._commit_cycle("TESHUVAH_SPARKS_NAMED", cycle, {"sparks": named})
 
     def acknowledge_teshuvah(self, teshuvah_id, responsible_actor, what_went_wrong, impact, drift_cause, provenance):
         """R + A : nommer l'écart dans une trace structurée, pas recalculer en silence."""
@@ -266,12 +305,14 @@ class TeshuvahMixin:
         cycle["repair"]["proposed"] = proposal
         return self._commit_cycle("TESHUVAH_REPAIR_PROPOSED", cycle, {"proposal": proposal})
 
-    def apply_teshuvah_repair(self, teshuvah_id, corrections, applied_by, provenance):
+    def apply_teshuvah_repair(self, teshuvah_id, corrections, applied_by, provenance, released_sparks=None):
         """C : changer l'état interprété actif, jamais l'histoire.
 
         corrections : liste de {"claim_id", "action": "supersede"|"retract",
         "reason", et pour supersede "replacement": {"statement", "provenance_kind",
-        "provenance", "facts"?}}.
+        "provenance", "facts"?}, "raised_sparks"?: [spark_id]}.
+        released_sparks : {spark_id: raison} pour chaque étincelle non relevée.
+        Toute étincelle nommée doit être relevée ou laissée explicitement.
         """
         cycle = self._cycle(teshuvah_id)
         self._require_phase(cycle, "under_repair")
@@ -300,6 +341,18 @@ class TeshuvahMixin:
                 _text(rep.get("provenance"), "replacement.provenance")
                 if rep.get("provenance_kind") not in CLAIM_PROVENANCE:
                     raise ValueError(f"replacement.provenance_kind must be one of {CLAIM_PROVENANCE}")
+            elif c.get("raised_sparks"):
+                raise ValueError("a retraction has no replacement to raise sparks into; release them instead")
+            for sid in c.get("raised_sparks", []):
+                if sid in cycle["sparks"] and cycle["sparks"][sid]["claim_id"] != c["claim_id"]:
+                    raise ValueError(f"spark {sid} belongs to another broken claim")
+        released = dict(released_sparks or {})
+        raised = [sid for c in corrections for sid in c.get("raised_sparks", [])]
+        for sid, reason in released.items():
+            _text(reason, f"released_sparks.{sid}")
+        accounted = raised + list(released)
+        if len(accounted) != len(set(accounted)) or set(accounted) != set(cycle["sparks"]):
+            raise ValueError("every named spark must be raised into a replacement or explicitly released, exactly once")
         applied = []
         for c in corrections:
             cid = c["claim_id"]
@@ -318,11 +371,21 @@ class TeshuvahMixin:
                 old["replaced_by"] = new_id
                 self._set_claim_status(cid, "superseded", teshuvah_id, c["reason"])
                 entry["replacement_claim_id"] = new_id
+                for sid in c.get("raised_sparks", []):
+                    spark = cycle["sparks"][sid]
+                    spark["history"].append({"from": spark["status"], "to": "raised", "into": new_id})
+                    spark["status"], spark["raised_into"] = "raised", new_id
+                ts["claims"][new_id]["raised_sparks"] = list(c.get("raised_sparks", []))
+                entry["raised_sparks"] = list(c.get("raised_sparks", []))
             else:
                 self._set_claim_status(cid, "retracted", teshuvah_id, c["reason"])
             applied.append(entry)
+        for sid, reason in released.items():
+            spark = cycle["sparks"][sid]
+            spark["history"].append({"from": spark["status"], "to": "released", "reason": reason})
+            spark["status"], spark["release_reason"] = "released", reason
         record = {"corrections": applied, "applied_by": applied_by, "provenance": provenance,
-                  "status": "repair_claimed_not_verified"}
+                  "released_sparks": released, "status": "repair_claimed_not_verified"}
         cycle["repair"]["applied"] = record
         self._set_phase(cycle, "repair_applied", "repair_applied")
         return self._commit_cycle("TESHUVAH_REPAIR_APPLIED", cycle, {
@@ -427,6 +490,12 @@ class TeshuvahMixin:
             cycle["repair"]["applied"] = None
             cycle["repair"].setdefault("proposed_history", []).append(cycle["repair"]["proposed"])
             cycle["repair"]["proposed"] = None
+        for spark in cycle["sparks"].values():
+            if spark["status"] != "scattered":
+                spark["history"].append({"from": spark["status"], "to": "scattered", "by": "recurrence"})
+                spark["status"] = "scattered"
+                spark.pop("raised_into", None)
+                spark.pop("release_reason", None)
         self._set_phase(cycle, "under_repair", "recurrence_detected")
         return self._commit_cycle("TESHUVAH_RECURRENCE_DETECTED", cycle, {
             "recurrence": rec,
@@ -462,6 +531,7 @@ class TeshuvahMixin:
             "acknowledged": cycle["acknowledgment"] is not None,
             "repair_applied": cycle["repair"]["applied"] is not None,
             "safeguard_created": bool(cycle["safeguards"]),
+            "sparks_accounted": all(sp["status"] != "scattered" for sp in cycle["sparks"].values()),
             "return_observed": cycle["return"] is not None,
             "non_recurrence_verified": cycle["verification"].get("status") == "verified_on_observable_state",
             "no_open_recurrence": cycle["phase"] in {"repair_verified", "cicatrized", "archived"},
@@ -518,7 +588,31 @@ class TeshuvahMixin:
                     "evidence_id": r["evidence_id"],
                     "held": r is c["return"] and c["phase"] in {"repair_verified", "cicatrized", "archived"},
                     "lesson": (c["lesson"] or {}).get("lesson") if r is c["return"] else None,
+                    "raised_sparks": [sp["content"] for sp in c["sparks"].values()
+                                      if r is c["return"] and sp["status"] == "raised"],
                 })
+        return out
+
+    def sparks(self, teshuvah_id):
+        return [copy.deepcopy(sp) for sp in self._cycle(teshuvah_id)["sparks"].values()]
+
+    def solitary_vessels(self):
+        """Vases du Tohou : claims actifs qui se tiennent seuls.
+
+        Un appui au plus, partagé avec aucun autre claim actif, et pas de parole
+        explicite de l'autre (user_stated). Signal de fragilité à examiner,
+        jamais un verdict de fausseté. Reconstruction analytique.
+        """
+        active = [c for c in self._teshuvah_state()["claims"].values() if c["status"] == "active"]
+        out = []
+        for c in active:
+            if c["provenance_kind"] == "user_stated" or len(c["facts"]) > 1:
+                continue
+            shared = any(set(c["facts"]) & set(o["facts"]) for o in active if o is not c)
+            if not shared:
+                out.append({"claim_id": c["claim_id"], "statement": c["statement"], "facts": list(c["facts"]),
+                            "provenance_kind": c["provenance_kind"],
+                            "status": "fragility_signal_not_falsity"})
         return out
 
     def redemption_index(self):

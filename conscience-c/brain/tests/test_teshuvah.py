@@ -236,5 +236,96 @@ class TeshuvahTests(unittest.TestCase):
         self.assertFalse(plan["automatic_replay_allowed"])
 
 
+class BrisureTests(unittest.TestCase):
+    """Shevirat ha-kelim : un claim brisé disperse des étincelles que la réparation relève."""
+
+    def make(self):
+        td = tempfile.TemporaryDirectory()
+        self.addCleanup(td.cleanup)
+        return ConscienceCBrain.load_or_bootstrap(Path(td.name))
+
+    def broken(self, b):
+        b.ingest_evidence(Evidence("E_detail", "demande détaillée sur l'architecture", EvidenceKind.ATTESTED_SOURCE,
+                                   source_ref="conversation:1"), CausalOrigin.OTHER)
+        claim = b.record_claim("L'utilisateur préfère toujours les réponses très détaillées.",
+                               "user_inferred", "dérivation", facts=["E_detail"])
+        tid = b.initiate_teshuvah("overgeneralization", "règle tirée d'un contexte", "correction de l'utilisateur",
+                                  claim_ids=[claim["claim_id"]])["teshuvah_id"]
+        b.name_sparks(tid, [
+            {"claim_id": claim["claim_id"], "content": "Pour l'architecture, le détail est voulu.",
+             "facts": ["E_detail"]},
+            {"claim_id": claim["claim_id"], "content": "Le système cherchait à servir la demande."},
+        ], "lecture de la brisure")
+        b.acknowledge_teshuvah(tid, "system", "x", "y", "surgénéralisation", "p")
+        b.propose_teshuvah_repair(tid, "contextualiser", "p")
+        return claim, tid
+
+    def correction(self, claim, raised):
+        return [{"claim_id": claim["claim_id"], "action": "supersede", "reason": "contexte",
+                 "replacement": {"statement": "Les préférences de détail dépendent du type de tâche.",
+                                 "provenance_kind": "user_stated", "provenance": "p"},
+                 "raised_sparks": raised}]
+
+    def test_no_spark_is_dropped_in_silence(self):
+        b = self.make()
+        claim, tid = self.broken(b)
+        n = b.state["n"]
+        with self.assertRaises(ValueError):
+            b.apply_teshuvah_repair(tid, self.correction(claim, [f"{tid}-SP01"]), "system", "p")
+        self.assertEqual(b.state["n"], n)
+        cycle = b.apply_teshuvah_repair(tid, self.correction(claim, [f"{tid}-SP01"]), "system", "p",
+                                        released_sparks={f"{tid}-SP02": "intention, pas une compréhension de l'autre"})
+        statuses = {sp["spark_id"]: sp["status"] for sp in cycle["sparks"].values()}
+        self.assertEqual(statuses, {f"{tid}-SP01": "raised", f"{tid}-SP02": "released"})
+        new_id = cycle["repair"]["applied"]["corrections"][0]["replacement_claim_id"]
+        self.assertEqual(b.claim(new_id)["raised_sparks"], [f"{tid}-SP01"])
+
+    def test_spark_cannot_be_raised_twice_or_into_a_retraction(self):
+        b = self.make()
+        claim, tid = self.broken(b)
+        with self.assertRaises(ValueError):
+            b.apply_teshuvah_repair(tid, self.correction(claim, [f"{tid}-SP01", f"{tid}-SP02"]), "system", "p",
+                                    released_sparks={f"{tid}-SP02": "r"})
+        with self.assertRaises(ValueError):
+            b.apply_teshuvah_repair(tid, [{"claim_id": claim["claim_id"], "action": "retract", "reason": "r",
+                                           "raised_sparks": [f"{tid}-SP01"]}], "system", "p")
+
+    def test_spark_cites_only_facts_of_its_broken_claim(self):
+        b = self.make()
+        claim, tid = self.broken(b)
+        b.ingest_evidence(Evidence("E_other", "autre", EvidenceKind.ATTESTED_SOURCE, source_ref="x"))
+        with self.assertRaises(ValueError):
+            b.name_sparks(tid, [{"claim_id": claim["claim_id"], "content": "c", "facts": ["E_other"]}], "p")
+
+    def test_return_memory_keeps_the_raised_sparks(self):
+        b = self.make()
+        claim, tid = self.broken(b)
+        b.create_safeguard(tid, "confirmer les préférences stables", "TC-118", "p")
+        b.apply_teshuvah_repair(tid, self.correction(claim, [f"{tid}-SP01"]), "system", "p",
+                                released_sparks={f"{tid}-SP02": "r"})
+        b.ingest_evidence(Evidence("E_ret", "retour", EvidenceKind.ATTESTED_SOURCE, source_ref="c:2"), CausalOrigin.OTHER)
+        b.observe_return(tid, "E_ret", ["dialogue"], "p")
+        b.ingest_evidence(Evidence("E_hold", "tenue", EvidenceKind.ATTESTED_SOURCE, source_ref="c:3"), CausalOrigin.OTHER)
+        b.verify_non_recurrence(tid, "E_hold", "mik", "p")
+        self.assertTrue(b.teshuvah_closure_status(tid)["checks"]["sparks_accounted"])
+        self.assertEqual(b.return_memory()[0]["raised_sparks"], ["Pour l'architecture, le détail est voulu."])
+        cycle = b.record_teshuvah_recurrence(tid, "récidive", "p")
+        self.assertTrue(all(sp["status"] == "scattered" for sp in cycle["sparks"].values()))
+        self.assertFalse(b.teshuvah_closure_status(tid)["checks"]["sparks_accounted"])
+
+    def test_solitary_vessels_are_flagged_not_judged(self):
+        b = self.make()
+        b.ingest_evidence(Evidence("E1", "a", EvidenceKind.ATTESTED_SOURCE, source_ref="x"))
+        b.ingest_evidence(Evidence("E2", "b", EvidenceKind.ATTESTED_SOURCE, source_ref="y"))
+        alone = b.record_claim("seul", "system_hypothesis", "p", facts=["E1"])
+        b.record_claim("lié 1", "user_inferred", "p", facts=["E2"])
+        b.record_claim("lié 2", "user_inferred", "p", facts=["E2"])
+        b.record_claim("dit par l'autre", "user_stated", "p")
+        flagged = b.solitary_vessels()
+        self.assertEqual([v["claim_id"] for v in flagged], [alone["claim_id"]])
+        self.assertEqual(flagged[0]["status"], "fragility_signal_not_falsity")
+        self.assertEqual(b.claim(alone["claim_id"])["status"], "active")
+
+
 if __name__ == "__main__":
     unittest.main()
