@@ -15,10 +15,11 @@ from ._state_model import ACTIVE_ANCHOR, _now, _stable_hash
 from .ledger import AppendOnlyLedger
 from .models import CandidateAction, CausalOrigin, Evidence, EvidenceKind
 from .revalidation import RevalidationMixin
+from .teshuvah import TeshuvahMixin
 from .transition_store import TransitionStore, RecoveryRequired, atomic_write, snapshot_bytes, digest
 
 
-class ConscienceCBrain(RevalidationMixin, _StateModel):
+class ConscienceCBrain(TeshuvahMixin, RevalidationMixin, _StateModel):
     def __init__(self, root: Path):
         self.root = Path(root)
         self.state_path = self.root / "state.json"
