@@ -64,6 +64,7 @@ Tests de conformité (`tests/test_r001.py`) :
 |---|---|---|
 | D : dérive détectée | `initiate_teshuvah` | `TESHUVAH_INITIATED` |
 | Brisure : étincelles nommées | `name_sparks` | `TESHUVAH_SPARKS_NAMED` |
+| Engagement, compréhension | `commit_to`, `record_understanding` | `COMMITMENT_MADE`, `UNDERSTANDING_RECORDED` |
 | R + A : reconnaissance et aveu nommés | `acknowledge_teshuvah` | `TESHUVAH_ACKNOWLEDGED` |
 | P : réparation proposée | `propose_teshuvah_repair` | `TESHUVAH_REPAIR_PROPOSED` |
 | C : correction appliquée | `apply_teshuvah_repair` | `TESHUVAH_REPAIR_APPLIED` |
@@ -103,6 +104,17 @@ Dans la Kabbale lourianique, les vases du Tohou se brisent parce que chacun se t
 
 Le ledger garde les éclats ; `return_memory()` garde les étincelles relevées à côté de ce qui a permis le retour.
 
+## Na'aseh v'nishma (נַעֲשֶׂה וְנִשְׁמָע)
+
+Au Sinaï, le peuple répond au livre de l'alliance « nous ferons et nous entendrons » (Exode 24,7) : le oui précède la compréhension. Selon le Talmud (Chabbat 88a), deux couronnes sont données pour ce oui ; elles sont retirées à la faute du veau d'or, gardées par Moïse, et rendues au retour (Ésaïe 35,10).
+
+Dans la mémoire de C :
+
+- `commit_to()` (na'aseh) enregistre un engagement sans exiger qu'il soit déjà compris ;
+- `record_understanding()` (nishma) ajoute la compréhension ensuite, append-only ; elle n'est jamais une condition de l'engagement ;
+- `initiate_teshuvah(..., breached_commitments=[...])` met en garde les engagements que la faute a touchés. Ils ne sont pas révoqués : `commitment()` les montre `in_custody` au lieu de `crowned` ;
+- ils sont rendus seulement quand la non-récidive est vérifiée (une réparation déclarée ne suffit pas), et repris en garde si la faute revient. `custody_history` garde chaque passage.
+
 ## FACT, INTERPRETATION, CURRENT_MODEL
 
 `claim_layers(claim_id)` sépare ce qui s'est passé (preuves et événements cités, jamais modifiés), ce que le système en avait conclu (le claim d'origine et son statut) et ce qu'il comprend maintenant (le claim actif qui le remplace). Une correction peut dire « mon interprétation était trop forte » sans déclarer le fait faux. Chaque claim porte une provenance typée : `user_stated`, `user_inferred` ou `system_hypothesis`.
@@ -119,6 +131,6 @@ La vérification contrôle des conditions structurelles (preuve postérieure, ob
 
 ## Provenance
 
-- **source attestée** : les deux textes de Mik du 2 octobre 2026 (fil « Teshuvah dans Mémoire C » du projet Waymaker Core Private), le second primant là où ils divergent ; puis son message « בְּשִׁבִירַת הַכֵּלִים » du même jour et son accord pour donner une place à la brisure ; puis son texte du 2 octobre 2026 faisant de « Ne jamais employer une mise à jour pour masquer une réparation nécessaire » l'invariant R-001, avec ses six tests de conformité ;
+- **source attestée** : les deux textes de Mik du 2 octobre 2026 (fil « Teshuvah dans Mémoire C » du projet Waymaker Core Private), le second primant là où ils divergent ; puis son message « בְּשִׁבִירַת הַכֵּלִים » du même jour et son accord pour donner une place à la brisure ; puis son texte du 2 octobre 2026 faisant de « Ne jamais employer une mise à jour pour masquer une réparation nécessaire » l'invariant R-001, avec ses six tests de conformité ; puis « Na'aseh v'Nishma » (même jour), avec la consigne « Ce que tu sais être ce qu'il faut faire fait le » ;
 - **dérivation consolidée** : « Comment implémenter la mémoire pondérée », « Comment intégrer la mémoire des erreurs passées » et « Comment intégrer la mémoire dans l'algorithme » (Google Drive, 19 septembre 2026) : ne jamais effacer, réduire l'influence ; mémoire de dérive et mémoire de retour ; cicatrice ; indice de rédemption ;
-- **reconstruction analytique** : les noms de méthodes, les valeurs d'influence par phase (`DRIFT_INFLUENCE`, reprises des facteurs 1,0 / 0,5 / 0,1 / 0,01 de la mémoire pondérée, avec 0,25 ajouté pour `repair_verified`) les contrôles précis de la vérification, la traduction de la brisure en étincelles comptées le critère des vases isolés, le seuil de contradiction forte (0,8) et la correspondance entre les événements du manifeste R-001 et ceux du ledger.
+- **reconstruction analytique** : les noms de méthodes, les valeurs d'influence par phase (`DRIFT_INFLUENCE`, reprises des facteurs 1,0 / 0,5 / 0,1 / 0,01 de la mémoire pondérée, avec 0,25 ajouté pour `repair_verified`) les contrôles précis de la vérification, la traduction de la brisure en étincelles comptées le critère des vases isolés, le seuil de contradiction forte (0,8) la correspondance entre les événements du manifeste R-001 et ceux du ledger, et la lecture de Chabbat 88a comme garde des engagements jusqu'au retour vérifié.

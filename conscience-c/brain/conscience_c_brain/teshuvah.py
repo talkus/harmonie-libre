@@ -26,6 +26,14 @@ explicitement laissée, avec sa raison. Aucune correction ne jette une étincell
 en silence. Les vases qui se tiennent seuls (un seul appui, partagé avec aucun
 autre claim, sans parole de l'autre) sont signalés comme fragiles avant de se
 briser.
+
+Na'aseh v'nishma (נַעֲשֶׂה וְנִשְׁמָע, Exode 24,7), « nous ferons et nous
+entendrons » : un engagement se prend avant d'être compris, et la compréhension
+s'y ajoute ensuite sans jamais en devenir la condition. Selon Chabbat 88a, les
+deux couronnes reçues pour ce oui sont retirées à la faute du veau d'or, gardées
+par Moïse et rendues au retour. Ici, une teshuvah qui touche un engagement ne le
+révoque pas : elle le met en garde. Il est rendu lorsque la non-récidive est
+vérifiée, et repris en garde si la faute revient.
 """
 from __future__ import annotations
 
@@ -69,6 +77,8 @@ _EVENT_TYPES = {
     "TESHUVAH_CICATRIZED": "documentary_only",
     "TESHUVAH_ARCHIVED": "documentary_only",
     "TESHUVAH_CLOSED": "documentary_only",
+    "COMMITMENT_MADE": "documentary_only",
+    "UNDERSTANDING_RECORDED": "documentary_only",
 }
 
 # INVARIANT R-001 : ne jamais employer une mise à jour pour masquer une
@@ -119,7 +129,9 @@ class TeshuvahMixin:
     # ------------------------------------------------------------------ état
 
     def _teshuvah_state(self):
-        return self.state.setdefault("teshuvah", {"claims": {}, "cycles": {}, "safeguards": {}})
+        ts = self.state.setdefault("teshuvah", {"claims": {}, "cycles": {}, "safeguards": {}})
+        ts.setdefault("commitments", {})
+        return ts
 
     def _cycle(self, teshuvah_id):
         cycle = self._teshuvah_state()["cycles"].get(teshuvah_id)
@@ -314,16 +326,76 @@ class TeshuvahMixin:
                     violations.append({"claim_id": c["claim_id"], "transition": h})
         return {"invariant": "R-001", "violations": violations, "ok": not violations}
 
+    # ------------------------------------------------- na'aseh v'nishma
+
+    def commit_to(self, commitment, provenance):
+        """Na'aseh : s'engager sans attendre d'avoir tout compris."""
+        ts = self._teshuvah_state()
+        cid = f"CM{len(ts['commitments']) + 1:04d}"
+        record = {"commitment_id": cid, "commitment": _text(commitment, "commitment"),
+                  "provenance": _text(provenance, "provenance"), "understandings": [],
+                  "custody": [], "custody_history": []}
+        ts["commitments"][cid] = record
+        result = copy.deepcopy(record)
+        event = self._commit("COMMITMENT_MADE", {"commitment": record,
+                             "principle": "na'aseh precedes nishma; understanding is never a precondition"},
+                             CausalOrigin.SELF)
+        return {**result, "event_hash": event["event_hash"]}
+
+    def record_understanding(self, commitment_id, understanding, provenance):
+        """Nishma : la compréhension s'ajoute à l'engagement, append-only."""
+        record = self._teshuvah_state()["commitments"].get(commitment_id)
+        if record is None:
+            raise ValueError(f"unknown commitment_id: {commitment_id}")
+        entry = {"understanding": _text(understanding, "understanding"), "provenance": _text(provenance, "provenance")}
+        record["understandings"].append(entry)
+        result = copy.deepcopy(record)
+        event = self._commit("UNDERSTANDING_RECORDED", {"commitment_id": commitment_id, "understanding": entry},
+                             CausalOrigin.SELF)
+        return {**result, "event_hash": event["event_hash"]}
+
+    def commitment(self, commitment_id):
+        record = self._teshuvah_state()["commitments"].get(commitment_id)
+        if record is None:
+            return None
+        out = copy.deepcopy(record)
+        out["standing"] = "in_custody" if record["custody"] else "crowned"
+        out["understood"] = bool(record["understandings"])
+        return out
+
+    def _take_into_custody(self, cycle, label):
+        for cid in cycle.get("breached_commitments", []):
+            record = self._teshuvah_state()["commitments"][cid]
+            if cycle["teshuvah_id"] not in record["custody"]:
+                record["custody"].append(cycle["teshuvah_id"])
+                record["custody_history"].append({"teshuvah_id": cycle["teshuvah_id"], "to": "in_custody", "by": label})
+
+    def _restore_from_custody(self, cycle, label):
+        for cid in cycle.get("breached_commitments", []):
+            record = self._teshuvah_state()["commitments"][cid]
+            if cycle["teshuvah_id"] in record["custody"]:
+                record["custody"].remove(cycle["teshuvah_id"])
+                record["custody_history"].append({"teshuvah_id": cycle["teshuvah_id"], "to": "restored", "by": label})
+
     # ----------------------------------------------------------------- cycle
 
-    def initiate_teshuvah(self, drift_kind, description, provenance, claim_ids=(), drift_events=()):
-        """D : la dérive est détectée. Les claims visés deviennent contested ; rien n'est effacé."""
+    def initiate_teshuvah(self, drift_kind, description, provenance, claim_ids=(), drift_events=(),
+                          breached_commitments=()):
+        """D : la dérive est détectée. Les claims visés deviennent contested ; rien n'est effacé.
+
+        breached_commitments : engagements que la faute a touchés. Ils sont mis
+        en garde, jamais révoqués, et rendus à la non-récidive vérifiée.
+        """
         _text(drift_kind, "drift_kind")
         _text(description, "description")
         _text(provenance, "provenance")
         claim_ids, drift_events = list(claim_ids), list(drift_events)
-        if not claim_ids and not drift_events:
-            raise ValueError("a teshuvah must name the claims or events it concerns")
+        breached = list(breached_commitments)
+        for cmid in breached:
+            if cmid not in self._teshuvah_state()["commitments"]:
+                raise ValueError(f"unknown commitment_id: {cmid}")
+        if not claim_ids and not drift_events and not breached:
+            raise ValueError("a teshuvah must name the claims, events or commitments it concerns")
         ts = self._teshuvah_state()
         for cid in claim_ids:
             if cid not in ts["claims"]:
@@ -351,11 +423,14 @@ class TeshuvahMixin:
             "recurrences": [],
             "lesson": None,
             "closed": False,
+            "breached_commitments": breached,
         }
         ts["cycles"][teshuvah_id] = cycle
+        self._take_into_custody(cycle, "breach")
         for cid in claim_ids:
             self._set_claim_status(cid, "contested", teshuvah_id, description)
-        return self._commit_cycle("TESHUVAH_INITIATED", cycle, {"origin": cycle["origin"]})
+        return self._commit_cycle("TESHUVAH_INITIATED", cycle, {"origin": cycle["origin"],
+                                                                "commitments_in_custody": breached})
 
     def name_sparks(self, teshuvah_id, sparks, provenance):
         """Brisure : nommer ce qui restait vrai dans les claims brisés.
@@ -606,6 +681,7 @@ class TeshuvahMixin:
         }
         cycle["verification"] = verification
         self._set_phase(cycle, "repair_verified", "non_recurrence_verified")
+        self._restore_from_custody(cycle, "verified_return")
         return self._commit_cycle("TESHUVAH_NON_RECURRENCE_VERIFIED", cycle, {"verification": verification})
 
     def record_teshuvah_recurrence(self, teshuvah_id, description, provenance, evidence_id=None):
@@ -637,6 +713,7 @@ class TeshuvahMixin:
                 spark.pop("raised_into", None)
                 spark.pop("release_reason", None)
         self._set_phase(cycle, "under_repair", "recurrence_detected")
+        self._take_into_custody(cycle, "recurrence")
         return self._commit_cycle("TESHUVAH_RECURRENCE_DETECTED", cycle, {
             "recurrence": rec,
             "principle": "recurrence is information about durability; prior return and verification stay in history",
