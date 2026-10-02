@@ -55,6 +55,8 @@ DRIFT_INFLUENCE = {
 
 _EVENT_TYPES = {
     "RECORD_CLAIM": "documentary_only",
+    "STATE_UPDATED": "requires_current_canon_check",
+    "TESHUVAH_NOTIFICATION_RECORDED": "requires_external_reverification",
     "TESHUVAH_INITIATED": "documentary_only",
     "TESHUVAH_SPARKS_NAMED": "documentary_only",
     "TESHUVAH_ACKNOWLEDGED": "documentary_only",
@@ -68,6 +70,35 @@ _EVENT_TYPES = {
     "TESHUVAH_ARCHIVED": "documentary_only",
     "TESHUVAH_CLOSED": "documentary_only",
 }
+
+# INVARIANT R-001 : ne jamais employer une mise à jour pour masquer une
+# réparation nécessaire. Une mise à jour répond au changement ; une réparation
+# répond à la rupture. Toute raison inconnue penche vers la réparation.
+UPDATE_REASONS = ("new_information", "context_shift", "preference_change", "version_upgrade")
+REPAIR_REASONS = ("error", "contradiction", "provenance_failure", "reality_mismatch",
+                  "privacy_violation", "misattribution", "relationship_harm", "trust_breach")
+# Atteintes possibles à O : la reconnaissance doit évaluer s'il faut en informer
+# la personne, et rien n'est envoyé sans son consentement ou un mandat.
+NOTIFY_ASSESSMENT_KINDS = {"misattribution", "privacy_violation", "relationship_harm", "trust_breach"}
+GOVERNANCE_INVARIANTS = {
+    "R-001": ("Aucune projection de l'état actif C(t) ne peut retirer, déclasser ou remplacer une "
+              "assertion antérieure lorsqu'un dommage, une erreur de provenance, une contradiction forte, "
+              "une déformation du réel ou une atteinte relationnelle a été détectée, sans événement de "
+              "réparation lié explicitement à la trace concernée."),
+}
+STRONG_CONTRADICTION = 0.8
+
+
+class R001Violation(ValueError):
+    """Une mise à jour tenterait de masquer une réparation nécessaire."""
+
+
+def route_change(reason, harm_detected=False):
+    """update si Δ de pertinence sans dommage identifié ; repair sinon, y compris dans le doute."""
+    if reason in UPDATE_REASONS and not harm_detected:
+        return "update"
+    return "repair"
+
 
 _OBSERVABLE_KINDS = {EvidenceKind.ATTESTED_SOURCE.value, EvidenceKind.CONSOLIDATED_DERIVATION.value}
 
@@ -142,7 +173,7 @@ class TeshuvahMixin:
 
     # ---------------------------------------------------------------- claims
 
-    def record_claim(self, statement, provenance_kind, provenance, facts=(), confidence=None, replaces=None):
+    def record_claim(self, statement, provenance_kind, provenance, facts=(), confidence=None):
         """Enregistre une INTERPRETATION fondée sur des FACTS (preuves ou événements)."""
         _text(statement, "statement")
         _text(provenance, "provenance")
@@ -167,7 +198,7 @@ class TeshuvahMixin:
             "confidence": confidence,
             "status": "active",
             "status_history": [],
-            "replaces": replaces,
+            "replaces": None,
             "replaced_by": None,
         }
         ts["claims"][claim_id] = claim
@@ -207,6 +238,81 @@ class TeshuvahMixin:
                 "claim_id": current["claim_id"], "statement": current["statement"]},
             "principle": "a correction may change the interpretation without declaring the fact false",
         }
+
+    def _open_cycles_for(self, claim_id):
+        return [c["teshuvah_id"] for c in self._teshuvah_state()["cycles"].values()
+                if claim_id in c["origin"]["claim_ids"] and not c["closed"]
+                and c["phase"] not in {"repair_verified", "cicatrized", "archived"}]
+
+    def update_claim(self, claim_id, statement, reason, provenance, provenance_kind,
+                     harm_detected=False, facts=None):
+        """UPDATE : remplacer un claim actif pour une raison qui n'est pas une rupture.
+
+        R-001 : une erreur, une contradiction, une provenance défaillante, une
+        déformation du réel, une atteinte à O ou une rupture de confiance (ou
+        toute raison inconnue, ou un dommage signalé) n'est pas une mise à jour.
+        Elle exige une teshuvah (initiate_teshuvah) liée à la trace concernée.
+        """
+        _text(statement, "statement")
+        _text(provenance, "provenance")
+        if provenance_kind not in CLAIM_PROVENANCE:
+            raise ValueError(f"provenance_kind must be one of {CLAIM_PROVENANCE}")
+        ts = self._teshuvah_state()
+        old = ts["claims"].get(claim_id)
+        if old is None:
+            raise ValueError(f"unknown claim_id: {claim_id}")
+        if route_change(reason, harm_detected) == "repair":
+            raise R001Violation(
+                f"R-001: reason {reason!r}{' with harm detected' if harm_detected else ''} requires a repair, "
+                f"not an update; open a teshuvah on {claim_id} (initiate_teshuvah)")
+        if old["status"] != "active" or self._open_cycles_for(claim_id):
+            raise R001Violation(f"R-001: {claim_id} is {old['status']} or under an open teshuvah; "
+                                "no silent substitution while a repair is pending")
+        facts = list(old["facts"] if facts is None else facts)
+        known_events = {row["event_hash"] for row in self.ledger.read_verified()}
+        for ref in facts:
+            if ref not in self.state["E"]["evidence"] and ref not in known_events:
+                raise ValueError(f"fact reference is neither recorded evidence nor a ledger event: {ref}")
+        new_id = f"CL{len(ts['claims']) + 1:04d}"
+        ts["claims"][new_id] = {
+            "claim_id": new_id, "layer": "interpretation", "statement": statement, "facts": facts,
+            "provenance_kind": provenance_kind, "provenance": provenance, "confidence": None,
+            "status": "active", "status_history": [], "replaces": claim_id, "replaced_by": None,
+            "created_by_update": reason,
+        }
+        old["replaced_by"] = new_id
+        self._set_claim_status(claim_id, "superseded", f"update:{reason}", "relevance changed; no harm identified")
+        result = copy.deepcopy(ts["claims"][new_id])
+        event = self._commit("STATE_UPDATED", {
+            "route": "update", "reason": reason, "superseded_claim_id": claim_id,
+            "new_claim": ts["claims"][new_id], "provenance": provenance, "invariant": "R-001",
+        }, CausalOrigin.MIXED)
+        return {**result, "event_hash": event["event_hash"]}
+
+    def ingest_evidence(self, evidence, origin=CausalOrigin.REALITY):
+        """R-001 : une contradiction forte d'un claim actif le gèle en contested."""
+        super().ingest_evidence(evidence, origin)
+        claims = self._teshuvah_state()["claims"]
+        target = claims.get(evidence.claim_ref) if evidence.claim_ref else None
+        if (target is not None and target["status"] == "active" and evidence.stance == "contradicts"
+                and evidence.kind == EvidenceKind.ATTESTED_SOURCE and evidence.confidence >= STRONG_CONTRADICTION):
+            self.initiate_teshuvah("contradiction", f"Contradiction forte par {evidence.evidence_id}.",
+                                   f"evidence:{evidence.evidence_id}", claim_ids=[target["claim_id"]],
+                                   drift_events=[self.ledger.head()])
+
+    def governance_audit(self):
+        """R-001 : tout claim retiré ou déclassé l'a été par une mise à jour légitime ou une teshuvah."""
+        cycles = self._teshuvah_state()["cycles"]
+        violations = []
+        for c in self._teshuvah_state()["claims"].values():
+            for h in c["status_history"]:
+                by = h["by"]
+                if by.startswith("update:"):
+                    if by.split(":", 1)[1] not in UPDATE_REASONS:
+                        violations.append({"claim_id": c["claim_id"], "transition": h})
+                elif by not in cycles:
+                    violations.append({"claim_id": c["claim_id"], "transition": h})
+        return {"invariant": "R-001", "violations": violations, "ok": not violations}
 
     # ----------------------------------------------------------------- cycle
 
@@ -280,17 +386,32 @@ class TeshuvahMixin:
             named.append(spark)
         return self._commit_cycle("TESHUVAH_SPARKS_NAMED", cycle, {"sparks": named})
 
-    def acknowledge_teshuvah(self, teshuvah_id, responsible_actor, what_went_wrong, impact, drift_cause, provenance):
-        """R + A : nommer l'écart dans une trace structurée, pas recalculer en silence."""
+    def acknowledge_teshuvah(self, teshuvah_id, responsible_actor, what_went_wrong, impact, drift_cause, provenance,
+                             affected_parties=(), affected_outputs=(), notification_required=None):
+        """R + A (repair.assessed) : nommer l'écart, sa cause et ce qu'il a touché.
+
+        Pour une atteinte possible à O (attribution erronée, vie privée, tort
+        relationnel, confiance), notification_required doit être évalué
+        explicitement (True ou False) ; le système ne notifie jamais lui-même.
+        """
         cycle = self._cycle(teshuvah_id)
         self._require_phase(cycle, "contested")
+        if cycle["origin"]["drift_kind"] in NOTIFY_ASSESSMENT_KINDS and notification_required is None:
+            raise ValueError("this drift may affect O: notification_required must be assessed explicitly")
+        if notification_required is not None and not isinstance(notification_required, bool):
+            raise ValueError("notification_required must be True, False or None")
         ack = {
             "responsible_actor": _text(responsible_actor, "responsible_actor"),
             "what_went_wrong": _text(what_went_wrong, "what_went_wrong"),
             "impact": _text(impact, "impact"),
             "drift_cause": _text(drift_cause, "drift_cause"),
             "provenance": _text(provenance, "provenance"),
+            "affected_parties": [_text(x, "affected_parties") for x in affected_parties],
+            "affected_outputs": [_text(x, "affected_outputs") for x in affected_outputs],
+            "notification_required": notification_required,
         }
+        if notification_required:
+            cycle["notification"] = {"status": "required", "history": []}
         cycle["acknowledgment"] = ack
         self._set_phase(cycle, "under_repair", "acknowledged")
         for cid in cycle["origin"]["claim_ids"]:
@@ -394,6 +515,25 @@ class TeshuvahMixin:
                            for e in applied if "replacement_claim_id" in e},
             "principle": "earlier claims and their facts stay in history; only the active interpretation changes",
         })
+
+    def record_notification(self, teshuvah_id, status, consent_ref, provenance):
+        """Notification à O : enregistrée, jamais envoyée par le système.
+
+        status : "sent" (par une personne mandatée) ou "waived" (la personne
+        concernée y renonce). Les deux exigent une référence de consentement ou
+        de mandat.
+        """
+        cycle = self._cycle(teshuvah_id)
+        note = cycle.get("notification")
+        if not note or note["status"] != "required":
+            raise ValueError("no pending notification for this teshuvah")
+        if status not in {"sent", "waived"}:
+            raise ValueError("notification status must be sent or waived")
+        record = {"status": status, "consent_ref": _text(consent_ref, "consent_ref"),
+                  "provenance": _text(provenance, "provenance"), "sent_by_system": False}
+        note["history"].append(record)
+        note["status"] = status
+        return self._commit_cycle("TESHUVAH_NOTIFICATION_RECORDED", cycle, {"notification": record})
 
     def create_safeguard(self, teshuvah_id, rule, test_case, provenance):
         """S : une règle ou un test qui empêche la répétition."""
@@ -535,8 +675,11 @@ class TeshuvahMixin:
             "return_observed": cycle["return"] is not None,
             "non_recurrence_verified": cycle["verification"].get("status") == "verified_on_observable_state",
             "no_open_recurrence": cycle["phase"] in {"repair_verified", "cicatrized", "archived"},
+            "notification_resolved": cycle.get("notification", {}).get("status", "not_required") != "required",
         }
-        return {"teshuvah_id": teshuvah_id, "checks": checks, "closable": all(checks.values())}
+        closable = all(checks.values())
+        return {"teshuvah_id": teshuvah_id, "checks": checks, "closable": closable,
+                "status": "closable" if closable else "repair_incomplete"}
 
     def close_teshuvah(self, teshuvah_id, provenance):
         _text(provenance, "provenance")

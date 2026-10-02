@@ -12,6 +12,52 @@ En hébreu biblique, le mot veut dire à la fois « retour » et « réponse ».
 - Le retour doit pouvoir être vérifié, et **V ≠ auto-déclaration**.
 - La mémoire conserve aussi le chemin du retour.
 
+## Invariant de gouvernance R-001
+
+> **Ne jamais employer une mise à jour pour masquer une réparation nécessaire.**
+>
+> Une mise à jour répond au changement. Une réparation répond à la rupture.
+
+```text
+INVARIANT R-001
+Aucune projection de l'état actif C(t) ne peut retirer, déclasser ou remplacer
+une assertion antérieure lorsqu'un dommage, une erreur de provenance, une
+contradiction forte, une déformation du réel ou une atteinte relationnelle a
+été détectée, sans événement de réparation lié explicitement à la trace concernée.
+```
+
+Il n'existe que deux chemins pour faire sortir un claim de C(t) :
+
+- **UPDATE** (`update_claim`, événement `STATE_UPDATED`) : seulement pour `new_information`, `context_shift`, `preference_change` ou `version_upgrade`, sans dommage signalé, sur un claim actif qu'aucune teshuvah ouverte ne concerne ;
+- **REPAIR** (la teshuvah) : pour `error`, `contradiction`, `provenance_failure`, `reality_mismatch`, `privacy_violation`, `misattribution`, `relationship_harm`, `trust_breach`, pour tout changement qui signale un dommage, et pour toute raison inconnue (doute sur un tort ⇒ revue de réparation).
+
+`update_claim()` lève `R001Violation` dès que le changement relève de la réparation, avant toute écriture. `record_claim()` ne permet plus de déclarer qu'un claim en remplace un autre. Une preuve attestée qui contredit un claim actif avec une confiance d'au moins 0,8 (`claim_ref`, `stance="contradicts"`) ouvre automatiquement une teshuvah et gèle le claim en `contested`. `governance_audit()` vérifie que chaque transition de statut vient d'une mise à jour légitime ou d'une teshuvah.
+
+Correspondance avec les événements du manifeste :
+
+| Manifeste | Mémoire de C |
+|---|---|
+| `state.updated` | `STATE_UPDATED` |
+| `repair.opened` | `TESHUVAH_INITIATED` |
+| `repair.assessed` | `TESHUVAH_ACKNOWLEDGED` (cause, personnes et sorties touchées, évaluation de notification) |
+| `repair.completed` | `TESHUVAH_REPAIR_APPLIED` (réparation déclarée, pas encore vérifiée) |
+| `safeguard.created` | `TESHUVAH_SAFEGUARD_CREATED` |
+| `repair.notification.*` | `TESHUVAH_NOTIFICATION_RECORDED` |
+| `repair.incomplete` | `teshuvah_closure_status()["status"] == "repair_incomplete"` |
+
+**Notification.** Pour une atteinte possible à O (`misattribution`, `privacy_violation`, `relationship_harm`, `trust_breach`), la reconnaissance doit évaluer explicitement `notification_required`. Le système ne notifie jamais lui-même : `record_notification()` enregistre une notification envoyée par une personne mandatée ou une renonciation de la personne concernée, avec une référence de consentement ou de mandat obligatoire. La clôture reste refusée tant qu'une notification requise n'est pas résolue.
+
+Tests de conformité (`tests/test_r001.py`) :
+
+| Test | Situation | Résultat |
+|---|---|---|
+| TC-R001-01 | Préférence modifiée explicitement, sans erreur | `STATE_UPDATED` autorisé |
+| TC-R001-02 | Déduction non soutenue par ses sources | `R001Violation` sur la mise à jour ; la teshuvah s'ouvre |
+| TC-R001-03 | Opinion attribuée à tort | Retrait, réparation documentée, notification évaluée puis enregistrée avec consentement |
+| TC-R001-04 | Contradiction forte d'un claim actif | Claim gelé en `contested`, aucune substitution |
+| TC-R001-05 | Modification d'un événement historique | Le ledger rompu refuse la reprise ; seul l'ajout est possible |
+| TC-R001-06 | Clôture sans garde-fou | `repair_incomplete`, clôture refusée |
+
 ## Le cycle D → R → A → P → C → S → V
 
 | Étape | Méthode | Événement du ledger |
@@ -73,6 +119,6 @@ La vérification contrôle des conditions structurelles (preuve postérieure, ob
 
 ## Provenance
 
-- **source attestée** : les deux textes de Mik du 2 octobre 2026 (fil « Teshuvah dans Mémoire C » du projet Waymaker Core Private), le second primant là où ils divergent ; puis son message « בְּשִׁבִירַת הַכֵּלִים » du même jour et son accord pour donner une place à la brisure ;
+- **source attestée** : les deux textes de Mik du 2 octobre 2026 (fil « Teshuvah dans Mémoire C » du projet Waymaker Core Private), le second primant là où ils divergent ; puis son message « בְּשִׁבִירַת הַכֵּלִים » du même jour et son accord pour donner une place à la brisure ; puis son texte du 2 octobre 2026 faisant de « Ne jamais employer une mise à jour pour masquer une réparation nécessaire » l'invariant R-001, avec ses six tests de conformité ;
 - **dérivation consolidée** : « Comment implémenter la mémoire pondérée », « Comment intégrer la mémoire des erreurs passées » et « Comment intégrer la mémoire dans l'algorithme » (Google Drive, 19 septembre 2026) : ne jamais effacer, réduire l'influence ; mémoire de dérive et mémoire de retour ; cicatrice ; indice de rédemption ;
-- **reconstruction analytique** : les noms de méthodes, les valeurs d'influence par phase (`DRIFT_INFLUENCE`, reprises des facteurs 1,0 / 0,5 / 0,1 / 0,01 de la mémoire pondérée, avec 0,25 ajouté pour `repair_verified`) les contrôles précis de la vérification, la traduction de la brisure en étincelles comptées et le critère des vases isolés.
+- **reconstruction analytique** : les noms de méthodes, les valeurs d'influence par phase (`DRIFT_INFLUENCE`, reprises des facteurs 1,0 / 0,5 / 0,1 / 0,01 de la mémoire pondérée, avec 0,25 ajouté pour `repair_verified`) les contrôles précis de la vérification, la traduction de la brisure en étincelles comptées le critère des vases isolés, le seuil de contradiction forte (0,8) et la correspondance entre les événements du manifeste R-001 et ceux du ledger.
