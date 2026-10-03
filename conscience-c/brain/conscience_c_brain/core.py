@@ -16,10 +16,11 @@ from .ledger import AppendOnlyLedger
 from .models import CandidateAction, CausalOrigin, Evidence, EvidenceKind
 from .revalidation import RevalidationMixin
 from .teshuvah import TeshuvahMixin
+from .fleuve import FleuveMixin
 from .transition_store import TransitionStore, RecoveryRequired, atomic_write, snapshot_bytes, digest
 
 
-class ConscienceCBrain(TeshuvahMixin, RevalidationMixin, _StateModel):
+class ConscienceCBrain(FleuveMixin, TeshuvahMixin, RevalidationMixin, _StateModel):
     def __init__(self, root: Path):
         self.root = Path(root)
         self.state_path = self.root / "state.json"
