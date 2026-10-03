@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "portes-231"
+version = "0.1.0"
+description = "Les 231 Portes du Sefer Yetzirah comme opérateurs binaires non commutatifs"
+requires-python = ">=3.10"
+
+[project.scripts]
+portes-231 = "portes_231.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["portes_231*"]
