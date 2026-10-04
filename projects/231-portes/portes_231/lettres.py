@@ -39,6 +39,12 @@ class Lettre:
     statut_categorie = SOURCE_ATTESTEE
     statut_primitive = RECONSTRUCTION_ANALYTIQUE
 
+    @property
+    def opcode(self) -> int:
+        """Rang dans l'ordre par catégories (mères 0-2, doubles 3-9, simples 10-21),
+        celui de ``LetterOpCode`` dans le texte du 2026-10-04."""
+        return _OPCODE[self.glyphe]
+
     def etat(self, bit: int) -> str:
         if self.etats is None:
             raise ValueError(f"{self.nom} n'est pas une double : elle n'a pas d'état 0/1")
@@ -89,6 +95,10 @@ _PAR_NOM: dict[str, Lettre] = {l.nom.lower(): l for l in ALPHABET}
 MERES = tuple(l for l in ALPHABET if l.categorie is _M)
 DOUBLES = tuple(l for l in ALPHABET if l.categorie is _D)
 SIMPLES = tuple(l for l in ALPHABET if l.categorie is _S)
+
+# Seconde numérotation : par catégorie, puis dans l'ordre alphabétique.
+ORDRE_CATEGORIES: tuple[Lettre, ...] = MERES + DOUBLES + SIMPLES
+_OPCODE: dict[str, int] = {l.glyphe: i for i, l in enumerate(ORDRE_CATEGORIES)}
 
 
 def lettre(cle: str | Lettre) -> Lettre:
