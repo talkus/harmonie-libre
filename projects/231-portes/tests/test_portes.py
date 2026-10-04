@@ -39,6 +39,7 @@ class LettresSeferYetzirah(unittest.TestCase):
 
     def test_recherche_par_nom(self):
         self.assertIs(lettre("aleph"), LETTRES["א"])
+        self.assertIs(lettre("ם"), LETTRES["מ"])
         with self.assertRaises(KeyError):
             lettre("Omega")
 

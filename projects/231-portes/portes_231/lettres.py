@@ -101,10 +101,17 @@ ORDRE_CATEGORIES: tuple[Lettre, ...] = MERES + DOUBLES + SIMPLES
 _OPCODE: dict[str, int] = {l.glyphe: i for i, l in enumerate(ORDRE_CATEGORIES)}
 
 
+# Les formes finales (sofit) ne sont pas des lettres de plus : elles renvoient
+# à leur lettre (ך→כ, ם→מ, ן→נ, ף→פ, ץ→צ).
+SOFIT: dict[str, str] = {"ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ"}
+
+
 def lettre(cle: str | Lettre) -> Lettre:
-    """Retrouve une lettre par son glyphe (« א ») ou son nom (« Aleph »)."""
+    """Retrouve une lettre par son glyphe (« א », ou une forme finale comme « ם »)
+    ou par son nom (« Aleph »)."""
     if isinstance(cle, Lettre):
         return cle
+    cle = SOFIT.get(cle, cle)
     if cle in LETTRES:
         return LETTRES[cle]
     try:

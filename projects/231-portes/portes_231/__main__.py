@@ -2,6 +2,7 @@
   python -m portes_231            résumé et matrice des faces
   python -m portes_231 א מ        les deux lectures de la porte א–מ
   python -m portes_231 --nommes   les 52 opérateurs nommés dans le texte
+  python -m portes_231 --table    la table des 231 portes (Markdown)
 """
 
 from __future__ import annotations
@@ -27,6 +28,11 @@ def main(argv: list[str] | None = None) -> int:
         for op in OPERATEURS:
             if op.nommage:
                 print(op)
+        return 0
+    if args == ["--table"]:
+        from .table import markdown
+
+        sys.stdout.write(markdown())
         return 0
     if len(args) == 2:
         p = Porte.de(*args)

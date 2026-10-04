@@ -13,7 +13,17 @@ python -m unittest discover -s tests -v
 python -m portes_231            # résumé et matrice des faces
 python -m portes_231 א מ        # les deux lectures d'une porte
 python -m portes_231 --nommes   # les 52 opérateurs nommés
+python -m portes_231 --table    # la table des 231 portes
 ```
+
+Fichiers du dossier :
+
+- `lettres.py`, `portes.py`, `exemples.py` : les lettres, les portes et les opérateurs nommés (texte du 2 octobre).
+- `roue.py` : la Roue, avec rotation et réflexion (texte du 4 octobre).
+- `operations.py` : les cinq opérations de 2:2, de Haqaq à Tsaraf.
+- `axes.py` : les mères comme axes, les doubles comme opérateurs bistables.
+- [`TABLE_231.md`](TABLE_231.md) : la table des 231 portes, générée par le code.
+- [`COMPARAISON.md`](COMPARAISON.md) : la comparaison avec le Yi Jing, l'arbre des sefirot, Lulle et le code génétique.
 
 ```python
 from portes_231 import porte, Porte
@@ -35,6 +45,9 @@ tourner(porte("א", "ב"), 1)              # ב→ג : la roue avance d'un cran
 | 22 lettres ; 3 mères אמש, 7 doubles בגדכפרת, 12 simples הוזחטילנסעצק | Sefer Yetzirah 1:2, ch. 3 à 5 | `source_attestee` |
 | 231 portes, face et dos (ענג en haut, נגע en bas) | Sefer Yetzirah 2:4 (recension du Gra) | `source_attestee` |
 | Primitives (Unit, Stream, Container…), bits des doubles, règle 3×3, noms d'opérateurs | texte de mik, 2026-10-02 | `reconstruction_analytique` |
+| Les cinq opérations : graver, tailler, peser, permuter, combiner ; n pierres bâtissent n! maisons | Sefer Yetzirah 2:2 ; fin du ch. 4 | `source_attestee` |
+| Contenu de chaque opération, poids 3/2/1, mères comme axes, doubles comme opérateurs sur Z₂³, réflexion de la roue | relecture de mik, 2026-10-04, et conventions de ce module | `reconstruction_analytique` |
+| Valeurs de guématria | tradition juive, hors Sefer Yetzirah | `derivation_consolidee` |
 | Roue tournant en avant et en arrière (גלגל חוזר פנים ואחור) | Sefer Yetzirah 2:4 | `source_attestee` |
 | Graphe K₂₂, matrice d'adjacence, rotation modulaire, numérotation par catégories, rôles système (mères = contrôle global, simples = routage) | texte de mik, 2026-10-04 | `reconstruction_analytique` |
 | Rotation de la roue comme « VRF ou rotation de clés de chiffrement » | texte de mik, 2026-10-04 | `indetermine` ; non codé |
@@ -128,3 +141,46 @@ Les deux textes donnent aux lettres des rôles différents. Le premier dit
 mères = types (Unit, Stream, Transform). Le second dit mères = contrôle
 global, simples = routage. Ce sont deux reconstructions. Le code garde les
 primitives du premier texte, et ce tableau garde la trace du second.
+
+## Les cinq opérations, les axes et la table (relecture du 4 octobre)
+
+**Les cinq opérations** (Sefer Yetzirah 2:2) sont des fonctions distinctes
+dans `operations.py` :
+
+- `haqaq()` grave l'alphabet ordonné.
+- `hatsav()` taille un ensemble de lettres en mères, doubles et simples.
+- `shaqal()` pèse une lettre. Il y a deux balances : par catégorie (mère 3,
+  double 2, simple 1, comme mik le propose), ou en guématria. La guématria est
+  traditionnelle, mais le Sefer Yetzirah ne la donne pas.
+- `hamir()` donne toutes les permutations d'un groupe de lettres.
+  `maisons(n) = n!` reprend le décompte que le texte donne lui-même à la fin du
+  chapitre 4 (« deux pierres bâtissent deux maisons… sept en bâtissent 5040 »).
+- `tsaraf()` combine deux lettres en une porte. Sans argument, il rend les 231
+  portes.
+
+**Les mères comme axes, les doubles comme opérateurs bistables** (`axes.py`).
+Trois axes binaires ont exactement 2³ − 1 = 7 parties non vides. Chaque double
+reçoit une partie distincte : ב agit sur א, ג sur מ, ד sur א et מ, et ainsi de
+suite jusqu'à ת qui agit sur les trois. En dagesh, la double bascule ses axes.
+En raphe, elle les laisse. Sur Z₂, l'appliquer deux fois revient au départ :
+c'est ce qui la rend bistable. Les 7 doubles et l'identité forment le groupe
+Z₂³. L'espace Z₃³ que mik propose est disponible (`Etat(modulo=3)`). Il y faut
+trois applications pour revenir au départ, donc la double n'y est plus
+bistable. Le Sefer Yetzirah ne dit pas quelle double agit sur quelle mère :
+l'attribution suit l'ordre des doubles et le comptage binaire, et c'est une
+convention.
+
+**La réflexion** (`refleter()`) complète la rotation. Les deux ensemble
+engendrent le groupe diédral D₂₂ que mik propose.
+
+**Deux points de la relecture ne sont pas repris tels quels.** Les fonctions
+`rotate()` et `reflect()` de la relecture ramènent encore chaque paire à (min, max). Elles
+rendent donc toujours les mêmes 231 portes et effacent l'avant et l'arrière.
+`tourner()` et `refleter()` gardent l'ordre des lettres de chaque opérateur.
+Quant à la polarité face/dos propre à chaque lettre, attribuée à
+Abulafia, elle n'est pas codée sans source à citer : les portes ont déjà une
+face et un dos.
+
+**La table des 231 portes** est dans [`TABLE_231.md`](TABLE_231.md). Elle donne
+pour chaque porte les noms des deux lettres, leurs catégories, et les lectures
+face et dos. Un test vérifie que le fichier correspond toujours au code.

@@ -73,6 +73,21 @@ def tourner(objet, crans, ordre=Ordre.ALPHABETIQUE):
     raise TypeError(f"on tourne une lettre, un opérateur ou une porte, pas {type(objet).__name__}")
 
 
+def refleter(objet, ordre=Ordre.ALPHABETIQUE):
+    """Retourne la roue comme un miroir : la position p devient −p (mod 22).
+
+    Avec ``tourner``, cette réflexion engendre le groupe diédral D₂₂ que mik
+    propose (2026-10-04). Un opérateur garde l'ordre de ses deux lettres.
+    """
+    if isinstance(objet, Lettre):
+        return cercle(ordre)[-position(objet, ordre) % TAILLE]
+    if isinstance(objet, Operateur):
+        return Operateur(refleter(objet.x, ordre), refleter(objet.y, ordre))
+    if isinstance(objet, Porte):
+        return Porte.de(refleter(objet.a, ordre), refleter(objet.b, ordre))
+    raise TypeError(f"on reflète une lettre, un opérateur ou une porte, pas {type(objet).__name__}")
+
+
 def distance(p: Porte, ordre: Ordre = Ordre.ALPHABETIQUE) -> int:
     """Écart entre les deux lettres d'une porte sur le cercle : de 1 à 11."""
     d = abs(position(p.a, ordre) - position(p.b, ordre))
