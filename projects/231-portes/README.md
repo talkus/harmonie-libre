@@ -22,7 +22,11 @@ Fichiers du dossier :
 - `roue.py` : la Roue, avec rotation et réflexion (texte du 4 octobre).
 - `operations.py` : les cinq opérations de 2:2, de Haqaq à Tsaraf.
 - `axes.py` : les mères comme axes, les doubles comme opérateurs bistables.
+- `cube.py` : le cube des chapitres 4 et 5 (doubles = six côtés et palais, simples = douze bordures).
+- `empreintes.py` : les empreintes SHA-256 de la table, dans les deux ordres.
 - [`TABLE_231.md`](TABLE_231.md) : la table des 231 portes, générée par le code.
+- [`TABLE_231_ETENDUE.csv`](TABLE_231_ETENDUE.csv) : la table étendue (catégories, poids combinés, distances, cube).
+- [`EMPREINTES.md`](EMPREINTES.md) : les empreintes, générées par le code.
 - [`COMPARAISON.md`](COMPARAISON.md) : la comparaison avec le Yi Jing, l'arbre des sefirot, Lulle et le code génétique.
 
 ```python
@@ -47,6 +51,8 @@ tourner(porte("א", "ב"), 1)              # ב→ג : la roue avance d'un cran
 | Primitives (Unit, Stream, Container…), bits des doubles, règle 3×3, noms d'opérateurs | texte de mik, 2026-10-02 | `reconstruction_analytique` |
 | Les cinq opérations : graver, tailler, peser, permuter, combiner ; n pierres bâtissent n! maisons | Sefer Yetzirah 2:2 ; fin du ch. 4 | `source_attestee` |
 | Contenu de chaque opération, poids 3/2/1, mères comme axes, doubles comme opérateurs sur Z₂³, réflexion de la roue | relecture de mik, 2026-10-04, et conventions de ce module | `reconstruction_analytique` |
+| 7 doubles = six côtés (haut, bas, est, ouest, nord, sud) et le palais saint au milieu ; 12 simples = douze bordures diagonales | Sefer Yetzirah ch. 4 et 5 | `source_attestee` |
+| Cube {−1, 0, 1}³, axe de chaque mère, ordre d'attribution des côtés et des bordures, règle de pas de la roue, poids combinés | relecture du 2026-10-04 et conventions de ce module | `reconstruction_analytique` |
 | Valeurs de guématria | tradition juive, hors Sefer Yetzirah | `derivation_consolidee` |
 | Roue tournant en avant et en arrière (גלגל חוזר פנים ואחור) | Sefer Yetzirah 2:4 | `source_attestee` |
 | Graphe K₂₂, matrice d'adjacence, rotation modulaire, numérotation par catégories, rôles système (mères = contrôle global, simples = routage) | texte de mik, 2026-10-04 | `reconstruction_analytique` |
@@ -184,3 +190,58 @@ face et un dos.
 **La table des 231 portes** est dans [`TABLE_231.md`](TABLE_231.md). Elle donne
 pour chaque porte les noms des deux lettres, leurs catégories, et les lectures
 face et dos. Un test vérifie que le fichier correspond toujours au code.
+
+## Le cube, les empreintes et la règle de la roue (seconde relecture du 4 octobre)
+
+**Le cube est dans le texte, pas seulement dans le modèle.** La relecture lit
+les 12 simples comme les 12 arêtes d'un cube. Le Sefer Yetzirah le dit
+lui-même. Il donne aux 7 doubles les six côtés et le palais saint au milieu
+(ch. 4), et aux 12 simples les douze bordures diagonales (ch. 5), qui sont les
+arêtes d'un cube dont les six côtés sont les faces. Dans {−1, 0, 1}³, ce cube
+se lit sans reste (`cube.py`). Le centre et les 6 faces donnent les 7 doubles,
+les 12 milieux d'arêtes les 12 simples, les 3 axes les 3 mères. Il reste les 8
+coins : ce sont les 8 états de Z₂³ de `axes.py`, et les 8 trigrammes du Yi
+Jing. 1 + 6 + 12 + 8 = 27 = 3³.
+
+Ce cube ne recouvre pas exactement la lecture algébrique de `axes.py`. Le
+texte place une double à une case : un côté, ou le centre. La lecture
+algébrique fait de chaque double un mouvement qui bascule des axes. Les deux
+sont gardées. La première suit le texte, la seconde explique la bistabilité.
+Les conventions du cube (quelle mère porte quel axe, dans quel ordre les
+doubles et les simples prennent leurs places) restent des conventions. L'ordre
+des douze bordures suit la recension du Gra et reste à vérifier sur le texte
+hébreu.
+
+**Empreintes** (`empreintes.py`, [`EMPREINTES.md`](EMPREINTES.md)). La table
+a une empreinte SHA-256 dans l'ordre alphabétique et une dans l'ordre 3-7-12.
+Les deux diffèrent, puisque leurs numéros diffèrent. Relues par leurs seules
+lettres, elles donnent toutes deux l'empreinte des 231 portes sans numéro.
+C'est ce qui scelle qu'elles décrivent les mêmes portes. Une troisième
+empreinte scelle la bijection entre les deux numérotations. Les valeurs sont
+fixées dans un test : changer la table oblige à changer le fichier.
+L'empreinte garantit qu'un contenu n'a pas changé d'une version à l'autre,
+mais elle ne dit rien de plus sur ce contenu. Dans ce module, l'ordre n'est
+pas cosmétique : il fixe la face, la rotation et les orbites. Un outil qui
+lit les portes dans un ordre donné doit donc citer l'empreinte de cet ordre.
+
+**Règle de transition** (`etat_suivant`, `trajectoire`, `periode` dans
+`roue.py`). S(t+1) = ρ₁(S(t)) : chaque porte active avance d'un cran. C'est
+une extension, puisque le texte dit que la roue tourne sans donner de pas.
+Si les 231 portes sont actives, rien ne bouge : l'ensemble est un point fixe.
+La dynamique n'apparaît que sur un sous-ensemble. Une porte revient en 22 pas,
+sauf entre deux lettres diamétralement opposées, où elle revient en 11. Un
+opérateur orienté, lui, revient toujours en 22 pas : l'orientation compte
+encore ici.
+
+**Table étendue** ([`TABLE_231_ETENDUE.csv`](TABLE_231_ETENDUE.csv)). On y
+trouve, pour chaque porte :
+- les lettres, leurs noms et leurs catégories ;
+- les poids 3/2/1, leur somme et leur produit ;
+- la somme de guématria ;
+- les distances sur les deux roues ;
+- la case de chaque lettre sur le cube.
+
+Le statut de chaque colonne est dans `table_etendue.py` (`STATUTS`). Le
+produit des poids sépare exactement les six familles de portes : 9, 6, 3, 4, 2
+et 1 donnent 3, 21, 36, 21, 84 et 66 portes. La somme, elle, confond
+double-double et mère-simple, qui valent toutes deux 4.

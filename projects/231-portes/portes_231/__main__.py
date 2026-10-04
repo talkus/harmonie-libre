@@ -3,6 +3,8 @@
   python -m portes_231 א מ        les deux lectures de la porte א–מ
   python -m portes_231 --nommes   les 52 opérateurs nommés dans le texte
   python -m portes_231 --table    la table des 231 portes (Markdown)
+  python -m portes_231 --etendue  la table étendue (CSV)
+  python -m portes_231 --empreintes  les empreintes SHA-256 (Markdown)
 """
 
 from __future__ import annotations
@@ -33,6 +35,16 @@ def main(argv: list[str] | None = None) -> int:
         from .table import markdown
 
         sys.stdout.write(markdown())
+        return 0
+    if args == ["--etendue"]:
+        from .table_etendue import csv_texte
+
+        sys.stdout.write(csv_texte())
+        return 0
+    if args == ["--empreintes"]:
+        from .empreintes import markdown as empreintes
+
+        sys.stdout.write(empreintes())
         return 0
     if len(args) == 2:
         p = Porte.de(*args)

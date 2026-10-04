@@ -1,0 +1,232 @@
+n,porte,lettre_1,nom_1,categorie_1,lettre_2,nom_2,categorie_2,categories,poids_1,poids_2,poids_somme,poids_produit,guematria_somme,distance_alphabetique,distance_categories,cube_1,cube_2
+1,א–ב,א,Aleph,Mère,ב,Bet,Double,Mère-Double,3,2,5,6,3,1,3,axe haut-bas,haut
+2,א–ג,א,Aleph,Mère,ג,Gimel,Double,Mère-Double,3,2,5,6,4,2,4,axe haut-bas,bas
+3,א–ד,א,Aleph,Mère,ד,Dalet,Double,Mère-Double,3,2,5,6,5,3,5,axe haut-bas,est
+4,א–ה,א,Aleph,Mère,ה,He,Simple,Mère-Simple,3,1,4,3,6,4,10,axe haut-bas,est-haut
+5,א–ו,א,Aleph,Mère,ו,Vav,Simple,Mère-Simple,3,1,4,3,7,5,11,axe haut-bas,est-nord
+6,א–ז,א,Aleph,Mère,ז,Zayin,Simple,Mère-Simple,3,1,4,3,8,6,10,axe haut-bas,est-bas
+7,א–ח,א,Aleph,Mère,ח,Het,Simple,Mère-Simple,3,1,4,3,9,7,9,axe haut-bas,sud-haut
+8,א–ט,א,Aleph,Mère,ט,Tet,Simple,Mère-Simple,3,1,4,3,10,8,8,axe haut-bas,sud-est
+9,א–י,א,Aleph,Mère,י,Yod,Simple,Mère-Simple,3,1,4,3,11,9,7,axe haut-bas,sud-bas
+10,א–כ,א,Aleph,Mère,כ,Kaf,Double,Mère-Double,3,2,5,6,21,10,6,axe haut-bas,ouest
+11,א–ל,א,Aleph,Mère,ל,Lamed,Simple,Mère-Simple,3,1,4,3,31,11,6,axe haut-bas,ouest-haut
+12,א–מ,א,Aleph,Mère,מ,Mem,Mère,Mère-Mère,3,3,6,9,41,10,1,axe haut-bas,axe est-ouest
+13,א–נ,א,Aleph,Mère,נ,Nun,Simple,Mère-Simple,3,1,4,3,51,9,5,axe haut-bas,ouest-sud
+14,א–ס,א,Aleph,Mère,ס,Samekh,Simple,Mère-Simple,3,1,4,3,61,8,4,axe haut-bas,ouest-bas
+15,א–ע,א,Aleph,Mère,ע,Ayin,Simple,Mère-Simple,3,1,4,3,71,7,3,axe haut-bas,nord-haut
+16,א–פ,א,Aleph,Mère,פ,Pe,Double,Mère-Double,3,2,5,6,81,6,7,axe haut-bas,nord
+17,א–צ,א,Aleph,Mère,צ,Tsadi,Simple,Mère-Simple,3,1,4,3,91,5,2,axe haut-bas,nord-ouest
+18,א–ק,א,Aleph,Mère,ק,Qof,Simple,Mère-Simple,3,1,4,3,101,4,1,axe haut-bas,nord-bas
+19,א–ר,א,Aleph,Mère,ר,Resh,Double,Mère-Double,3,2,5,6,201,3,8,axe haut-bas,sud
+20,א–ש,א,Aleph,Mère,ש,Shin,Mère,Mère-Mère,3,3,6,9,301,2,2,axe haut-bas,axe nord-sud
+21,א–ת,א,Aleph,Mère,ת,Tav,Double,Mère-Double,3,2,5,6,401,1,9,axe haut-bas,palais
+22,ב–ג,ב,Bet,Double,ג,Gimel,Double,Double-Double,2,2,4,4,5,1,1,haut,bas
+23,ב–ד,ב,Bet,Double,ד,Dalet,Double,Double-Double,2,2,4,4,6,2,2,haut,est
+24,ב–ה,ב,Bet,Double,ה,He,Simple,Double-Simple,2,1,3,2,7,3,7,haut,est-haut
+25,ב–ו,ב,Bet,Double,ו,Vav,Simple,Double-Simple,2,1,3,2,8,4,8,haut,est-nord
+26,ב–ז,ב,Bet,Double,ז,Zayin,Simple,Double-Simple,2,1,3,2,9,5,9,haut,est-bas
+27,ב–ח,ב,Bet,Double,ח,Het,Simple,Double-Simple,2,1,3,2,10,6,10,haut,sud-haut
+28,ב–ט,ב,Bet,Double,ט,Tet,Simple,Double-Simple,2,1,3,2,11,7,11,haut,sud-est
+29,ב–י,ב,Bet,Double,י,Yod,Simple,Double-Simple,2,1,3,2,12,8,10,haut,sud-bas
+30,ב–כ,ב,Bet,Double,כ,Kaf,Double,Double-Double,2,2,4,4,22,9,3,haut,ouest
+31,ב–ל,ב,Bet,Double,ל,Lamed,Simple,Double-Simple,2,1,3,2,32,10,9,haut,ouest-haut
+32,ב–מ,ב,Bet,Double,מ,Mem,Mère,Double-Mère,2,3,5,6,42,11,2,haut,axe est-ouest
+33,ב–נ,ב,Bet,Double,נ,Nun,Simple,Double-Simple,2,1,3,2,52,10,8,haut,ouest-sud
+34,ב–ס,ב,Bet,Double,ס,Samekh,Simple,Double-Simple,2,1,3,2,62,9,7,haut,ouest-bas
+35,ב–ע,ב,Bet,Double,ע,Ayin,Simple,Double-Simple,2,1,3,2,72,8,6,haut,nord-haut
+36,ב–פ,ב,Bet,Double,פ,Pe,Double,Double-Double,2,2,4,4,82,7,4,haut,nord
+37,ב–צ,ב,Bet,Double,צ,Tsadi,Simple,Double-Simple,2,1,3,2,92,6,5,haut,nord-ouest
+38,ב–ק,ב,Bet,Double,ק,Qof,Simple,Double-Simple,2,1,3,2,102,5,4,haut,nord-bas
+39,ב–ר,ב,Bet,Double,ר,Resh,Double,Double-Double,2,2,4,4,202,4,5,haut,sud
+40,ב–ש,ב,Bet,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,302,3,1,haut,axe nord-sud
+41,ב–ת,ב,Bet,Double,ת,Tav,Double,Double-Double,2,2,4,4,402,2,6,haut,palais
+42,ג–ד,ג,Gimel,Double,ד,Dalet,Double,Double-Double,2,2,4,4,7,1,1,bas,est
+43,ג–ה,ג,Gimel,Double,ה,He,Simple,Double-Simple,2,1,3,2,8,2,6,bas,est-haut
+44,ג–ו,ג,Gimel,Double,ו,Vav,Simple,Double-Simple,2,1,3,2,9,3,7,bas,est-nord
+45,ג–ז,ג,Gimel,Double,ז,Zayin,Simple,Double-Simple,2,1,3,2,10,4,8,bas,est-bas
+46,ג–ח,ג,Gimel,Double,ח,Het,Simple,Double-Simple,2,1,3,2,11,5,9,bas,sud-haut
+47,ג–ט,ג,Gimel,Double,ט,Tet,Simple,Double-Simple,2,1,3,2,12,6,10,bas,sud-est
+48,ג–י,ג,Gimel,Double,י,Yod,Simple,Double-Simple,2,1,3,2,13,7,11,bas,sud-bas
+49,ג–כ,ג,Gimel,Double,כ,Kaf,Double,Double-Double,2,2,4,4,23,8,2,bas,ouest
+50,ג–ל,ג,Gimel,Double,ל,Lamed,Simple,Double-Simple,2,1,3,2,33,9,10,bas,ouest-haut
+51,ג–מ,ג,Gimel,Double,מ,Mem,Mère,Double-Mère,2,3,5,6,43,10,3,bas,axe est-ouest
+52,ג–נ,ג,Gimel,Double,נ,Nun,Simple,Double-Simple,2,1,3,2,53,11,9,bas,ouest-sud
+53,ג–ס,ג,Gimel,Double,ס,Samekh,Simple,Double-Simple,2,1,3,2,63,10,8,bas,ouest-bas
+54,ג–ע,ג,Gimel,Double,ע,Ayin,Simple,Double-Simple,2,1,3,2,73,9,7,bas,nord-haut
+55,ג–פ,ג,Gimel,Double,פ,Pe,Double,Double-Double,2,2,4,4,83,8,3,bas,nord
+56,ג–צ,ג,Gimel,Double,צ,Tsadi,Simple,Double-Simple,2,1,3,2,93,7,6,bas,nord-ouest
+57,ג–ק,ג,Gimel,Double,ק,Qof,Simple,Double-Simple,2,1,3,2,103,6,5,bas,nord-bas
+58,ג–ר,ג,Gimel,Double,ר,Resh,Double,Double-Double,2,2,4,4,203,5,4,bas,sud
+59,ג–ש,ג,Gimel,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,303,4,2,bas,axe nord-sud
+60,ג–ת,ג,Gimel,Double,ת,Tav,Double,Double-Double,2,2,4,4,403,3,5,bas,palais
+61,ד–ה,ד,Dalet,Double,ה,He,Simple,Double-Simple,2,1,3,2,9,1,5,est,est-haut
+62,ד–ו,ד,Dalet,Double,ו,Vav,Simple,Double-Simple,2,1,3,2,10,2,6,est,est-nord
+63,ד–ז,ד,Dalet,Double,ז,Zayin,Simple,Double-Simple,2,1,3,2,11,3,7,est,est-bas
+64,ד–ח,ד,Dalet,Double,ח,Het,Simple,Double-Simple,2,1,3,2,12,4,8,est,sud-haut
+65,ד–ט,ד,Dalet,Double,ט,Tet,Simple,Double-Simple,2,1,3,2,13,5,9,est,sud-est
+66,ד–י,ד,Dalet,Double,י,Yod,Simple,Double-Simple,2,1,3,2,14,6,10,est,sud-bas
+67,ד–כ,ד,Dalet,Double,כ,Kaf,Double,Double-Double,2,2,4,4,24,7,1,est,ouest
+68,ד–ל,ד,Dalet,Double,ל,Lamed,Simple,Double-Simple,2,1,3,2,34,8,11,est,ouest-haut
+69,ד–מ,ד,Dalet,Double,מ,Mem,Mère,Double-Mère,2,3,5,6,44,9,4,est,axe est-ouest
+70,ד–נ,ד,Dalet,Double,נ,Nun,Simple,Double-Simple,2,1,3,2,54,10,10,est,ouest-sud
+71,ד–ס,ד,Dalet,Double,ס,Samekh,Simple,Double-Simple,2,1,3,2,64,11,9,est,ouest-bas
+72,ד–ע,ד,Dalet,Double,ע,Ayin,Simple,Double-Simple,2,1,3,2,74,10,8,est,nord-haut
+73,ד–פ,ד,Dalet,Double,פ,Pe,Double,Double-Double,2,2,4,4,84,9,2,est,nord
+74,ד–צ,ד,Dalet,Double,צ,Tsadi,Simple,Double-Simple,2,1,3,2,94,8,7,est,nord-ouest
+75,ד–ק,ד,Dalet,Double,ק,Qof,Simple,Double-Simple,2,1,3,2,104,7,6,est,nord-bas
+76,ד–ר,ד,Dalet,Double,ר,Resh,Double,Double-Double,2,2,4,4,204,6,3,est,sud
+77,ד–ש,ד,Dalet,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,304,5,3,est,axe nord-sud
+78,ד–ת,ד,Dalet,Double,ת,Tav,Double,Double-Double,2,2,4,4,404,4,4,est,palais
+79,ה–ו,ה,He,Simple,ו,Vav,Simple,Simple-Simple,1,1,2,1,11,1,1,est-haut,est-nord
+80,ה–ז,ה,He,Simple,ז,Zayin,Simple,Simple-Simple,1,1,2,1,12,2,2,est-haut,est-bas
+81,ה–ח,ה,He,Simple,ח,Het,Simple,Simple-Simple,1,1,2,1,13,3,3,est-haut,sud-haut
+82,ה–ט,ה,He,Simple,ט,Tet,Simple,Simple-Simple,1,1,2,1,14,4,4,est-haut,sud-est
+83,ה–י,ה,He,Simple,י,Yod,Simple,Simple-Simple,1,1,2,1,15,5,5,est-haut,sud-bas
+84,ה–כ,ה,He,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,25,6,4,est-haut,ouest
+85,ה–ל,ה,He,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,35,7,6,est-haut,ouest-haut
+86,ה–מ,ה,He,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,45,8,9,est-haut,axe est-ouest
+87,ה–נ,ה,He,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,55,9,7,est-haut,ouest-sud
+88,ה–ס,ה,He,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,65,10,8,est-haut,ouest-bas
+89,ה–ע,ה,He,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,75,11,9,est-haut,nord-haut
+90,ה–פ,ה,He,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,85,10,3,est-haut,nord
+91,ה–צ,ה,He,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,95,9,10,est-haut,nord-ouest
+92,ה–ק,ה,He,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,105,8,11,est-haut,nord-bas
+93,ה–ר,ה,He,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,205,7,2,est-haut,sud
+94,ה–ש,ה,He,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,305,6,8,est-haut,axe nord-sud
+95,ה–ת,ה,He,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,405,5,1,est-haut,palais
+96,ו–ז,ו,Vav,Simple,ז,Zayin,Simple,Simple-Simple,1,1,2,1,13,1,1,est-nord,est-bas
+97,ו–ח,ו,Vav,Simple,ח,Het,Simple,Simple-Simple,1,1,2,1,14,2,2,est-nord,sud-haut
+98,ו–ט,ו,Vav,Simple,ט,Tet,Simple,Simple-Simple,1,1,2,1,15,3,3,est-nord,sud-est
+99,ו–י,ו,Vav,Simple,י,Yod,Simple,Simple-Simple,1,1,2,1,16,4,4,est-nord,sud-bas
+100,ו–כ,ו,Vav,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,26,5,5,est-nord,ouest
+101,ו–ל,ו,Vav,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,36,6,5,est-nord,ouest-haut
+102,ו–מ,ו,Vav,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,46,7,10,est-nord,axe est-ouest
+103,ו–נ,ו,Vav,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,56,8,6,est-nord,ouest-sud
+104,ו–ס,ו,Vav,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,66,9,7,est-nord,ouest-bas
+105,ו–ע,ו,Vav,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,76,10,8,est-nord,nord-haut
+106,ו–פ,ו,Vav,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,86,11,4,est-nord,nord
+107,ו–צ,ו,Vav,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,96,10,9,est-nord,nord-ouest
+108,ו–ק,ו,Vav,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,106,9,10,est-nord,nord-bas
+109,ו–ר,ו,Vav,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,206,8,3,est-nord,sud
+110,ו–ש,ו,Vav,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,306,7,9,est-nord,axe nord-sud
+111,ו–ת,ו,Vav,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,406,6,2,est-nord,palais
+112,ז–ח,ז,Zayin,Simple,ח,Het,Simple,Simple-Simple,1,1,2,1,15,1,1,est-bas,sud-haut
+113,ז–ט,ז,Zayin,Simple,ט,Tet,Simple,Simple-Simple,1,1,2,1,16,2,2,est-bas,sud-est
+114,ז–י,ז,Zayin,Simple,י,Yod,Simple,Simple-Simple,1,1,2,1,17,3,3,est-bas,sud-bas
+115,ז–כ,ז,Zayin,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,27,4,6,est-bas,ouest
+116,ז–ל,ז,Zayin,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,37,5,4,est-bas,ouest-haut
+117,ז–מ,ז,Zayin,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,47,6,11,est-bas,axe est-ouest
+118,ז–נ,ז,Zayin,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,57,7,5,est-bas,ouest-sud
+119,ז–ס,ז,Zayin,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,67,8,6,est-bas,ouest-bas
+120,ז–ע,ז,Zayin,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,77,9,7,est-bas,nord-haut
+121,ז–פ,ז,Zayin,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,87,10,5,est-bas,nord
+122,ז–צ,ז,Zayin,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,97,11,8,est-bas,nord-ouest
+123,ז–ק,ז,Zayin,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,107,10,9,est-bas,nord-bas
+124,ז–ר,ז,Zayin,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,207,9,4,est-bas,sud
+125,ז–ש,ז,Zayin,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,307,8,10,est-bas,axe nord-sud
+126,ז–ת,ז,Zayin,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,407,7,3,est-bas,palais
+127,ח–ט,ח,Het,Simple,ט,Tet,Simple,Simple-Simple,1,1,2,1,17,1,1,sud-haut,sud-est
+128,ח–י,ח,Het,Simple,י,Yod,Simple,Simple-Simple,1,1,2,1,18,2,2,sud-haut,sud-bas
+129,ח–כ,ח,Het,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,28,3,7,sud-haut,ouest
+130,ח–ל,ח,Het,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,38,4,3,sud-haut,ouest-haut
+131,ח–מ,ח,Het,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,48,5,10,sud-haut,axe est-ouest
+132,ח–נ,ח,Het,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,58,6,4,sud-haut,ouest-sud
+133,ח–ס,ח,Het,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,68,7,5,sud-haut,ouest-bas
+134,ח–ע,ח,Het,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,78,8,6,sud-haut,nord-haut
+135,ח–פ,ח,Het,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,88,9,6,sud-haut,nord
+136,ח–צ,ח,Het,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,98,10,7,sud-haut,nord-ouest
+137,ח–ק,ח,Het,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,108,11,8,sud-haut,nord-bas
+138,ח–ר,ח,Het,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,208,10,5,sud-haut,sud
+139,ח–ש,ח,Het,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,308,9,11,sud-haut,axe nord-sud
+140,ח–ת,ח,Het,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,408,8,4,sud-haut,palais
+141,ט–י,ט,Tet,Simple,י,Yod,Simple,Simple-Simple,1,1,2,1,19,1,1,sud-est,sud-bas
+142,ט–כ,ט,Tet,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,29,2,8,sud-est,ouest
+143,ט–ל,ט,Tet,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,39,3,2,sud-est,ouest-haut
+144,ט–מ,ט,Tet,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,49,4,9,sud-est,axe est-ouest
+145,ט–נ,ט,Tet,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,59,5,3,sud-est,ouest-sud
+146,ט–ס,ט,Tet,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,69,6,4,sud-est,ouest-bas
+147,ט–ע,ט,Tet,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,79,7,5,sud-est,nord-haut
+148,ט–פ,ט,Tet,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,89,8,7,sud-est,nord
+149,ט–צ,ט,Tet,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,99,9,6,sud-est,nord-ouest
+150,ט–ק,ט,Tet,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,109,10,7,sud-est,nord-bas
+151,ט–ר,ט,Tet,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,209,11,6,sud-est,sud
+152,ט–ש,ט,Tet,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,309,10,10,sud-est,axe nord-sud
+153,ט–ת,ט,Tet,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,409,9,5,sud-est,palais
+154,י–כ,י,Yod,Simple,כ,Kaf,Double,Simple-Double,1,2,3,2,30,1,9,sud-bas,ouest
+155,י–ל,י,Yod,Simple,ל,Lamed,Simple,Simple-Simple,1,1,2,1,40,2,1,sud-bas,ouest-haut
+156,י–מ,י,Yod,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,50,3,8,sud-bas,axe est-ouest
+157,י–נ,י,Yod,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,60,4,2,sud-bas,ouest-sud
+158,י–ס,י,Yod,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,70,5,3,sud-bas,ouest-bas
+159,י–ע,י,Yod,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,80,6,4,sud-bas,nord-haut
+160,י–פ,י,Yod,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,90,7,8,sud-bas,nord
+161,י–צ,י,Yod,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,100,8,5,sud-bas,nord-ouest
+162,י–ק,י,Yod,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,110,9,6,sud-bas,nord-bas
+163,י–ר,י,Yod,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,210,10,7,sud-bas,sud
+164,י–ש,י,Yod,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,310,11,9,sud-bas,axe nord-sud
+165,י–ת,י,Yod,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,410,10,6,sud-bas,palais
+166,כ–ל,כ,Kaf,Double,ל,Lamed,Simple,Double-Simple,2,1,3,2,50,1,10,ouest,ouest-haut
+167,כ–מ,כ,Kaf,Double,מ,Mem,Mère,Double-Mère,2,3,5,6,60,2,5,ouest,axe est-ouest
+168,כ–נ,כ,Kaf,Double,נ,Nun,Simple,Double-Simple,2,1,3,2,70,3,11,ouest,ouest-sud
+169,כ–ס,כ,Kaf,Double,ס,Samekh,Simple,Double-Simple,2,1,3,2,80,4,10,ouest,ouest-bas
+170,כ–ע,כ,Kaf,Double,ע,Ayin,Simple,Double-Simple,2,1,3,2,90,5,9,ouest,nord-haut
+171,כ–פ,כ,Kaf,Double,פ,Pe,Double,Double-Double,2,2,4,4,100,6,1,ouest,nord
+172,כ–צ,כ,Kaf,Double,צ,Tsadi,Simple,Double-Simple,2,1,3,2,110,7,8,ouest,nord-ouest
+173,כ–ק,כ,Kaf,Double,ק,Qof,Simple,Double-Simple,2,1,3,2,120,8,7,ouest,nord-bas
+174,כ–ר,כ,Kaf,Double,ר,Resh,Double,Double-Double,2,2,4,4,220,9,2,ouest,sud
+175,כ–ש,כ,Kaf,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,320,10,4,ouest,axe nord-sud
+176,כ–ת,כ,Kaf,Double,ת,Tav,Double,Double-Double,2,2,4,4,420,11,3,ouest,palais
+177,ל–מ,ל,Lamed,Simple,מ,Mem,Mère,Simple-Mère,1,3,4,3,70,1,7,ouest-haut,axe est-ouest
+178,ל–נ,ל,Lamed,Simple,נ,Nun,Simple,Simple-Simple,1,1,2,1,80,2,1,ouest-haut,ouest-sud
+179,ל–ס,ל,Lamed,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,90,3,2,ouest-haut,ouest-bas
+180,ל–ע,ל,Lamed,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,100,4,3,ouest-haut,nord-haut
+181,ל–פ,ל,Lamed,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,110,5,9,ouest-haut,nord
+182,ל–צ,ל,Lamed,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,120,6,4,ouest-haut,nord-ouest
+183,ל–ק,ל,Lamed,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,130,7,5,ouest-haut,nord-bas
+184,ל–ר,ל,Lamed,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,230,8,8,ouest-haut,sud
+185,ל–ש,ל,Lamed,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,330,9,8,ouest-haut,axe nord-sud
+186,ל–ת,ל,Lamed,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,430,10,7,ouest-haut,palais
+187,מ–נ,מ,Mem,Mère,נ,Nun,Simple,Mère-Simple,3,1,4,3,90,1,6,axe est-ouest,ouest-sud
+188,מ–ס,מ,Mem,Mère,ס,Samekh,Simple,Mère-Simple,3,1,4,3,100,2,5,axe est-ouest,ouest-bas
+189,מ–ע,מ,Mem,Mère,ע,Ayin,Simple,Mère-Simple,3,1,4,3,110,3,4,axe est-ouest,nord-haut
+190,מ–פ,מ,Mem,Mère,פ,Pe,Double,Mère-Double,3,2,5,6,120,4,6,axe est-ouest,nord
+191,מ–צ,מ,Mem,Mère,צ,Tsadi,Simple,Mère-Simple,3,1,4,3,130,5,3,axe est-ouest,nord-ouest
+192,מ–ק,מ,Mem,Mère,ק,Qof,Simple,Mère-Simple,3,1,4,3,140,6,2,axe est-ouest,nord-bas
+193,מ–ר,מ,Mem,Mère,ר,Resh,Double,Mère-Double,3,2,5,6,240,7,7,axe est-ouest,sud
+194,מ–ש,מ,Mem,Mère,ש,Shin,Mère,Mère-Mère,3,3,6,9,340,8,1,axe est-ouest,axe nord-sud
+195,מ–ת,מ,Mem,Mère,ת,Tav,Double,Mère-Double,3,2,5,6,440,9,8,axe est-ouest,palais
+196,נ–ס,נ,Nun,Simple,ס,Samekh,Simple,Simple-Simple,1,1,2,1,110,1,1,ouest-sud,ouest-bas
+197,נ–ע,נ,Nun,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,120,2,2,ouest-sud,nord-haut
+198,נ–פ,נ,Nun,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,130,3,10,ouest-sud,nord
+199,נ–צ,נ,Nun,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,140,4,3,ouest-sud,nord-ouest
+200,נ–ק,נ,Nun,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,150,5,4,ouest-sud,nord-bas
+201,נ–ר,נ,Nun,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,250,6,9,ouest-sud,sud
+202,נ–ש,נ,Nun,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,350,7,7,ouest-sud,axe nord-sud
+203,נ–ת,נ,Nun,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,450,8,8,ouest-sud,palais
+204,ס–ע,ס,Samekh,Simple,ע,Ayin,Simple,Simple-Simple,1,1,2,1,130,1,1,ouest-bas,nord-haut
+205,ס–פ,ס,Samekh,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,140,2,11,ouest-bas,nord
+206,ס–צ,ס,Samekh,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,150,3,2,ouest-bas,nord-ouest
+207,ס–ק,ס,Samekh,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,160,4,3,ouest-bas,nord-bas
+208,ס–ר,ס,Samekh,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,260,5,10,ouest-bas,sud
+209,ס–ש,ס,Samekh,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,360,6,6,ouest-bas,axe nord-sud
+210,ס–ת,ס,Samekh,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,460,7,9,ouest-bas,palais
+211,ע–פ,ע,Ayin,Simple,פ,Pe,Double,Simple-Double,1,2,3,2,150,1,10,nord-haut,nord
+212,ע–צ,ע,Ayin,Simple,צ,Tsadi,Simple,Simple-Simple,1,1,2,1,160,2,1,nord-haut,nord-ouest
+213,ע–ק,ע,Ayin,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,170,3,2,nord-haut,nord-bas
+214,ע–ר,ע,Ayin,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,270,4,11,nord-haut,sud
+215,ע–ש,ע,Ayin,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,370,5,5,nord-haut,axe nord-sud
+216,ע–ת,ע,Ayin,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,470,6,10,nord-haut,palais
+217,פ–צ,פ,Pe,Double,צ,Tsadi,Simple,Double-Simple,2,1,3,2,170,1,9,nord,nord-ouest
+218,פ–ק,פ,Pe,Double,ק,Qof,Simple,Double-Simple,2,1,3,2,180,2,8,nord,nord-bas
+219,פ–ר,פ,Pe,Double,ר,Resh,Double,Double-Double,2,2,4,4,280,3,1,nord,sud
+220,פ–ש,פ,Pe,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,380,4,5,nord,axe nord-sud
+221,פ–ת,פ,Pe,Double,ת,Tav,Double,Double-Double,2,2,4,4,480,5,2,nord,palais
+222,צ–ק,צ,Tsadi,Simple,ק,Qof,Simple,Simple-Simple,1,1,2,1,190,1,1,nord-ouest,nord-bas
+223,צ–ר,צ,Tsadi,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,290,2,10,nord-ouest,sud
+224,צ–ש,צ,Tsadi,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,390,3,4,nord-ouest,axe nord-sud
+225,צ–ת,צ,Tsadi,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,490,4,11,nord-ouest,palais
+226,ק–ר,ק,Qof,Simple,ר,Resh,Double,Simple-Double,1,2,3,2,300,1,9,nord-bas,sud
+227,ק–ש,ק,Qof,Simple,ש,Shin,Mère,Simple-Mère,1,3,4,3,400,2,3,nord-bas,axe nord-sud
+228,ק–ת,ק,Qof,Simple,ת,Tav,Double,Simple-Double,1,2,3,2,500,3,10,nord-bas,palais
+229,ר–ש,ר,Resh,Double,ש,Shin,Mère,Double-Mère,2,3,5,6,500,1,6,sud,axe nord-sud
+230,ר–ת,ר,Resh,Double,ת,Tav,Double,Double-Double,2,2,4,4,600,2,1,sud,palais
+231,ש–ת,ש,Shin,Mère,ת,Tav,Double,Mère-Double,3,2,5,6,700,1,7,axe nord-sud,palais

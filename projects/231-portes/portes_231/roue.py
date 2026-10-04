@@ -102,3 +102,31 @@ def orbites(ordre: Ordre = Ordre.ALPHABETIQUE) -> dict[int, tuple[Porte, ...]]:
     for p in PORTES:
         groupes[distance(p, ordre)].append(p)
     return {d: tuple(ps) for d, ps in groupes.items()}
+
+
+# --- Extension : la roue comme système dynamique ---------------------------
+# Le texte dit que la roue tourne ; il ne donne pas de règle de pas. La règle
+# ci-dessous, S(t+1) = ρ₁(S(t)), est une extension proposée le 2026-10-04 et
+# reste une reconstruction analytique.
+
+
+def etat_suivant(actives, crans: int = 1, ordre: Ordre = Ordre.ALPHABETIQUE) -> frozenset:
+    """Un pas de la roue : chaque porte (ou opérateur) actif avance de ``crans``."""
+    return frozenset(tourner(x, crans, ordre) for x in actives)
+
+
+def trajectoire(actives, pas: int, crans: int = 1, ordre: Ordre = Ordre.ALPHABETIQUE) -> list[frozenset]:
+    """Les états S(0), S(1), …, S(pas)."""
+    etats = [frozenset(actives)]
+    for _ in range(pas):
+        etats.append(etat_suivant(etats[-1], crans, ordre))
+    return etats
+
+
+def periode(actives, crans: int = 1, ordre: Ordre = Ordre.ALPHABETIQUE) -> int:
+    """Le plus petit t > 0 tel que S(t) = S(0)."""
+    depart = frozenset(actives)
+    etat, t = etat_suivant(depart, crans, ordre), 1
+    while etat != depart:
+        etat, t = etat_suivant(etat, crans, ordre), t + 1
+    return t
