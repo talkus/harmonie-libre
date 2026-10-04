@@ -31,6 +31,17 @@ from .portes import PORTES
 from .roue import Ordre, cercle
 
 
+# Étiquette de la convention, inscrite dans l'empreinte elle-même :
+# « sha256:virgule:<hex> ». Une autre convention (tabulation, barre verticale)
+# donnerait une autre étiquette, et les deux chaînes ne se confondent pas.
+CONVENTION = "virgule"
+
+
+def etiqueter(hexa: str) -> str:
+    """Préfixe une empreinte par son algorithme et sa convention."""
+    return f"sha256:{CONVENTION}:{hexa}"
+
+
 def _sha256(texte: str) -> str:
     return hashlib.sha256(texte.encode("utf-8")).hexdigest()
 
@@ -85,17 +96,17 @@ def markdown() -> str:
         "",
         "| Sorte | Contenu | Dépend de l'ordre ? | Sérialisation | SHA-256 |",
         "|---|---|:---:|---|---|",
-        f"| structurelle | Les 231 portes, sans numéro | non | `XY` par ligne, ordre alphabétique | `{portes()}` |",
-        f"| sérialisation | Table, ordre alphabétique | oui | `i,j,X,Y` par ligne | `{table(Ordre.ALPHABETIQUE)}` |",
-        f"| sérialisation | Table, ordre par catégories (3-7-12) | oui | `i,j,X,Y` par ligne | `{table(Ordre.CATEGORIES)}` |",
-        f"| sérialisation | Bijection entre les deux numérotations | — | `glyphe,rang,opcode` par ligne | `{bijection()}` |",
+        f"| structurelle | Les 231 portes, sans numéro | non | `XY` par ligne, ordre alphabétique | `{etiqueter(portes())}` |",
+        f"| sérialisation | Table, ordre alphabétique | oui | `i,j,X,Y` par ligne | `{etiqueter(table(Ordre.ALPHABETIQUE))}` |",
+        f"| sérialisation | Table, ordre par catégories (3-7-12) | oui | `i,j,X,Y` par ligne | `{etiqueter(table(Ordre.CATEGORIES))}` |",
+        f"| sérialisation | Bijection entre les deux numérotations | — | `glyphe,rang,opcode` par ligne | `{etiqueter(bijection())}` |",
         "",
         "Il n'existe qu'une empreinte structurelle. Les deux tables, relues par",
         "leurs seules lettres, la redonnent toutes deux : c'est ce qui scelle",
         "qu'elles décrivent les mêmes portes. Les empreintes de sérialisation, une",
         "par ordre, figent cet ordre pour un outil qui lit les portes en séquence.",
         "",
-        "Convention : champs séparés par `,` ; chaque ligne terminée par `\\n`, y",
+        "Convention `virgule`, inscrite dans chaque empreinte : champs séparés par `,` ; chaque ligne terminée par `\\n`, y",
         "compris la dernière ; UTF-8 sans BOM ; pas d'en-tête. Dans une ligne de",
         "table, l'extrémité de plus petit rang dans l'ordre choisi vient d'abord.",
         "",

@@ -40,6 +40,11 @@ class LettresSeferYetzirah(unittest.TestCase):
     def test_recherche_par_nom(self):
         self.assertIs(lettre("aleph"), LETTRES["א"])
         self.assertIs(lettre("ם"), LETTRES["מ"])
+        # Recherche exacte : « Zayin » se termine par « ayin » sans être Ayin.
+        self.assertIs(lettre("Ayin"), LETTRES["ע"])
+        self.assertIs(lettre("Zayin"), LETTRES["ז"])
+        with self.assertRaises(KeyError):
+            lettre("yin")
         with self.assertRaises(KeyError):
             lettre("Omega")
 

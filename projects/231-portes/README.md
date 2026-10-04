@@ -225,7 +225,10 @@ C'est ce qui scelle qu'elles décrivent les mêmes portes. Une troisième
 empreinte scelle la bijection entre les deux numérotations. Les valeurs sont
 fixées dans un test : changer la table oblige à changer le fichier.
 L'empreinte garantit qu'un contenu n'a pas changé d'une version à l'autre,
-mais elle ne dit rien de plus sur ce contenu. Dans ce module, l'ordre n'est
+mais elle ne dit rien de plus sur ce contenu. Chaque empreinte porte sa
+convention dans son préfixe (`sha256:virgule:…`). Une empreinte calculée avec
+un autre séparateur porterait une autre étiquette, et les deux ne peuvent pas
+être confondues. Dans ce module, l'ordre n'est
 pas cosmétique : il fixe la face, la rotation et les orbites. Un outil qui
 lit les portes dans un ordre donné doit donc citer l'empreinte de cet ordre.
 

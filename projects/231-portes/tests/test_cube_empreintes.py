@@ -58,6 +58,11 @@ class Empreintes(unittest.TestCase):
             self.assertTrue(texte.endswith("\n"))
             self.assertFalse(texte.endswith("\n\n"))
 
+    def test_etiquette_de_convention(self):
+        self.assertEqual(empreintes.etiqueter(empreintes.portes()),
+                         "sha256:virgule:" + empreintes.portes())
+        self.assertIn("sha256:virgule:" + empreintes.portes(), empreintes.markdown())
+
     def test_231_lignes(self):
         self.assertEqual(len(empreintes.serialisation_table().splitlines()), 231)
         self.assertEqual(len(empreintes.serialisation_bijection().splitlines()), 22)
