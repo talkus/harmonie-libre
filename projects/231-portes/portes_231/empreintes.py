@@ -3,14 +3,20 @@
 Demande du 2026-10-04 : sceller la table dans l'ordre alphabétique et dans
 l'ordre par catégories (3-7-12), et sceller la bijection entre les deux.
 
-Trois empreintes :
+Deux sortes d'empreintes :
 
-* ``table(ordre)`` : la table numérotée dans un ordre donné. Elle change avec
-  l'ordre, puisque les numéros changent.
-* ``portes()`` : les 231 portes écrites par leurs lettres, sans numéro. Elle
-  ne dépend d'aucune numérotation. Si les deux tables, relues par leurs
-  lettres, donnent cette même empreinte, elles décrivent les mêmes portes.
-* ``bijection()`` : la correspondance entre les deux numérotations.
+* empreinte **structurelle**, ``portes()`` : les 231 portes écrites par leurs
+  lettres, sans numéro. Elle ne dépend d'aucun ordre d'énumération. Il n'en
+  existe qu'une. Elle prouve que deux tables décrivent le même ensemble.
+* empreintes **de sérialisation**, ``table(ordre)`` : la table numérotée dans
+  un ordre donné, une par ordre. Elles figent l'ordre pour un outil qui lit
+  les portes en séquence. ``bijection()`` fige la correspondance entre les
+  deux numérotations.
+
+Convention (figée par les tests) : champs séparés par « , », chaque ligne
+terminée par « \n » (y compris la dernière), UTF-8 sans BOM, sans en-tête ;
+dans chaque ligne, l'extrémité de plus petit rang (dans l'ordre choisi)
+vient d'abord.
 
 Une empreinte garantit qu'un contenu n'a pas changé d'une version à l'autre.
 Elle ne dit rien de plus sur ce contenu.
@@ -77,17 +83,20 @@ def markdown() -> str:
         "Fichier généré par `python -m portes_231 --empreintes` ; ne pas éditer à la main.",
         "Un test vérifie que ces valeurs correspondent toujours au code.",
         "",
-        "| Contenu | Sérialisation | SHA-256 |",
-        "|---|---|---|",
-        f"| Table, ordre alphabétique | `i,j,X,Y` par ligne | `{table(Ordre.ALPHABETIQUE)}` |",
-        f"| Table, ordre par catégories (3-7-12) | `i,j,X,Y` par ligne | `{table(Ordre.CATEGORIES)}` |",
-        f"| Les 231 portes, sans numéro | `XY` par ligne, ordre alphabétique | `{portes()}` |",
-        f"| Bijection entre les deux numérotations | `glyphe,rang,opcode` par ligne | `{bijection()}` |",
+        "| Sorte | Contenu | Dépend de l'ordre ? | Sérialisation | SHA-256 |",
+        "|---|---|:---:|---|---|",
+        f"| structurelle | Les 231 portes, sans numéro | non | `XY` par ligne, ordre alphabétique | `{portes()}` |",
+        f"| sérialisation | Table, ordre alphabétique | oui | `i,j,X,Y` par ligne | `{table(Ordre.ALPHABETIQUE)}` |",
+        f"| sérialisation | Table, ordre par catégories (3-7-12) | oui | `i,j,X,Y` par ligne | `{table(Ordre.CATEGORIES)}` |",
+        f"| sérialisation | Bijection entre les deux numérotations | — | `glyphe,rang,opcode` par ligne | `{bijection()}` |",
         "",
-        "Les deux tables ont des empreintes différentes, puisque leurs numéros",
-        "diffèrent. Relues par leurs seules lettres, elles donnent toutes deux",
-        "l'empreinte des 231 portes sans numéro : c'est ce qui scelle qu'elles",
-        "décrivent les mêmes portes. Chaque ligne se termine par un saut de ligne",
-        "(`\\n`), et le texte est encodé en UTF-8.",
+        "Il n'existe qu'une empreinte structurelle. Les deux tables, relues par",
+        "leurs seules lettres, la redonnent toutes deux : c'est ce qui scelle",
+        "qu'elles décrivent les mêmes portes. Les empreintes de sérialisation, une",
+        "par ordre, figent cet ordre pour un outil qui lit les portes en séquence.",
+        "",
+        "Convention : champs séparés par `,` ; chaque ligne terminée par `\\n`, y",
+        "compris la dernière ; UTF-8 sans BOM ; pas d'en-tête. Dans une ligne de",
+        "table, l'extrémité de plus petit rang dans l'ordre choisi vient d'abord.",
         "",
     ])

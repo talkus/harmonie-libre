@@ -51,7 +51,8 @@ tourner(porte("א", "ב"), 1)              # ב→ג : la roue avance d'un cran
 | Primitives (Unit, Stream, Container…), bits des doubles, règle 3×3, noms d'opérateurs | texte de mik, 2026-10-02 | `reconstruction_analytique` |
 | Les cinq opérations : graver, tailler, peser, permuter, combiner ; n pierres bâtissent n! maisons | Sefer Yetzirah 2:2 ; fin du ch. 4 | `source_attestee` |
 | Contenu de chaque opération, poids 3/2/1, mères comme axes, doubles comme opérateurs sur Z₂³, réflexion de la roue | relecture de mik, 2026-10-04, et conventions de ce module | `reconstruction_analytique` |
-| 7 doubles = six côtés (haut, bas, est, ouest, nord, sud) et le palais saint au milieu ; 12 simples = douze bordures diagonales | Sefer Yetzirah ch. 4 et 5 | `source_attestee` |
+| 7 doubles = six côtés (haut, bas, est, ouest, nord, sud) et le palais saint au milieu ; 12 simples = douze bordures diagonales, chacune nommée par deux directions | Sefer Yetzirah ch. 4 et 5 | `source_attestee` |
+| Ces douze bordures sont les douze arêtes du cube dont les six côtés sont les faces | conséquence géométrique de la ligne précédente | `derivation_consolidee` |
 | Cube {−1, 0, 1}³, axe de chaque mère, ordre d'attribution des côtés et des bordures, règle de pas de la roue, poids combinés | relecture du 2026-10-04 et conventions de ce module | `reconstruction_analytique` |
 | Valeurs de guématria | tradition juive, hors Sefer Yetzirah | `derivation_consolidee` |
 | Roue tournant en avant et en arrière (גלגל חוזר פנים ואחור) | Sefer Yetzirah 2:4 | `source_attestee` |
@@ -193,11 +194,15 @@ face et dos. Un test vérifie que le fichier correspond toujours au code.
 
 ## Le cube, les empreintes et la règle de la roue (seconde relecture du 4 octobre)
 
-**Le cube est dans le texte, pas seulement dans le modèle.** La relecture lit
-les 12 simples comme les 12 arêtes d'un cube. Le Sefer Yetzirah le dit
-lui-même. Il donne aux 7 doubles les six côtés et le palais saint au milieu
-(ch. 4), et aux 12 simples les douze bordures diagonales (ch. 5), qui sont les
-arêtes d'un cube dont les six côtés sont les faces. Dans {−1, 0, 1}³, ce cube
+**Le cube vient du texte, à une déduction près.** La relecture lit les 12
+simples comme les 12 arêtes d'un cube. Le Sefer Yetzirah ne prononce pas le
+mot « cube ». Il donne aux 7 doubles les six côtés et le palais saint au
+milieu (ch. 4), et aux 12 simples les douze bordures diagonales, chacune
+nommée par deux directions voisines (est-haut, est-nord…) (ch. 5). Douze paires
+de côtés voisins, ce sont les douze arêtes du cube dont les six côtés sont les
+faces : c'est une déduction directe (`derivation_consolidee`), pas une
+correspondance numérique. En revanche, 7 = 2³ − 1 dans `axes.py` reste une
+reconstruction analytique, que le texte ne demande pas. Dans {−1, 0, 1}³, ce cube
 se lit sans reste (`cube.py`). Le centre et les 6 faces donnent les 7 doubles,
 les 12 milieux d'arêtes les 12 simples, les 3 axes les 3 mères. Il reste les 8
 coins : ce sont les 8 états de Z₂³ de `axes.py`, et les 8 trigrammes du Yi
@@ -245,3 +250,24 @@ Le statut de chaque colonne est dans `table_etendue.py` (`STATUTS`). Le
 produit des poids sépare exactement les six familles de portes : 9, 6, 3, 4, 2
 et 1 donnent 3, 21, 36, 21, 84 et 66 portes. La somme, elle, confond
 double-double et mère-simple, qui valent toutes deux 4.
+
+## Trois niveaux d'ordre
+
+Le mot « ordre » recouvre trois choses distinctes dans ce module :
+
+1. **L'ordre des lettres** (alphabétique ou 3-7-12). Il est conventionnel pour
+   K₂₂ : toute permutation des sommets donne le même graphe. Il ne l'est plus
+   dès qu'on numérote. Les deux ordres numérotent les 231 portes différemment,
+   et la correspondance entre les deux numérotations est une permutation des
+   231 portes, pas l'identité. `bijection()` la scelle.
+2. **L'ordre des deux lettres dans une porte.** Il est sans effet pour les 231
+   portes non orientées, et il compte pour les 462 opérateurs : c'est la face
+   et le dos. La face est fixée par l'ordre alphabétique.
+3. **L'ordre de lecture des 231 portes.** Il est sans effet pour l'ensemble,
+   et il compte pour un outil qui les parcourt en séquence. L'empreinte de
+   sérialisation de chaque ordre le fige.
+
+La période d'une porte sous la rotation ne dépend que de l'écart entre ses
+deux lettres sur la roue. Les 11 portes antipodales (écart 11) reviennent en
+11 pas, les 220 autres en 22. Un test vérifie la période minimale de chaque
+porte dans les deux ordres.

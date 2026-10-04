@@ -51,6 +51,13 @@ class Empreintes(unittest.TestCase):
             relue = empreintes.relire_par_lettres(empreintes.serialisation_table(ordre))
             self.assertEqual(relue, empreintes.serialisation_portes())
 
+    def test_convention(self):
+        for texte in (empreintes.serialisation_table(), empreintes.serialisation_portes(),
+                      empreintes.serialisation_bijection()):
+            self.assertFalse(texte.startswith("\ufeff"))
+            self.assertTrue(texte.endswith("\n"))
+            self.assertFalse(texte.endswith("\n\n"))
+
     def test_231_lignes(self):
         self.assertEqual(len(empreintes.serialisation_table().splitlines()), 231)
         self.assertEqual(len(empreintes.serialisation_bijection().splitlines()), 22)
@@ -88,6 +95,20 @@ class RegleDeTransition(unittest.TestCase):
         self.assertEqual(periode({Porte.de("א", "ל")}), 11)
         self.assertEqual(periode({porte("א", "ל")}), 22)
         self.assertEqual(periode({porte("א", "ב")}, crans=2), 11)
+
+    def test_periode_minimale_de_chaque_porte(self):
+        # 11 portes antipodales (distance 11) reviennent en 11 pas, les 220
+        # autres en 22 ; chaque opérateur orienté revient en 22.
+        from collections import Counter
+
+        from portes_231 import OPERATEURS, distance
+        periodes = Counter(periode({p}) for p in PORTES)
+        self.assertEqual(periodes, {11: 11, 22: 220})
+        for p in PORTES:
+            self.assertEqual(periode({p}), 11 if distance(p) == 11 else 22)
+        self.assertEqual({periode({op}) for op in OPERATEURS}, {22})
+        for ordre in (Ordre.ALPHABETIQUE, Ordre.CATEGORIES):
+            self.assertEqual(Counter(periode({p}, ordre=ordre) for p in PORTES), {11: 11, 22: 220})
 
     def test_avant_et_arriere(self):
         s = {porte("ג", "ש")}
