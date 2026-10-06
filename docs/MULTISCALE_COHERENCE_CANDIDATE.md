@@ -53,6 +53,12 @@ Ce document ne remplace ni `SECURITY_COMMAND.md`, ni AEGIS-24, ni les sources de
 
 **MS-14 — Adjacence des passages.** Un parent est exactement au niveau suivant : micro→méso, méso→macro, macro→méta. Le niveau méta n'a pas de parent supérieur dans ce modèle.
 
+Dans `validate_multiscale`, chaque reçu hors méta doit déclarer ce parent,
+y compris en mode strict : quatre échelles présentes mais déconnectées ne
+constituent pas une composition valide. `validate_scale_receipt` reste un
+contrôle local et n'exige pas à lui seul un graphe complet. Une relation locale
+doit citer au moins une distinction ; une liste vide n'établit pas sa provenance.
+
 **MS-15 — Acyclicité.** Le graphe d'agrégation parentale ne peut contenir de cycle.
 
 **MS-16 — Conservation des origines.** Chaque parent conserve l'union des `origin_ref` de ses enfants. Une copie ne multiplie jamais le poids de sa source.
@@ -461,7 +467,7 @@ Le runtime ne classe pas ces hypothèses avec un score totalisant et ne sélecti
 
 **MS-75 — UNKNOWN_Ξ.** `unknown_xi=true` lorsqu'une dynamique unique ne peut pas être déterminée : plusieurs hypothèses admissibles subsistent ou au moins une hypothèse reste sous-déterminée.
 
-**MS-76 — Hors-modèle de premier ordre.** Si aucune hypothèse n'est compatible, le système retourne `out_of_model=true`; il ne choisit pas la moins mauvaise par défaut.
+**MS-76 — Hors-modèle de premier ordre.** Si aucune hypothèse ne reste compatible ou sous-déterminée, le système retourne `out_of_model=true`; il ne choisit pas la moins mauvaise par défaut. Une observation sans trace ou un ensemble d'observations contradictoire maintient la sous-détermination ; il ne suffit pas à rejeter une hypothèse.
 
 **MS-77 — Compatibilité ≠ vérité.** Un seul Ξ compatible peut produire `CANDIDATE_OK` structurel, mais `independent_validation=false` et aucune promotion en vérité n'en découle.
 
@@ -656,6 +662,8 @@ risque de dissolution
 
 **MS-120 — Non-masquage.** Une dégradation, contestation ou indétermination locale reste visible dans l'agrégation multi-échelle.
 
+Un rapport local `PARTIAL` conserve ce défaut de validation au niveau composé, même si son verdict est déjà `DEGRADED`.
+
 **MS-121 — Fécondité ≠ optimalité.** Même `SUSTAINED` ne signifie jamais « forme optimale », « meilleure forme » ou « critère final ».
 
 **MS-122 — Fécondité ≠ autorité.** `optimality_claim=false` et `execution_authority=false` à chaque niveau et au rapport composé.
@@ -716,6 +724,8 @@ peuvent soutenir une capacité de reprise vers une forme connue, mais ne suffise
 **MS-132 — Auto-similarité multi-échelle.** Le même contrat reconstruction/exploration s'applique à micro, méso, macro et méta.
 
 **MS-133 — Non-masquage.** Une indétermination ou contestation locale sur l'exploration reste visible dans le composé.
+
+Un rapport local `PARTIAL` ne peut pas devenir `CANDIDATE_OK` par agrégation. Les mesures de rappel ne produisent une amélioration observée ou une cohérence publiée que si leurs valeurs sont finies et leurs traces disponibles ; une valeur invalide reste signalée sans être comparée.
 
 **MS-134 — Mémoire vivante ≠ retour maximal.** Le candidat ne définit pas la santé par la profondeur maximale d'un attracteur, mais par la coexistence prouvée de capacités distinctes de reprise et d'exploration.
 

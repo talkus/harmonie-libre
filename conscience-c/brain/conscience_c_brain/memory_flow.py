@@ -106,7 +106,11 @@ def _validate_signal(
 
 
 def _valid_metric(value: float | None) -> bool:
-    return value is None or (isinstance(value, (int, float)) and math.isfinite(float(value)))
+    return value is None or (
+        not isinstance(value, bool)
+        and isinstance(value, (int, float))
+        and math.isfinite(value)
+    )
 
 
 def validate_memory_flow(
@@ -194,6 +198,13 @@ def validate_memory_flow(
                         f"{label} must be finite when provided",
                     )
                 )
+        if not measurement.trace_refs:
+            issues.append(
+                ValidationIssue(
+                    "MS_MEM_RECALL_TRACE_REQUIRED",
+                    "recall measurement requires trace provenance",
+                )
+            )
         missing_traces = set(measurement.trace_refs) - traces
         if measurement.trace_refs and missing_traces:
             issues.append(
@@ -202,9 +213,12 @@ def validate_memory_flow(
                     f"recall measurement cites unavailable traces: {sorted(missing_traces)}",
                 )
             )
-        if measurement.d_in is not None and measurement.d_out is not None:
+        traced = bool(measurement.trace_refs) and not missing_traces
+        if (traced and measurement.d_in is not None and measurement.d_out is not None
+                and _valid_metric(measurement.d_in) and _valid_metric(measurement.d_out)):
             recall_improvement = float(measurement.d_out) < float(measurement.d_in)
-        recall_coherence = measurement.coherence
+        if traced and _valid_metric(measurement.coherence):
+            recall_coherence = measurement.coherence
 
     reconstruction_established = assessment.reconstruction_status == EvidenceStatus.TRIGGERED
     exploration_established = assessment.exploration_status == EvidenceStatus.TRIGGERED
@@ -272,6 +286,13 @@ def validate_multiscale_memory_flow(
     by_scale: dict[Scale, MemoryFlowReport] = {}
 
     for report in reports:
+        if report.status == CoherenceStatus.PARTIAL:
+            issues.append(
+                ValidationIssue(
+                    "MS_MEM_LOCAL_PARTIAL",
+                    f"memory-flow report for {report.scale.value} remains partial",
+                )
+            )
         if report.scale in by_scale:
             issues.append(
                 ValidationIssue(

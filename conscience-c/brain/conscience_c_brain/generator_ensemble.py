@@ -213,11 +213,13 @@ def assess_hypothesis(
     )
     unobserved = tuple(sorted(set(hypothesis_map) - set(observed)))
 
-    if conflicts:
+    # Invalid or conflicting input cannot establish an incompatibility.
+    # Keep the hypothesis revisable instead of rejecting it on an unfit basis.
+    if issues:
+        fit = HypothesisFit.UNDERDETERMINED
+    elif conflicts:
         fit = HypothesisFit.INCOMPATIBLE
     elif not overlap:
-        fit = HypothesisFit.UNDERDETERMINED
-    elif issues:
         fit = HypothesisFit.UNDERDETERMINED
     else:
         fit = HypothesisFit.COMPATIBLE

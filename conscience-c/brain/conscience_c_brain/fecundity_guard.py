@@ -296,6 +296,13 @@ def validate_multiscale_fecundity(
     by_scale: dict[Scale, FecundityReport] = {}
 
     for report in reports:
+        if report.status == CoherenceStatus.PARTIAL:
+            issues.append(
+                ValidationIssue(
+                    "MS_FEC_LOCAL_PARTIAL",
+                    f"fecundity report for {report.scale.value} remains partial",
+                )
+            )
         if report.scale in by_scale:
             issues.append(
                 ValidationIssue(
@@ -321,7 +328,7 @@ def validate_multiscale_fecundity(
         status = CoherenceStatus.CONTESTED
     elif FecundityVerdict.INDETERMINATE in verdicts:
         verdict = FecundityVerdict.INDETERMINATE
-        status = CoherenceStatus.INDETERMINATE
+        status = CoherenceStatus.PARTIAL if issues else CoherenceStatus.INDETERMINATE
     elif FecundityVerdict.DEGRADED in verdicts:
         verdict = FecundityVerdict.DEGRADED
         status = CoherenceStatus.PARTIAL if issues else CoherenceStatus.CANDIDATE_OK

@@ -400,6 +400,13 @@ def validate_scale_receipt(receipt: ScaleReceipt) -> ValidationReport:
             )
 
     for relation in receipt.relations:
+        if not relation.distinction_refs:
+            issues.append(
+                ValidationIssue(
+                    "MS_RHO_DELTA_REQUIRED",
+                    f"relation {relation.relation_id} has no distinction provenance",
+                )
+            )
         missing_distinctions = _missing_refs(relation.distinction_refs, distinction_ids)
         if missing_distinctions:
             issues.append(
@@ -771,6 +778,13 @@ def validate_multiscale(
             )
 
     for receipt in receipts:
+        if receipt.scale != Scale.META and not receipt.parent_receipt_hash:
+            issues.append(
+                ValidationIssue(
+                    "MS_PARENT_REQUIRED",
+                    f"{receipt.receipt_id} ({receipt.scale.value}) has no next-scale parent",
+                )
+            )
         if receipt.scale == Scale.META and receipt.parent_receipt_hash:
             issues.append(
                 ValidationIssue(
