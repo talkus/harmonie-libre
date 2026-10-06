@@ -2,8 +2,10 @@ import unittest
 from dataclasses import replace
 
 from conscience_c_brain.horizon_reciprocity import (
+    DistinctionProposal,
     derive_local_horizon,
     derive_transition,
+    validate_horizon_conditioned_distinction,
     validate_horizon_transition,
     validate_local_horizon,
 )
@@ -170,6 +172,131 @@ class HorizonReciprocityTests(unittest.TestCase):
         self.assertEqual(a.scale, b.scale)
         self.assertNotEqual(a.digest(), b.digest())
 
+
+class HorizonToDistinctionTests(unittest.TestCase):
+    def test_horizon_conditions_but_does_not_prove_candidate_distinction(self):
+        src = receipt()
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash=omega.digest(),
+            distinction_id="d2",
+            coupling_refs=("k2",),
+            evidence_trace_refs=("trace:2",),
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1", "k2"),
+            available_trace_refs=("trace:1", "trace:2"),
+        )
+        self.assertEqual(report.status, CoherenceStatus.CANDIDATE_OK)
+        self.assertTrue(report.admissible_for_review)
+        self.assertFalse(report.execution_authority)
+
+    def test_horizon_alone_cannot_supply_evidence(self):
+        src = receipt()
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash=omega.digest(),
+            distinction_id="d2",
+            coupling_refs=("k1",),
+            evidence_trace_refs=(),
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1",),
+            available_trace_refs=("trace:1",),
+        )
+        self.assertIn(
+            "MS_DELTA_PROPOSAL_EVIDENCE_REQUIRED",
+            {x.code for x in report.issues},
+        )
+        self.assertFalse(report.admissible_for_review)
+
+    def test_candidate_cannot_promote_itself_to_truth_or_authority(self):
+        src = receipt()
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash=omega.digest(),
+            distinction_id="d2",
+            coupling_refs=("k1",),
+            evidence_trace_refs=("trace:1",),
+            claims_truth=True,
+            execution_authority=True,
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1",),
+            available_trace_refs=("trace:1",),
+        )
+        codes = {x.code for x in report.issues}
+        self.assertIn("MS_DELTA_PROPOSAL_TRUTH_CLAIM_FORBIDDEN", codes)
+        self.assertIn("MS_DELTA_PROPOSAL_AUTHORITY_FORBIDDEN", codes)
+
+    def test_candidate_must_cite_exact_horizon(self):
+        src = receipt()
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash="0" * 64,
+            distinction_id="d2",
+            coupling_refs=("k1",),
+            evidence_trace_refs=("trace:1",),
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1",),
+            available_trace_refs=("trace:1",),
+        )
+        self.assertIn(
+            "MS_DELTA_PROPOSAL_HORIZON_MISMATCH",
+            {x.code for x in report.issues},
+        )
+
+    def test_candidate_cannot_fake_resolution_of_foreign_unknown(self):
+        src = receipt(
+            unknowns=(UnknownBoundary("u1", ("k1",), "open question"),)
+        )
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash=omega.digest(),
+            distinction_id="d2",
+            coupling_refs=("k1",),
+            evidence_trace_refs=("trace:1",),
+            addresses_unknown_ids=("u2",),
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1",),
+            available_trace_refs=("trace:1",),
+        )
+        self.assertIn(
+            "MS_DELTA_PROPOSAL_UNKNOWN_TARGET_MISMATCH",
+            {x.code for x in report.issues},
+        )
+
+    def test_existing_distinction_is_not_reintroduced_as_novel(self):
+        src = receipt()
+        omega = derive_local_horizon(src)
+        proposal = DistinctionProposal(
+            proposal_id="p1",
+            source_horizon_hash=omega.digest(),
+            distinction_id="d1",
+            coupling_refs=("k1",),
+            evidence_trace_refs=("trace:1",),
+        )
+        report = validate_horizon_conditioned_distinction(
+            omega, src, proposal,
+            available_coupling_refs=("k1",),
+            available_trace_refs=("trace:1",),
+        )
+        self.assertIn(
+            "MS_DELTA_PROPOSAL_ALREADY_PRESENT",
+            {x.code for x in report.issues},
+        )
 
 if __name__ == "__main__":
     unittest.main()
