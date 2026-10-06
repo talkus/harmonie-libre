@@ -681,3 +681,65 @@ Transformer seulement sous un contrat séparé de décision et de preuve.
 ~~~
 
 Ce correctif évite deux erreurs symétriques : fossiliser une forme parce qu'elle a été utile, ou la remplacer uniquement parce qu'une nouveauté est possible.
+
+## Extension mémoire du fleuve — reconstruction et exploration
+
+Le croisement avec les attracteurs hebbiens introduit une distinction essentielle : **rappel/reconstruction** et **exploration** sont deux capacités différentes.
+
+Les mesures de type :
+
+~~~text
+d_in > d_out
+cohérence élevée
+~~~
+
+peuvent soutenir une capacité de reprise vers une forme connue, mais ne suffisent pas à établir l'émergence d'une forme nouvelle.
+
+**MS-123 — Reconstruction ≠ exploration.** Une preuve de rappel ou de correction de perturbation ne promeut jamais automatiquement `exploration_status`.
+
+**MS-124 — Cohérence élevée ≠ découverte.** Une cohérence de rappel, même proche de 1, ne prouve ni plasticité, ni innovation, ni découverte d'un nouvel attracteur.
+
+**MS-125 — Exploration séparément testée.** `exploration_status=TRIGGERED` exige des preuves propres à une nouveauté structurée et persistante.
+
+**MS-126 — Continuité séparée.** Une exploration n'est pas assimilée à une continuité vivante sans preuve distincte de continuité.
+
+**MS-127 — Reprise ≠ capture.** Une reconstruction dominante reste distincte d'un risque de capture ; le risque de capture est une dimension séparée.
+
+**MS-128 — Exploration ≠ diffusion.** Une exploration dominante reste distincte d'un risque de diffusion ; le risque de diffusion est une dimension séparée.
+
+**MS-129 — Double capacité.** `DUAL_CAPACITY` exige reconstruction, exploration et continuité toutes soutenues sous le contrat local.
+
+**MS-130 — Inconnu conservé.** Si l'exploration n'est pas mesurée, une excellente reprise reste `INDETERMINATE` quant à la double capacité.
+
+**MS-131 — Pas de scalaire retour/exploration.** Le runtime ne calcule aucun score unique mélangeant rappel, plasticité, capture et diffusion.
+
+**MS-132 — Auto-similarité multi-échelle.** Le même contrat reconstruction/exploration s'applique à micro, méso, macro et méta.
+
+**MS-133 — Non-masquage.** Une indétermination ou contestation locale sur l'exploration reste visible dans le composé.
+
+**MS-134 — Mémoire vivante ≠ retour maximal.** Le candidat ne définit pas la santé par la profondeur maximale d'un attracteur, mais par la coexistence prouvée de capacités distinctes de reprise et d'exploration.
+
+**MS-135 — Symbolique sans preuve.** Les analogies du fleuve et du Nehar di-Nur restent interprétatives ; elles ne changent aucun verdict expérimental.
+
+La forme exécutable devient :
+
+~~~text
+perturbation transitoire
+  → reconstruction/reprise ?
+
+nouveauté structurée persistante
+  → exploration/plasticité ?
+
+continuité
+  → la transformation conserve-t-elle une généalogie pertinente ?
+
+capture / diffusion
+  → risques séparés
+~~~
+
+Le principe candidat est donc :
+
+~~~text
+Une mémoire capable de revenir n'est pas encore une mémoire capable de découvrir.
+Une mémoire vivante doit tester séparément les deux.
+~~~
