@@ -5,6 +5,7 @@ from .paired_memory import PairedMemoryBank
 from .teshuvah import TeshuvahMixin, CLAIM_PROVENANCE, CLAIM_STATUSES, PHASES as TESHUVAH_PHASES
 from .fleuve import FleuveMixin
 from .gabriel import GabrielMixin, GABRIEL_CRITERIA_VERSION
+from .uriel import UrielMixin, URIEL_CRITERIA_VERSION
 from .security_command import (
     SecurityCommandGuard, SecurityCommandInput, SecurityCommandDecision,
     SecurityMode, SecurityVerdict,
@@ -23,6 +24,7 @@ __all__ = [
     "TeshuvahMixin", "CLAIM_PROVENANCE", "CLAIM_STATUSES", "TESHUVAH_PHASES",
     "FleuveMixin",
     "GabrielMixin", "GABRIEL_CRITERIA_VERSION",
+    "UrielMixin", "URIEL_CRITERIA_VERSION",
     "SecurityCommandGuard", "SecurityCommandInput", "SecurityCommandDecision",
     "SecurityMode", "SecurityVerdict",
     "COMAND_AI_PUBLIC_REF", "BoundaryResult", "evaluate_comand_security_boundary",

@@ -45,6 +45,11 @@ def main():
     gp.add_argument("--reexamines")
     gp.add_argument("--revision-reason")
     sub.add_parser("gabriel-report").add_argument("report_ref")
+    up = sub.add_parser("uriel-read", help="read selected recorded Gabriel reports without writing")
+    up.add_argument("report_refs", nargs="+")
+    up.add_argument("--observer", required=True)
+    up.add_argument("--scope", required=True)
+    up.add_argument("--at-time")
     for command in ("gabriel-contest", "gabriel-correct", "gabriel-open-repair"):
         command_parser = sub.add_parser(command)
         command_parser.add_argument("report_ref")
@@ -56,6 +61,15 @@ def main():
             command_parser.add_argument("--evidence-ref", action="append", required=True)
 
     args = p.parse_args()
+    if args.cmd == "uriel-read":
+        try:
+            b = ConscienceCBrain.load_read_only(Path(args.root))
+            result = b.uriel_read(args.report_refs, observer_ref=args.observer,
+                                  scope_ref=args.scope, at_time=args.at_time)
+        except (ValueError, OSError) as exc:
+            p.error(str(exc))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
     if args.cmd.startswith("gabriel-"):
         if not (Path(args.root) / "state.json").is_file():
             p.error("Gabriel requires an existing memory; refusing to bootstrap a new one")

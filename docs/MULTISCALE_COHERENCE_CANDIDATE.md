@@ -753,3 +753,37 @@ Le principe candidat est donc :
 Une mémoire capable de revenir n'est pas encore une mémoire capable de découvrir.
 Une mémoire vivante doit tester séparément les deux.
 ~~~
+
+## Extension Uriel — carte située et révisable, 6 octobre 2026
+
+Cette traduction candidate reprend « Uriel — Détail » et le repère fourni
+par Mikael : **« Ne prends jamais pour ultime ce que tu rends visible. »**
+Le nom reste une analogie architecturale. L'interface et les limites sont
+détaillées dans [URIEL.md](../conscience-c/brain/URIEL.md).
+
+**MS-136 — Coordonnées de lecture distinctes.** Le lecteur et la portée de
+projection ne remplacent pas ceux des rapports source. Un rapport Gabriel
+macro peut constituer une unité micro de lecture sans changer son échelle
+d'origine. Plusieurs perspectives restent visibles.
+
+**MS-137 — Répétition du contrat et des passages.** Les unités micro, méso,
+macro et méta reprennent κ/Δ/ρ/τ/UNKNOWN. Chaque passage adjacent possède un
+pont explicite qui conserve les origines, l'ascendance déclarée des preuves,
+les limites et les objections. Les regroupements n'augmentent aucune autorité.
+
+**MS-138 — Clarté sans clôture.** Même si un diagnostic local est HOLD, la
+projection conserve ses limites de couverture, de vérité sémantique et
+d'authentification, avec des conditions de réouverture. Le niveau méta les
+expose. Un arrêt borné n'est pas un achèvement irrévisable.
+
+**MS-139 — Actualité distincte de l'histoire.** Une nouvelle contradiction,
+une expiration ou une donnée invalide ne réécrit pas un ancien rapport. La
+lecture expose le diagnostic historique et le contrôle d'applicabilité actuel,
+avec leurs preuves et origines respectives. Leur union de provenance remonte
+les quatre échelles ; leurs verdicts locaux demeurent séparés.
+
+`uriel_read` et la commande `uriel-read` sont des lectures sans écriture.
+Elles reprennent une mémoire existante, refusent une frontière altérée ou une
+transition inachevée et ne déclenchent aucune réparation. Cette projection
+réalise un transport explicite des rapports et de leurs limites ; elle ne
+revendique pas toute la couche de décision MS-25–30 ni un service déployé.

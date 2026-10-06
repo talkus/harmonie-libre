@@ -18,10 +18,11 @@ from .revalidation import RevalidationMixin
 from .teshuvah import TeshuvahMixin
 from .fleuve import FleuveMixin
 from .gabriel import GabrielMixin
+from .uriel import UrielMixin
 from .transition_store import TransitionStore, RecoveryRequired, atomic_write, snapshot_bytes, digest
 
 
-class ConscienceCBrain(GabrielMixin, FleuveMixin, TeshuvahMixin, RevalidationMixin, _StateModel):
+class ConscienceCBrain(UrielMixin, GabrielMixin, FleuveMixin, TeshuvahMixin, RevalidationMixin, _StateModel):
     def __init__(self, root: Path):
         self.root = Path(root)
         self.state_path = self.root / "state.json"
@@ -49,6 +50,20 @@ class ConscienceCBrain(GabrielMixin, FleuveMixin, TeshuvahMixin, RevalidationMix
             brain._adopt(*loaded)
             brain._migrate_anchor_if_needed()
             brain.audit_or_raise()
+        return brain
+
+    @classmethod
+    def load_read_only(cls, root: Path):
+        """Load C(t_n) without bootstrap, migration, file creation or recovery.
+
+        This is a non-mutating loader, not a permissions sandbox for subsequent
+        calls. Uriel only uses non-mutating operations on the loaded brain.
+        """
+        brain = cls(root)
+        brain._adopt(*brain._store.inspect())
+        brain.audit_or_raise()
+        if brain._store.inspect()[1] != brain._snapshot_token:
+            raise ValueError("snapshot boundary changed during read-only loading")
         return brain
 
     def _load(self):
