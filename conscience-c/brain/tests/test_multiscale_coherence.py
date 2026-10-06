@@ -8,10 +8,12 @@ from conscience_c_brain.multiscale_coherence import (
     EvidenceStatus,
     RelationRecord,
     Scale,
+    ScaleBridge,
     ScaleReceipt,
     UnknownBoundary,
     stutter_equivalent,
     validate_multiscale,
+    validate_scale_bridge,
     validate_scale_receipt,
 )
 
@@ -88,6 +90,25 @@ def linked_four_scale():
         parent_receipt_hash=meso.digest(),
     )
     return meta, macro, meso, micro_a, micro_b
+
+
+def valid_bridge(child, parent, **overrides):
+    values = {
+        "bridge_id": f"bridge:{child.receipt_id}->{parent.receipt_id}",
+        "child_receipt_hash": child.digest(),
+        "parent_receipt_hash": parent.digest(),
+        "transform_ref": "transform:test",
+        "preserved_origin_refs": child.origin_refs,
+        "preserved_provenance_bundle_refs": child.provenance_bundle_refs,
+        "carried_unknown_ids": tuple(x.unknown_id for x in child.unknowns),
+        "carried_contestation_ids": tuple(x.contestation_id for x in child.contestations),
+        "carried_evidence_status": child.evidence_status,
+        "declared_loss_refs": (),
+        "loss_justification_refs": (),
+        "authority_transfer": False,
+    }
+    values.update(overrides)
+    return ScaleBridge(**values)
 
 
 class MultiscaleCoherenceTests(unittest.TestCase):
@@ -399,6 +420,109 @@ class MultiscaleCoherenceTests(unittest.TestCase):
         self.assertEqual(report.status, CoherenceStatus.CANDIDATE_OK)
         self.assertEqual(len(report.scale_reports), 5)
         self.assertTrue(all(x.status == CoherenceStatus.CANDIDATE_OK for x in report.scale_reports))
+
+    def test_strict_mode_requires_explicit_bridge_per_parent_edge(self):
+        receipts = linked_four_scale()
+        report = validate_multiscale(receipts, require_explicit_bridges=True)
+        self.assertIn("MS_BRIDGE_MISSING", {x.code for x in report.issues})
+        self.assertEqual(report.status, CoherenceStatus.PARTIAL)
+
+    def test_explicit_bridges_cover_full_micro_meso_macro_meta_chain(self):
+        meta, macro, meso, micro_a, micro_b = linked_four_scale()
+        bridges = (
+            valid_bridge(macro, meta),
+            valid_bridge(meso, macro),
+            valid_bridge(micro_a, meso),
+            valid_bridge(micro_b, meso),
+        )
+        report = validate_multiscale(
+            (meta, macro, meso, micro_a, micro_b),
+            bridges,
+            require_explicit_bridges=True,
+        )
+        self.assertEqual(report.status, CoherenceStatus.CANDIDATE_OK)
+        self.assertEqual(len(report.bridge_reports), 4)
+        self.assertTrue(all(not x.issues for x in report.bridge_reports))
+        self.assertTrue(all(not x.execution_authority for x in report.bridge_reports))
+
+    def test_bridge_cannot_silently_drop_unknown_or_contestation(self):
+        meta, macro, meso, _, micro_b = linked_four_scale()
+        child = valid_receipt(
+            receipt_id="micro-uncertain",
+            scale=Scale.MICRO,
+            parent_receipt_hash=meso.digest(),
+            unknowns=(UnknownBoundary("u1", ("k1",), "open question"),),
+            contestations=(Contestation("c1", meso.digest(), "d1", ("trace:1",)),),
+        )
+        bridge = valid_bridge(
+            child,
+            meso,
+            carried_unknown_ids=(),
+            carried_contestation_ids=(),
+        )
+        report = validate_scale_bridge(
+            bridge,
+            {child.digest(): child, meso.digest(): meso},
+        )
+        codes = {x.code for x in report.issues}
+        self.assertIn("MS_BRIDGE_UNKNOWN_DROPPED", codes)
+        self.assertIn("MS_BRIDGE_CONTESTATION_DROPPED", codes)
+        self.assertFalse(report.execution_authority)
+
+    def test_bridge_must_carry_evidence_status_without_rewriting_it(self):
+        _, _, meso, _, _ = linked_four_scale()
+        child = valid_receipt(
+            receipt_id="micro-insufficient",
+            scale=Scale.MICRO,
+            parent_receipt_hash=meso.digest(),
+            evidence_status=EvidenceStatus.INSUFFICIENT_DATA,
+        )
+        bridge = valid_bridge(
+            child,
+            meso,
+            carried_evidence_status=EvidenceStatus.TRIGGERED,
+        )
+        report = validate_scale_bridge(
+            bridge,
+            {child.digest(): child, meso.digest(): meso},
+        )
+        self.assertIn(
+            "MS_BRIDGE_EVIDENCE_STATUS_MISMATCH",
+            {x.code for x in report.issues},
+        )
+
+    def test_bridge_rejects_authority_transfer_and_unjustified_loss(self):
+        _, _, meso, micro_a, _ = linked_four_scale()
+        bridge = valid_bridge(
+            micro_a,
+            meso,
+            authority_transfer=True,
+            declared_loss_refs=("detail:collapsed",),
+            loss_justification_refs=(),
+        )
+        report = validate_scale_bridge(
+            bridge,
+            {micro_a.digest(): micro_a, meso.digest(): meso},
+        )
+        codes = {x.code for x in report.issues}
+        self.assertIn("MS_BRIDGE_AUTHORITY_TRANSFER", codes)
+        self.assertIn("MS_BRIDGE_LOSS_UNJUSTIFIED", codes)
+
+    def test_bridge_cannot_invent_origin_or_provenance(self):
+        _, _, meso, micro_a, _ = linked_four_scale()
+        bridge = valid_bridge(
+            micro_a,
+            meso,
+            preserved_origin_refs=micro_a.origin_refs + ("origin:invented",),
+            preserved_provenance_bundle_refs=micro_a.provenance_bundle_refs + ("prov:invented",),
+        )
+        report = validate_scale_bridge(
+            bridge,
+            {micro_a.digest(): micro_a, meso.digest(): meso},
+        )
+        codes = {x.code for x in report.issues}
+        self.assertIn("MS_BRIDGE_ORIGIN_INVENTED", codes)
+        self.assertIn("MS_BRIDGE_PROVENANCE_INVENTED", codes)
 
 
 if __name__ == "__main__":
