@@ -203,3 +203,85 @@ Ce candidat reste révisable. Une fusion éventuelle exige au minimum :
 3. comparaison avec les invariants canoniques existants ;
 4. résolution explicite des contradictions ;
 5. aucune promotion de `CANDIDATE_OK` en « vérité », « autorité » ou « validation indépendante ».
+
+
+## Extension Ω ↔ Δ — horizon local co-engendré
+
+La nouvelle inversion retire le dernier absolu implicite : **Ω n'est pas une région stable située derrière les formes**.
+
+On écrit désormais, pour un contrat d'observation local :
+
+~~~text
+Ω_(observer, scope, scale, property, version) ↔ Δ_local
+~~~
+
+Une distinction locale contribue à configurer ce qui apparaît comme son horizon pertinent ; un changement d'observateur, de portée, de propriété, de version, de distinction ou d'UNKNOWN peut donc produire un nouvel horizon local.
+
+Cette réciprocité reste épistémique. Elle ne prétend pas que l'action « crée toute possibilité réelle », seulement que **le modèle de ce qui est possible ou pertinent dépend lui-même de ses formes d'observation et de distinction**.
+
+**MS-37 — Horizon local seulement.** Tout Ω opérationnel cite exactement un reçu, une échelle, un observateur, une portée et un contrat de propriété. `epistemic_scope` reste `local`.
+
+**MS-38 — Forme → horizon.** Un horizon opérationnel est dérivé d'un reçu local ; un Ω flottant sans provenance de forme est PARTIAL.
+
+**MS-39 — Ω ↔ Δ.** Une modification des distinctions locales peut reconfigurer Ω ; réciproquement, changer le contrat d'observation peut modifier quelles distinctions sont disponibles. Aucune direction n'est déclarée causalité métaphysique.
+
+**MS-40 — Non-totalisation de Ω.** Aucun horizon local ne peut être promu en « frontière du réel » ou « ensemble exhaustif de toutes les possibilités ».
+
+**MS-41 — UNKNOWN local ≠ impossibilité absolue.** Un `UNKNOWN` décrit une limite du contrat courant. Il ne permet jamais d'inférer que ce qui est inconnu est impossible pour tout autre observateur, toute autre échelle ou tout contrat futur.
+
+**MS-42 — Reconfiguration traçable.** Tout passage Ω_n → Ω_(n+1) publie les distinctions ajoutées ou retirées, les UNKNOWN ouverts ou résolus et les traces invoquées comme causes.
+
+**MS-43 — Croissance non monotone.** La révision peut ouvrir ou fermer des distinctions ou des UNKNOWN. « Plus de distinctions » n'est pas assimilé automatiquement à « plus de vérité » ou « plus de progrès ».
+
+**MS-44 — Actualisation ≠ preuve d'un réservoir préalable.** Le fait qu'une nouvelle distinction devienne formulable n'établit pas qu'elle existait auparavant comme possibilité déjà représentée dans un espace exhaustif.
+
+**MS-45 — Neutralité symbolique de l'horizon.** Les labels symboliques restent hors du hash opérationnel ; renommer Keter, Ω, Nehar di-Nur ou toute autre analogie ne change pas le verdict.
+
+Le module candidat `horizon_reciprocity.py` implémente seulement cette couche locale :
+
+~~~text
+ScaleReceipt
+    ↓ deterministic derivation
+LocalHorizon
+    ↓ explicit traced reconfiguration
+HorizonTransition
+~~~
+
+et conserve toujours :
+
+~~~text
+execution_authority = false
+~~~
+
+### Tests supplémentaires
+
+Les tests de cette extension vérifient :
+
+1. Ω dérivé d'une forme ou d'un reçu exact ;
+2. changement d'observateur → horizon local distinct ;
+3. changement de portée → horizon local distinct ;
+4. nouvelle distinction → reconfiguration explicitement déclarée ;
+5. UNKNOWN conservé comme frontière locale ;
+6. revendication d'horizon absolu ou total rejetée ;
+7. horizon flottant sans reçu exact rejeté ;
+8. diff de reconfiguration vérifié contre l'état réel ;
+9. impossibilité de certifier un espace futur exhaustif ;
+10. causes de reconfiguration obligatoirement reliées à des traces connues ;
+11. coexistence de plusieurs horizons au même niveau ;
+12. renommage symbolique sans effet opérationnel.
+
+La formulation conceptuelle devient donc :
+
+~~~text
+ce qui ouvre ↔ ce qui distingue
+~~~
+
+mais la formulation exécutable reste plus prudente :
+
+~~~text
+forme locale / contrat d'observation
+    ↔
+horizon épistémique local et révisable
+~~~
+
+Aucune de ces deux directions ne reçoit un privilège ontologique ou une autorité d'exécution.
