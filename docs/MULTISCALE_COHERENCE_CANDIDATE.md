@@ -330,3 +330,58 @@ mais τ/κ soutiennent Δ ;
 ~~~
 
 Ce choix empêche le cercle auto-certifiant `Ω prouve Δ ; Δ prouve Ω`.
+## Extension pluralité d'horizons — auto-similarité micro / méso / macro / méta
+
+La réciprocité Ω ↔ Δ est maintenant répétée sous la même discipline aux quatre échelles, sans transformer l'accord en preuve.
+
+~~~text
+micro : horizons locaux → évaluations locales → désaccord conservé
+méso  : horizons locaux → évaluations locales → désaccord conservé
+macro : horizons locaux → évaluations locales → désaccord conservé
+méta  : horizons locaux → évaluations locales → désaccord conservé
+~~~
+
+Le même validateur structurel s'applique partout ; **les conclusions n'ont pas à être identiques**.
+
+**MS-51 — Pluralité d'horizons par échelle.** Une propriété peut être examinée depuis plusieurs Ω locaux au même niveau sans qu'un horizon de référence soit déclaré souverain.
+
+**MS-52 — Accord ≠ indépendance.** Deux appuis ne comptent comme structurellement distincts que s'ils diffèrent d'horizon et d'observateur et n'ont pas d'origine ni de bundle de provenance commun.
+
+**MS-53 — Miroir ≠ corroboration.** Deux copies ou dérivations d'une même origine ne produisent jamais deux preuves indépendantes.
+
+**MS-54 — Corroboration structurelle ≠ validation indépendante.** Même lorsque deux chemins d'appui sont structurellement distincts, le runtime conserve `independent_validation=false`.
+
+**MS-55 — Pas de vote majoritaire épistémique.** Une contestation explicite reste `CONTESTED`, même face à plusieurs appuis. Elle n'est pas effacée par comptage.
+
+**MS-56 — Indétermination conservée.** Un horizon `INDETERMINATE` ne devient pas support par agrégation.
+
+**MS-57 — Auto-similarité du contrat, pas du verdict.** Micro, méso, macro et méta utilisent le même schéma de provenance, pluralité, contestation et non-autorité ; leurs verdicts peuvent diverger.
+
+**MS-58 — Non-masquage ascendant.** Un niveau supérieur ne peut pas convertir une contestation ou indétermination d'un niveau inférieur en `CANDIDATE_OK` global.
+
+**MS-59 — Complétude multi-échelle explicite.** Un rapport dit multi-échelle doit contenir micro, méso, macro et méta ; une échelle manquante garde le résultat `PARTIAL`.
+
+**MS-60 — Autorité toujours nulle.** La pluralité des horizons et la répétition du motif n'accordent aucune permission : `execution_authority=false` à chaque niveau et au rapport composé.
+
+La forme candidate complète devient :
+
+~~~text
+Ω_i ↔ Δ_i
+  ↓
+évaluation locale sourcée
+  ↓
+{support | challenge | indeterminate}
+  ↓
+comparaison inter-horizons sans fusion
+  ↓
+répétition du même contrat à micro / méso / macro / méta
+~~~
+
+La cohérence recherchée n'est donc pas « tout le monde conclut pareil », mais :
+
+~~~text
+chaque conclusion reste liée à son horizon,
+chaque accord conserve sa provenance,
+chaque désaccord reste visible,
+et aucune échelle ne blanchit l'incertitude d'une autre.
+~~~
