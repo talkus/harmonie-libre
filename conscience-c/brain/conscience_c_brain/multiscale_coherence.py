@@ -120,6 +120,12 @@ class ScaleReceipt:
     relations: tuple[RelationRecord, ...]
     trace_refs: tuple[str, ...]
     origin_refs: tuple[str, ...]
+    property_ref: str
+    property_version: str
+    scope_ref: str
+    observer_ref: str
+    revision_triggers: tuple[str, ...]
+    provenance_bundle_refs: tuple[str, ...]
     evidence_status: EvidenceStatus = EvidenceStatus.TRIGGERED
     unknowns: tuple[UnknownBoundary, ...] = ()
     contestations: tuple[Contestation, ...] = ()
@@ -164,6 +170,12 @@ class ScaleReceipt:
             ],
             "trace_refs": list(self.trace_refs),
             "origin_refs": list(self.origin_refs),
+            "property_ref": self.property_ref,
+            "property_version": self.property_version,
+            "scope_ref": self.scope_ref,
+            "observer_ref": self.observer_ref,
+            "revision_triggers": list(self.revision_triggers),
+            "provenance_bundle_refs": list(self.provenance_bundle_refs),
             "evidence_status": self.evidence_status.value,
             "unknowns": [
                 {
@@ -187,6 +199,27 @@ class ScaleReceipt:
             "parent_receipt_hash": self.parent_receipt_hash,
         }
 
+    def state_payload(self) -> dict:
+        """Relevant local state for stutter-equivalence checks.
+
+        Receipt identity and the cross-scale parent pointer are transport/history
+        coordinates, not part of the local epistemic state. Symbolic labels are
+        already excluded by canonical_payload().
+        """
+        payload = dict(self.canonical_payload())
+        payload.pop("receipt_id", None)
+        payload.pop("parent_receipt_hash", None)
+        return payload
+
+    def state_digest(self) -> str:
+        raw = json.dumps(
+            self.state_payload(),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        return hashlib.sha256(raw).hexdigest()
+
     def digest(self) -> str:
         raw = json.dumps(
             self.canonical_payload(),
@@ -195,6 +228,16 @@ class ScaleReceipt:
             separators=(",", ":"),
         ).encode("utf-8")
         return hashlib.sha256(raw).hexdigest()
+
+
+def stutter_equivalent(left: ScaleReceipt, right: ScaleReceipt) -> bool:
+    """True when two receipts expose the same relevant state at one scale.
+
+    This is a deliberately narrow analogue of stuttering invariance: changing
+    only receipt identity or the cross-scale parent pointer does not create a
+    new local epistemic state.
+    """
+    return left.scale == right.scale and left.state_digest() == right.state_digest()
 
 
 def _missing_refs(refs: Sequence[str], available: set[str]) -> set[str]:
@@ -222,6 +265,47 @@ def validate_scale_receipt(receipt: ScaleReceipt) -> ValidationReport:
             ValidationIssue(
                 "MS_ORIGIN_DUPLICATE",
                 "duplicate origin refs do not count as additional evidence",
+            )
+        )
+
+    if not receipt.property_ref:
+        issues.append(ValidationIssue("MS_PROPERTY_REQUIRED", "property_ref must be explicit"))
+    if not receipt.property_version:
+        issues.append(
+            ValidationIssue("MS_PROPERTY_VERSION_REQUIRED", "property_version must be explicit")
+        )
+    if not receipt.scope_ref:
+        issues.append(ValidationIssue("MS_SCOPE_REQUIRED", "scope_ref must be explicit"))
+    if not receipt.observer_ref:
+        issues.append(ValidationIssue("MS_OBSERVER_REQUIRED", "observer_ref must be explicit"))
+
+    if not receipt.revision_triggers:
+        issues.append(
+            ValidationIssue(
+                "MS_REVISION_TRIGGER_REQUIRED",
+                "at least one reopening/revision trigger must be explicit",
+            )
+        )
+    elif len(set(receipt.revision_triggers)) != len(receipt.revision_triggers):
+        issues.append(
+            ValidationIssue(
+                "MS_REVISION_TRIGGER_DUPLICATE",
+                "duplicate revision triggers add no independent condition",
+            )
+        )
+
+    if len(set(receipt.provenance_bundle_refs)) != len(receipt.provenance_bundle_refs):
+        issues.append(
+            ValidationIssue(
+                "MS_PROVENANCE_BUNDLE_DUPLICATE",
+                "duplicate provenance-bundle refs add no independent provenance",
+            )
+        )
+    if receipt.external_witness_refs and not receipt.provenance_bundle_refs:
+        issues.append(
+            ValidationIssue(
+                "MS_WITNESS_PROVENANCE_REQUIRED",
+                "declared external witnesses require provenance-of-provenance refs",
             )
         )
 
@@ -467,6 +551,15 @@ def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
                         ValidationIssue(
                             "MS_ORIGIN_NOT_PROPAGATED",
                             f"parent {parent.receipt_id} omits child origins: {sorted(missing_origins)}",
+                        )
+                    )
+
+                missing_bundles = set(receipt.provenance_bundle_refs) - set(parent.provenance_bundle_refs)
+                if missing_bundles:
+                    issues.append(
+                        ValidationIssue(
+                            "MS_PROVENANCE_BUNDLE_NOT_PROPAGATED",
+                            f"parent {parent.receipt_id} omits child provenance bundles: {sorted(missing_bundles)}",
                         )
                     )
 
