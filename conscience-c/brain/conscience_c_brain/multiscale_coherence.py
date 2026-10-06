@@ -6,8 +6,8 @@ Runtime motif:
     kappa -> delta -> rho -> tau -> UNKNOWN -> kappa'
 
 The same validation structure can be instantiated at micro, meso, macro,
-and meta scales.  Structural self-similarity does not imply that conclusions,
-authority, or permissions propagate across scales.
+and meta scales. Structural self-similarity does not imply that conclusions,
+authority, permissions, or evidence weight propagate across scales.
 """
 from __future__ import annotations
 
@@ -25,11 +25,26 @@ class Scale(str, Enum):
     META = "meta"
 
 
+_SCALE_RANK = {
+    Scale.MICRO: 0,
+    Scale.MESO: 1,
+    Scale.MACRO: 2,
+    Scale.META: 3,
+}
+
+
 class CoherenceStatus(str, Enum):
     CANDIDATE_OK = "CANDIDATE_OK"
     PARTIAL = "PARTIAL"
     INDETERMINATE = "INDETERMINATE"
     CONTESTED = "CONTESTED"
+
+
+class EvidenceStatus(str, Enum):
+    TRIGGERED = "TRIGGERED"
+    NOT_TRIGGERED = "NOT_TRIGGERED"
+    INSUFFICIENT_DATA = "INSUFFICIENT_DATA"
+    INVALID_DATA = "INVALID_DATA"
 
 
 @dataclass(frozen=True)
@@ -87,7 +102,12 @@ class ValidationIssue:
 class ValidationReport:
     status: CoherenceStatus
     receipt_hash: str
+    evidence_status: EvidenceStatus
     issues: tuple[ValidationIssue, ...] = ()
+    has_unknown: bool = False
+    has_contestation: bool = False
+    external_witness_declared: bool = False
+    independent_validation: bool = False
     execution_authority: bool = False
 
 
@@ -99,9 +119,11 @@ class ScaleReceipt:
     distinctions: tuple[DistinctionRecord, ...]
     relations: tuple[RelationRecord, ...]
     trace_refs: tuple[str, ...]
+    origin_refs: tuple[str, ...]
+    evidence_status: EvidenceStatus = EvidenceStatus.TRIGGERED
     unknowns: tuple[UnknownBoundary, ...] = ()
     contestations: tuple[Contestation, ...] = ()
-    independent_witness_refs: tuple[str, ...] = ()
+    external_witness_refs: tuple[str, ...] = ()
     parent_receipt_hash: str | None = None
     symbolic_labels: Mapping[str, str] = field(default_factory=dict)
 
@@ -141,6 +163,8 @@ class ScaleReceipt:
                 for x in self.relations
             ],
             "trace_refs": list(self.trace_refs),
+            "origin_refs": list(self.origin_refs),
+            "evidence_status": self.evidence_status.value,
             "unknowns": [
                 {
                     "unknown_id": x.unknown_id,
@@ -159,7 +183,7 @@ class ScaleReceipt:
                 }
                 for x in self.contestations
             ],
-            "independent_witness_refs": list(self.independent_witness_refs),
+            "external_witness_refs": list(self.external_witness_refs),
             "parent_receipt_hash": self.parent_receipt_hash,
         }
 
@@ -178,7 +202,11 @@ def _missing_refs(refs: Sequence[str], available: set[str]) -> set[str]:
 
 
 def validate_scale_receipt(receipt: ScaleReceipt) -> ValidationReport:
-    """Validate one scale using the same structural rules used at every scale."""
+    """Validate one scale using the same structural rules used at every scale.
+
+    CANDIDATE_OK means that this local structural contract passed. It is not
+    an independent validation and never grants execution authority.
+    """
     issues: list[ValidationIssue] = []
     trace_ids = set(receipt.trace_refs)
     coupling_ids = {x.coupling_id for x in receipt.couplings}
@@ -186,6 +214,19 @@ def validate_scale_receipt(receipt: ScaleReceipt) -> ValidationReport:
 
     if not receipt.trace_refs:
         issues.append(ValidationIssue("MS_TRACE_REQUIRED", "scale has no local trace provenance"))
+
+    if not receipt.origin_refs:
+        issues.append(ValidationIssue("MS_ORIGIN_REQUIRED", "scale has no source-origin provenance"))
+    elif len(set(receipt.origin_refs)) != len(receipt.origin_refs):
+        issues.append(
+            ValidationIssue(
+                "MS_ORIGIN_DUPLICATE",
+                "duplicate origin refs do not count as additional evidence",
+            )
+        )
+
+    if receipt.evidence_status == EvidenceStatus.INVALID_DATA:
+        issues.append(ValidationIssue("MS_INVALID_DATA", "evidence is explicitly marked invalid"))
 
     for coupling in receipt.couplings:
         if not coupling.trace_refs:
@@ -297,20 +338,29 @@ def validate_scale_receipt(receipt: ScaleReceipt) -> ValidationReport:
                 )
             )
 
-    if receipt.contestations:
+    has_unknown = bool(receipt.unknowns) or receipt.evidence_status == EvidenceStatus.INSUFFICIENT_DATA
+    has_contestation = bool(receipt.contestations)
+
+    # Governance and epistemic uncertainty remain separately visible even
+    # though a compact headline status is returned.
+    if has_contestation:
         status = CoherenceStatus.CONTESTED
-    elif receipt.unknowns:
+    elif has_unknown:
         status = CoherenceStatus.INDETERMINATE
-    elif issues or not receipt.independent_witness_refs:
+    elif issues:
         status = CoherenceStatus.PARTIAL
     else:
         status = CoherenceStatus.CANDIDATE_OK
 
-    # Coherence evidence never grants execution authority.
     return ValidationReport(
         status=status,
         receipt_hash=receipt.digest(),
+        evidence_status=receipt.evidence_status,
         issues=tuple(issues),
+        has_unknown=has_unknown,
+        has_contestation=has_contestation,
+        external_witness_declared=bool(receipt.external_witness_refs),
+        independent_validation=False,
         execution_authority=False,
     )
 
@@ -320,32 +370,108 @@ class MultiscaleReport:
     status: CoherenceStatus
     scale_reports: tuple[ValidationReport, ...]
     issues: tuple[ValidationIssue, ...]
+    has_unknown: bool = False
+    has_contestation: bool = False
+    independent_validation: bool = False
     execution_authority: bool = False
 
 
+def _cycle_nodes(receipts_by_hash: Mapping[str, ScaleReceipt]) -> set[str]:
+    """Return receipt hashes involved in a parent-link cycle."""
+    cycle_nodes: set[str] = set()
+
+    for start in receipts_by_hash:
+        path: list[str] = []
+        index: dict[str, int] = {}
+        current = start
+
+        while current in receipts_by_hash:
+            if current in index:
+                cycle_nodes.update(path[index[current] :])
+                break
+            index[current] = len(path)
+            path.append(current)
+            parent = receipts_by_hash[current].parent_receipt_hash
+            if not parent:
+                break
+            current = parent
+
+    return cycle_nodes
+
+
 def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
-    """Validate composition without collapsing local conclusions into one score."""
+    """Validate composition without collapsing local conclusions into one score.
+
+    Multiple units per scale are allowed. A full composition needs all four
+    scales, parent links move exactly one scale upward, source origins survive
+    aggregation, and the parent graph must remain acyclic.
+    """
     issues: list[ValidationIssue] = []
     reports = tuple(validate_scale_receipt(x) for x in receipts)
 
-    hashes = {x.digest() for x in receipts}
-    if len(hashes) != len(receipts):
+    hashes = [x.digest() for x in receipts]
+    receipts_by_hash = {x.digest(): x for x in receipts}
+
+    if len(set(hashes)) != len(hashes):
         issues.append(ValidationIssue("MS_DUPLICATE_RECEIPT", "duplicate operational receipts"))
 
-    scales = [x.scale for x in receipts]
-    if len(set(scales)) != len(scales):
-        issues.append(ValidationIssue("MS_DUPLICATE_SCALE", "more than one receipt for the same scale"))
+    receipt_ids = [x.receipt_id for x in receipts]
+    if len(set(receipt_ids)) != len(receipt_ids):
+        issues.append(
+            ValidationIssue(
+                "MS_DUPLICATE_RECEIPT_ID",
+                "one composition cannot contain competing versions of the same receipt_id",
+            )
+        )
 
-    for receipt in receipts:
-        if receipt.parent_receipt_hash and receipt.parent_receipt_hash not in hashes:
+    present_scales = {x.scale for x in receipts}
+    for scale in Scale:
+        if scale not in present_scales:
             issues.append(
                 ValidationIssue(
-                    "MS_PARENT_UNKNOWN",
-                    f"{receipt.receipt_id} cites a parent receipt not present in this composition",
+                    "MS_SCALE_MISSING",
+                    f"full multiscale composition is missing scale {scale.value}",
                 )
             )
+
+    for receipt in receipts:
+        if receipt.scale == Scale.META and receipt.parent_receipt_hash:
+            issues.append(
+                ValidationIssue(
+                    "MS_META_PARENT_FORBIDDEN",
+                    f"meta receipt {receipt.receipt_id} cannot have a higher-scale parent",
+                )
+            )
+
+        if receipt.parent_receipt_hash:
+            parent = receipts_by_hash.get(receipt.parent_receipt_hash)
+            if parent is None:
+                issues.append(
+                    ValidationIssue(
+                        "MS_PARENT_UNKNOWN",
+                        f"{receipt.receipt_id} cites a parent receipt not present in this composition",
+                    )
+                )
+            else:
+                if _SCALE_RANK[parent.scale] != _SCALE_RANK[receipt.scale] + 1:
+                    issues.append(
+                        ValidationIssue(
+                            "MS_NON_ADJACENT_PARENT",
+                            f"{receipt.receipt_id} ({receipt.scale.value}) must link only to the next scale, not {parent.scale.value}",
+                        )
+                    )
+
+                missing_origins = set(receipt.origin_refs) - set(parent.origin_refs)
+                if missing_origins:
+                    issues.append(
+                        ValidationIssue(
+                            "MS_ORIGIN_NOT_PROPAGATED",
+                            f"parent {parent.receipt_id} omits child origins: {sorted(missing_origins)}",
+                        )
+                    )
+
         for contestation in receipt.contestations:
-            if contestation.target_receipt_hash not in hashes:
+            if contestation.target_receipt_hash not in receipts_by_hash:
                 issues.append(
                     ValidationIssue(
                         "MS_CONTEST_TARGET_UNKNOWN",
@@ -353,12 +479,23 @@ def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
                     )
                 )
 
-    statuses = {x.status for x in reports}
-    if CoherenceStatus.CONTESTED in statuses:
+    cycle_nodes = _cycle_nodes(receipts_by_hash)
+    if cycle_nodes:
+        issues.append(
+            ValidationIssue(
+                "MS_PARENT_CYCLE",
+                f"parent graph contains a cycle involving {len(cycle_nodes)} receipt(s)",
+            )
+        )
+
+    has_contestation = any(x.has_contestation for x in reports)
+    has_unknown = any(x.has_unknown for x in reports)
+
+    if has_contestation:
         status = CoherenceStatus.CONTESTED
-    elif CoherenceStatus.INDETERMINATE in statuses:
+    elif has_unknown:
         status = CoherenceStatus.INDETERMINATE
-    elif issues or CoherenceStatus.PARTIAL in statuses:
+    elif issues or any(x.status == CoherenceStatus.PARTIAL for x in reports):
         status = CoherenceStatus.PARTIAL
     else:
         status = CoherenceStatus.CANDIDATE_OK
@@ -367,5 +504,8 @@ def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
         status=status,
         scale_reports=reports,
         issues=tuple(issues),
+        has_unknown=has_unknown,
+        has_contestation=has_contestation,
+        independent_validation=False,
         execution_authority=False,
     )
