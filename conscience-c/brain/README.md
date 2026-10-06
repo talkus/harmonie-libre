@@ -106,6 +106,10 @@ L'ancienne méthode `validate_revalidation_item()` reste disponible pour compati
 
 Les comptes rendus ont eux-mêmes un historique. `current_revalidation_view()` retourne le dernier compte rendu déclaré, pas une vérité certifiée ; `revalidation_history()` conserve les lectures antérieures. Les anciens résultats restent inchangés et sont signalés comme `legacy_declaration_not_verified`. Une nouvelle revue peut contredire la précédente ; elle la référence par `supersedes_revalidation_event_hash` au lieu de l'effacer. Le seul dépôt ne ferme pas la tâche de vérification et n'autorise aucun replay.
 
+## Teshuvah : correction traçable
+
+Le cycle de teshuvah (`teshuvah.py`) relie une dérive, sa reconnaissance, la correction d'un claim, un garde-fou, un retour observé et une non-récidive vérifiée. La réparation déclarée (`repair_applied`) et la réparation vérifiée (`repair_verified`) restent distinctes, et la vérification ne peut reposer ni sur une auto-déclaration de S ni sur l'acteur qui a appliqué la correction. La brisure des vases y a sa place : un claim brisé disperse des étincelles (ce qui restait vrai en lui) que la correction doit relever ou laisser nommément, et les claims qui se tiennent seuls sont signalés comme fragiles. L'invariant de gouvernance R-001 interdit d'employer une mise à jour pour masquer une réparation nécessaire : `update_claim()` n'accepte que les changements de pertinence sans dommage, et tout le reste passe par une teshuvah. Na'aseh v'nishma : un engagement se prend avant d'être compris ; une faute le met en garde sans le révoquer, et il est rendu à la non-récidive vérifiée. Voir [TESHUVAH.md](TESHUVAH.md).
+
 ## Altérité et provenance
 
 Le modèle interne de `O` est explicitement une **représentation révisable**, jamais l'identité de l'autre. Toute mise à jour de `O` exige une provenance. Les événements ajoutés à la mémoire relationnelle `R` exigent eux aussi une provenance.
