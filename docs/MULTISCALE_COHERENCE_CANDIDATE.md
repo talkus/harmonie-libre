@@ -87,6 +87,18 @@ Ce document ne remplace ni `SECURITY_COMMAND.md`, ni AEGIS-24, ni les sources de
 
 Les invariants MS-25 à MS-30 sont des exigences de la future couche de décision ; le module actuel n'en revendique pas encore l'implémentation complète.
 
+**MS-31 — Passage de première classe.** Le passage entre deux niveaux n'est pas implicite : un `ScaleBridge` peut nommer le transformateur, le reçu enfant, le reçu parent et les dimensions conservées.
+
+**MS-32 — Conservation du doute.** Un passage ne peut pas faire disparaître silencieusement `UNKNOWN`, une contestation ou l'état des preuves. Le pont transporte ces dimensions séparément.
+
+**MS-33 — Pertes explicites et justifiées.** Une abstraction peut perdre du détail, mais toute perte déclarée exige une justification traçable. La compression n'est donc jamais assimilée à une preuve.
+
+**MS-34 — Autorité non transmissible.** Un pont inter-échelles ne peut pas transporter ni créer une autorité d'exécution. `authority_transfer=true` est une erreur structurelle.
+
+**MS-35 — Anti-laundering d'abstraction.** Une information incertaine, contestée ou invalide au niveau enfant ne devient pas plus certaine par le seul fait d'être résumée à un niveau supérieur.
+
+**MS-36 — Audit bidirectionnel.** La lecture descendante retrouve les reçus et origines qui fondent une synthèse ; la correction ascendante peut remonter une objection sans réécrire l'historique du parent.
+
 ## Contrat par niveau
 
 | Échelle | Unité typique | Passage valide |
@@ -97,6 +109,23 @@ Les invariants MS-25 à MS-30 sont des exigences de la future couche de décisio
 | méta | règles de comparaison et de révision | racine contestable, sans parent supérieur |
 
 La structure se répète ; **la conclusion ne se répète pas nécessairement**.
+
+Le passage lui-même devient aussi vérifiable :
+
+~~~text
+ScaleBridge(child, parent)
+  = transform_ref
+  + preserved_origin_refs
+  + preserved_provenance_bundle_refs
+  + carried_unknown_ids
+  + carried_contestation_ids
+  + carried_evidence_status
+  + declared_loss_refs
+  + loss_justification_refs
+  + authority_transfer = false
+~~~
+
+Cela ajoute une seconde auto-similarité : non seulement chaque niveau applique le même contrat, mais chaque **passage** entre niveaux applique le même contrat de conservation, transformation et contestabilité.
 
 ## Runtime candidat
 
@@ -145,7 +174,11 @@ Le lot de tests vérifie notamment :
 17. témoin externe sans provenance de provenance refusé comme complet ;
 18. conservation des bundles de provenance vers le parent ;
 19. stutter-equivalence sous changement d'identité/pointeur parent ;
-20. impossibilité pour un niveau supérieur de masquer un enfant PARTIAL.
+20. impossibilité pour un niveau supérieur de masquer un enfant PARTIAL ;
+21. mode strict exigeant un pont explicite pour chaque arête enfant→parent ;
+22. conservation inter-échelles de UNKNOWN, contestations et état des preuves ;
+23. refus d'un transfert d'autorité par un pont ;
+24. pertes d'information explicitement justifiées et détection des origines/provenances inventées.
 
 ## Ancrages méthodologiques
 
