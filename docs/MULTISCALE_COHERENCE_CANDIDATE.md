@@ -19,6 +19,9 @@ Ce document ne remplace ni `SECURITY_COMMAND.md`, ni AEGIS-24, ni les sources de
 - **UNKNOWN — frontière de pertinence** : couplages pour lesquels les distinctions pertinentes ne sont pas encore établies. UNKNOWN n'est jamais converti implicitement en PASS ou en permission.
 - **origin_ref** : identité de la source d'origine. Deux miroirs d'une même origine réutilisent le même `origin_ref` et ne deviennent pas deux preuves indépendantes.
 - **evidence_status** : `TRIGGERED | NOT_TRIGGERED | INSUFFICIENT_DATA | INVALID_DATA`. Ces états ne sont jamais fusionnés.
+- **property_ref / property_version / scope_ref / observer_ref** : toute conclusion est explicitement liée à une propriété, une version, une portée et un observateur.
+- **revision_triggers** : conditions explicites de réouverture ; un maintien n'est donc jamais confondu avec une irrévisabilité.
+- **provenance_bundle_refs** : provenance de provenance, notamment pour les témoins externes et les agrégations inter-échelles.
 
 ## Invariants multi-échelle
 
@@ -59,6 +62,30 @@ Ce document ne remplace ni `SECURITY_COMMAND.md`, ni AEGIS-24, ni les sources de
 **MS-18 — Dimensions non écrasées.** Contestation, UNKNOWN, donnée invalide et témoin externe restent des champs séparés même lorsqu'un statut compact est calculé.
 
 **MS-19 — Autorité monotone nulle.** Aucun passage micro→méso→macro→méta n'augmente `execution_authority`; cette couche la fixe à `false`.
+
+**MS-20 — Contrat explicite.** Chaque reçu nomme la propriété examinée, sa version, sa portée et l'observateur. Une conclusion sans ces quatre coordonnées est PARTIAL.
+
+**MS-21 — Réouverture explicite.** Chaque reçu publie au moins un `revision_trigger`. La stabilité peut être justifiée, mais elle ne se transforme pas silencieusement en fermeture.
+
+**MS-22 — Provenance de provenance.** Un témoin externe déclaré doit être relié à un bundle de provenance ; les bundles d'un enfant doivent survivre dans son parent. Un miroir d'une même origine n'est toujours pas un nouveau témoin.
+
+**MS-23 — Stutter-invariance locale.** Deux reçus du même niveau qui ne diffèrent que par leur identité d'événement ou leur pointeur parent ont le même `state_digest` et le même verdict local. Un no-op ne fabrique donc pas artificiellement du progrès.
+
+**MS-24 — No-depth privilege.** Un niveau supérieur ne peut pas convertir un enfant PARTIAL, INDETERMINATE ou CONTESTED en preuve plus forte. Les verdicts locaux restent visibles dans le rapport composé.
+
+**MS-25 — Charge de la transformation.** Une future couche de décision devra justifier tout CHANGE par rapport à la baseline HOLD ; le simple fait de changer n'est pas une amélioration.
+
+**MS-26 — Stabilité–plasticité.** Le système doit résister au bruit sans devenir fermé à une preuve matérielle nouvelle.
+
+**MS-27 — Transformation bornée.** Une correction doit avoir une portée déclarée et une condition d'arrêt ; elle ne déclenche pas par défaut une réécriture de toutes les échelles.
+
+**MS-28 — HOLD révocable.** Le maintien est un résultat de premier ordre, distinct du silence et du manque de données, et reste réouvrable par ses déclencheurs.
+
+**MS-29 — Quiescence.** Plusieurs niveaux peuvent demeurer cohérents sans mutation continue, sans que ce repos soit promu en vérité finale.
+
+**MS-30 — Externalités inter-échelles.** Un HOLD local n'est pas cohérent s'il masque une objection, un coût ou une contradiction significative à une autre échelle.
+
+Les invariants MS-25 à MS-30 sont des exigences de la future couche de décision ; le module actuel n'en revendique pas encore l'implémentation complète.
 
 ## Contrat par niveau
 
@@ -112,14 +139,21 @@ Le lot de tests vérifie notamment :
 11. identifiants concurrents détectés ;
 12. contestation enfant→parent sans réécriture ;
 13. UNKNOWN et contestation visibles simultanément ;
-14. présence des quatre échelles pour un verdict multiscale complet.
+14. présence des quatre échelles pour un verdict multiscale complet ;
+15. propriété/version/portée/observateur obligatoires ;
+16. déclencheurs de révision obligatoires ;
+17. témoin externe sans provenance de provenance refusé comme complet ;
+18. conservation des bundles de provenance vers le parent ;
+19. stutter-equivalence sous changement d'identité/pointeur parent ;
+20. impossibilité pour un niveau supérieur de masquer un enfant PARTIAL.
 
 ## Ancrages méthodologiques
 
 - **W3C PROV-O** : sépare entités, activités, agents et dérivations ; l'architecture conserve de la même façon source, transformation et responsabilité.
 - **RFC 9162** : les preuves de cohérence d'un arbre de Merkle illustrent la différence entre append-only vérifiable et vérité du contenu enregistré.
-- **TLA+ / stuttering** : une spécification peut tolérer des pas qui ne changent pas l'état pertinent ; cela motive un futur test d'invariance aux no-op sans faire de la stabilité une faute.
-- **NIST — association ≠ causalité** : soutient explicitement MS-08.
+- **TLA+ / stuttering** : une spécification peut tolérer des pas qui ne changent pas l'état pertinent. Le candidat matérialise maintenant une version locale et limitée de cette idée via `state_digest` / `stutter_equivalent`; ce n'est pas une preuve TLA+.
+- **W3C PROV bundles** : la provenance de provenance motive `provenance_bundle_refs`, sans transformer la provenance en vérité.
+- **RAPTOR / GraphRAG** : leurs hiérarchies montrent l'utilité de représentations à plusieurs niveaux d'abstraction ; elles motivent l'organisation multi-échelle mais ne valident ni les verdicts ni l'autorité de ce candidat.
 
 Ces références motivent des propriétés de conception ; elles ne prouvent pas que ce candidat les implémente formellement.
 
