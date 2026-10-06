@@ -185,19 +185,48 @@ class TeshuvahMixin:
 
     # ---------------------------------------------------------------- claims
 
+    def _validate_claim_basis(self, facts, confidence=None):
+        if confidence is not None and (
+            isinstance(confidence, bool) or not isinstance(confidence, (int, float))
+            or not 0.0 <= confidence <= 1.0
+        ):
+            raise ValueError("confidence must be a finite number between 0 and 1")
+        if isinstance(facts, (str, bytes)):
+            raise ValueError("facts must be a collection of references")
+        facts = list(facts)
+        known_events = {row["event_hash"] for row in self.ledger.read_verified()}
+        for ref in facts:
+            _text(ref, "fact reference")
+            if ref not in self.state["E"]["evidence"] and ref not in known_events:
+                raise ValueError(f"fact reference is neither recorded evidence nor a ledger event: {ref}")
+        return facts
+
+    def _claim_chain(self, claim_id):
+        """Follow recorded replacements without changing historical links."""
+        claims = self._teshuvah_state()["claims"]
+        chain = []
+        seen = set()
+        while claim_id:
+            if claim_id in seen:
+                raise ValueError("claim replacement cycle")
+            if claim_id not in claims:
+                raise ValueError(f"unknown claim_id: {claim_id}")
+            seen.add(claim_id)
+            chain.append(claim_id)
+            claim_id = claims[claim_id].get("replaced_by")
+        return chain
+
+    def _repair_claim_ids(self, cycle):
+        # Old saved cycles have no separate current target list.
+        return cycle.get("repair_claim_ids", cycle["origin"]["claim_ids"])
+
     def record_claim(self, statement, provenance_kind, provenance, facts=(), confidence=None):
         """Enregistre une INTERPRETATION fondée sur des FACTS (preuves ou événements)."""
         _text(statement, "statement")
         _text(provenance, "provenance")
         if provenance_kind not in CLAIM_PROVENANCE:
             raise ValueError(f"provenance_kind must be one of {CLAIM_PROVENANCE}")
-        if confidence is not None and not 0.0 <= confidence <= 1.0:
-            raise ValueError("confidence must be between 0 and 1")
-        facts = list(facts)
-        known_events = {row["event_hash"] for row in self.ledger.read_verified()}
-        for ref in facts:
-            if ref not in self.state["E"]["evidence"] and ref not in known_events:
-                raise ValueError(f"fact reference is neither recorded evidence nor a ledger event: {ref}")
+        facts = self._validate_claim_basis(facts, confidence)
         ts = self._teshuvah_state()
         claim_id = f"CL{len(ts['claims']) + 1:04d}"
         claim = {
@@ -234,14 +263,7 @@ class TeshuvahMixin:
         if claim_id not in claims:
             raise ValueError(f"unknown claim_id: {claim_id}")
         original = claims[claim_id]
-        current = original
-        seen = {claim_id}
-        while current.get("replaced_by"):
-            nxt = current["replaced_by"]
-            if nxt in seen:
-                raise ValueError("claim replacement cycle")
-            seen.add(nxt)
-            current = claims[nxt]
+        current = claims[self._claim_chain(claim_id)[-1]]
         return {
             "fact": list(original["facts"]),
             "interpretation": {"claim_id": original["claim_id"], "statement": original["statement"],
@@ -253,7 +275,7 @@ class TeshuvahMixin:
 
     def _open_cycles_for(self, claim_id):
         return [c["teshuvah_id"] for c in self._teshuvah_state()["cycles"].values()
-                if claim_id in c["origin"]["claim_ids"] and not c["closed"]
+                if claim_id in (*c["origin"]["claim_ids"], *self._repair_claim_ids(c)) and not c["closed"]
                 and c["phase"] not in {"repair_verified", "cicatrized", "archived"}]
 
     def update_claim(self, claim_id, statement, reason, provenance, provenance_kind,
@@ -280,11 +302,7 @@ class TeshuvahMixin:
         if old["status"] != "active" or self._open_cycles_for(claim_id):
             raise R001Violation(f"R-001: {claim_id} is {old['status']} or under an open teshuvah; "
                                 "no silent substitution while a repair is pending")
-        facts = list(old["facts"] if facts is None else facts)
-        known_events = {row["event_hash"] for row in self.ledger.read_verified()}
-        for ref in facts:
-            if ref not in self.state["E"]["evidence"] and ref not in known_events:
-                raise ValueError(f"fact reference is neither recorded evidence nor a ledger event: {ref}")
+        facts = self._validate_claim_basis(old["facts"] if facts is None else facts)
         new_id = f"CL{len(ts['claims']) + 1:04d}"
         ts["claims"][new_id] = {
             "claim_id": new_id, "layer": "interpretation", "statement": statement, "facts": facts,
@@ -445,7 +463,7 @@ class TeshuvahMixin:
             raise ValueError("sparks must be a nonempty list")
         claims = self._teshuvah_state()["claims"]
         for sp in sparks:
-            if not isinstance(sp, dict) or sp.get("claim_id") not in cycle["origin"]["claim_ids"]:
+            if not isinstance(sp, dict) or sp.get("claim_id") not in self._repair_claim_ids(cycle):
                 raise ValueError("each spark must come from a claim broken in this teshuvah")
             _text(sp.get("content"), "spark.content")
             facts = list(sp.get("facts", []))
@@ -489,7 +507,7 @@ class TeshuvahMixin:
             cycle["notification"] = {"status": "required", "history": []}
         cycle["acknowledgment"] = ack
         self._set_phase(cycle, "under_repair", "acknowledged")
-        for cid in cycle["origin"]["claim_ids"]:
+        for cid in self._repair_claim_ids(cycle):
             self._set_claim_status(cid, "under_repair", teshuvah_id, what_went_wrong)
         return self._commit_cycle("TESHUVAH_ACKNOWLEDGED", cycle, {"acknowledgment": ack})
 
@@ -518,16 +536,23 @@ class TeshuvahMixin:
         _text(provenance, "provenance")
         if not isinstance(corrections, list):
             raise ValueError("corrections must be a list")
-        targets = set(cycle["origin"]["claim_ids"])
-        if targets and {c.get("claim_id") for c in corrections if isinstance(c, dict)} != targets:
-            raise ValueError("every contested claim of this teshuvah must receive an explicit correction")
+        targets = set(self._repair_claim_ids(cycle))
+        correction_ids = [c.get("claim_id") for c in corrections if isinstance(c, dict)]
+        if len(correction_ids) != len(corrections) or len(correction_ids) != len(set(correction_ids)):
+            raise ValueError("each current claim must receive exactly one correction")
+        if set(correction_ids) != targets:
+            raise ValueError("every current claim of this teshuvah must receive an explicit correction")
         ts = self._teshuvah_state()
+        replacement_facts = {}
         # Valider tout avant toute mutation.
         for c in corrections:
             if not isinstance(c, dict) or c.get("action") not in {"supersede", "retract"}:
                 raise ValueError("each correction needs action supersede or retract")
             if c.get("claim_id") not in targets:
                 raise ValueError(f"claim {c.get('claim_id')} is not under repair in this teshuvah")
+            old = ts["claims"][c["claim_id"]]
+            if old["status"] not in {"contested", "under_repair"} or old.get("replaced_by"):
+                raise ValueError("repair target is no longer current; review its replacement first")
             _text(c.get("reason"), "reason")
             if c["action"] == "supersede":
                 rep = c.get("replacement")
@@ -537,10 +562,12 @@ class TeshuvahMixin:
                 _text(rep.get("provenance"), "replacement.provenance")
                 if rep.get("provenance_kind") not in CLAIM_PROVENANCE:
                     raise ValueError(f"replacement.provenance_kind must be one of {CLAIM_PROVENANCE}")
+                replacement_facts[c["claim_id"]] = self._validate_claim_basis(
+                    rep.get("facts", old["facts"]), rep.get("confidence"))
             elif c.get("raised_sparks"):
                 raise ValueError("a retraction has no replacement to raise sparks into; release them instead")
             for sid in c.get("raised_sparks", []):
-                if sid in cycle["sparks"] and cycle["sparks"][sid]["claim_id"] != c["claim_id"]:
+                if sid in cycle["sparks"] and c["claim_id"] not in self._claim_chain(cycle["sparks"][sid]["claim_id"]):
                     raise ValueError(f"spark {sid} belongs to another broken claim")
         released = dict(released_sparks or {})
         raised = [sid for c in corrections for sid in c.get("raised_sparks", [])]
@@ -559,7 +586,7 @@ class TeshuvahMixin:
                 new_id = f"CL{len(ts['claims']) + 1:04d}"
                 ts["claims"][new_id] = {
                     "claim_id": new_id, "layer": "interpretation", "statement": rep["statement"],
-                    "facts": list(rep.get("facts", old["facts"])), "provenance_kind": rep["provenance_kind"],
+                    "facts": replacement_facts[cid], "provenance_kind": rep["provenance_kind"],
                     "provenance": rep["provenance"], "confidence": rep.get("confidence"),
                     "status": "active", "status_history": [], "replaces": cid, "replaced_by": None,
                     "created_by_teshuvah": teshuvah_id,
@@ -692,7 +719,16 @@ class TeshuvahMixin:
             raise ValueError(f"unknown evidence_id: {evidence_id}")
         rec = {"description": _text(description, "description"), "provenance": _text(provenance, "provenance"),
                "evidence_id": evidence_id, "phase_at_recurrence": cycle["phase"]}
+        # A recurrence concerns the current descendants, never a rewrite of
+        # the original claims or replacement edges. Retractions stay retired.
+        claims = self._teshuvah_state()["claims"]
+        current_ids = list(dict.fromkeys(self._claim_chain(cid)[-1] for cid in cycle["origin"]["claim_ids"]))
+        repair_ids = [cid for cid in current_ids if claims[cid]["status"] in {"active", "contested", "under_repair"}]
+        rec["repair_claim_ids"] = repair_ids
         cycle["recurrences"].append(rec)
+        cycle["repair_claim_ids"] = repair_ids
+        for cid in repair_ids:
+            self._set_claim_status(cid, "under_repair", teshuvah_id, description)
         cycle.pop("custom_influence", None)
         cycle["closed"] = False
         if cycle["verification"].get("status") != "pending":
