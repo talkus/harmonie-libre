@@ -309,3 +309,136 @@ def validate_horizon_transition(
         issues=tuple(issues),
         execution_authority=False,
     )
+
+
+@dataclass(frozen=True)
+class DistinctionProposal:
+    """A candidate Delta conditioned by a local Omega.
+
+    The horizon constrains relevance; it is never evidence for the proposal.
+    """
+
+    proposal_id: str
+    source_horizon_hash: str
+    distinction_id: str
+    coupling_refs: tuple[str, ...]
+    evidence_trace_refs: tuple[str, ...]
+    addresses_unknown_ids: tuple[str, ...] = ()
+    claims_truth: bool = False
+    execution_authority: bool = False
+
+
+@dataclass(frozen=True)
+class DistinctionProposalReport:
+    status: CoherenceStatus
+    issues: tuple[ValidationIssue, ...] = ()
+    admissible_for_review: bool = False
+    execution_authority: bool = False
+
+
+def validate_horizon_conditioned_distinction(
+    horizon: LocalHorizon,
+    source_receipt: ScaleReceipt,
+    proposal: DistinctionProposal,
+    *,
+    available_coupling_refs: Sequence[str],
+    available_trace_refs: Sequence[str],
+) -> DistinctionProposalReport:
+    """Validate the Omega -> candidate-Delta direction without circular proof.
+
+    Omega provides scope/relevance coordinates only. Couplings and trace
+    evidence must come from the explicitly supplied evidence context.
+    """
+    issues: list[ValidationIssue] = []
+
+    horizon_report = validate_local_horizon(horizon, source_receipt)
+    if horizon_report.status != CoherenceStatus.CANDIDATE_OK:
+        issues.append(
+            ValidationIssue(
+                "MS_OMEGA_INVALID_FOR_PROPOSAL",
+                "proposal is conditioned by an invalid or drifted local horizon",
+            )
+        )
+
+    if proposal.source_horizon_hash != horizon.digest():
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_HORIZON_MISMATCH",
+                "proposal does not cite the exact local horizon used to condition it",
+            )
+        )
+
+    if proposal.distinction_id in set(horizon.distinction_refs):
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_ALREADY_PRESENT",
+                "proposal reuses a distinction already present in the local horizon",
+            )
+        )
+
+    if not proposal.coupling_refs:
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_KAPPA_REQUIRED",
+                "candidate distinction requires at least one coupling ref",
+            )
+        )
+    else:
+        missing_couplings = set(proposal.coupling_refs) - set(available_coupling_refs)
+        if missing_couplings:
+            issues.append(
+                ValidationIssue(
+                    "MS_DELTA_PROPOSAL_KAPPA_UNKNOWN",
+                    f"proposal cites unavailable couplings: {sorted(missing_couplings)}",
+                )
+            )
+
+    if not proposal.evidence_trace_refs:
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_EVIDENCE_REQUIRED",
+                "candidate distinction requires evidence traces external to the horizon itself",
+            )
+        )
+    else:
+        missing_traces = set(proposal.evidence_trace_refs) - set(available_trace_refs)
+        if missing_traces:
+            issues.append(
+                ValidationIssue(
+                    "MS_DELTA_PROPOSAL_EVIDENCE_UNKNOWN",
+                    f"proposal cites unavailable evidence traces: {sorted(missing_traces)}",
+                )
+            )
+
+    unknown_ids = set(horizon.unknown_ids)
+    missing_unknowns = set(proposal.addresses_unknown_ids) - unknown_ids
+    if missing_unknowns:
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_UNKNOWN_TARGET_MISMATCH",
+                f"proposal claims to address UNKNOWN ids outside this horizon: {sorted(missing_unknowns)}",
+            )
+        )
+
+    if proposal.claims_truth:
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_TRUTH_CLAIM_FORBIDDEN",
+                "candidate admission cannot promote a distinction to truth",
+            )
+        )
+
+    if proposal.execution_authority:
+        issues.append(
+            ValidationIssue(
+                "MS_DELTA_PROPOSAL_AUTHORITY_FORBIDDEN",
+                "candidate distinction cannot carry execution authority",
+            )
+        )
+
+    return DistinctionProposalReport(
+        status=CoherenceStatus.PARTIAL if issues else CoherenceStatus.CANDIDATE_OK,
+        issues=tuple(issues),
+        admissible_for_review=not issues,
+        execution_authority=False,
+    )
