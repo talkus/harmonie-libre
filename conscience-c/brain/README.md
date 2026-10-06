@@ -2,6 +2,10 @@
 
 Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pas ni ne prétend démontrer une conscience phénoménale.
 
+**Gabriel :** l'[examen borné et contestable](GABRIEL.md) est intégré au cerveau,
+au journal, aux reçus multi-échelles et à la réparation explicite. Une lecture
+seule ne modifie aucune affirmation ; un diagnostic ne donne aucune permission.
+
 **Audit du 26 septembre 2026 :** un compte rendu enregistré n'est pas un fait vérifié. Voir [l'audit des revérifications](AUDIT_REVALIDATION_2026-09-26.md), [l'audit des checkpoints](AUDIT_CHECKPOINTS_2026-09-26.md) et [la récupération des transitions](AUDIT_TRANSITIONS_2026-09-26.md).
 
 ## Invariants implémentés

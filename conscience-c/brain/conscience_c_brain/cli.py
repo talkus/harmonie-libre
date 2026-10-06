@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .core import ConscienceCBrain
 from .models import CausalOrigin, Evidence, EvidenceKind, Hypothesis
+from .multiscale_coherence import Scale
 
 def main():
     p = argparse.ArgumentParser(prog="conscience-c-brain")
@@ -32,10 +33,60 @@ def main():
     rp = sub.add_parser("repair")
     rp.add_argument("--provenance", required=True)
 
+    gp = sub.add_parser("gabriel-examine", help="examine one recorded claim without changing it")
+    gp.add_argument("claim_id")
+    gp.add_argument("--scope", required=True)
+    gp.add_argument("--observer", required=True)
+    gp.add_argument("--subject")
+    gp.add_argument("--scale", choices=[s.value for s in Scale], default="micro")
+    gp.add_argument("--at-time")
+    gp.add_argument("--record", action="store_true", help="append the diagnostic to the journal")
+    gp.add_argument("--provenance")
+    gp.add_argument("--reexamines")
+    gp.add_argument("--revision-reason")
+    sub.add_parser("gabriel-report").add_argument("report_ref")
+    for command in ("gabriel-contest", "gabriel-correct", "gabriel-open-repair"):
+        command_parser = sub.add_parser(command)
+        command_parser.add_argument("report_ref")
+        command_parser.add_argument("--actor", required=True)
+        command_parser.add_argument("--provenance", required=True)
+        if command != "gabriel-open-repair":
+            command_parser.add_argument("--reason", required=True)
+        if command == "gabriel-correct":
+            command_parser.add_argument("--evidence-ref", action="append", required=True)
+
     args = p.parse_args()
+    if args.cmd.startswith("gabriel-"):
+        if not (Path(args.root) / "state.json").is_file():
+            p.error("Gabriel requires an existing memory; refusing to bootstrap a new one")
+        if args.cmd == "gabriel-examine" and args.record and not args.provenance:
+            p.error("--record requires --provenance")
     b = ConscienceCBrain.load_or_bootstrap(Path(args.root))
 
-    if args.cmd == "status":
+    if args.cmd.startswith("gabriel-"):
+        try:
+            if args.cmd == "gabriel-examine":
+                context = dict(scope_ref=args.scope, observer_ref=args.observer, subject_ref=args.subject,
+                               scale=args.scale, at_time=args.at_time)
+                if args.record:
+                    result = b.record_gabriel_examination(args.claim_id, provenance=args.provenance,
+                        reexamines=args.reexamines, revision_reason=args.revision_reason, **context)
+                else:
+                    result = b.gabriel_examine(args.claim_id, **context)
+            elif args.cmd == "gabriel-report":
+                result = b.gabriel_report(args.report_ref)
+            elif args.cmd == "gabriel-open-repair":
+                result = b.open_gabriel_repair(args.report_ref, requested_by=args.actor, provenance=args.provenance)
+            else:
+                context = dict(reason=args.reason, actor=args.actor, provenance=args.provenance)
+                if args.cmd == "gabriel-correct":
+                    result = b.correct_gabriel(args.report_ref, evidence_refs=args.evidence_ref, **context)
+                else:
+                    result = b.contest_gabriel(args.report_ref, **context)
+        except ValueError as exc:
+            p.error(str(exc))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.cmd == "status":
         print(json.dumps(b.status(), ensure_ascii=False, indent=2))
     elif args.cmd == "audit":
         print(json.dumps(b.audit(), ensure_ascii=False, indent=2))
