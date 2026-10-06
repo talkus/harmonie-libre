@@ -101,6 +101,12 @@
       "path": "registre-continuite",
       "mode": "GUARD",
       "integration": "provenance/integrity guard"
+    },
+    {
+      "id": "231-portes",
+      "path": "projects/231-portes",
+      "mode": "SHADOW_READ_ONLY",
+      "integration": "source/provenance audit; computational reading is reconstruction, not source"
     }
   ],
   "external_integrations": [

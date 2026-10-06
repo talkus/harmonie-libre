@@ -1,0 +1,25 @@
+name: 231 Portes
+
+on:
+  push:
+    paths:
+      - "projects/231-portes/**"
+      - ".github/workflows/portes-231.yml"
+  pull_request:
+    paths:
+      - "projects/231-portes/**"
+      - ".github/workflows/portes-231.yml"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/231-portes
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e .
+      - run: python -m unittest discover -s tests -v

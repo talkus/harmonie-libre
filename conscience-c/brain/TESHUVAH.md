@@ -127,6 +127,17 @@ Dans la mémoire de C :
 
 ## Limite
 
+Les remplacements passent les mêmes contrôles de faits et de confiance que
+`record_claim()`. Toutes les corrections sont validées avant mutation ; chaque
+claim reçoit exactement une correction.
+
+Lors d'une récidive, `origin.claim_ids` reste historique. Le cycle enregistre
+séparément les `repair_claim_ids` courants, trouvés en suivant les remplacements.
+Ces claims deviennent `under_repair` et sortent des décisions sensibles. La
+réparation suivante vise ces identifiants, sans réécrire les anciens liens ni
+réactiver un claim rétracté. Les étincelles gardent leur provenance d'origine
+et peuvent être relevées dans un descendant de cette même lignée.
+
 La vérification contrôle des conditions structurelles (preuve postérieure, observable, non émise par S, vérificateur distinct de l'acteur). Le logiciel n'authentifie ni l'identité ni l'indépendance du vérificateur : le statut porte `external_authentication: not_performed`, comme pour `verify_repair()`.
 
 ## Provenance
