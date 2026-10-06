@@ -499,3 +499,66 @@ OUT_OF_MODEL = aucune reconstruction actuelle ne couvre les traces
 ~~~
 
 Le second cas est essentiel : l'ouverture du modèle exige de pouvoir reconnaître que **l'espace actuel de dynamiques est lui-même insuffisant**.
+
+## Axiome racine candidat — non-clôture opérationnelle
+
+La formulation philosophique la plus dépouillée proposée est :
+
+~~~text
+non-clôture
+~~~
+
+ou :
+
+~~~text
+aucune présentation n'épuise ce qui se présente
+~~~
+
+Le runtime adopte une version volontairement plus faible et vérifiable. Il **ne code pas** `∀P, ∃P' ≠ P` comme fait ontologique, car l'existence effective d'une autre présentation ne peut pas être déduite du seul refus de clôture.
+
+Il code :
+
+~~~text
+par défaut, aucune présentation locale ne peut se déclarer exhaustive ;
+une clôture n'est admissible que relativement à un domaine borné,
+un critère explicite et des preuves de clôture ;
+même alors, cette clôture reste locale et réouvrable.
+~~~
+
+**MS-85 — Non-clôture par défaut.** Une présentation qui ne revendique aucune exhaustivité reste `OPEN`; l'ouverture n'est ni une erreur ni une preuve d'incomplétude métaphysique.
+
+**MS-86 — Clôture globale interdite.** Aucun reçu local ne peut revendiquer l'exhaustivité du réel, de toutes les perspectives ou de toutes les possibilités.
+
+**MS-87 — Clôture locale bornée.** `LOCALLY_CLOSED` exige un domaine borné, un critère de clôture, des références de preuve et aucune inconnue silencieusement conservée.
+
+**MS-88 — Preuve de clôture ≠ vérité totale.** Une clôture locale structurellement admissible reste `independent_validation=false`, `globally_exhaustive=false` et `execution_authority=false`.
+
+**MS-89 — Réouverture obligatoire.** Même une clôture locale publie des déclencheurs de révision. Changer de portée, de propriété ou recevoir une preuve nouvelle peut rouvrir le contrat.
+
+**MS-90 — UNKNOWN incompatible avec clôture silencieuse.** Un élément non résolu interdit de déclarer exhaustive la présentation locale concernée.
+
+**MS-91 — Quatre clôtures locales ≠ clôture globale.** La complétude micro + méso + macro + méta n'est jamais promue par composition en totalité absolue.
+
+**MS-92 — Non-clôture multi-échelle.** Le même garde-fou s'applique à chaque niveau et au composé ; une indétermination locale reste visible.
+
+**MS-93 — Non-clôture ≠ génération forcée de nouveauté.** Le système ne doit pas inventer une nouvelle présentation uniquement pour satisfaire l'axiome. `DEFER`, `HOLD`, `RETIRE` et absence de nouvelle hypothèse restent permis.
+
+**MS-94 — Non-clôture ≠ relativisme.** Une présentation peut être réfutée, localement close ou mieux soutenue qu'une autre ; le garde-fou interdit seulement le saut injustifié de local à total.
+
+La forme racine exécutable devient donc :
+
+~~~text
+présentation locale
+  → {OPEN | INDETERMINATE | LOCALLY_CLOSED}
+  → toujours scope-bounded
+  → jamais globally_exhaustive
+  → toujours reopenable
+~~~
+
+Cette couche donne un sens opérationnel à la formule :
+
+~~~text
+Il y a toujours plus que ce qui est actuellement distingué.
+~~~
+
+sans la convertir en affirmation métaphysique automatique. Ce qui est garanti par le runtime est plus précis : **ce qui est actuellement distingué n'a jamais, par défaut, le droit de se déclarer totalité.**
