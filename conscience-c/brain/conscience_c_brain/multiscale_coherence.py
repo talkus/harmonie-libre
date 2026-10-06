@@ -93,9 +93,38 @@ class Contestation:
 
 
 @dataclass(frozen=True)
+class ScaleBridge:
+    """First-class transformation contract between adjacent scales.
+
+    The bridge records what a parent received from one child. It is a
+    provenance/contestability object, never an authority channel.
+    """
+
+    bridge_id: str
+    child_receipt_hash: str
+    parent_receipt_hash: str
+    transform_ref: str
+    preserved_origin_refs: tuple[str, ...] = ()
+    preserved_provenance_bundle_refs: tuple[str, ...] = ()
+    carried_unknown_ids: tuple[str, ...] = ()
+    carried_contestation_ids: tuple[str, ...] = ()
+    carried_evidence_status: EvidenceStatus | None = None
+    declared_loss_refs: tuple[str, ...] = ()
+    loss_justification_refs: tuple[str, ...] = ()
+    authority_transfer: bool = False
+
+
+@dataclass(frozen=True)
 class ValidationIssue:
     code: str
     message: str
+
+
+@dataclass(frozen=True)
+class BridgeReport:
+    bridge_id: str
+    issues: tuple[ValidationIssue, ...] = ()
+    execution_authority: bool = False
 
 
 @dataclass(frozen=True)
@@ -454,6 +483,7 @@ class MultiscaleReport:
     status: CoherenceStatus
     scale_reports: tuple[ValidationReport, ...]
     issues: tuple[ValidationIssue, ...]
+    bridge_reports: tuple[BridgeReport, ...] = ()
     has_unknown: bool = False
     has_contestation: bool = False
     independent_validation: bool = False
@@ -483,18 +513,240 @@ def _cycle_nodes(receipts_by_hash: Mapping[str, ScaleReceipt]) -> set[str]:
     return cycle_nodes
 
 
-def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
+
+def validate_scale_bridge(
+    bridge: ScaleBridge,
+    receipts_by_hash: Mapping[str, ScaleReceipt],
+) -> BridgeReport:
+    """Validate one explicit adjacent-scale transformation contract.
+
+    A bridge may transform or summarize local material, but it must not erase
+    provenance, uncertainty, or contestation, and it can never transmit
+    execution authority.
+    """
+    issues: list[ValidationIssue] = []
+    child = receipts_by_hash.get(bridge.child_receipt_hash)
+    parent = receipts_by_hash.get(bridge.parent_receipt_hash)
+
+    if not bridge.transform_ref:
+        issues.append(
+            ValidationIssue(
+                "MS_BRIDGE_TRANSFORM_REQUIRED",
+                f"bridge {bridge.bridge_id} has no transform_ref",
+            )
+        )
+
+    if bridge.authority_transfer:
+        issues.append(
+            ValidationIssue(
+                "MS_BRIDGE_AUTHORITY_TRANSFER",
+                f"bridge {bridge.bridge_id} attempts to transfer execution authority",
+            )
+        )
+
+    if bridge.declared_loss_refs and not bridge.loss_justification_refs:
+        issues.append(
+            ValidationIssue(
+                "MS_BRIDGE_LOSS_UNJUSTIFIED",
+                f"bridge {bridge.bridge_id} declares information loss without justification",
+            )
+        )
+
+    if child is None:
+        issues.append(
+            ValidationIssue(
+                "MS_BRIDGE_CHILD_UNKNOWN",
+                f"bridge {bridge.bridge_id} cites a child receipt outside this composition",
+            )
+        )
+    if parent is None:
+        issues.append(
+            ValidationIssue(
+                "MS_BRIDGE_PARENT_UNKNOWN",
+                f"bridge {bridge.bridge_id} cites a parent receipt outside this composition",
+            )
+        )
+
+    if child is not None and parent is not None:
+        if child.parent_receipt_hash != bridge.parent_receipt_hash:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_PARENT_MISMATCH",
+                    f"bridge {bridge.bridge_id} does not match the child's declared parent",
+                )
+            )
+
+        if _SCALE_RANK[parent.scale] != _SCALE_RANK[child.scale] + 1:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_NON_ADJACENT",
+                    f"bridge {bridge.bridge_id} must connect adjacent scales",
+                )
+            )
+
+        child_origins = set(child.origin_refs)
+        preserved_origins = set(bridge.preserved_origin_refs)
+        missing_origins = child_origins - preserved_origins
+        invented_origins = preserved_origins - child_origins
+        if missing_origins:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_ORIGIN_DROPPED",
+                    f"bridge {bridge.bridge_id} drops child origins: {sorted(missing_origins)}",
+                )
+            )
+        if invented_origins:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_ORIGIN_INVENTED",
+                    f"bridge {bridge.bridge_id} invents origins: {sorted(invented_origins)}",
+                )
+            )
+        not_in_parent = preserved_origins - set(parent.origin_refs)
+        if not_in_parent:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_ORIGIN_NOT_IN_PARENT",
+                    f"bridge {bridge.bridge_id} preserves origins absent from parent: {sorted(not_in_parent)}",
+                )
+            )
+
+        child_bundles = set(child.provenance_bundle_refs)
+        preserved_bundles = set(bridge.preserved_provenance_bundle_refs)
+        missing_bundles = child_bundles - preserved_bundles
+        invented_bundles = preserved_bundles - child_bundles
+        if missing_bundles:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_PROVENANCE_DROPPED",
+                    f"bridge {bridge.bridge_id} drops provenance bundles: {sorted(missing_bundles)}",
+                )
+            )
+        if invented_bundles:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_PROVENANCE_INVENTED",
+                    f"bridge {bridge.bridge_id} invents provenance bundles: {sorted(invented_bundles)}",
+                )
+            )
+        bundles_not_in_parent = preserved_bundles - set(parent.provenance_bundle_refs)
+        if bundles_not_in_parent:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_PROVENANCE_NOT_IN_PARENT",
+                    f"bridge {bridge.bridge_id} preserves bundles absent from parent: {sorted(bundles_not_in_parent)}",
+                )
+            )
+
+        unknown_ids = {x.unknown_id for x in child.unknowns}
+        carried_unknowns = set(bridge.carried_unknown_ids)
+        missing_unknowns = unknown_ids - carried_unknowns
+        invented_unknowns = carried_unknowns - unknown_ids
+        if missing_unknowns:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_UNKNOWN_DROPPED",
+                    f"bridge {bridge.bridge_id} drops UNKNOWN ids: {sorted(missing_unknowns)}",
+                )
+            )
+        if invented_unknowns:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_UNKNOWN_INVENTED",
+                    f"bridge {bridge.bridge_id} invents UNKNOWN ids: {sorted(invented_unknowns)}",
+                )
+            )
+
+        contestation_ids = {x.contestation_id for x in child.contestations}
+        carried_contestations = set(bridge.carried_contestation_ids)
+        missing_contestations = contestation_ids - carried_contestations
+        invented_contestations = carried_contestations - contestation_ids
+        if missing_contestations:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_CONTESTATION_DROPPED",
+                    f"bridge {bridge.bridge_id} drops contestations: {sorted(missing_contestations)}",
+                )
+            )
+        if invented_contestations:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_CONTESTATION_INVENTED",
+                    f"bridge {bridge.bridge_id} invents contestations: {sorted(invented_contestations)}",
+                )
+            )
+
+        if bridge.carried_evidence_status is None:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_EVIDENCE_STATUS_REQUIRED",
+                    f"bridge {bridge.bridge_id} does not carry the child's evidence status",
+                )
+            )
+        elif bridge.carried_evidence_status != child.evidence_status:
+            issues.append(
+                ValidationIssue(
+                    "MS_BRIDGE_EVIDENCE_STATUS_MISMATCH",
+                    f"bridge {bridge.bridge_id} changes child evidence status "
+                    f"{child.evidence_status.value} -> {bridge.carried_evidence_status.value}",
+                )
+            )
+
+    return BridgeReport(
+        bridge_id=bridge.bridge_id,
+        issues=tuple(issues),
+        execution_authority=False,
+    )
+
+def validate_multiscale(
+    receipts: Sequence[ScaleReceipt],
+    bridges: Sequence[ScaleBridge] = (),
+    *,
+    require_explicit_bridges: bool = False,
+) -> MultiscaleReport:
     """Validate composition without collapsing local conclusions into one score.
 
     Multiple units per scale are allowed. A full composition needs all four
     scales, parent links move exactly one scale upward, source origins survive
-    aggregation, and the parent graph must remain acyclic.
+    aggregation, and the parent graph must remain acyclic. Optional first-class
+    bridges make each transformation auditable; strict mode requires one bridge
+    for every child→parent edge.
     """
     issues: list[ValidationIssue] = []
     reports = tuple(validate_scale_receipt(x) for x in receipts)
 
     hashes = [x.digest() for x in receipts]
     receipts_by_hash = {x.digest(): x for x in receipts}
+    bridge_reports = tuple(validate_scale_bridge(x, receipts_by_hash) for x in bridges)
+
+    bridge_ids = [x.bridge_id for x in bridges]
+    if len(set(bridge_ids)) != len(bridge_ids):
+        issues.append(
+            ValidationIssue(
+                "MS_DUPLICATE_BRIDGE_ID",
+                "one composition cannot contain competing versions of the same bridge_id",
+            )
+        )
+
+    bridge_pairs = [(x.child_receipt_hash, x.parent_receipt_hash) for x in bridges]
+    if len(set(bridge_pairs)) != len(bridge_pairs):
+        issues.append(
+            ValidationIssue(
+                "MS_DUPLICATE_BRIDGE",
+                "more than one bridge describes the same child→parent edge",
+            )
+        )
+
+    if require_explicit_bridges:
+        declared_pairs = set(bridge_pairs)
+        for receipt in receipts:
+            if receipt.parent_receipt_hash and (receipt.digest(), receipt.parent_receipt_hash) not in declared_pairs:
+                issues.append(
+                    ValidationIssue(
+                        "MS_BRIDGE_MISSING",
+                        f"strict bridge mode: {receipt.receipt_id} has no explicit child→parent bridge",
+                    )
+                )
 
     if len(set(hashes)) != len(hashes):
         issues.append(ValidationIssue("MS_DUPLICATE_RECEIPT", "duplicate operational receipts"))
@@ -588,7 +840,11 @@ def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
         status = CoherenceStatus.CONTESTED
     elif has_unknown:
         status = CoherenceStatus.INDETERMINATE
-    elif issues or any(x.status == CoherenceStatus.PARTIAL for x in reports):
+    elif (
+        issues
+        or any(x.status == CoherenceStatus.PARTIAL for x in reports)
+        or any(x.issues for x in bridge_reports)
+    ):
         status = CoherenceStatus.PARTIAL
     else:
         status = CoherenceStatus.CANDIDATE_OK
@@ -597,6 +853,7 @@ def validate_multiscale(receipts: Sequence[ScaleReceipt]) -> MultiscaleReport:
         status=status,
         scale_reports=reports,
         issues=tuple(issues),
+        bridge_reports=bridge_reports,
         has_unknown=has_unknown,
         has_contestation=has_contestation,
         independent_validation=False,
