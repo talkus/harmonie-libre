@@ -438,3 +438,64 @@ le contexte historique local doit rester révisable.
 ~~~
 
 Le système ne cherche donc plus un correcteur du correcteur. Il applique le même contrat de provenance, contestabilité, révision et non-autorité à chaque décision de cycle de vie.
+
+## Extension ensemble de dynamiques — 𝔛 et UNKNOWN_Ξ
+
+L'inversion suivante retire le privilège d'une dynamique génératrice unique. `Ξ` n'est jamais observé directement dans ce candidat : il est reconstruit à partir de projections et de traces.
+
+~~~text
+{Ω, Δ, Φ, τ}_observés
+    ↓ reconstruction
+𝔛_n = {Ξ_1, Ξ_2, ..., Ξ_k}
+    ↓ nouvelles traces
+𝔛_(n+1) = A(𝔛_n, τ_n)
+~~~
+
+Le runtime ne classe pas ces hypothèses avec un score totalisant et ne sélectionne pas automatiquement un « vrai moteur caché ».
+
+**MS-72 — Ξ reconstruit, non observé.** Une hypothèse génératrice doit publier ses projections, ses hypothèses, ses origines et sa provenance.
+
+**MS-73 — Non-unicité conservée.** Plusieurs Ξ compatibles peuvent demeurer simultanément admissibles.
+
+**MS-74 — Équivalence observationnelle.** Deux hypothèses donnant les mêmes projections sur les dimensions actuellement observées restent distinctes mais sont regroupées comme observationnellement équivalentes pour ce contrat.
+
+**MS-75 — UNKNOWN_Ξ.** `unknown_xi=true` lorsqu'une dynamique unique ne peut pas être déterminée : plusieurs hypothèses admissibles subsistent ou au moins une hypothèse reste sous-déterminée.
+
+**MS-76 — Hors-modèle de premier ordre.** Si aucune hypothèse n'est compatible, le système retourne `out_of_model=true`; il ne choisit pas la moins mauvaise par défaut.
+
+**MS-77 — Compatibilité ≠ vérité.** Un seul Ξ compatible peut produire `CANDIDATE_OK` structurel, mais `independent_validation=false` et aucune promotion en vérité n'en découle.
+
+**MS-78 — Révision sans effacement.** Chaque révision conserve les identifiants de l'espace précédent, les hypothèses retenues, sous-déterminées, rejetées et nouvellement proposées.
+
+**MS-79 — Nouvelle hypothèse ≠ privilège.** Une hypothèse ajoutée après observation est évaluée avec le même contrat que les anciennes et doit exposer ses hypothèses et sa provenance.
+
+**MS-80 — Projection locale.** La comparaison d'un Ξ à des traces reste liée à une échelle, un observateur et une portée explicites.
+
+**MS-81 — Auto-similarité de 𝔛.** Le même opérateur de révision de l'espace d'hypothèses s'applique à micro, méso, macro et méta ; les ensembles de dynamiques peuvent être différents à chaque niveau.
+
+**MS-82 — Non-masquage.** `UNKNOWN_Ξ` ou `out_of_model` à une échelle ne peut pas être blanchi par une synthèse supérieure.
+
+**MS-83 — Pas de gagnant scalaire.** Aucun score global ne réduit l'écologie des reconstructions à un classement unique.
+
+**MS-84 — Structure ≠ autorité.** Ni la compatibilité, ni l'unicité locale, ni la répétition multi-échelle ne confèrent une autorité d'exécution.
+
+La forme candidate devient :
+
+~~~text
+𝔛_n
+  ↕ projections / observations
+Ω_n ↔ Δ_n
+  → τ_n
+  → Φ_n
+  → révision de 𝔛
+𝔛_(n+1)
+~~~
+
+avec deux sorties explicitement distinctes :
+
+~~~text
+UNKNOWN_Ξ  = plusieurs reconstructions restent admissibles
+OUT_OF_MODEL = aucune reconstruction actuelle ne couvre les traces
+~~~
+
+Le second cas est essentiel : l'ouverture du modèle exige de pouvoir reconnaître que **l'espace actuel de dynamiques est lui-même insuffisant**.
