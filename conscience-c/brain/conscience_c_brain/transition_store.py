@@ -159,6 +159,29 @@ class TransitionStore:
                 raise RecoveryRequired("snapshot requires explicit recovery: " + str(exc)) from exc
             return state, digest(data)
 
+    def inspect(self):
+        """Read an existing boundary without locking, creating or recovering files.
+
+        A cooperating writer observed during the read makes it fail. This is
+        local consistency checking, not a distributed snapshot or authentication.
+        Pending transitions need an explicit recovery through the normal loader.
+        """
+        if self.pending_path.exists():
+            raise RecoveryRequired("unfinished transition; read-only inspection cannot recover it")
+        data = self._snapshot()
+        if data is None or not self.journal_path.is_file():
+            raise RecoveryRequired("read-only inspection requires existing snapshot and journal")
+        rows = self._rows()
+        try:
+            state = _strict_json(data)
+            self._check_snapshot(state, rows)
+        except (ValueError, TypeError, AttributeError) as exc:
+            raise RecoveryRequired("snapshot requires explicit recovery: " + str(exc)) from exc
+        if (self.pending_path.exists() or self._snapshot() != data
+                or self._rows() != rows):
+            raise StaleWriter("snapshot/journal boundary changed during read-only inspection")
+        return state, digest(data)
+
     def _has_commits(self):
         return self.receipts_path.exists() and any(self.receipts_path.glob("*.committed.json"))
 

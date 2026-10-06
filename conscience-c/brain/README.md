@@ -6,6 +6,11 @@ Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pa
 au journal, aux reçus multi-échelles et à la réparation explicite. Une lecture
 seule ne modifie aucune affirmation ; un diagnostic ne donne aucune permission.
 
+**Uriel :** la [lecture située](URIEL.md) relie les rapports Gabriel aux niveaux
+micro, méso, macro et méta. Les passages conservent sources, limites et
+objections. La commande `uriel-read` reprend une mémoire existante sans écrire,
+réparer ou transformer sa carte en autorité.
+
 **Audit du 26 septembre 2026 :** un compte rendu enregistré n'est pas un fait vérifié. Voir [l'audit des revérifications](AUDIT_REVALIDATION_2026-09-26.md), [l'audit des checkpoints](AUDIT_CHECKPOINTS_2026-09-26.md) et [la récupération des transitions](AUDIT_TRANSITIONS_2026-09-26.md).
 
 ## Invariants implémentés
