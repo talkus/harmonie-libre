@@ -385,3 +385,56 @@ chaque accord conserve sa provenance,
 chaque désaccord reste visible,
 et aucune échelle ne blanchit l'incertitude d'une autre.
 ~~~
+
+## Extension cycle de vie de Φ — Λ_t, maturation et régénération
+
+Le nouvel axe corrige la régression `Φ → Θ → Ψ → ...` : Θ et Ψ restent des **labels conceptuels**, pas des méta-autorités exécutables.
+
+Le runtime encode uniquement un contrat local :
+
+~~~text
+Ω ↔ Δ
+  ↓
+Φ_n
+  ↓ traces
+Λ_t = contexte historique local
+  ↓
+{MATURE | REGENERATE | DEFER | RETIRE}
+  ↓
+Ω' ↔ Δ'
+~~~
+
+`Λ_t` n'est pas un score scalaire de maturité. Il comprend une phase historique déclarée, un horizon local, des traces, une portée, un observateur et des déclencheurs de révision.
+
+**MS-61 — Gain borné.** Le contexte exige `0 < G_Φ < ∞`. Ce gain n'est ni une vérité, ni un rythme optimal, ni un sélecteur automatique de décision.
+
+**MS-62 — Λ local et sourcé.** Toute maturité historique cite des traces disponibles et un horizon local connu.
+
+**MS-63 — Maturation ≠ régénération.** `MATURE` conserve l'identité de Φ et change sa version ; `REGENERATE` exige un successeur Φ distinct.
+
+**MS-64 — Différer est un premier ordre.** `DEFER` ne choisit aucun successeur en secret et exige une condition explicite de réexamen.
+
+**MS-65 — Retrait sans remplacement implicite.** `RETIRE` peut mettre fin à un Φ sans fabriquer silencieusement Φ_(n+1).
+
+**MS-66 — Pas de rythme absolu.** Toute revendication d'un `right rhythm` final ou optimal est rejetée par le contrat (`claims_optimal_rhythm=false`).
+
+**MS-67 — Ψ n'est pas une autorité.** Le discernement entre maturation et régénération est un résultat local justifié, pas un méta-opérateur souverain.
+
+**MS-68 — Même G_Φ, décisions différentes.** Des contextes Λ distincts peuvent légitimement choisir des chemins différents avec la même valeur de gain.
+
+**MS-69 — Auto-similarité du cycle de vie.** Le même contrat s'applique à micro, méso, macro et méta ; les chemins choisis peuvent diverger.
+
+**MS-70 — Non-masquage inter-échelles.** Une contestation ou une phase historique indéterminée à une échelle reste visible dans le rapport composé.
+
+**MS-71 — Aucun choix n'autorise l'exécution.** `execution_authority=false` pour toutes les décisions et pour leur agrégation.
+
+La conséquence architecturale est :
+
+~~~text
+innovation n'est pas présumée supérieure à maturation ;
+stabilité n'est pas présumée supérieure à transformation ;
+retrait n'est pas présumé être un échec ;
+le contexte historique local doit rester révisable.
+~~~
+
+Le système ne cherche donc plus un correcteur du correcteur. Il applique le même contrat de provenance, contestabilité, révision et non-autorité à chaque décision de cycle de vie.
