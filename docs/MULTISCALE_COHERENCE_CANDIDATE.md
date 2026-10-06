@@ -616,3 +616,68 @@ révision / contestation / maintien
 ~~~
 
 Le point central est que le double axe `cohérence / tension` n'est pas forcé en opposition dialectique. Il reste possible de constater : cohérence avec tension, incohérence sans tension identifiée, tension non générative, ou absence actuelle de relation justifiée.
+
+## Extension fécondité durable — détecter l'épuisement sans régression infinie
+
+L'architecture remplace la recherche d'un critère parfait par une question locale : **la forme demeure-t-elle féconde sous son contrat courant ?**
+
+Le candidat refuse toutefois `max(fécondité)` comme score unique. La fécondité reste multi-dimensionnelle :
+
+~~~text
+reprise
+génération
+réouverture
+impact sur les voies viables
+risque de fossilisation
+risque de dissolution
+~~~
+
+**MS-109 — Fécondité ≠ scalaire.** Aucun `fecundity_score` totalisant n'est calculé ; `scalar_score=None` est conservé dans les rapports.
+
+**MS-110 — Nouveauté ≠ fécondité.** Générer de nouvelles possibilités ne suffit pas si la reprise ou la réouverture sont perdues.
+
+**MS-111 — Reprise positive.** Une forme féconde doit conserver une capacité de reprise soutenue par des preuves locales ; absence de preuve ≠ preuve d'absence.
+
+**MS-112 — Réouverture positive.** Une forme peut rester stable tout en restant féconde si elle demeure explicitement réouvrable.
+
+**MS-113 — Pas de destruction silencieuse des voies viables.** Toute fermeture de voie doit être tracée et justifiée ; sinon la fécondité est dégradée.
+
+**MS-114 — Fermeture justifiée ≠ infertilité automatique.** Une voie peut être fermée pour une raison traçable sans que toute la forme soit déclarée non féconde.
+
+**MS-115 — Fossilisation et dissolution séparées.** Ces risques restent deux dimensions distinctes et ne sont jamais compressés en un score d'équilibre.
+
+**MS-116 — Données insuffisantes ≠ absence de risque.** `INSUFFICIENT_DATA` maintient le verdict `INDETERMINATE`.
+
+**MS-117 — Pas de nouveauté obligatoire.** `generation_status=NOT_TRIGGERED` n'est pas à lui seul une dégradation si reprise, réouverture et stewardship des voies restent soutenus.
+
+**MS-118 — Détection plutôt qu'optimisation.** Le module détecte `SUSTAINED`, `DEGRADED`, `INDETERMINATE` ou `CONTESTED`; il ne choisit ni n'autorise la transformation suivante.
+
+**MS-119 — Auto-similarité multi-échelle.** Le même contrat de fécondité s'applique à micro, méso, macro et méta.
+
+**MS-120 — Non-masquage.** Une dégradation, contestation ou indétermination locale reste visible dans l'agrégation multi-échelle.
+
+**MS-121 — Fécondité ≠ optimalité.** Même `SUSTAINED` ne signifie jamais « forme optimale », « meilleure forme » ou « critère final ».
+
+**MS-122 — Fécondité ≠ autorité.** `optimality_claim=false` et `execution_authority=false` à chaque niveau et au rapport composé.
+
+La formulation exécutable devient :
+
+~~~text
+forme locale
+  ↓ preuves séparées
+{reprise, génération, réouverture, impacts de voies, risques}
+  ↓
+{SUSTAINED | DEGRADED | INDETERMINATE | CONTESTED}
+  ↓
+aucune transformation automatique
+~~~
+
+La compression conceptuelle est alors :
+
+~~~text
+Conserver ce qui demeure fécond.
+Réexaminer ce qui cesse de l'être.
+Transformer seulement sous un contrat séparé de décision et de preuve.
+~~~
+
+Ce correctif évite deux erreurs symétriques : fossiliser une forme parce qu'elle a été utile, ou la remplacer uniquement parce qu'une nouveauté est possible.
