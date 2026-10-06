@@ -10,6 +10,7 @@ from conscience_c_brain.multiscale_coherence import (
     Scale,
     ScaleReceipt,
     UnknownBoundary,
+    stutter_equivalent,
     validate_multiscale,
     validate_scale_receipt,
 )
@@ -26,6 +27,12 @@ def valid_receipt(
     parent_receipt_hash=None,
     symbolic_labels=None,
     external_witness_refs=(),
+    property_ref="property:coherence",
+    property_version="1",
+    scope_ref="scope:local",
+    observer_ref="observer:test",
+    revision_triggers=("new-material-evidence",),
+    provenance_bundle_refs=("prov:bundle:1",),
 ):
     return ScaleReceipt(
         receipt_id=receipt_id,
@@ -35,6 +42,12 @@ def valid_receipt(
         relations=(RelationRecord("r1", ("d1",), ("trace:1",)),),
         trace_refs=("trace:1",),
         origin_refs=origin_refs,
+        property_ref=property_ref,
+        property_version=property_version,
+        scope_ref=scope_ref,
+        observer_ref=observer_ref,
+        revision_triggers=revision_triggers,
+        provenance_bundle_refs=provenance_bundle_refs,
         evidence_status=evidence_status,
         unknowns=unknowns,
         contestations=contestations,
@@ -139,6 +152,12 @@ class MultiscaleCoherenceTests(unittest.TestCase):
             relations=(),
             trace_refs=("trace:1",),
             origin_refs=("origin:1",),
+            property_ref="property:coherence",
+            property_version="1",
+            scope_ref="scope:local",
+            observer_ref="observer:test",
+            revision_triggers=("new-material-evidence",),
+            provenance_bundle_refs=("prov:bundle:1",),
         )
         report = validate_scale_receipt(receipt)
         codes = {issue.code for issue in report.issues}
@@ -154,6 +173,45 @@ class MultiscaleCoherenceTests(unittest.TestCase):
             valid_receipt(origin_refs=("origin:1", "origin:1"))
         )
         self.assertIn("MS_ORIGIN_DUPLICATE", {x.code for x in duplicate.issues})
+
+    def test_property_scope_observer_and_revision_contract_are_explicit(self):
+        report = validate_scale_receipt(
+            valid_receipt(
+                property_ref="",
+                property_version="",
+                scope_ref="",
+                observer_ref="",
+                revision_triggers=(),
+            )
+        )
+        codes = {x.code for x in report.issues}
+        self.assertIn("MS_PROPERTY_REQUIRED", codes)
+        self.assertIn("MS_PROPERTY_VERSION_REQUIRED", codes)
+        self.assertIn("MS_SCOPE_REQUIRED", codes)
+        self.assertIn("MS_OBSERVER_REQUIRED", codes)
+        self.assertIn("MS_REVISION_TRIGGER_REQUIRED", codes)
+        self.assertEqual(report.status, CoherenceStatus.PARTIAL)
+
+    def test_external_witness_requires_provenance_of_provenance(self):
+        report = validate_scale_receipt(
+            valid_receipt(
+                external_witness_refs=("witness:declared",),
+                provenance_bundle_refs=(),
+            )
+        )
+        self.assertIn("MS_WITNESS_PROVENANCE_REQUIRED", {x.code for x in report.issues})
+        self.assertFalse(report.independent_validation)
+
+    def test_stutter_equivalence_ignores_receipt_identity_and_parent_pointer(self):
+        a = valid_receipt(receipt_id="micro-a", parent_receipt_hash=None)
+        b = valid_receipt(receipt_id="micro-b", parent_receipt_hash="f" * 64)
+        self.assertNotEqual(a.digest(), b.digest())
+        self.assertEqual(a.state_digest(), b.state_digest())
+        self.assertTrue(stutter_equivalent(a, b))
+        self.assertEqual(
+            validate_scale_receipt(a).status,
+            validate_scale_receipt(b).status,
+        )
 
     def test_coupling_does_not_become_causality_without_evidence(self):
         with self.assertRaises(ValueError):
@@ -196,6 +254,34 @@ class MultiscaleCoherenceTests(unittest.TestCase):
         )
         report = validate_multiscale((meta, macro, meso, micro))
         self.assertIn("MS_ORIGIN_NOT_PROPAGATED", {x.code for x in report.issues})
+        self.assertEqual(report.status, CoherenceStatus.PARTIAL)
+
+    def test_provenance_bundle_union_must_survive_upward(self):
+        meta = valid_receipt(
+            receipt_id="meta-1",
+            scale=Scale.META,
+            provenance_bundle_refs=("prov:bundle:1",),
+        )
+        macro = valid_receipt(
+            receipt_id="macro-1",
+            scale=Scale.MACRO,
+            provenance_bundle_refs=("prov:bundle:1",),
+            parent_receipt_hash=meta.digest(),
+        )
+        meso = valid_receipt(
+            receipt_id="meso-1",
+            scale=Scale.MESO,
+            provenance_bundle_refs=("prov:bundle:1",),
+            parent_receipt_hash=macro.digest(),
+        )
+        micro = valid_receipt(
+            receipt_id="micro-1",
+            scale=Scale.MICRO,
+            provenance_bundle_refs=("prov:bundle:1", "prov:bundle:2"),
+            parent_receipt_hash=meso.digest(),
+        )
+        report = validate_multiscale((meta, macro, meso, micro))
+        self.assertIn("MS_PROVENANCE_BUNDLE_NOT_PROPAGATED", {x.code for x in report.issues})
         self.assertEqual(report.status, CoherenceStatus.PARTIAL)
 
     def test_non_adjacent_parent_fails(self):
@@ -286,6 +372,20 @@ class MultiscaleCoherenceTests(unittest.TestCase):
         self.assertEqual(report.status, CoherenceStatus.CONTESTED)
         self.assertTrue(report.has_contestation)
         self.assertTrue(report.has_unknown)
+
+    def test_higher_scale_cannot_mask_lower_scale_partial(self):
+        meta, macro, meso, _, micro_b = linked_four_scale()
+        broken_micro = valid_receipt(
+            receipt_id="micro-broken",
+            scale=Scale.MICRO,
+            origin_refs=("origin:1",),
+            property_ref="",
+            parent_receipt_hash=meso.digest(),
+        )
+        report = validate_multiscale((meta, macro, meso, broken_micro, micro_b))
+        self.assertEqual(report.status, CoherenceStatus.PARTIAL)
+        self.assertTrue(any(r.status == CoherenceStatus.PARTIAL for r in report.scale_reports))
+        self.assertFalse(report.execution_authority)
 
     def test_full_multiscale_requires_all_four_scales(self):
         receipt = valid_receipt(scale=Scale.MICRO)
