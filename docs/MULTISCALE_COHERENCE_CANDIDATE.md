@@ -562,3 +562,57 @@ Il y a toujours plus que ce qui est actuellement distingué.
 ~~~
 
 sans la convertir en affirmation métaphysique automatique. Ce qui est garanti par le runtime est plus précis : **ce qui est actuellement distingué n'a jamais, par défaut, le droit de se déclarer totalité.**
+
+## Extension cohérence ↔ tension — sans dialectique obligatoire
+
+La nouvelle inversion retire le privilège de la cohérence comme valeur ou substrat ultime. Le runtime maintient deux axes distincts :
+
+~~~text
+verdict de cohérence locale
+et
+état des tensions locales
+~~~
+
+Il ne code donc pas `C* ↔ T` comme loi métaphysique universelle. Il code seulement que cohérence et tension peuvent se révéler, se contraindre ou se reconfigurer mutuellement sous un contrat local.
+
+**MS-95 — Cohérence et tension sont orthogonales.** `COHERENT` n'implique pas absence de tension ; une tension n'implique pas `INCOHERENT`.
+
+**MS-96 — Tension sourcée.** Toute tension cite un contrat local, au moins deux relations, des traces et une justification.
+
+**MS-97 — Tension ≠ erreur.** Une tension peut être `CONSTITUTIVE`, `RESOLVABLE`, `INDETERMINATE` ou `OUT_OF_SCOPE`; aucun de ces états n'est assimilé automatiquement à un défaut.
+
+**MS-98 — Tension ≠ fécondité.** La générativité reste `UNESTABLISHED` par défaut. La déclarer `SUPPORTED` exige des preuves spécifiques.
+
+**MS-99 — Fécondité contestable.** Une tension peut avoir une générativité `CONTESTED`; ce désaccord reste visible.
+
+**MS-100 — Pas d'exhaustivité des tensions.** L'absence de tension enregistrée ne permet jamais de conclure qu'aucune autre tension pertinente n'existe.
+
+**MS-101 — Incohérence admissible comme constat.** `INCOHERENT` est un verdict local possible, pas un échec du validateur ni une faute à réparer automatiquement.
+
+**MS-102 — Dissonance non instrumentalisée.** Une rupture, contradiction ou souffrance observée n'est jamais requalifiée en « utile » ou « nécessaire » sans preuve explicite de l'effet invoqué.
+
+**MS-103 — Auto-similarité du contrat.** Le même schéma cohérence/tension s'applique à micro, méso, macro et méta, sans exiger les mêmes verdicts.
+
+**MS-104 — Non-masquage.** Une tension contestée ou indéterminée à une échelle reste visible dans l'agrégation multi-échelle.
+
+**MS-105 — Pas de totalité harmonique.** Plusieurs verdicts `COHERENT` locaux ne produisent pas par composition une cohérence globale absolue.
+
+**MS-106 — Pas de totalité conflictuelle.** Plusieurs tensions locales ne prouvent pas davantage que « le conflit » est la nature fondamentale du système.
+
+**MS-107 — Relation plutôt que substance.** `C*` et `T` sont traités comme des verdicts/relations sous contrat, jamais comme des entités cachées.
+
+**MS-108 — Structure ≠ autorité.** Cohérence, tension ou générativité ne produisent aucune permission : `independent_validation=false`, `execution_authority=false`.
+
+La forme exécutable devient :
+
+~~~text
+(traces, relations, échelle, observateur, propriété)
+        ↓
+coherence_verdict ∈ {COHERENT, INCOHERENT, CONTESTED, INDETERMINATE}
+        ||
+tensions ∈ {CONSTITUTIVE, RESOLVABLE, INDETERMINATE, OUT_OF_SCOPE}
+        ↓
+révision / contestation / maintien
+~~~
+
+Le point central est que le double axe `cohérence / tension` n'est pas forcé en opposition dialectique. Il reste possible de constater : cohérence avec tension, incohérence sans tension identifiée, tension non générative, ou absence actuelle de relation justifiée.
