@@ -285,3 +285,48 @@ horizon épistémique local et révisable
 ~~~
 
 Aucune de ces deux directions ne reçoit un privilège ontologique ou une autorité d'exécution.
+
+
+### Réciprocité opérationnelle sans cercle auto-validant
+
+L'implémentation précédente matérialisait surtout :
+
+~~~text
+Δ_n → Ω_n
+~~~
+
+La direction inverse est désormais rendue explicite, mais asymétrique :
+
+~~~text
+Δ_n --derive--> Ω_n
+
+(Ω_n + κ_available + τ_evidence)
+  --constrain/admit as candidate--> Δ_candidate_(n+1)
+
+Δ_candidate_(n+1)
+  --review / evidence / contestation--> Δ_(n+1)
+
+Δ_(n+1) --derive--> Ω_(n+1)
+~~~
+
+Ici `Δ_candidate` est une distinction candidate, pas une vérité acquise.
+
+**MS-46 — Ω n'est pas une preuve.** L'horizon peut contraindre la pertinence d'une distinction candidate, mais ne peut jamais servir lui-même de preuve de cette distinction.
+
+**MS-47 — Preuve externe au cercle.** Toute distinction candidate doit citer des couplages et des traces disponibles indépendamment du hash de l'horizon qui la conditionne.
+
+**MS-48 — Admission ≠ vérité.** `admissible_for_review=true` signifie uniquement que la proposition satisfait le contrat structurel pour être examinée ; cela ne la promeut ni en vérité, ni en relation stabilisée, ni en action permise.
+
+**MS-49 — Anti-auto-validation.** Une distinction candidate ne peut pas s'auto-promouvoir via `claims_truth` ni transporter `execution_authority`.
+
+**MS-50 — UNKNOWN ciblé.** Une proposition qui prétend répondre à un UNKNOWN doit citer un `unknown_id` réellement présent dans l'horizon local ; elle ne peut pas déclarer résolue une inconnue étrangère au contrat courant.
+
+La formule exécutable de la réciprocité devient donc :
+
+~~~text
+Ω contraint la recherche de Δ
+mais τ/κ soutiennent Δ ;
+Δ reconfigure ensuite Ω.
+~~~
+
+Ce choix empêche le cercle auto-certifiant `Ω prouve Δ ; Δ prouve Ω`.
