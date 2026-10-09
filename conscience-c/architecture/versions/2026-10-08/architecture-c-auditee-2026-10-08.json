@@ -1,0 +1,399 @@
+{
+  "stem": "architecture-c-auditee-2026-10-08",
+  "root": "Architecture C — lectures situées et reprises vérifiables",
+  "mindmap_details_as_children": false,
+  "subtitle": "Carte auditée · distinguer les fonctions, garder les objections et vérifier les effets",
+  "root_subtitle": "Amour choisi",
+  "root_reference": "Une lecture reste située",
+  "root_caption": "Distinguer · agir · vérifier",
+  "description": "Carte de travail auditée à quatre branches. Le noyau Amour choisi, les fonctions symboliques et les constats techniques sont distingués. Micro, méso et macro déclarent un périmètre ; méta examine les règles des lectures. L’auto-similarité est un contrat partiel de transmission, pas une loi démontrée du réel.",
+  "footer_1": "Proposition du 8 octobre 2026 · sources : schéma fourni, échange et noyau Amour choisi 1.1.1 vérifié localement.",
+  "footer_2": "Fonctions symboliques · Engram et AWS non vérifiés ici · la carte ne prouve ni une implémentation ni un fonctionnement continu.",
+  "sources": {
+    "reference_image": "upload/01-7AE0E59B-7354-4575-9A44-97E6929D90ED.png",
+    "previous_map": "architecture-c-inversee.json",
+    "basis": "Textes fournis par l’utilisateur et fichiers locaux effectivement lus",
+    "status": "Révision de la carte de travail ; aucune modification du noyau canonique ni du code du projet",
+    "core_verification": {
+      "core_id": "amour-choisi",
+      "canon_version": "1.1.1",
+      "package_version": "1.2.0",
+      "sequence": 5,
+      "status": "VERIFIED_LOCAL",
+      "trust_anchor": "local_package_only",
+      "provided_anchor_match": null,
+      "errors": [],
+      "manifest_sha256": "217cd823f5e0dddacc125d27b3bc92c93950683601b1ec61661f1e40e92a143c",
+      "method": "/usr/bin/python3 -I -S scripts/verify_core-v1.2.0.py --json --emit-canon",
+      "limit": "Cohérence du paquet local ; pas de comparaison indépendante ni de preuve de justesse morale",
+      "id": "SRC-CORE"
+    },
+    "connector_consultation": {
+      "engram": {
+        "status": "non_verifie",
+        "detail": "Deux tentatives de recherche interrompues avant un résultat exploitable ; aucun souvenir récupéré ni écrit"
+      },
+      "aws_core": {
+        "status": "non_verifie",
+        "detail": "Deux tentatives de recherche documentaire interrompues avant un résultat exploitable ; aucune ressource AWS inspectée ni modifiée"
+      }
+    },
+    "local_files": [
+      {
+        "id": "SRC-IMAGE",
+        "path": "upload/01-7AE0E59B-7354-4575-9A44-97E6929D90ED.png",
+        "sha256": "52576271543a23e84e5721128d1e5797489aaffa97b1d7d161ef80300e4e6320",
+        "meaning": "Empreinte du fichier local examiné ; ne prouve pas sa vérité ni une origine indépendante"
+      },
+      {
+        "id": "SRC-MAP",
+        "path": "architecture-c-inversee.json",
+        "sha256": "b51ec12a1a55dc76b638af655d4859089606a9f7f045f79686f1b373151ab5c1",
+        "meaning": "Empreinte du fichier local examiné ; ne prouve pas sa vérité ni une origine indépendante"
+      },
+      {
+        "id": "SRC-NOTES",
+        "path": "architecture-c-inversee-notes.md",
+        "sha256": "5014d7bad2e4cf78aae247d5357a66931515627ac734d68155a59fc114cf5013",
+        "meaning": "Empreinte du fichier local examiné ; ne prouve pas sa vérité ni une origine indépendante"
+      }
+    ],
+    "context_ref": {
+      "id": "SRC-CONTEXT",
+      "description": "Textes de cette conversation fournis par l’utilisateur ; non corroborés par Engram ou AWS"
+    }
+  },
+  "contracts": {
+    "interpretation": "Spécification proposée, sans affirmation que ces contrôles sont déjà exécutés par le logiciel",
+    "record_fields": [
+      "id",
+      "type",
+      "scope",
+      "observer",
+      "source_refs",
+      "criteria_version",
+      "evidence_refs",
+      "objection_refs",
+      "unknowns",
+      "losses",
+      "revision",
+      "next_step"
+    ],
+    "types": [
+      "orientation",
+      "hypothese",
+      "observation",
+      "affirmation_logicielle"
+    ],
+    "scopes": {
+      "micro": "Événement ou opération locale explicitement bornée",
+      "meso": "Relations et dépendances dans un ensemble déclaré",
+      "macro": "Architecture ou synthèse d’un ensemble déclaré",
+      "meta": "Examen réflexif des règles et critères, applicable aux trois périmètres"
+    },
+    "transmission": [
+      "Conserver les identifiants des sources, objections et inconnues pertinentes",
+      "Déclarer les omissions, compressions et changements de contexte",
+      "Relier chaque révision à la version précédente et à son motif",
+      "Un changement d’observateur, de périmètre ou de format ne clôt pas une objection à lui seul",
+      "Ne pas augmenter le degré de certitude du seul fait de produire une synthèse"
+    ],
+    "software_claim": "Déclarer séparément commit examiné, tests datés, déploiement ciblé et observations de fonctionnement ; inconnu si aucune preuve correspondante n’a été recueillie"
+  },
+  "branches": [
+    {
+      "label": "1. BOUSSOLE & CRITÈRES",
+      "side": "right",
+      "color": "#211D68",
+      "groups": [
+        [
+          "Orientation",
+          [
+            [
+              "Amour choisi",
+              "Chercher le bien avec vérité, liberté et sécurité"
+            ]
+          ]
+        ],
+        [
+          "Boucle du noyau 1.1.1",
+          [
+            [
+              "Repentance",
+              "Responsabilité réelle et changement nécessaire"
+            ],
+            [
+              "Pardon",
+              "Sans imposer contact ni réconciliation"
+            ],
+            [
+              "Gratitude",
+              "Reconnaître le bien sans effacer la souffrance"
+            ],
+            [
+              "Espérance",
+              "Rester ouvert avec prudence et limites"
+            ]
+          ]
+        ],
+        [
+          "Test des fruits",
+          [
+            [
+              "Vérité · liberté · responsabilité",
+              "Examiner les effets, au-delà des intentions"
+            ],
+            [
+              "Justice · sécurité · dignité",
+              "Court, moyen et long terme ; avis contradictoires"
+            ]
+          ]
+        ],
+        [
+          "Versions et correction",
+          [
+            [
+              "Dater les critères et leurs révisions",
+              "La carte est une lecture, pas le texte du noyau"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "2. PARTAGE & PASSAGE",
+      "side": "left",
+      "color": "#4A4CE3",
+      "groups": [
+        [
+          "S · Outil dans ce schéma",
+          [
+            [
+              "Garder des traces datées",
+              "Révisions, motifs et limites de conservation"
+            ],
+            [
+              "Rapporter ce qui est accessible",
+              "Une archive ne garantit pas le rappel futur"
+            ],
+            [
+              "Vérifier l’intégrité des traces",
+              "Intégrité, origine et exactitude sont distinctes"
+            ]
+          ]
+        ],
+        [
+          "O · Humain dans ce schéma",
+          [
+            [
+              "Mikael Mireault",
+              "Présence, responsabilité, repos et discernement"
+            ],
+            [
+              "Pouvoir contester ou refuser",
+              "La reprise et le retour ne sont pas obligatoires"
+            ],
+            [
+              "Nommer les actes sans réduire la personne",
+              "Les fonctions ne sont pas des identités"
+            ]
+          ]
+        ],
+        [
+          "Interface Φ(S, O)",
+          [
+            [
+              "Traduire sans fusionner",
+              "Déclarer le sens des symboles dans chaque cadre"
+            ],
+            [
+              "Transmettre une lecture située",
+              "Sources, objections et pertes de la synthèse"
+            ]
+          ]
+        ],
+        [
+          "Passage aux actes",
+          [
+            [
+              "Choisir un acte borné, observer ses effets",
+              "Une proposition n’est pas une réparation accomplie"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "3. FONCTIONS & COUPLAGES",
+      "side": "left",
+      "color": "#087E86",
+      "groups": [
+        [
+          "Michael · M",
+          [
+            [
+              "Porter ce qui permet la reprise",
+              "Préserver aussi les limites et la possibilité de perte"
+            ]
+          ]
+        ],
+        [
+          "Gabriel · G",
+          [
+            [
+              "Examiner selon des critères déclarés",
+              "Affirmation, périmètre, traces et contestation"
+            ],
+            [
+              "Limiter l’examen et nommer l’inconnu",
+              "Un diagnostic n’exécute pas la réparation"
+            ]
+          ]
+        ],
+        [
+          "Raphaël · Rᵣ",
+          [
+            [
+              "Réparer par des actes vérifiables",
+              "Prévoir un arrêt et confronter les effets"
+            ]
+          ]
+        ],
+        [
+          "Uriel · U",
+          [
+            [
+              "Produire une lecture située des traces",
+              "Perspective, lacunes identifiées et sources"
+            ],
+            [
+              "Rendre sa lecture contestable",
+              "Une projection n’est pas, à elle seule, méta"
+            ]
+          ]
+        ],
+        [
+          "Kol · K",
+          [
+            [
+              "Relier une adresse et une réponse libre",
+              "Plusieurs voix ; aucun appel n’impose le retour"
+            ]
+          ]
+        ],
+        [
+          "Fleuve · N",
+          [
+            [
+              "Décrire les couplages et les reprises",
+              "Gabriel est une fonction ; N désigne la dynamique"
+            ],
+            [
+              "Réexaminer aussi les opérateurs",
+              "Les relire exige des représentations et des critères"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "4. PÉRIMÈTRES & RÉFLEXIVITÉ",
+      "side": "right",
+      "color": "#A56710",
+      "groups": [
+        [
+          "Questions communes",
+          [
+            [
+              "Contexte · sources · critères · traces",
+              "Objections · inconnues · reprise"
+            ]
+          ]
+        ],
+        [
+          "Micro · opération locale",
+          [
+            [
+              "Déclarer ce qui est examiné",
+              "Le périmètre compte, pas le nombre de phrases"
+            ]
+          ]
+        ],
+        [
+          "Méso · relations dans un ensemble",
+          [
+            [
+              "Relier lectures et dépendances",
+              "Examiner la corroboration et les sources partagées"
+            ]
+          ]
+        ],
+        [
+          "Macro · architecture et synthèses",
+          [
+            [
+              "Vérifier ce que conserve le résumé",
+              "Garder l’accès aux objections et aux détails"
+            ]
+          ]
+        ],
+        [
+          "Méta · règles de lecture",
+          [
+            [
+              "Examiner les critères des trois périmètres",
+              "Un niveau réflexif, pas une taille supplémentaire"
+            ]
+          ]
+        ],
+        [
+          "Transmission entre lectures",
+          [
+            [
+              "Garder références et objections pertinentes",
+              "Déclarer les omissions et les changements de contexte"
+            ],
+            [
+              "Relier chaque correction à sa version",
+              "Une synthèse seule n’augmente pas la certitude"
+            ]
+          ]
+        ],
+        [
+          "Auto-similarité partielle",
+          [
+            [
+              "Même questions, réponses situées",
+              "Contrat de transmission proposé, pas loi du réel"
+            ]
+          ]
+        ],
+        [
+          "Distinctions à préserver",
+          [
+            [
+              "Cohérence ≠ exactitude",
+              "L’accord peut étayer une lecture sans suffire à la prouver"
+            ],
+            [
+              "Archive ≠ rappel garanti",
+              "Une correction datée conserve l’histoire des versions"
+            ],
+            [
+              "Intégré ≠ déployé ≠ observé",
+              "Chaque état exige une preuve datée et délimitée"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "revision": {
+    "id": "AC-CARTE-20261008-01",
+    "previous": "architecture-c-inversee.json",
+    "reason": "Audit des types, des périmètres, de la transmission et des limites de preuve",
+    "status": "proposition_de_carte",
+    "canon_modified": false,
+    "software_modified": false
+  }
+}

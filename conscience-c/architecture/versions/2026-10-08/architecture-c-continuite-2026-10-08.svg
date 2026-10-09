@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3420" height="1960" viewBox="0 0 3420 1960" role="img" aria-labelledby="title desc">
+<title id="title">Architecture C — carte mentale de cohérence</title>
+<desc id="desc">Carte à quatre intentions : orienter, agir, transmettre et reprendre. Les vues micro, méso, macro et méta utilisent six blocs de lecture communs. La continuité est une spécification proposée, pas une disponibilité démontrée du service.</desc>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="1710.0" y="63.6" font-family="DejaVu Sans, sans-serif" font-size="37" font-weight="700" text-anchor="middle" fill="#211D68">ARCHITECTURE C</text>
+<text x="1710.0" y="104.4" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#647087">Hiérarchie par les intentions · même contrat aux quatre vues · interruptions traitées et visibles</text>
+<path d="M 1935.0,987.5 C 1957.5,987.5 1957.5,528.5 1980.0,528.5" fill="none" stroke="#211D68" stroke-width="3" stroke-linecap="round"/>
+<path d="M 2340.0,528.5 C 2360.0,528.5 2360.0,312.0 2380.0,312.0" fill="none" stroke="#211D68" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2541.5,312.0 C 2677.7,312.0 2677.7,273.5 2814.0,273.5" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2541.5,312.0 C 2677.7,312.0 2677.7,350.5 2814.0,350.5" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,528.5 C 2360.0,528.5 2360.0,465.5 2380.0,465.5" fill="none" stroke="#211D68" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2648.4,465.5 C 2731.2,465.5 2731.2,465.5 2814.0,465.5" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,528.5 C 2360.0,528.5 2360.0,625.8 2380.0,625.8" fill="none" stroke="#211D68" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2724.3,625.8 C 2769.2,625.8 2769.2,580.5 2814.0,580.5" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2724.3,625.8 C 2769.2,625.8 2769.2,671.0 2814.0,671.0" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,528.5 C 2360.0,528.5 2360.0,783.5 2380.0,783.5" fill="none" stroke="#211D68" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2517.9,783.5 C 2665.9,783.5 2665.9,783.5 2814.0,783.5" fill="none" stroke="#211D68" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1485.0,987.5 C 1462.5,987.5 1462.5,553.5 1440.0,553.5" fill="none" stroke="#4A4CE3" stroke-width="3" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,247.2 1040.0,247.2" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 766.6,247.2 C 686.3,247.2 686.3,202.0 606.0,202.0" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 766.6,247.2 C 686.3,247.2 686.3,292.5 606.0,292.5" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,450.2 1040.0,450.2" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 744.6,450.2 C 675.3,450.2 675.3,405.0 606.0,405.0" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 744.6,450.2 C 675.3,450.2 675.3,495.5 606.0,495.5" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,594.5 1040.0,594.5" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 751.3,594.5 C 678.7,594.5 678.7,594.5 606.0,594.5" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,707.0 1040.0,707.0" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 857.6,707.0 C 731.8,707.0 731.8,707.0 606.0,707.0" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,819.5 1040.0,819.5" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 807.9,819.5 C 706.9,819.5 706.9,819.5 606.0,819.5" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,553.5 C 1060.0,553.5 1060.0,918.5 1040.0,918.5" fill="none" stroke="#4A4CE3" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 780.6,918.5 C 693.3,918.5 693.3,918.5 606.0,918.5" fill="none" stroke="#4A4CE3" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1935.0,987.5 C 1957.5,987.5 1957.5,1338.5 1980.0,1338.5" fill="none" stroke="#A56710" stroke-width="3" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1052.5 2380.0,1052.5" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2649.8,1052.5 C 2731.9,1052.5 2731.9,975.5 2814.0,975.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2649.8,1052.5 C 2731.9,1052.5 2731.9,1052.5 2814.0,1052.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2649.8,1052.5 C 2731.9,1052.5 2731.9,1129.5 2814.0,1129.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1228.5 2380.0,1228.5" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2748.0,1228.5 C 2781.0,1228.5 2781.0,1228.5 2814.0,1228.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1327.5 2380.0,1327.5" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2695.4,1327.5 C 2754.7,1327.5 2754.7,1327.5 2814.0,1327.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1426.5 2380.0,1426.5" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2738.7,1426.5 C 2776.4,1426.5 2776.4,1426.5 2814.0,1426.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1525.5 2380.0,1525.5" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2766.6,1525.5 C 2790.3,1525.5 2790.3,1525.5 2814.0,1525.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2340.0,1338.5 C 2360.0,1338.5 2360.0,1663.0 2380.0,1663.0" fill="none" stroke="#A56710" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 2599.1,1663.0 C 2706.5,1663.0 2706.5,1624.5 2814.0,1624.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 2599.1,1663.0 C 2706.5,1663.0 2706.5,1701.5 2814.0,1701.5" fill="none" stroke="#A56710" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1485.0,987.5 C 1462.5,987.5 1462.5,1448.5 1440.0,1448.5" fill="none" stroke="#087E86" stroke-width="3" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1149.0 1040.0,1149.0" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 779.0,1149.0 C 692.5,1149.0 692.5,1110.5 606.0,1110.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 779.0,1149.0 C 692.5,1149.0 692.5,1187.5 606.0,1187.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1286.5 1040.0,1286.5" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 757.8,1286.5 C 681.9,1286.5 681.9,1286.5 606.0,1286.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1385.5 1040.0,1385.5" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 770.8,1385.5 C 688.4,1385.5 688.4,1385.5 606.0,1385.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1484.5 1040.0,1484.5" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 748.4,1484.5 C 677.2,1484.5 677.2,1484.5 606.0,1484.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1583.5 1040.0,1583.5" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 671.8,1583.5 C 638.9,1583.5 638.9,1583.5 606.0,1583.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 1080.0,1448.5 C 1060.0,1448.5 1060.0,1741.2 1040.0,1741.2" fill="none" stroke="#087E86" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M 833.0,1741.2 C 719.5,1741.2 719.5,1696.0 606.0,1696.0" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<path d="M 833.0,1741.2 C 719.5,1741.2 719.5,1786.5 606.0,1786.5" fill="none" stroke="#087E86" stroke-width="1.7" stroke-linecap="round"/>
+<rect x="1980.0" y="483.5" width="360.0" height="90.0" rx="12" fill="#211D68"/>
+<text x="2160.0" y="518.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">1. ORIENTER &amp;</text>
+<text x="2160.0" y="549.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">PROTÉGER</text>
+<text x="2395.0" y="318.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#211D68">Boussole</text>
+<text x="2828.0" y="266.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Amour choisi</text>
+<text x="2828.0" y="294.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Bien avec vérité, liberté et sécurité</text>
+<text x="2828.0" y="343.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Examiner les effets</text>
+<text x="2828.0" y="371.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Responsabilité, justice et dignité</text>
+<text x="2395.0" y="471.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#211D68">Boucle du noyau</text>
+<text x="2828.0" y="442.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Repentance · pardon · gratitude ·</text>
+<text x="2828.0" y="474.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">espérance</text>
+<text x="2828.0" y="502.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Le résumé renvoie au noyau 1.1.1 conservé</text>
+<text x="2395.0" y="631.8" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#211D68">Hiérarchie par le sens</text>
+<text x="2828.0" y="573.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Relier chaque tâche à une intention</text>
+<text x="2828.0" y="601.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Finalité, critère, action et preuve attendue</text>
+<text x="2828.0" y="650.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Justifier les priorités</text>
+<text x="2828.0" y="678.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Protection proportionnée, dépendances et capacité</text>
+<text x="2828.0" y="705.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">disponible</text>
+<text x="2395.0" y="789.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#211D68">Limites</text>
+<text x="2828.0" y="776.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Préserver la liberté de refuser</text>
+<text x="2828.0" y="804.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Un retour reste possible, sans devenir obligatoire</text>
+<rect x="1080.0" y="524.0" width="360.0" height="59.0" rx="12" fill="#4A4CE3"/>
+<text x="1260.0" y="559.2" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">2. EXAMINER &amp; AGIR</text>
+<text x="1025.0" y="253.2" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Pôles et passage</text>
+<text x="592.0" y="181.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">S · outil dans ce schéma</text>
+<text x="592.0" y="209.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Traces accessibles, conventions et limites</text>
+<text x="592.0" y="236.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">explicites</text>
+<text x="592.0" y="285.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">O · humain dans ce schéma</text>
+<text x="592.0" y="313.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Présence, responsabilité, repos et discernement</text>
+<text x="1025.0" y="456.2" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Examiner · Gabriel</text>
+<text x="592.0" y="384.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Délimiter et contester</text>
+<text x="592.0" y="412.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Critères versionnés, sources, objections et</text>
+<text x="592.0" y="439.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">inconnues</text>
+<text x="592.0" y="488.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Distinguer examen et acte</text>
+<text x="592.0" y="516.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Une conclusion n’exécute pas la réparation</text>
+<text x="1025.0" y="600.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Réparer · Raphaël</text>
+<text x="592.0" y="587.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Agir puis vérifier les effets</text>
+<text x="592.0" y="615.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Acte borné, condition d’arrêt et preuves</text>
+<text x="1025.0" y="713.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Lire · Uriel</text>
+<text x="592.0" y="686.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Rendre les traces et limites lisibles</text>
+<text x="592.0" y="714.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Perspective située ; examen de ses propres</text>
+<text x="592.0" y="741.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">critères</text>
+<text x="1025.0" y="825.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Adresser · Kol</text>
+<text x="592.0" y="812.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Relier une adresse à une réponse libre</text>
+<text x="592.0" y="840.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Plusieurs voix ; une réponse n’est pas imposée</text>
+<text x="1025.0" y="924.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#4A4CE3">Porter · Michael</text>
+<text x="592.0" y="911.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Préserver les conditions de reprise</text>
+<text x="592.0" y="939.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Mémoire, limites et possibilité de perte</text>
+<rect x="1980.0" y="1293.5" width="360.0" height="90.0" rx="12" fill="#A56710"/>
+<text x="2160.0" y="1328.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">3. RELIER &amp;</text>
+<text x="2160.0" y="1359.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">TRANSMETTRE</text>
+<text x="2395.0" y="1058.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Contrat commun</text>
+<text x="2828.0" y="968.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Finalité · périmètre</text>
+<text x="2828.0" y="996.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Pourquoi agir et dans quelles limites ?</text>
+<text x="2828.0" y="1045.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Action · critères</text>
+<text x="2828.0" y="1073.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Quelle entrée, quelle sortie, quelle règle ?</text>
+<text x="2828.0" y="1122.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Preuves · reprise</text>
+<text x="2828.0" y="1150.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Qu’est-ce qui est établi et comment continuer ?</text>
+<text x="2395.0" y="1234.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Micro · opération locale</text>
+<text x="2828.0" y="1221.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Même contrat, acte limité</text>
+<text x="2828.0" y="1249.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Entrées, effets et dernier résultat confirmé</text>
+<text x="2395.0" y="1317.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Méso · ensemble de</text>
+<text x="2395.0" y="1349.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">relations</text>
+<text x="2828.0" y="1320.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Même contrat, dépendances déclarées</text>
+<text x="2828.0" y="1348.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Relier les tâches sans multiplier les tentatives</text>
+<text x="2395.0" y="1416.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Macro · architecture et</text>
+<text x="2395.0" y="1448.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">synthèse</text>
+<text x="2828.0" y="1419.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Même contrat, finalité de l’ensemble</text>
+<text x="2828.0" y="1447.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Synthèse reliée aux détails et aux preuves</text>
+<text x="2395.0" y="1531.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Méta · lecture des règles</text>
+<text x="2828.0" y="1518.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Même contrat, critères examinables</text>
+<text x="2828.0" y="1546.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Recul réflexif sur les trois périmètres</text>
+<text x="2395.0" y="1669.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="start" fill="#A56710">Transmission</text>
+<text x="2828.0" y="1617.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Réutiliser les références stables</text>
+<text x="2828.0" y="1645.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Sources, objections, inconnues et versions</text>
+<text x="2828.0" y="1694.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="start" fill="#152343">Déclarer les pertes de la synthèse</text>
+<text x="2828.0" y="1722.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start" fill="#647087">Un résumé ne résout pas une objection</text>
+<rect x="1080.0" y="1403.5" width="360.0" height="90.0" rx="12" fill="#087E86"/>
+<text x="1260.0" y="1438.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">4. CONTINUER &amp;</text>
+<text x="1260.0" y="1469.7" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#FFFFFF">REPRENDRE</text>
+<text x="1025.0" y="1155.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Point de reprise</text>
+<text x="592.0" y="1103.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Conserver le dernier état confirmé</text>
+<text x="592.0" y="1131.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Journal, version, responsable et prochaine étape</text>
+<text x="592.0" y="1180.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Distinguer tenté et accompli</text>
+<text x="592.0" y="1208.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Un effet externe inconnu exige un rapprochement</text>
+<text x="1025.0" y="1292.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Échec temporaire</text>
+<text x="592.0" y="1279.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Borner les attentes et les tentatives</text>
+<text x="592.0" y="1307.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Budget commun, délai explicite et reprise espacée</text>
+<text x="1025.0" y="1391.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Échec persistant</text>
+<text x="592.0" y="1378.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Rendre le blocage visible</text>
+<text x="592.0" y="1406.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Motif, étape utile et activité indépendante possible</text>
+<text x="1025.0" y="1490.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Effets et doublons</text>
+<text x="592.0" y="1477.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Identifier chaque action logique</text>
+<text x="592.0" y="1505.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Relancer seulement après contrôle de son résultat</text>
+<text x="1025.0" y="1589.5" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Charge et dépendances</text>
+<text x="592.0" y="1576.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Limiter le travail simultané</text>
+<text x="592.0" y="1604.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Ordre justifié et ressources bornées</text>
+<text x="1025.0" y="1747.2" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" text-anchor="end" fill="#087E86">Observation</text>
+<text x="592.0" y="1675.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Mesurer la reprise et les pertes</text>
+<text x="592.0" y="1703.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Durée de coupure, données perdues et âge des</text>
+<text x="592.0" y="1730.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">preuves</text>
+<text x="592.0" y="1779.0" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="400" text-anchor="end" fill="#152343">Distinguer conçu, installé et observé</text>
+<text x="592.0" y="1807.8" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="end" fill="#647087">Une continuité réelle exige des essais en service</text>
+<rect x="1480.0" y="903.5" width="460.0" height="168.0" rx="19" fill="#E3E6F4"/>
+<rect x="1485.0" y="898.5" width="450.0" height="166.0" rx="15" fill="#1C1958" stroke="#7075EB" stroke-width="2"/>
+<text x="1710.0" y="956.3" font-family="DejaVu Sans, sans-serif" font-size="31" font-weight="700" text-anchor="middle" fill="#FFFFFF">ARCHITECTURE C</text>
+<text x="1710.0" y="998.9" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" text-anchor="middle" fill="#E8E9FF">Amour choisi</text>
+<text x="1710.0" y="1042.3" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#BFC4F9">Sens · preuves · reprise</text>
+<text x="1710.0" y="1109.3" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="middle" fill="#647087">Une structure commune, des rôles situés</text>
+<text x="1710.0" y="1884.0" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#647087">Révision de travail du 8 octobre 2026 · les versions précédentes et le noyau éthique restent conservés.</text>
+<text x="1710.0" y="1919.0" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#647087">Les contrôles du document ne prouvent pas la continuité d’un service. Délais, budgets et stockage durable doivent être implémentés et observés.</text>
+</svg>

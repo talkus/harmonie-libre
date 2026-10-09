@@ -1,0 +1,29 @@
+name: Architecture C document contract
+
+on:
+  push:
+    paths:
+      - "conscience-c/architecture/**"
+      - ".github/workflows/architecture-c-contract.yml"
+  pull_request:
+    paths:
+      - "conscience-c/architecture/**"
+      - ".github/workflows/architecture-c-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  document-contract:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: conscience-c/architecture
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python architecture_c_contract.py versions/2026-10-08/architecture-c-continuite-2026-10-08.json
+      - run: python -m unittest discover -s tests -v
+

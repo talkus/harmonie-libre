@@ -1,0 +1,144 @@
+{
+  "checked_at_utc": "2026-10-09T02:57:05.279109+00:00",
+  "coverage": "document_contract_and_simulated_invalid_inputs",
+  "base_model_valid": true,
+  "checks": 14,
+  "passed": 14,
+  "cases": [
+    {
+      "name": "Contrat initial cohérent",
+      "expected": "accept",
+      "observed": "accept",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Objection supprimée par une synthèse",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Transfer dropped objection_refs: ['OBJ-DURABILITY', 'OBJ-RUNTIME']"
+      ]
+    },
+    {
+      "name": "Inconnue effacée lors du changement de vue",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Transfer dropped unknown_refs: ['UNK-SAVE', 'UNK-SERVICE']"
+      ]
+    },
+    {
+      "name": "Source référencée inexistante",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MICRO: unresolved source_refs",
+        "Transfer dropped source_refs: ['MISSING']"
+      ]
+    },
+    {
+      "name": "Intention perdue entre les vues",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Transfer dropped goal_refs: ['GOAL-RESUME']"
+      ]
+    },
+    {
+      "name": "Cycle dans la hiérarchie des intentions",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Goal hierarchy requires one root",
+        "Cycle in goal hierarchy",
+        "Cycle in goal hierarchy",
+        "Cycle in goal hierarchy",
+        "Cycle in goal hierarchy",
+        "Cycle in goal hierarchy"
+      ]
+    },
+    {
+      "name": "Niveau méta sans objets examinés",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-META: missing reflexive targets"
+      ]
+    },
+    {
+      "name": "Succès sans preuve",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MICRO: completion requires evidence"
+      ]
+    },
+    {
+      "name": "Budget multiplié entre deux vues",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Shared retry budget exceeded: BUDGET-READ"
+      ]
+    },
+    {
+      "name": "Relance aveugle après un effet externe inconnu",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MICRO: reconcile before retry"
+      ]
+    },
+    {
+      "name": "Deux effets déclarés avec la même identité",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MESO: duplicate or missing effect key"
+      ]
+    },
+    {
+      "name": "Simulation présentée comme une observation de service",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MICRO: continuous-operation claim lacks observation"
+      ]
+    },
+    {
+      "name": "Changement silencieux de critères",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "Undeclared criteria migration",
+        "Undeclared criteria migration"
+      ]
+    },
+    {
+      "name": "Rubrique commune absente",
+      "expected": "reject",
+      "observed": "reject",
+      "passed": true,
+      "errors": [
+        "NODE-MICRO: missing common contract block"
+      ]
+    }
+  ],
+  "runtime_verified": false,
+  "durable_store_verified": false,
+  "repository_tests_run": false,
+  "limit": "Les garde-fous vérifient des déclarations et des références ; ils ne prouvent ni la vérité sémantique ni les effets du service réel."
+}

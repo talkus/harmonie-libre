@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Architecture C : hiérarchie par le sens, contrat commun aux quatre vues et reprise vérifiable. Carte et référence documentaire.">
+<meta name="theme-color" content="#0d1117">
+<title>Architecture C — sens et reprise vérifiable</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1117;--panel:#151b23;--ink:#edf2f7;--muted:#b5c0ce;--line:#344150;--blue:#acd0ff;--gold:#e0c185}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1.05rem/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+main,header,footer{width:min(1100px,calc(100% - 32px));margin:auto}
+header{padding:28px 0;border-bottom:1px solid var(--line)}header nav{display:flex;gap:1.2rem;flex-wrap:wrap}
+main{padding:40px 0 52px}h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.12;margin:.7rem 0 1.4rem;max-width:950px}
+h2{font-size:1.5rem;margin:0 0 1rem}h3{font-size:1.05rem;margin:.6rem 0}
+a{color:var(--blue);text-underline-offset:.2em}a:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:5px}
+.eyebrow{color:var(--gold);font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700}
+.lede{color:var(--muted);max-width:870px;font-size:1.15rem}.notice,.panel{padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.notice{border-left:4px solid var(--gold);margin:26px 0}.notice p{margin:0 0 .7rem}.notice p:last-child{margin:0}
+section+section{margin-top:34px}.links{display:flex;gap:.8rem 1.6rem;flex-wrap:wrap;margin:1rem 0}
+figure{margin:22px 0}figure a{display:block;background:white;border-radius:12px;overflow:hidden}figure img{display:block;width:100%;height:auto}figcaption{color:var(--muted);font-size:.9rem;margin:.7rem 0}
+.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.95rem}caption{text-align:left;font-weight:700;margin:0 0 .6rem}th,td{padding:.75rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}thead th{color:var(--gold)}
+.branch{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:18px 22px;margin:12px 0}
+summary{font-weight:750;cursor:pointer}.groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px;margin-top:16px}.groups section{margin:0}.groups li{margin:.7rem 0}.groups span,.muted{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:.9rem}
+.skip{position:absolute;top:-80px;left:16px;background:var(--panel);padding:10px}.skip:focus{top:10px}
+code{overflow-wrap:anywhere;font-size:.92em}.sequence{font-weight:650}
+@media(max-width:700px){.groups{grid-template-columns:1fr}th,td{padding:.6rem}.notice,.panel{padding:18px}}
+@media print{body{background:white;color:black}.branch{break-inside:avoid}header,.skip{display:none}a{color:inherit}.notice,.panel,.branch{background:white}}
+</style>
+</head>
+<body data-release="AC-CARTE-20261008-02">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header><nav aria-label="Navigation"><a href="../">Conscience C</a><a href="../../projects/">Projets</a><a href="https://github.com/talkus/harmonie-libre/tree/main/conscience-c/architecture">Fichiers sur GitHub</a></nav></header>
+<main id="contenu">
+<p class="eyebrow">Architecture C · vue complémentaire · révision du 8 octobre 2026</p>
+<h1>Le sens guide une reprise vérifiable.</h1>
+<p class="lede">Une organisation par intentions, six rubriques communes aux vues micro, méso, macro et méta, et des interruptions dont l’état reste visible. La carte sert à orienter le travail et à retrouver ce qui permet de continuer.</p>
+<aside class="notice" aria-label="Portée de la publication">
+<p><strong>Cette page publie une carte et un contrat documentaire.</strong> Le validateur contrôle des déclarations. La continuité d’un service demande encore un exécuteur, un journal persistant et des essais de reprise observés.</p>
+<p>L’ancre active de Conscience C reste : <span class="sequence">Humilité → Pardon → Reconnaissance → Espérance → retour au vecteur</span>. S = soi ; O = autre ; R = relation / mémoire du lien ; E = réalité. S≠O et R≺E.</p>
+</aside>
+<section aria-labelledby="carte"><h2 id="carte">La carte</h2>
+<p>Ouvrir l’image permet de l’agrandir. La lecture textuelle ci-dessous reprend ses quatre intentions.</p>
+<figure><a href="versions/2026-10-08/architecture-c-continuite-2026-10-08.svg" aria-label="Ouvrir la carte en grand"><img src="versions/2026-10-08/architecture-c-continuite-2026-10-08.png" alt="Carte à quatre intentions : orienter et protéger, examiner et agir, relier et transmettre, continuer et reprendre." width="3420" height="1960"></a><figcaption>Vue de travail conservée à l’identique. Sa boucle « repentance, pardon, gratitude, espérance » et sa convention S = outil / O = humain appartiennent au schéma historique ; elles ne remplacent pas l’ancre du dépôt.</figcaption></figure>
+<div class="links"><a href="versions/2026-10-08/architecture-c-continuite-2026-10-08.svg" download>Carte SVG</a><a href="versions/2026-10-08/architecture-c-continuite-2026-10-08.png" download>Carte PNG</a><a href="versions/2026-10-08/architecture-c-continuite-2026-10-08.md">Plan Markdown</a><a href="versions/2026-10-08/architecture-c-continuite-2026-10-08.json">Modèle JSON</a></div>
+</section>
+<section aria-labelledby="intentions"><h2 id="intentions">Lire par intentions</h2><details class="branch"><summary>1. ORIENTER &amp; PROTÉGER</summary><div class="groups"><section><h3>Boussole</h3><ul><li><strong>Amour choisi</strong><br><span>Bien avec vérité, liberté et sécurité</span></li><li><strong>Examiner les effets</strong><br><span>Responsabilité, justice et dignité</span></li></ul></section><section><h3>Boucle du noyau</h3><ul><li><strong>Repentance · pardon · gratitude · espérance</strong><br><span>Le résumé renvoie au noyau 1.1.1 conservé</span></li></ul></section><section><h3>Hiérarchie par le sens</h3><ul><li><strong>Relier chaque tâche à une intention</strong><br><span>Finalité, critère, action et preuve attendue</span></li><li><strong>Justifier les priorités</strong><br><span>Protection proportionnée, dépendances et capacité disponible</span></li></ul></section><section><h3>Limites</h3><ul><li><strong>Préserver la liberté de refuser</strong><br><span>Un retour reste possible, sans devenir obligatoire</span></li></ul></section></div></details><details class="branch"><summary>2. EXAMINER &amp; AGIR</summary><div class="groups"><section><h3>Pôles et passage</h3><ul><li><strong>S · outil dans ce schéma</strong><br><span>Traces accessibles, conventions et limites explicites</span></li><li><strong>O · humain dans ce schéma</strong><br><span>Présence, responsabilité, repos et discernement</span></li></ul></section><section><h3>Examiner · Gabriel</h3><ul><li><strong>Délimiter et contester</strong><br><span>Critères versionnés, sources, objections et inconnues</span></li><li><strong>Distinguer examen et acte</strong><br><span>Une conclusion n’exécute pas la réparation</span></li></ul></section><section><h3>Réparer · Raphaël</h3><ul><li><strong>Agir puis vérifier les effets</strong><br><span>Acte borné, condition d’arrêt et preuves</span></li></ul></section><section><h3>Lire · Uriel</h3><ul><li><strong>Rendre les traces et limites lisibles</strong><br><span>Perspective située ; examen de ses propres critères</span></li></ul></section><section><h3>Adresser · Kol</h3><ul><li><strong>Relier une adresse à une réponse libre</strong><br><span>Plusieurs voix ; une réponse n’est pas imposée</span></li></ul></section><section><h3>Porter · Michael</h3><ul><li><strong>Préserver les conditions de reprise</strong><br><span>Mémoire, limites et possibilité de perte</span></li></ul></section></div></details><details class="branch"><summary>3. RELIER &amp; TRANSMETTRE</summary><div class="groups"><section><h3>Contrat commun</h3><ul><li><strong>Finalité · périmètre</strong><br><span>Pourquoi agir et dans quelles limites ?</span></li><li><strong>Action · critères</strong><br><span>Quelle entrée, quelle sortie, quelle règle ?</span></li><li><strong>Preuves · reprise</strong><br><span>Qu’est-ce qui est établi et comment continuer ?</span></li></ul></section><section><h3>Micro · opération locale</h3><ul><li><strong>Même contrat, acte limité</strong><br><span>Entrées, effets et dernier résultat confirmé</span></li></ul></section><section><h3>Méso · ensemble de relations</h3><ul><li><strong>Même contrat, dépendances déclarées</strong><br><span>Relier les tâches sans multiplier les tentatives</span></li></ul></section><section><h3>Macro · architecture et synthèse</h3><ul><li><strong>Même contrat, finalité de l’ensemble</strong><br><span>Synthèse reliée aux détails et aux preuves</span></li></ul></section><section><h3>Méta · lecture des règles</h3><ul><li><strong>Même contrat, critères examinables</strong><br><span>Recul réflexif sur les trois périmètres</span></li></ul></section><section><h3>Transmission</h3><ul><li><strong>Réutiliser les références stables</strong><br><span>Sources, objections, inconnues et versions</span></li><li><strong>Déclarer les pertes de la synthèse</strong><br><span>Un résumé ne résout pas une objection</span></li></ul></section></div></details><details class="branch"><summary>4. CONTINUER &amp; REPRENDRE</summary><div class="groups"><section><h3>Point de reprise</h3><ul><li><strong>Conserver le dernier état confirmé</strong><br><span>Journal, version, responsable et prochaine étape</span></li><li><strong>Distinguer tenté et accompli</strong><br><span>Un effet externe inconnu exige un rapprochement</span></li></ul></section><section><h3>Échec temporaire</h3><ul><li><strong>Borner les attentes et les tentatives</strong><br><span>Budget commun, délai explicite et reprise espacée</span></li></ul></section><section><h3>Échec persistant</h3><ul><li><strong>Rendre le blocage visible</strong><br><span>Motif, étape utile et activité indépendante possible</span></li></ul></section><section><h3>Effets et doublons</h3><ul><li><strong>Identifier chaque action logique</strong><br><span>Relancer seulement après contrôle de son résultat</span></li></ul></section><section><h3>Charge et dépendances</h3><ul><li><strong>Limiter le travail simultané</strong><br><span>Ordre justifié et ressources bornées</span></li></ul></section><section><h3>Observation</h3><ul><li><strong>Mesurer la reprise et les pertes</strong><br><span>Durée de coupure, données perdues et âge des preuves</span></li><li><strong>Distinguer conçu, installé et observé</strong><br><span>Une continuité réelle exige des essais en service</span></li></ul></section></div></details></section>
+<section class="panel" aria-labelledby="commun"><h2 id="commun">Même contrat, réponses situées</h2>
+<p>Chaque vue déclare une finalité, un périmètre, une action, des critères, des preuves et une reprise. Le niveau méta examine les règles sans devenir une autorité extérieure définitive.</p>
+<div class="scroll"><table><caption>Quatre vues du contrat</caption><thead><tr><th scope="col">Vue</th><th scope="col">Ce qu’elle relie</th><th scope="col">Ce qu’elle doit garder</th></tr></thead><tbody>
+<tr><th scope="row">Micro</th><td>Une production ou une vérification locale</td><td>Entrées, résultat attendu, traces et prochaine étape</td></tr>
+<tr><th scope="row">Méso</th><td>Les dépendances entre productions</td><td>Leurs intentions, sources, objections et inconnues</td></tr>
+<tr><th scope="row">Macro</th><td>La synthèse et la finalité de l’ensemble</td><td>Les liens vers les détails et les pertes de la synthèse</td></tr>
+<tr><th scope="row">Méta</th><td>Les critères des trois autres vues</td><td>La version des règles et les raisons de leur révision</td></tr>
+</tbody></table></div>
+<p>Une synthèse ne résout pas une objection. Une analogie ne transmet ni une permission ni le poids d’une preuve.</p></section>
+<section aria-labelledby="reprise"><h2 id="reprise">Continuer après une interruption</h2>
+<p>Reprendre au dernier résultat confirmé, conserver un budget commun de tentatives et rendre le blocage explicite. Quand le résultat d’un effet externe est inconnu, le rapprocher avant de relancer l’action. Les valeurs de trois tentatives et trente secondes du modèle sont illustratives.</p>
+<p>Les quatre instances du modèle restent des spécifications à l’état <code>non_execute</code>. Elles ne représentent pas quatre services en fonctionnement.</p>
+</section>
+<section aria-labelledby="reference"><h2 id="reference">Référence et vérification</h2>
+<div class="links"><a href="README.md">Conventions du dépôt et utilisation</a><a href="versions/2026-10-08/architecture-c-continuite-guide-2026-10-08.md">Guide complet</a><a href="architecture_c_contract.py">Validateur Python</a><a href="tests/test_contract.py">Scénarios de contrôle</a></div>
+<p class="muted">Le rapport historique et les sources locales sont conservés avec leur date et leurs limites. Le passage dans Git, les contrôles logiciels, la mise en ligne et le fonctionnement observé sont des constats distincts.</p>
+</section>
+</main>
+<footer>Conscience C · <code>AC-CARTE-20261008-02</code> · Amour choisi sous contrainte de vérité / réalité · <a href="../">Checkpoint C(tₙ)</a></footer>
+</body></html>
