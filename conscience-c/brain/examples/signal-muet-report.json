@@ -1,0 +1,848 @@
+{
+  "simulation": true,
+  "source_class": "reconstruction_analytique",
+  "incident": "L'anomalie du signal muet",
+  "grid_version": "AC-EXAM-1",
+  "stages": [
+    {
+      "object": "micro:signal-muet",
+      "scope_k": {
+        "scale": "micro",
+        "boundary": "simulation:micro",
+        "observer": "simulation:lecteur",
+        "criteria_version": "AC-EXAM-1"
+      },
+      "support_sha256": {
+        "artifact_sha256": "1f06d521cce06d9035c39c221a3e507049c0429f29f5a1b0df3f162568b6666c",
+        "trace_refs": [
+          "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+          "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7",
+          "simulation:artifact:sha256:1f06d521cce06d9035c39c221a3e507049c0429f29f5a1b0df3f162568b6666c"
+        ]
+      },
+      "dependencies": [],
+      "omissions_pi": {
+        "declared_refs": [
+          "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+          "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+          "UNKNOWN:terrain:micro",
+          "applicability_or_support_unestablished:SIM-micro",
+          "no_explicit_applicable_support"
+        ],
+        "situated": [
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "applicability_or_support_unestablished:SIM-micro",
+            "unknown_id": "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          }
+        ]
+      },
+      "correction": {
+        "status": "ASSISTANT_PROPOSAL_REVISABLE",
+        "external_effect_applied": false,
+        "next_step": "Examiner les limites avant une décision séparée"
+      },
+      "criterion_verdicts": {
+        "MIC-TYPE": "PASS",
+        "MIC-TRACE": "PASS",
+        "MIC-ANCHOR": "UNKNOWN",
+        "MIC-UNKNOWN": "PASS"
+      },
+      "scenario_verdict": "UNKNOWN",
+      "gabriel_verdict": "INDETERMINATE",
+      "profile": {
+        "version": "AC-EXAM-1",
+        "scale": "micro",
+        "fields": [
+          "object",
+          "scope_k",
+          "support_sha256",
+          "dependencies",
+          "omissions_pi",
+          "correction"
+        ],
+        "criteria": [
+          {
+            "criterion_id": "MIC-TYPE",
+            "question": "Types et valeurs finies",
+            "required_support": "Données exactes et contrat de type explicite"
+          },
+          {
+            "criterion_id": "MIC-TRACE",
+            "question": "Intégrité de la trace locale",
+            "required_support": "Octets ou reçu et empreinte attendue"
+          },
+          {
+            "criterion_id": "MIC-ANCHOR",
+            "question": "Ancrage empirique",
+            "required_support": "Entrées et sorties comparables, méthode et tolérance déclarées"
+          },
+          {
+            "criterion_id": "MIC-UNKNOWN",
+            "question": "Inconnues distinctes",
+            "required_support": "Identité, objet, contexte et source de chaque inconnue"
+          }
+        ],
+        "verification_status": "questions_only_not_performed",
+        "execution_authority": false,
+        "independent_validation": false
+      },
+      "artifact": {
+        "sensor": [
+          -1.0,
+          1.0,
+          -1.0,
+          1.0
+        ],
+        "output": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "type_valid": true,
+        "frozen_alert": true,
+        "accepted_as_empirical": false,
+        "raw_trace_retained": true
+      }
+    },
+    {
+      "object": "meso:signal-muet",
+      "scope_k": {
+        "scale": "meso",
+        "boundary": "simulation:meso",
+        "observer": "simulation:lecteur",
+        "criteria_version": "AC-EXAM-1"
+      },
+      "support_sha256": {
+        "artifact_sha256": "ed07319511574cc060c7d33b75e1a822aa2876743b33e3fd3c9ba16007ac5a75",
+        "trace_refs": [
+          "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+          "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c",
+          "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+          "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7",
+          "simulation:artifact:sha256:1f06d521cce06d9035c39c221a3e507049c0429f29f5a1b0df3f162568b6666c",
+          "simulation:artifact:sha256:ed07319511574cc060c7d33b75e1a822aa2876743b33e3fd3c9ba16007ac5a75"
+        ]
+      },
+      "dependencies": [
+        "micro"
+      ],
+      "omissions_pi": {
+        "declared_refs": [
+          "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+          "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+          "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+          "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+          "UNKNOWN:terrain:meso",
+          "UNKNOWN:terrain:micro",
+          "applicability_or_support_unestablished:SIM-meso",
+          "applicability_or_support_unestablished:SIM-micro",
+          "no_explicit_applicable_support"
+        ],
+        "situated": [
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "applicability_or_support_unestablished:SIM-micro",
+            "unknown_id": "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "applicability_or_support_unestablished:SIM-meso",
+            "unknown_id": "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          }
+        ]
+      },
+      "correction": {
+        "status": "ASSISTANT_PROPOSAL_REVISABLE",
+        "external_effect_applied": false,
+        "next_step": "Examiner les limites avant une décision séparée"
+      },
+      "criterion_verdicts": {
+        "MES-ENVELOPE": "UNKNOWN",
+        "MES-DELIVERY": "FAIL",
+        "MES-FAIRNESS": "PASS",
+        "MES-PERMISSION": "UNKNOWN"
+      },
+      "scenario_verdict": "FAIL",
+      "gabriel_verdict": "INDETERMINATE",
+      "profile": {
+        "version": "AC-EXAM-1",
+        "scale": "meso",
+        "fields": [
+          "object",
+          "scope_k",
+          "support_sha256",
+          "dependencies",
+          "omissions_pi",
+          "correction"
+        ],
+        "criteria": [
+          {
+            "criterion_id": "MES-ENVELOPE",
+            "question": "Intégrité et authenticité séparées",
+            "required_support": "Octets signés, clé autorisée et résultat de vérification"
+          },
+          {
+            "criterion_id": "MES-DELIVERY",
+            "question": "Livraison et flux",
+            "required_support": "Identifiants, accusés, délais et définition du cycle"
+          },
+          {
+            "criterion_id": "MES-FAIRNESS",
+            "question": "Attente et anti-famine",
+            "required_support": "Politique d'ordonnancement et historique des tâches admissibles"
+          },
+          {
+            "criterion_id": "MES-PERMISSION",
+            "question": "Frontières d'interface",
+            "required_support": "Permissions applicables et séparation des effets"
+          }
+        ],
+        "verification_status": "questions_only_not_performed",
+        "execution_authority": false,
+        "independent_validation": false
+      },
+      "artifact": {
+        "packet": {
+          "protocol": "CC-SIM-SIGNED-1",
+          "canonicalization": "python-json-sorted-utf8",
+          "payload": {
+            "packet_id": "fixture:packet-1",
+            "outputs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "payload_sha256": "4938b23507a6e4702fa87d29872b72fb8688da4b34f19c0a1ff51ff07374e64b",
+          "public_key_hex": "5676d73132046ffd49df6ebb823e6997adc8f0cdb681a219ed2742f164b2831b",
+          "signature_hex": "72bdedbbb5f4248b169df57b9e62bb28680db1ed0ea6997b9fded9e9c2b7b7d9e2bbf4f3a2b8e2543ce13d5099fca7ca6dad2d38650fe9e48f96b47b7bc06b0a"
+        },
+        "signature_valid": true,
+        "authorized_key_identity": "UNKNOWN",
+        "queue": [
+          {
+            "id": "bad-channel",
+            "wait_cycles": 4
+          },
+          {
+            "id": "healthy-channel",
+            "wait_cycles": 0
+          }
+        ],
+        "fixture_triage_order": [
+          "bad-channel",
+          "healthy-channel"
+        ],
+        "quarantined_channels": [
+          "bad-channel"
+        ],
+        "nonconvergence_established": false
+      }
+    },
+    {
+      "object": "macro:signal-muet",
+      "scope_k": {
+        "scale": "macro",
+        "boundary": "simulation:macro",
+        "observer": "simulation:lecteur",
+        "criteria_version": "AC-EXAM-1"
+      },
+      "support_sha256": {
+        "artifact_sha256": "7be62a696b4b537b233ac054d1c1ec9dba21d46197c604260023e21d0e821437",
+        "trace_refs": [
+          "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+          "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+          "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c",
+          "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+          "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad",
+          "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7",
+          "simulation:artifact:sha256:1f06d521cce06d9035c39c221a3e507049c0429f29f5a1b0df3f162568b6666c",
+          "simulation:artifact:sha256:7be62a696b4b537b233ac054d1c1ec9dba21d46197c604260023e21d0e821437",
+          "simulation:artifact:sha256:ed07319511574cc060c7d33b75e1a822aa2876743b33e3fd3c9ba16007ac5a75"
+        ]
+      },
+      "dependencies": [
+        "meso"
+      ],
+      "omissions_pi": {
+        "declared_refs": [
+          "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+          "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+          "UNKNOWN:8435924ce2f6800de5a375195f252373a8d5ff77a715daf1c249aa4b6442193a",
+          "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+          "UNKNOWN:ac05e0f060f5b0a7659dda433312ee4fe26728b57af4b1fec05750da163b05e7",
+          "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+          "UNKNOWN:terrain:macro",
+          "UNKNOWN:terrain:meso",
+          "UNKNOWN:terrain:micro",
+          "applicability_or_support_unestablished:SIM-macro",
+          "applicability_or_support_unestablished:SIM-meso",
+          "applicability_or_support_unestablished:SIM-micro",
+          "no_explicit_applicable_support"
+        ],
+        "situated": [
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "applicability_or_support_unestablished:SIM-micro",
+            "unknown_id": "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "macro",
+            "claim_id": "CL0004",
+            "scale": "macro",
+            "scope_ref": "simulation:macro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "a8a10eff8ed79d0e61c0511a54e8cf7b42c3bcc85bdd98933d8c0ec6331b67e7",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:8435924ce2f6800de5a375195f252373a8d5ff77a715daf1c249aa4b6442193a",
+            "trace_refs": [
+              "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+              "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "applicability_or_support_unestablished:SIM-meso",
+            "unknown_id": "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "macro",
+            "claim_id": "CL0004",
+            "scale": "macro",
+            "scope_ref": "simulation:macro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "a8a10eff8ed79d0e61c0511a54e8cf7b42c3bcc85bdd98933d8c0ec6331b67e7",
+            "reason": "applicability_or_support_unestablished:SIM-macro",
+            "unknown_id": "UNKNOWN:ac05e0f060f5b0a7659dda433312ee4fe26728b57af4b1fec05750da163b05e7",
+            "trace_refs": [
+              "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+              "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          }
+        ]
+      },
+      "correction": {
+        "status": "ASSISTANT_PROPOSAL_REVISABLE",
+        "external_effect_applied": false,
+        "next_step": "Examiner les limites avant une décision séparée"
+      },
+      "criterion_verdicts": {
+        "MAC-HISTORY": "PASS",
+        "MAC-REPLICA": "FAIL",
+        "MAC-RETENTION": "FAIL",
+        "MAC-REVOCATION": "UNKNOWN"
+      },
+      "scenario_verdict": "FAIL",
+      "gabriel_verdict": "INDETERMINATE",
+      "profile": {
+        "version": "AC-EXAM-1",
+        "scale": "macro",
+        "fields": [
+          "object",
+          "scope_k",
+          "support_sha256",
+          "dependencies",
+          "omissions_pi",
+          "correction"
+        ],
+        "criteria": [
+          {
+            "criterion_id": "MAC-HISTORY",
+            "question": "Continuité de l'histoire",
+            "required_support": "Chaîne, point d'ancrage et méthode de conservation"
+          },
+          {
+            "criterion_id": "MAC-REPLICA",
+            "question": "Comparaison des répliques",
+            "required_support": "Même objet, même version et même frontière comparables"
+          },
+          {
+            "criterion_id": "MAC-RETENTION",
+            "question": "Rétention et non-interférence",
+            "required_support": "Mesures, baseline et seuils propres au composant"
+          },
+          {
+            "criterion_id": "MAC-REVOCATION",
+            "question": "Révocation traçable",
+            "required_support": "Nouvelle transition avec auteur et provenance"
+          }
+        ],
+        "verification_status": "questions_only_not_performed",
+        "execution_authority": false,
+        "independent_validation": false
+      },
+      "artifact": {
+        "baseline_rank_pr": 2.0,
+        "drifted_rank_pr": 1.0,
+        "fixture_min_rank_pr": 1.5,
+        "local_merkle_root": "e490da4fc5d51f4e97dfab9a7c83acaa1ba4225967cf8962c4c38ae56c7c3860",
+        "remote_merkle_root": "03401f797d8c608aa91f275c284a24cf1aee86269a32bf34a61b7a7da545a769",
+        "same_checkpoint_comparison": "FAIL",
+        "different_checkpoint_comparison": "UNKNOWN"
+      }
+    },
+    {
+      "object": "meta:signal-muet",
+      "scope_k": {
+        "scale": "meta",
+        "boundary": "simulation:meta",
+        "observer": "simulation:lecteur",
+        "criteria_version": "AC-EXAM-1"
+      },
+      "support_sha256": {
+        "artifact_sha256": "e0271bc84ea24bdd0992a81a7a82458648cb22833a309bb1c395650f4a9945dd",
+        "trace_refs": [
+          "41805e099d12d7b0e1afb384d64a1e5d06cc1d5b130b2ab2ec56270dd6776c99",
+          "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+          "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+          "7aa0e07b1b119eba12afda3e6d9d65cfb6121ad25fc296b9daec6b735bb2519c",
+          "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c",
+          "a53cb89b9538e8285bdb20b068468c8e0d0beb6fa23e61a568f600864d64ad54",
+          "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+          "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad",
+          "f43d8d178c422b79ee0a35c218102df8e8676a305ccd3bab4860935e56ead606",
+          "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7",
+          "simulation:artifact:sha256:1f06d521cce06d9035c39c221a3e507049c0429f29f5a1b0df3f162568b6666c",
+          "simulation:artifact:sha256:50776c8e4c019782983e8681fcc4d66c9c7bbaed54766c6822a07db9f8c52ca7",
+          "simulation:artifact:sha256:7be62a696b4b537b233ac054d1c1ec9dba21d46197c604260023e21d0e821437",
+          "simulation:artifact:sha256:e0271bc84ea24bdd0992a81a7a82458648cb22833a309bb1c395650f4a9945dd",
+          "simulation:artifact:sha256:ed07319511574cc060c7d33b75e1a822aa2876743b33e3fd3c9ba16007ac5a75"
+        ]
+      },
+      "dependencies": [
+        "macro"
+      ],
+      "omissions_pi": {
+        "declared_refs": [
+          "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+          "UNKNOWN:250bb1df258165c29874f21be63339f40088ed2d3c4aa70306a885a20fd4fb99",
+          "UNKNOWN:7ab1a6465558d805a498dfd4139694ed481fee0f17f0ae1a32b2c3ffe82552a2",
+          "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+          "UNKNOWN:8435924ce2f6800de5a375195f252373a8d5ff77a715daf1c249aa4b6442193a",
+          "UNKNOWN:994c59c7e032c7d2e6367f944e69163516aa833276753896e90fcd3f2d7e8904",
+          "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+          "UNKNOWN:ac05e0f060f5b0a7659dda433312ee4fe26728b57af4b1fec05750da163b05e7",
+          "UNKNOWN:b2813a28d5063fda007f34d000f752d9a9b36071b916434dabf09f4a848c1e04",
+          "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+          "UNKNOWN:terrain:macro",
+          "UNKNOWN:terrain:meso",
+          "UNKNOWN:terrain:meta",
+          "UNKNOWN:terrain:micro",
+          "UNKNOWN:terrain:micro-independent",
+          "applicability_or_support_unestablished:SIM-macro",
+          "applicability_or_support_unestablished:SIM-meso",
+          "applicability_or_support_unestablished:SIM-meta",
+          "applicability_or_support_unestablished:SIM-micro",
+          "applicability_or_support_unestablished:SIM-micro-independent",
+          "no_explicit_applicable_support"
+        ],
+        "situated": [
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "applicability_or_support_unestablished:SIM-micro",
+            "unknown_id": "UNKNOWN:06ba896b234afc41e906e1ac65fcb240bdb9d64bcb25c7906dc8ef3a6ddef350",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meta",
+            "claim_id": "CL0005",
+            "scale": "meta",
+            "scope_ref": "simulation:meta",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "233b3d7afaa83e4f76cdaba0bc4dfd587ec2c7845c7de85616f99485355c5d91",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:250bb1df258165c29874f21be63339f40088ed2d3c4aa70306a885a20fd4fb99",
+            "trace_refs": [
+              "41805e099d12d7b0e1afb384d64a1e5d06cc1d5b130b2ab2ec56270dd6776c99",
+              "f43d8d178c422b79ee0a35c218102df8e8676a305ccd3bab4860935e56ead606"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro-independent",
+            "claim_id": "CL0002",
+            "scale": "micro",
+            "scope_ref": "simulation:micro-independent",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "98c866f163ffc471dc5d49f47697d4cac99a1e55645a830ce754b42ed08302a3",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:7ab1a6465558d805a498dfd4139694ed481fee0f17f0ae1a32b2c3ffe82552a2",
+            "trace_refs": [
+              "7aa0e07b1b119eba12afda3e6d9d65cfb6121ad25fc296b9daec6b735bb2519c",
+              "a53cb89b9538e8285bdb20b068468c8e0d0beb6fa23e61a568f600864d64ad54"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:7b34c756991463cb9f05613dff51e2bf0db936ebeb0ffcbbaeabcb900ac37e27",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "macro",
+            "claim_id": "CL0004",
+            "scale": "macro",
+            "scope_ref": "simulation:macro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "a8a10eff8ed79d0e61c0511a54e8cf7b42c3bcc85bdd98933d8c0ec6331b67e7",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:8435924ce2f6800de5a375195f252373a8d5ff77a715daf1c249aa4b6442193a",
+            "trace_refs": [
+              "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+              "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro-independent",
+            "claim_id": "CL0002",
+            "scale": "micro",
+            "scope_ref": "simulation:micro-independent",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "98c866f163ffc471dc5d49f47697d4cac99a1e55645a830ce754b42ed08302a3",
+            "reason": "applicability_or_support_unestablished:SIM-micro-independent",
+            "unknown_id": "UNKNOWN:994c59c7e032c7d2e6367f944e69163516aa833276753896e90fcd3f2d7e8904",
+            "trace_refs": [
+              "7aa0e07b1b119eba12afda3e6d9d65cfb6121ad25fc296b9daec6b735bb2519c",
+              "a53cb89b9538e8285bdb20b068468c8e0d0beb6fa23e61a568f600864d64ad54"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meso",
+            "claim_id": "CL0003",
+            "scale": "meso",
+            "scope_ref": "simulation:meso",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f56848b9d65c7b6154a9f97eab72361079f4d07eb2eb50c0518e88afc489462",
+            "reason": "applicability_or_support_unestablished:SIM-meso",
+            "unknown_id": "UNKNOWN:a9d04172ab622562aa427b90c0ab779589e5c4ef96b048e2473ddeb3d0823245",
+            "trace_refs": [
+              "6d905e9cc14b1e462db6406328a74dca676badf8305de8caf7b0ac988a89841a",
+              "7fb13416a4bf6b0f33503daa2efa5bceff5214f0613cf1a8847466cdfd45c80c"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "macro",
+            "claim_id": "CL0004",
+            "scale": "macro",
+            "scope_ref": "simulation:macro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "a8a10eff8ed79d0e61c0511a54e8cf7b42c3bcc85bdd98933d8c0ec6331b67e7",
+            "reason": "applicability_or_support_unestablished:SIM-macro",
+            "unknown_id": "UNKNOWN:ac05e0f060f5b0a7659dda433312ee4fe26728b57af4b1fec05750da163b05e7",
+            "trace_refs": [
+              "678ffb2d8f2f9618cc5811cbac0a5f41bfa2b4a4ed45e786734c42697163a3a6",
+              "d53f43d87b6eb0bcf2343cb68a86224fd553fb5d77463570582ae7693da733ad"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "meta",
+            "claim_id": "CL0005",
+            "scale": "meta",
+            "scope_ref": "simulation:meta",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "233b3d7afaa83e4f76cdaba0bc4dfd587ec2c7845c7de85616f99485355c5d91",
+            "reason": "applicability_or_support_unestablished:SIM-meta",
+            "unknown_id": "UNKNOWN:b2813a28d5063fda007f34d000f752d9a9b36071b916434dabf09f4a848c1e04",
+            "trace_refs": [
+              "41805e099d12d7b0e1afb384d64a1e5d06cc1d5b130b2ab2ec56270dd6776c99",
+              "f43d8d178c422b79ee0a35c218102df8e8676a305ccd3bab4860935e56ead606"
+            ],
+            "result_current": true
+          },
+          {
+            "plan_id": "signal-muet-simulation-v1",
+            "origin_unit_id": "micro",
+            "claim_id": "CL0001",
+            "scale": "micro",
+            "scope_ref": "simulation:micro",
+            "observer_ref": "simulation:lecteur",
+            "subject_ref": null,
+            "basis_digest": "3f7d4f5fcd77ddc53b94427777946991f3294f7bf9897fb1151c35b61bb35209",
+            "reason": "no_explicit_applicable_support",
+            "unknown_id": "UNKNOWN:bd09e65dd37cf78947c52ce7e9061e17390f71165fcf270204250fe32843082b",
+            "trace_refs": [
+              "bf9b0805c4a87ce4a133940a7fae15ce448524719ac5b15813d2364e32b91492",
+              "faa5ed1b88ed68c3e3e1562d735b4da2ada705da9e72e280a81400bf29cb6eb7"
+            ],
+            "result_current": true
+          }
+        ]
+      },
+      "correction": {
+        "status": "ASSISTANT_PROPOSAL_REVISABLE",
+        "external_effect_applied": false,
+        "next_step": "Examiner les limites avant une décision séparée"
+      },
+      "criterion_verdicts": {
+        "MET-OBJECTION": "PASS",
+        "MET-REVISION": "UNKNOWN",
+        "MET-VETO": "UNKNOWN",
+        "MET-GENERATIVITY": "UNKNOWN"
+      },
+      "scenario_verdict": "UNKNOWN",
+      "gabriel_verdict": "INDETERMINATE",
+      "profile": {
+        "version": "AC-EXAM-1",
+        "scale": "meta",
+        "fields": [
+          "object",
+          "scope_k",
+          "support_sha256",
+          "dependencies",
+          "omissions_pi",
+          "correction"
+        ],
+        "criteria": [
+          {
+            "criterion_id": "MET-OBJECTION",
+            "question": "Critère lui-même contestable",
+            "required_support": "Cible précise, trace et voie de traitement de l'objection"
+          },
+          {
+            "criterion_id": "MET-REVISION",
+            "question": "Révision et effets distincts",
+            "required_support": "Version proposée, décision et test des conséquences séparés"
+          },
+          {
+            "criterion_id": "MET-VETO",
+            "question": "Veto humain applicable",
+            "required_support": "Autorité authentifiée et chemin d'arrêt réellement connecté"
+          },
+          {
+            "criterion_id": "MET-GENERATIVITY",
+            "question": "Ouverture sans totalité",
+            "required_support": "Capacités distinctes de reprise et de réouverture examinées"
+          }
+        ],
+        "verification_status": "questions_only_not_performed",
+        "execution_authority": false,
+        "independent_validation": false
+      },
+      "artifact": {
+        "proposal_status": "ASSISTANT_PROPOSAL_REVISABLE",
+        "proposal": "Séparer contrôle de type et ancrage empirique ; comparer des répliques au même checkpoint",
+        "beta_candidate": null,
+        "beta_cause_established": false,
+        "automatic_remediation": false,
+        "human_seal": false,
+        "canonical_version": null,
+        "retention_after_candidate_restore": "UNKNOWN"
+      }
+    }
+  ],
+  "executed_units": [
+    "micro",
+    "micro-independent",
+    "meso",
+    "macro",
+    "meta"
+  ],
+  "memory_reloads": 5,
+  "independent_read_completed": true,
+  "meta_objection_preserved": true,
+  "history_preserved": true,
+  "ledger_kind": "local_sha256_hash_chain",
+  "ledger_head": "d1e33794d9954a8d0d63b1319431be0182b684d22ae34cf7713a1be569ed76e1",
+  "checkpoint": "C(t_23)",
+  "human_seal": false,
+  "canonical_revision_applied": false,
+  "execution_authority": false,
+  "live_sensor_observed": false,
+  "aws_drive_observed": false,
+  "continuous_service_observed": false
+}

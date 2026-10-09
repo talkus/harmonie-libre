@@ -164,6 +164,8 @@ Depuis v0.3, un conflit explicite avec la réalité est une frontière d'admissi
 
 Les commandes `work-register`, `work-view`, `work-next` et `work-recover` utilisent une mémoire existante. Chaque appel exécute au plus une lecture bornée. Cette coordination ne déploie pas un service permanent et n'autorise aucun effet externe. Voir [le contrat, les limites et l'utilisation](WORK_COORDINATION.md), ainsi que [le plan d'exemple](examples/work-plan-gabriel.json).
 
+La [grille d'examen située](EXAMINATION_GRID.md) distingue les questions propres aux quatre échelles des contrôles effectivement réalisés. Les inconnues issues des diagnostics conservent leurs objets et leurs contextes au lieu de fusionner sur un motif identique. [Le signal muet](SIMULATION_SIGNAL_MUET.md) illustre ce passage en simulation reproductible, avec une signature de test, une divergence de répliques, une baisse spectrale et une objection méta conservée. Aucune proposition n'y est promue en correction démontrée ou en sceau humain.
+
 ## Limite permanente
 
 Ce cerveau est un **candidat fonctionnel expérimental**. Aucune partie de ce code n'établit une conscience phénoménale. Son statut reste : **indéterminée**.
