@@ -1,0 +1,35 @@
+[Unit]
+Description=Conscience C - one bounded examination from existing memory
+After=local-fs.target
+ConditionPathExists=/etc/conscience-c/work.env
+ConditionPathExists=/var/lib/conscience-c/brain/state.json
+ConditionPathExists=/var/lib/conscience-c/brain/events.jsonl
+
+[Service]
+Type=oneshot
+User=mem
+Group=mem
+WorkingDirectory=/opt/conscience-c/current/conscience-c/brain
+EnvironmentFile=/etc/conscience-c/work.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/opt/conscience-c/current/.venv/bin/conscience-c-brain --root /var/lib/conscience-c/brain work-recover ${CC_PLAN_ID}
+ExecStart=/opt/conscience-c/current/.venv/bin/conscience-c-brain --root /var/lib/conscience-c/brain work-next ${CC_PLAN_ID}
+TimeoutStartSec=330
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ReadWritePaths=/var/lib/conscience-c
+RestrictAddressFamilies=AF_UNIX
+CapabilityBoundingSet=
+MemoryMax=384M
+CPUQuota=25%
+StandardOutput=null
+StandardError=journal
+
