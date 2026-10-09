@@ -58,6 +58,10 @@ Ce contrôle établit la cohérence du journal local de confiance. Les disponibi
 
 `work_view` utilise une seule lecture fraîchement vérifiée du journal et un instant commun pour les quatre échelles, y compris les preuves temporelles et les objections Gabriel. Cette lecture n'est pas conservée entre appels : le prochain état est revérifié. La frontière snapshot/journal et la concurrence restent contrôlées.
 
+Depuis la version logicielle `0.3.3`, la recherche des preuves et des diagnostics est également partagée dans cette lecture. Les entrées sont regroupées par claim ; les ancêtres et les dates sont examinés une fois par contexte pertinent, puis chaque unité conserve sa propre empreinte de périmètre et de travail. Pour 128 unités, la recherche parcourt les preuves une fois et l'historique au plus deux fois, au lieu de recommencer ces parcours pour chaque unité.
+
+Une réservation, son processus de lecture et sa clôture calculent seulement l'empreinte de l'unité concernée et des dépendances nécessaires à son encodage. La vue globale continue d'examiner toutes les unités pour choisir selon les intentions déclarées, les dépendances et l'équité. Les empreintes CC-WORK-1 et CC-WORK-2 restent identiques à celles de la version précédente ; une preuve changée, une objection nouvelle ou une date dépassée sont réexaminées à l'appel suivant. Voir [la vérification datée et ses limites](OPTIMISATION_2026-10-09.md).
+
 ## Activation et compatibilité
 
 Adapter [l'exemple CC-WORK-2](examples/work-plan-gabriel-v2.json) aux claims réellement présents, puis enregistrer un **nouvel identifiant de plan**. Les commandes `work-register`, `work-view`, `work-next` et `work-recover` restent identiques. `WORK_VERSION` reste l'alias historique `CC-WORK-1` ; `SCHEDULED_WORK_VERSION` désigne le nouveau format.

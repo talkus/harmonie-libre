@@ -363,52 +363,90 @@ class WorkCoordinationMixin:
             "before_digest": _stable_hash(old), "unit": new, "reason": reason,
             "execution_authority": False, **scheduling}, CausalOrigin.SELF)
 
+    def _work_basis_contexts(self, claim_ids, *, history, at_time):
+        """Share input searches within one fresh frame, never across calls."""
+        claims = self.state.get("teshuvah", {}).get("claims", {})
+        all_evidence = self.state["E"]["evidence"]
+        # Keep the original distinction: facts select existing entries;
+        # absent ancestors remain explicit missing inputs during traversal.
+        related = {cid: {eid for eid in (claims.get(cid) or {}).get("facts", [])
+                         if eid in all_evidence} for cid in claim_ids}
+        for eid, item in all_evidence.items():
+            cid = item.get("claim_ref")
+            if cid in related:
+                related[cid].add(eid)
+        reports = {row["event_hash"]: row["payload"]["report"]["claim_id"]
+                   for row in history if row["event_type"] == "GABRIEL_EXAMINED"
+                   and row["payload"]["report"]["claim_id"] in related}
+        diagnostics = {cid: [] for cid in related}
+        for row in history:
+            cid = reports.get(row["event_hash"])
+            if cid is None and row["event_type"] in {"GABRIEL_CONTESTED", "GABRIEL_CORRECTED"}:
+                cid = reports.get(row["payload"]["report_ref"])
+            if cid is not None:
+                diagnostics[cid].append(row["event_hash"])
+        temporal, contexts = {}, {}
+        for cid, refs in related.items():
+            stack = list(refs)
+            while stack:
+                eid = stack.pop()
+                for ancestor in all_evidence.get(eid, {}).get("derived_from", []):
+                    if ancestor not in refs:
+                        refs.add(ancestor)
+                        stack.append(ancestor)
+            evidence = {eid: all_evidence.get(eid) for eid in sorted(refs)}
+            for eid, item in evidence.items():
+                if eid not in temporal:
+                    temporal[eid] = self._work_evidence_time(item, at_time)
+            contexts[cid] = {"claim": claims.get(cid), "evidence": evidence,
+                             "temporal": {eid: temporal[eid] for eid in evidence},
+                             "diagnostic_refs": diagnostics[cid]}
+        return contexts
+
+    @staticmethod
+    def _work_evidence_time(item, now):
+        if item is None:
+            return "missing"
+        try:
+            start = _instant(item["valid_at"]) if item.get("valid_at") else None
+            end = _instant(item["expires_at"]) if item.get("expires_at") else None
+            return "future" if start and now < start else "expired" if end and now > end else "current"
+        except (ValueError, TypeError):
+            return "invalid"
+
+    @staticmethod
+    def _work_context_digest(unit, context):
+        # Unit boundaries remain distinct; preserve both historical encodings.
+        return _stable_hash({**context, "work": unit["work"], "scope": unit["scope"],
+                             "criteria": GABRIEL_CRITERIA_VERSION})
+
     def _work_basis(self, unit, *, history=None, at_time=None):
         """Check relevant evidence/ancestors and temporal boundaries only."""
-        cid = unit["work"]["claim_id"]
-        claim = self.state.get("teshuvah", {}).get("claims", {}).get(cid)
-        all_evidence = self.state["E"]["evidence"]
-        related = {eid for eid, item in all_evidence.items()
-                   if item.get("claim_ref") == cid or eid in (claim or {}).get("facts", [])}
-        stack = list(related)
-        while stack:
-            eid = stack.pop()
-            for ancestor in all_evidence.get(eid, {}).get("derived_from", []):
-                if ancestor not in related:
-                    related.add(ancestor)
-                    stack.append(ancestor)
-        evidence = {eid: all_evidence.get(eid) for eid in sorted(related)}
-        temporal = {}
-        now = _clock() if at_time is None else at_time
-        for eid, item in evidence.items():
-            if item is None:
-                temporal[eid] = "missing"
-                continue
-            try:
-                start = _instant(item["valid_at"]) if item.get("valid_at") else None
-                end = _instant(item["expires_at"]) if item.get("expires_at") else None
-                temporal[eid] = "future" if start and now < start else "expired" if end and now > end else "current"
-            except (ValueError, TypeError):
-                temporal[eid] = "invalid"
         rows = verified_history(self) if history is None else history
-        reports = {r["event_hash"] for r in rows if r["event_type"] == "GABRIEL_EXAMINED"
-                   and r["payload"]["report"]["claim_id"] == cid}
-        diagnostic_refs = [r["event_hash"] for r in rows if r["event_hash"] in reports or (
-            r["event_type"] in {"GABRIEL_CONTESTED", "GABRIEL_CORRECTED"}
-            and r["payload"]["report_ref"] in reports)]
-        return _stable_hash({"claim": claim, "evidence": evidence, "temporal": temporal,
-                             "work": unit["work"], "scope": unit["scope"],
-                             "criteria": GABRIEL_CRITERIA_VERSION,
-                             "diagnostic_refs": diagnostic_refs})
+        now = _clock() if at_time is None else at_time
+        cid = unit["work"]["claim_id"]
+        context = self._work_basis_contexts([cid], history=rows, at_time=now)[cid]
+        return self._work_context_digest(unit, context)
 
-    def _work_plan_bases(self, plan, *, history=None, at_time=None):
-        """One read frame; v2 binds each read to its dependency diagnostics."""
+    def _work_plan_bases(self, plan, *, history=None, at_time=None, unit_ids=None):
+        """One fresh frame; optionally examine only selected dependency closures."""
         rows = verified_history(self) if history is None else history
         now = _clock() if at_time is None else at_time
         by_id = {u["id"]: u for u in plan["spec"]["units"]}
-        own = {uid: self._work_basis(u, history=rows, at_time=now) for uid, u in by_id.items()}
+        requested = list(by_id) if unit_ids is None else list(unit_ids)
+        required, stack = set(), list(requested)
+        while stack:
+            uid = stack.pop()
+            if uid not in required:
+                required.add(uid)
+                if plan["spec"]["version"] == SCHEDULED_WORK_VERSION:
+                    stack.extend(by_id[uid]["work"]["depends_on"])
+        contexts = self._work_basis_contexts(
+            {by_id[uid]["work"]["claim_id"] for uid in required}, history=rows, at_time=now)
+        own = {uid: self._work_context_digest(u, contexts[u["work"]["claim_id"]])
+               for uid, u in by_id.items() if uid in required}
         if plan["spec"]["version"] == WORK_VERSION:
-            return own  # Preserve the historical encoding of recorded bases.
+            return {uid: own[uid] for uid in requested}
         runtime, bases = plan["units"], {}
         def resolve(uid):
             if uid not in bases:
@@ -419,7 +457,7 @@ class WorkCoordinationMixin:
                     for dep in by_id[uid]["work"]["depends_on"]}
                 bases[uid] = _stable_hash({"own_basis": own[uid], "dependencies": dependencies})
             return bases[uid]
-        return {uid: resolve(uid) for uid in by_id}
+        return {uid: resolve(uid) for uid in requested}
 
     def work_view(self, plan_id):
         rows = verified_history(self)
@@ -575,7 +613,8 @@ class WorkCoordinationMixin:
         self._work_change(pid, uid, {"state": "running",
             "attempts": plan["units"][uid]["attempts"] + 1, "attempt_id": attempt,
             "deadline": (_clock() + timedelta(seconds=timeout)).isoformat(),
-            "ready_at": None, "error": None, "basis_digest": self._work_plan_bases(plan)[uid]},
+            "ready_at": None, "error": None,
+            "basis_digest": self._work_plan_bases(plan, unit_ids=[uid])[uid]},
             "bounded local examination reserved", schedule_receipt=schedule_receipt)
         return uid, attempt, timeout
 
@@ -588,7 +627,7 @@ class WorkCoordinationMixin:
         if error is None:
             if not _result_matches(result, unit, current, attempt, verified_history(self)):
                 error = "worker_output_invalid"
-            elif self._work_plan_bases(plan)[uid] != current["basis_digest"]:
+            elif self._work_plan_bases(plan, unit_ids=[uid])[uid] != current["basis_digest"]:
                 error = "inputs_changed; new bounded examination required"
             elif _clock() > _instant(current["deadline"]):
                 error = "read_deadline_exceeded"

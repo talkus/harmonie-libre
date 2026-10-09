@@ -8,6 +8,8 @@ seule ne modifie aucune affirmation ; un diagnostic ne donne aucune permission.
 
 **Coordination multi-échelle :** [CC-WORK-2](WORK_SCHEDULING.md) conserve les mêmes six rubriques à chaque échelle, transmet la priorité déclarée aux dépendances nécessaires et répartit les tentatives malgré un échec répété. Les choix se reprennent depuis le journal ; les anciens plans gardent leur comportement. Cette coordination locale n'est pas un service supervisé en permanence.
 
+**Optimisation v0.3.3 du 9 octobre 2026 :** les quatre échelles partagent la recherche des preuves pendant un examen ; une tâche ne recalcule que ses dépendances nécessaires. Les lectures suivantes vérifient à nouveau les traces et leurs dates. Voir [les résultats, la compatibilité et l'état du déploiement](OPTIMISATION_2026-10-09.md).
+
 **Audit du 26 septembre 2026 :** un compte rendu enregistré n'est pas un fait vérifié. Voir [l'audit des revérifications](AUDIT_REVALIDATION_2026-09-26.md), [l'audit des checkpoints](AUDIT_CHECKPOINTS_2026-09-26.md) et [la récupération des transitions](AUDIT_TRANSITIONS_2026-09-26.md).
 
 ## Invariants implémentés

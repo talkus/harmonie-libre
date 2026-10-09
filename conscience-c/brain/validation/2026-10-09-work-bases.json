@@ -1,0 +1,70 @@
+{
+  "date_utc": "2026-10-09",
+  "baseline_commit": "1461cd31022fbbe7b9398379285e4bc68a15a360",
+  "baseline_work_coordination_sha256": "78dab77902e8abab2dcd97a142bb03b9f66e6fd148937f60df89f84fa8119eaf",
+  "method": "Synthetic local evidence-basis calculation only; verified history and persistence costs excluded.",
+  "results": [
+    {
+      "units": 4,
+      "version": "CC-WORK-1",
+      "evidence_entries": 5005,
+      "history_rows": 5006,
+      "repetitions": 7,
+      "median_before_ms": 3.524,
+      "median_after_ms": 0.686,
+      "ratio_before_after": 5.13,
+      "basis_digests_identical": true
+    },
+    {
+      "units": 4,
+      "version": "CC-WORK-2",
+      "evidence_entries": 5005,
+      "history_rows": 5006,
+      "repetitions": 7,
+      "median_before_ms": 4.639,
+      "median_after_ms": 0.837,
+      "ratio_before_after": 5.54,
+      "basis_digests_identical": true
+    },
+    {
+      "units": 128,
+      "version": "CC-WORK-1",
+      "evidence_entries": 5005,
+      "history_rows": 5006,
+      "repetitions": 7,
+      "median_before_ms": 162.142,
+      "median_after_ms": 2.685,
+      "ratio_before_after": 60.39,
+      "basis_digests_identical": true
+    },
+    {
+      "units": 128,
+      "version": "CC-WORK-2",
+      "evidence_entries": 5005,
+      "history_rows": 5006,
+      "repetitions": 7,
+      "median_before_ms": 137.012,
+      "median_after_ms": 2.379,
+      "ratio_before_after": 57.58,
+      "basis_digests_identical": true
+    }
+  ],
+  "deployment_verified": false,
+  "continuous_operation_observed": false,
+  "package_version": "0.3.3",
+  "python_version": "3.12.14",
+  "local_validation": {
+    "brain_tests": 486,
+    "continuity_checks": 11,
+    "result": "PASS",
+    "test_log_sha256": "319944ff7a281c5153d6aa1072a2b382941ed3685e8d7057f6ef70333ce1ed9d"
+  },
+  "files_sha256": {
+    "conscience_c_brain/work_coordination.py": "78eb4d9fdb5234a82c93f86aeacdbd817696b704281fe6d49cd3a28ff8d0f737",
+    "conscience_c_brain/work_runner.py": "d751fc1e590c26bd53b7c9d818d89c9ad5975d992fb02547a73a363fe988a86b",
+    "tests/test_work_evidence.py": "4b6ecd2a1365a7d0dad2a90cd7b7ade83badc3acf8398853d07959750647ea9e",
+    "pyproject.toml": "94a9bd31c66321ac84b4ad5a17aaa9b7c1b21839908db5963d9fb6d85706bc30"
+  },
+  "aws_consultation": "UNAUTHORIZED: connector reauthentication required",
+  "github_checks": "See checks attached to the commit containing this receipt; not inferred from local tests."
+}
