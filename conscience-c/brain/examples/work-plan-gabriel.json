@@ -1,0 +1,78 @@
+{
+  "plan_id": "gabriel-quatre-vues-v1",
+  "version": "CC-WORK-1",
+  "goals": [
+    {
+      "id": "REPRENDRE",
+      "parent": null,
+      "text": "Continuer un examen traçable sous contrainte de réalité",
+      "serves_because": "Préserver la reprise à C(tₙ) et les limites du diagnostic",
+      "priority": 0
+    },
+    {
+      "id": "EXAMINER",
+      "parent": "REPRENDRE",
+      "text": "Examiner une proposition dans son périmètre déclaré",
+      "serves_because": "Une décision doit retrouver les traces pertinentes",
+      "priority": 0
+    },
+    {
+      "id": "TRANSMETTRE",
+      "parent": "REPRENDRE",
+      "text": "Relier les vues sans perdre les objections et les inconnues",
+      "serves_because": "La synthèse doit rester reliée aux détails",
+      "priority": 10
+    },
+    {
+      "id": "REVOIR",
+      "parent": "REPRENDRE",
+      "text": "Rendre les critères et leurs limites examinables",
+      "serves_because": "La lisibilité d'une conclusion n'en fait pas une vérité ultime",
+      "priority": 20
+    }
+  ],
+  "budget": {
+    "max_attempts": 8,
+    "timeout_seconds": 10,
+    "max_inflight": 1,
+    "retry_delay_seconds": 1
+  },
+  "units": [
+    {
+      "id": "micro",
+      "purpose": {"goal_refs": ["EXAMINER"], "serves_because": "Situer le diagnostic local"},
+      "scope": {"view": "micro", "boundary": "local", "observer": "local:operateur", "reviews": []},
+      "work": {"kind": "gabriel_examine", "claim_id": "CL0001", "depends_on": [], "input_refs": [], "output_contract": "Un diagnostic local borné", "subject_ref": null},
+      "review": {"criteria_version": "1.0.0", "objection_refs": [], "unknown_refs": ["UNKNOWN:validation-des-sources"]},
+      "evidence": {"source_refs": []},
+      "continuity": {"next_step": "Lire le diagnostic et ses preuves exclues"}
+    },
+    {
+      "id": "meso",
+      "purpose": {"goal_refs": ["TRANSMETTRE"], "serves_because": "Relier le diagnostic à sa dépendance"},
+      "scope": {"view": "meso", "boundary": "local", "observer": "local:operateur", "reviews": []},
+      "work": {"kind": "gabriel_examine", "claim_id": "CL0001", "depends_on": ["micro"], "input_refs": [], "output_contract": "Une lecture située conservant les références de micro", "subject_ref": null},
+      "review": {"criteria_version": "1.0.0", "objection_refs": [], "unknown_refs": []},
+      "evidence": {"source_refs": []},
+      "continuity": {"next_step": "Examiner ce que la relation entre vues apporte ou laisse ouvert"}
+    },
+    {
+      "id": "macro",
+      "purpose": {"goal_refs": ["TRANSMETTRE"], "serves_because": "Rattacher l'ensemble à sa finalité"},
+      "scope": {"view": "macro", "boundary": "local", "observer": "local:operateur", "reviews": []},
+      "work": {"kind": "gabriel_examine", "claim_id": "CL0001", "depends_on": ["meso"], "input_refs": [], "output_contract": "Une lecture d'ensemble reliée aux diagnostics précédents", "subject_ref": null},
+      "review": {"criteria_version": "1.0.0", "objection_refs": [], "unknown_refs": []},
+      "evidence": {"source_refs": []},
+      "continuity": {"next_step": "Relire les inconnues conservées avant toute synthèse"}
+    },
+    {
+      "id": "meta",
+      "purpose": {"goal_refs": ["REVOIR"], "serves_because": "Exposer les limites des règles et des trois lectures"},
+      "scope": {"view": "meta", "boundary": "local", "observer": "local:operateur", "reviews": ["micro", "meso", "macro"]},
+      "work": {"kind": "gabriel_examine", "claim_id": "CL0001", "depends_on": ["macro"], "input_refs": [], "output_contract": "Un examen situé avec les références des cibles ; aucune approbation automatique des critères", "subject_ref": null},
+      "review": {"criteria_version": "1.0.0", "objection_refs": [], "unknown_refs": []},
+      "evidence": {"source_refs": []},
+      "continuity": {"next_step": "Décider explicitement si les critères ou le plan doivent être révisés"}
+    }
+  ]
+}

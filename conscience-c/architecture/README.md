@@ -30,9 +30,15 @@ Le validateur rejette les entrées mal formées, les pertes silencieuses d’int
 
 Les versions historiques sont conservées à l’identique dans `versions/2026-10-08/`. Leurs champs de statut décrivent leur création, avant publication. Le rapport historique de 14 contrôles accompagne la version ; la suite CI actuelle teste séparément le validateur publié.
 
+## Coordination locale ajoutée
+
+Le cerveau expose désormais [un coordinateur local](../brain/WORK_COORDINATION.md) et [un exemple à quatre vues](../brain/examples/work-plan-gabriel.json). Son contrat `CC-WORK-1` reprend les six rubriques, avec une hiérarchie d'intentions déclarées, des dépendances, un budget partagé par plan et des réservations enregistrées dans le journal existant. Il exécute seulement des examens Gabriel bornés en lecture seule. Ses tests couvrent notamment un arrêt brutal, un délai dépassé, la reprise et les résultats périmés.
+
+Le format exécutable et le format documentaire historique sont distincts : aucun modèle historique n'est converti ou exécuté automatiquement. Les budgets du modèle publié restent illustratifs ; les budgets d'un plan de coordination enregistré sont effectivement appliqués aux lectures locales.
+
 ## Suite utile
 
-Relier ce contrat à une tâche réelle du moteur existant, à son journal persistant et à un essai de reprise après interruption. Mesurer ensuite le délai de reprise, les pertes et les doublons éventuels. Les budgets proposés restent illustratifs tant qu’un exécuteur ne les applique pas.
+Installer explicitement une supervision adaptée à l'environnement réel, puis observer la durée de reprise, les pertes et les doublons éventuels en service. La reprise locale testée ne garantit pas une disponibilité sans interruption.
 
 La mise en ligne de cette page ne déploie pas un moteur permanent et n’atteste pas une protection AEGIS live.
 
