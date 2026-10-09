@@ -184,7 +184,10 @@ class GabrielMixin:
 
     def gabriel_report(self, report_ref):
         """Resolve by recorded event hash, never by trusting a caller's report body."""
-        rows = verified_history(self)
+        return self._gabriel_report_from_history(report_ref, verified_history(self))
+
+    def _gabriel_report_from_history(self, report_ref, rows):
+        """Internal read frame; rows must be freshly verified by the caller."""
         reports = {r["event_hash"]: r for r in rows if r["event_type"] == "GABRIEL_EXAMINED"}
         if report_ref not in reports:
             raise ValueError("unknown Gabriel report reference")

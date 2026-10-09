@@ -20,6 +20,10 @@ from .gabriel import GABRIEL_CRITERIA_VERSION
 from .examination_grid import examination_profile
 from .models import CausalOrigin
 from .multiscale_coherence import Scale
+from .work_scheduling import (
+    SCHEDULED_WORK_VERSION, SCHEDULING_VERSION, initial_scheduler,
+    scheduling_view, scheduling_transition,
+)
 
 
 WORK_VERSION = "CC-WORK-1"
@@ -69,10 +73,21 @@ def _instant(value):
 
 def validate_work_plan(spec, *, require_current_criteria=True):
     """Validate shape, meaning links and both DAGs before any state mutation."""
-    _fields(spec, ("plan_id", "version", "goals", "units", "budget"), "plan")
+    scheduled = isinstance(spec, dict) and spec.get("version") == SCHEDULED_WORK_VERSION
+    fields = ("plan_id", "version", "goals", "units", "budget")
+    _fields(spec, (*fields, "scheduling") if scheduled else fields, "plan")
     _text(spec["plan_id"], "plan_id")
-    if spec["version"] != WORK_VERSION:
+    _text(spec["version"], "version")
+    if spec["version"] not in {WORK_VERSION, SCHEDULED_WORK_VERSION}:
         raise ValueError("unsupported work contract version")
+    if scheduled:
+        policy = spec["scheduling"]
+        _fields(policy, ("version", "fair_after", "inherit_priorities"), "scheduling")
+        if policy["version"] != SCHEDULING_VERSION:
+            raise ValueError("unsupported scheduling policy version")
+        _integer(policy["fair_after"], "scheduling.fair_after", 1, 128)
+        if type(policy["inherit_priorities"]) is not bool:
+            raise ValueError("scheduling.inherit_priorities must be a boolean")
     for name in ("goals", "units"):
         if not isinstance(spec[name], list) or not 1 <= len(spec[name]) <= 128:
             raise ValueError(name + " requires 1 to 128 entries")
@@ -163,11 +178,14 @@ def validate_work_plan(spec, *, require_current_criteria=True):
 
 
 def _initial(spec):
-    return {"spec": copy.deepcopy(spec), "units": {
+    plan = {"spec": copy.deepcopy(spec), "units": {
         u["id"]: {"state": "queued", "attempts": 0, "attempt_id": None,
                   "deadline": None, "ready_at": None, "error": None,
                   "basis_digest": None, "result": None}
         for u in spec["units"]}}
+    if spec["version"] == SCHEDULED_WORK_VERSION:
+        plan["scheduler"] = initial_scheduler(spec)
+    return plan
 
 
 def _projection(rows):
@@ -193,6 +211,22 @@ def _projection(rows):
                     new["state"] not in _STATES or type(new["attempts"]) is not int or
                     new["attempts"] < old["attempts"]):
                 raise ValueError("invalid recorded work progress")
+            if plan["spec"]["version"] == SCHEDULED_WORK_VERSION:
+                reserved = new["state"] == "running" and new["attempts"] == old["attempts"] + 1
+                if reserved:
+                    recorded = payload.get("scheduling", {})
+                    if not isinstance(recorded, dict) or not isinstance(recorded.get("receipt"), dict):
+                        raise ValueError("missing scheduling receipt")
+                    receipt = recorded.get("receipt", {})
+                    _instant(receipt.get("decision_at"))
+                    if receipt.get("ledger_boundary") != row["prev_hash"] or receipt.get("selected") != uid:
+                        raise ValueError("scheduling receipt is not bound to this reservation")
+                    expected = scheduling_transition(plan["spec"], plan["units"], plan["scheduler"], receipt)
+                    if not equal_json(recorded, expected):
+                        raise ValueError("scheduling state differs from recorded choice")
+                    plan["scheduler"] = expected["after"]
+                elif "scheduling" in payload or new["attempts"] != old["attempts"] or new["state"] == "running":
+                    raise ValueError("invalid scheduling transition")
             plan["units"][uid] = copy.deepcopy(new)
     return plans
 
@@ -276,8 +310,10 @@ class WorkCoordinationMixin:
             return "documentary_only"
         return super().classify_replay_event(row)
 
-    def _work_plans(self):
-        rows = verified_history(self)
+    def _work_plans(self, *, history=None):
+        # Internal callers may share one freshly verified read frame. It is
+        # never cached across calls or after a transition.
+        rows = verified_history(self) if history is None else history
         plans = _projection(rows)
         stored = self.state.get(_ROOT, {})
         if (not equal_json(plans, stored) or
@@ -312,17 +348,22 @@ class WorkCoordinationMixin:
             "execution_authority": False}, CausalOrigin.MIXED)
         return self.work_view(pid)
 
-    def _work_change(self, pid, uid, update, reason):
+    def _work_change(self, pid, uid, update, reason, *, schedule_receipt=None):
         plans = self._work_plans()
         old = plans[pid]["units"][uid]
         new = {**copy.deepcopy(old), **copy.deepcopy(update)}
+        scheduling = {}
+        if schedule_receipt is not None:
+            scheduling["scheduling"] = scheduling_transition(
+                plans[pid]["spec"], plans[pid]["units"], plans[pid]["scheduler"], schedule_receipt)
+            plans[pid]["scheduler"] = scheduling["scheduling"]["after"]
         plans[pid]["units"][uid] = new
         self.state[_ROOT] = plans
         return self._transition(_PROGRESS, {"plan_id": pid, "unit_id": uid,
             "before_digest": _stable_hash(old), "unit": new, "reason": reason,
-            "execution_authority": False}, CausalOrigin.SELF)
+            "execution_authority": False, **scheduling}, CausalOrigin.SELF)
 
-    def _work_basis(self, unit):
+    def _work_basis(self, unit, *, history=None, at_time=None):
         """Check relevant evidence/ancestors and temporal boundaries only."""
         cid = unit["work"]["claim_id"]
         claim = self.state.get("teshuvah", {}).get("claims", {}).get(cid)
@@ -338,7 +379,7 @@ class WorkCoordinationMixin:
                     stack.append(ancestor)
         evidence = {eid: all_evidence.get(eid) for eid in sorted(related)}
         temporal = {}
-        now = _clock()
+        now = _clock() if at_time is None else at_time
         for eid, item in evidence.items():
             if item is None:
                 temporal[eid] = "missing"
@@ -349,7 +390,7 @@ class WorkCoordinationMixin:
                 temporal[eid] = "future" if start and now < start else "expired" if end and now > end else "current"
             except (ValueError, TypeError):
                 temporal[eid] = "invalid"
-        rows = verified_history(self)
+        rows = verified_history(self) if history is None else history
         reports = {r["event_hash"] for r in rows if r["event_type"] == "GABRIEL_EXAMINED"
                    and r["payload"]["report"]["claim_id"] == cid}
         diagnostic_refs = [r["event_hash"] for r in rows if r["event_hash"] in reports or (
@@ -360,30 +401,58 @@ class WorkCoordinationMixin:
                              "criteria": GABRIEL_CRITERIA_VERSION,
                              "diagnostic_refs": diagnostic_refs})
 
+    def _work_plan_bases(self, plan, *, history=None, at_time=None):
+        """One read frame; v2 binds each read to its dependency diagnostics."""
+        rows = verified_history(self) if history is None else history
+        now = _clock() if at_time is None else at_time
+        by_id = {u["id"]: u for u in plan["spec"]["units"]}
+        own = {uid: self._work_basis(u, history=rows, at_time=now) for uid, u in by_id.items()}
+        if plan["spec"]["version"] == WORK_VERSION:
+            return own  # Preserve the historical encoding of recorded bases.
+        runtime, bases = plan["units"], {}
+        def resolve(uid):
+            if uid not in bases:
+                dependencies = {dep: {"current_basis": resolve(dep),
+                    "recorded_basis": runtime[dep]["basis_digest"],
+                    "result_digest": _stable_hash(runtime[dep]["result"]),
+                    "state": runtime[dep]["state"]}
+                    for dep in by_id[uid]["work"]["depends_on"]}
+                bases[uid] = _stable_hash({"own_basis": own[uid], "dependencies": dependencies})
+            return bases[uid]
+        return {uid: resolve(uid) for uid in by_id}
+
     def work_view(self, plan_id):
-        plans = self._work_plans()
+        rows = verified_history(self)
+        plans = self._work_plans(history=rows)
         if plan_id not in plans:
             raise ValueError("unknown plan_id")
         plan = plans[plan_id]
         spec, runtime = plan["spec"], plan["units"]
         by_id = {u["id"]: u for u in spec["units"]}
         goals = {g["id"]: g for g in spec["goals"]}
+        now = _clock()
         total = sum(x["attempts"] for x in runtime.values())
         active = sum(x["state"] == "running" for x in runtime.values())
-        freshness = {u["id"]: (
-            runtime[u["id"]]["result"] is not None and
-            runtime[u["id"]]["basis_digest"] == self._work_basis(u))
-            for u in spec["units"]}
+        bases = self._work_plan_bases(plan, history=rows, at_time=now)
+        freshness = {}
+        def result_current(uid):
+            if uid not in freshness:
+                freshness[uid] = (runtime[uid]["result"] is not None
+                    and runtime[uid]["basis_digest"] == bases[uid]
+                    and all(runtime[dep]["state"] == "completed" and result_current(dep)
+                            for dep in by_id[uid]["work"]["depends_on"]))
+            return freshness[uid]
+        for uid in by_id:
+            result_current(uid)
         unknowns = {u["id"]: _situated_unknowns(
             plan_id, u, runtime[u["id"]], freshness[u["id"]]) for u in spec["units"]}
         latest = {}
-        for row in verified_history(self):
+        for row in rows:
             if row["event_type"] == "GABRIEL_EXAMINED":
                 latest[row["payload"]["report"]["claim_id"]] = row["event_hash"]
-        current_objections = {cid: self.gabriel_report(latest[cid])["contestation_refs"]
+        current_objections = {cid: self._gabriel_report_from_history(latest[cid], rows)["contestation_refs"]
                               for cid in {u["work"]["claim_id"] for u in spec["units"]}
                               if cid in latest}
-        now = _clock()
         ready, units = [], []
         for unit in spec["units"]:
             uid = unit["id"]
@@ -446,13 +515,27 @@ class WorkCoordinationMixin:
                 readiness=reason, checkpoint=self.state["state_label"],
                 shared_attempts_used=total, budget=copy.deepcopy(spec["budget"]))
             units.append(view)
-        ready.sort(key=lambda uid: (_priority(by_id[uid], goals), list(by_id).index(uid)))
-        return {"version": WORK_VERSION, "plan_id": plan_id,
+        extra = {}
+        if spec["version"] == SCHEDULED_WORK_VERSION:
+            unavailable = [u["id"] for u in units if u["continuity"]["readiness"] in {
+                "blocked", "completed_result_historical", "criteria_revision_required",
+                "dependency_blocked", "dependency_requires_revision"}]
+            eligible = list(ready)
+            ready, details = scheduling_view(spec, runtime, plan["scheduler"], eligible, unavailable)
+            for unit in units:
+                unit["continuity"]["scheduling"] = details[unit["id"]]
+            extra["scheduling"] = {**copy.deepcopy(spec["scheduling"]),
+                "dispatches": plan["scheduler"]["dispatches"],
+                "eligible": eligible, "revision_unavailable": unavailable,
+                "decision_at": now.isoformat()}
+        else:
+            ready.sort(key=lambda uid: (_priority(by_id[uid], goals), list(by_id).index(uid)))
+        return {"version": spec["version"], "plan_id": plan_id,
                 "goals": copy.deepcopy(spec["goals"]), "units": units,
                 "ready": ready, "shared_attempts_used": total, "inflight": active,
-                "checkpoint": self.state["state_label"], "ledger_head": self.ledger.head(),
+                "checkpoint": self.state["state_label"], "ledger_head": rows[-1]["event_hash"],
                 "execution_authority": False, "independent_validation": False,
-                "continuous_service_observed": False}
+                "continuous_service_observed": False, **extra}
 
     def work_recover_expired(self, plan_id):
         """Requeue only expired pure reads, never an external side effect."""
@@ -478,14 +561,22 @@ class WorkCoordinationMixin:
             return None
         pid, uid = plan_id, view["ready"][0]
         plan = self._work_plans()[pid]
-        unit = next(u for u in plan["spec"]["units"] if u["id"] == uid)
         timeout = plan["spec"]["budget"]["timeout_seconds"]
         attempt = uuid.uuid4().hex
+        schedule_receipt = None
+        if plan["spec"]["version"] == SCHEDULED_WORK_VERSION:
+            chosen = next(u for u in view["units"] if u["id"] == uid)["continuity"]["scheduling"]
+            schedule_receipt = {"version": SCHEDULING_VERSION,
+                "criteria_version": GABRIEL_CRITERIA_VERSION,
+                "eligible": view["scheduling"]["eligible"],
+                "revision_unavailable": view["scheduling"]["revision_unavailable"],
+                "selected": uid, "reason": "aged_eligible" if chosen["fairness_due"] else "effective_priority",
+                "decision_at": view["scheduling"]["decision_at"], "ledger_boundary": view["ledger_head"]}
         self._work_change(pid, uid, {"state": "running",
             "attempts": plan["units"][uid]["attempts"] + 1, "attempt_id": attempt,
             "deadline": (_clock() + timedelta(seconds=timeout)).isoformat(),
-            "ready_at": None, "error": None, "basis_digest": self._work_basis(unit)},
-            "bounded local examination reserved")
+            "ready_at": None, "error": None, "basis_digest": self._work_plan_bases(plan)[uid]},
+            "bounded local examination reserved", schedule_receipt=schedule_receipt)
         return uid, attempt, timeout
 
     def _work_finish(self, pid, uid, attempt, result=None, error=None):
@@ -497,7 +588,7 @@ class WorkCoordinationMixin:
         if error is None:
             if not _result_matches(result, unit, current, attempt, verified_history(self)):
                 error = "worker_output_invalid"
-            elif self._work_basis(unit) != current["basis_digest"]:
+            elif self._work_plan_bases(plan)[uid] != current["basis_digest"]:
                 error = "inputs_changed; new bounded examination required"
             elif _clock() > _instant(current["deadline"]):
                 error = "read_deadline_exceeded"

@@ -2,6 +2,8 @@
 
 Le contrat `CC-WORK-1` relie une intention déclarée, ses tâches et leurs points de reprise au journal existant de Conscience C. Une unité micro, méso, macro ou méta possède les mêmes six rubriques. Le périmètre change ; les sources, objections et inconnues restent accessibles.
 
+Le nouveau contrat [CC-WORK-2](WORK_SCHEDULING.md) ajoute une politique commune d'équité entre les unités disponibles et de transmission de priorité aux dépendances nécessaires. Les plans CC-WORK-1 gardent leur ordre et ne sont pas migrés automatiquement.
+
 Cette première version exécute uniquement un examen Gabriel local, en lecture seule, sur un claim déjà enregistré. Elle ne répare aucun claim, n'appelle aucun service externe et ne lance aucun programme fourni par le plan. Elle reprend la mémoire existante à **C(tₙ)** ; les commandes de coordination refusent de créer une nouvelle mémoire.
 
 ## Même structure, quatre périmètres

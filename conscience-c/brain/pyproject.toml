@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "conscience-c-brain"
-version = "0.3.1"
+version = "0.3.2"
 description = "Experimental functional continuity kernel for Conscience C"
 requires-python = ">=3.10"
 
