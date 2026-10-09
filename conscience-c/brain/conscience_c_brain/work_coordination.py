@@ -17,6 +17,7 @@ import uuid
 from ._state_model import _stable_hash
 from .checkpoint_integrity import equal_json, verified_history
 from .gabriel import GABRIEL_CRITERIA_VERSION
+from .examination_grid import examination_profile
 from .models import CausalOrigin
 from .multiscale_coherence import Scale
 
@@ -253,6 +254,22 @@ def _result_matches(result, unit, current, attempt, rows):
             and report.get("ledger_boundary") in recorded)
 
 
+def _situated_unknowns(plan_id, unit, current, result_current):
+    """Keep equal reason text distinct across different objects and contexts."""
+    report = (current["result"] or {}).get("report", {})
+    context = {
+        "plan_id": plan_id, "origin_unit_id": unit["id"],
+        "claim_id": unit["work"]["claim_id"], "scale": unit["scope"]["view"],
+        "scope_ref": unit["scope"]["boundary"], "observer_ref": unit["scope"]["observer"],
+        "subject_ref": unit["work"]["subject_ref"], "basis_digest": current["basis_digest"],
+    }
+    return [{**context, "reason": reason,
+             "unknown_id": "UNKNOWN:" + _stable_hash({**context, "reason": reason}),
+             "trace_refs": list(report.get("trace_refs", [])),
+             "result_current": result_current}
+            for reason in report.get("unknowns", [])]
+
+
 class WorkCoordinationMixin:
     def classify_replay_event(self, row):
         if row.get("event_type") in {_REGISTER, _PROGRESS}:
@@ -357,6 +374,8 @@ class WorkCoordinationMixin:
             runtime[u["id"]]["result"] is not None and
             runtime[u["id"]]["basis_digest"] == self._work_basis(u))
             for u in spec["units"]}
+        unknowns = {u["id"]: _situated_unknowns(
+            plan_id, u, runtime[u["id"]], freshness[u["id"]]) for u in spec["units"]}
         latest = {}
         for row in verified_history(self):
             if row["event_type"] == "GABRIEL_EXAMINED":
@@ -415,6 +434,11 @@ class WorkCoordinationMixin:
                     if block == "evidence":
                         refs.update(result.get("report", {}).get("trace_refs", []))
                 view[block][key] = sorted(refs)
+            details = {d["unknown_id"]: d for target in ancestors for d in unknowns[target]}
+            view["review"]["unknown_details"] = [details[key] for key in sorted(details)]
+            # Keep legacy reason strings, but use located identifiers for identity.
+            view["review"]["unknown_refs"] = sorted(set(view["review"]["unknown_refs"]) | set(details))
+            view["review"]["examination_profile"] = examination_profile(unit["scope"]["view"])
             view["evidence"]["result"] = copy.deepcopy(current["result"])
             view["evidence"]["result_current"] = freshness[uid]
             view["continuity"].update(copy.deepcopy(current))

@@ -21,6 +21,8 @@ Les intentions forment une hiérarchie avec une seule racine. Les dépendances e
 
 Le contrat documentaire historique `AC-CONTRACT-1.0` et le contrat exécutable local `CC-WORK-1` partagent ces six rubriques, mais leurs formats JSON sont distincts. Le modèle historique n'est pas exécuté ni réécrit automatiquement.
 
+La [grille AC-EXAM-1](EXAMINATION_GRID.md) ajoute les questions propres à chaque échelle. `review.examination_profile` les expose avec `verification_status=questions_only_not_performed` ; il ne change pas les critères réellement exécutés par Gabriel. `review.unknown_details` conserve désormais l'identité et le contexte des inconnues issues des diagnostics. Deux lacunes sur deux claims restent distinctes même si leur motif textuel est identique.
+
 ## Ordre et budget commun
 
 Une tâche est disponible lorsque ses dépendances sont terminées avec des résultats encore actuels, que ses critères correspondent au Gabriel installé et que le budget, le délai de reprise et la capacité le permettent. Parmi ces tâches, l'ordre suit les priorités déclarées de la racine vers l'intention référencée ; les nombres les plus petits passent d'abord. Une égalité conserve l'ordre de déclaration. Une tâche liée à plusieurs intentions utilise le chemin prioritaire le plus tôt dans cet ordre.

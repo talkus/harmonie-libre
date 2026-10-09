@@ -6,6 +6,7 @@ from .teshuvah import TeshuvahMixin, CLAIM_PROVENANCE, CLAIM_STATUSES, PHASES as
 from .fleuve import FleuveMixin
 from .gabriel import GabrielMixin, GABRIEL_CRITERIA_VERSION
 from .work_coordination import WorkCoordinationMixin, WORK_VERSION, validate_work_plan
+from .examination_grid import EXAMINATION_GRID_VERSION, examination_profile
 from .security_command import (
     SecurityCommandGuard, SecurityCommandInput, SecurityCommandDecision,
     SecurityMode, SecurityVerdict,
@@ -25,6 +26,7 @@ __all__ = [
     "FleuveMixin",
     "GabrielMixin", "GABRIEL_CRITERIA_VERSION",
     "WorkCoordinationMixin", "WORK_VERSION", "validate_work_plan",
+    "EXAMINATION_GRID_VERSION", "examination_profile",
     "SecurityCommandGuard", "SecurityCommandInput", "SecurityCommandDecision",
     "SecurityMode", "SecurityVerdict",
     "COMAND_AI_PUBLIC_REF", "BoundaryResult", "evaluate_comand_security_boundary",
