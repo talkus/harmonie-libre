@@ -1,0 +1,113 @@
+{
+  "schema": "CC-DEPLOYMENT-RECEIPT-1",
+  "examined_at": "2026-10-09T07:28:16.079409+00:00",
+  "source_commit": "4480618c92b66dfe3d91c5e0494597b8a5c8acde",
+  "archive_sha256": "6ca65394c3784ea35f3127326cd5733dcb0bf088e5243ec3b6c4fdac7675c980",
+  "manifest_sha256": "8274a231cd7398f3cc2e41553fab8454c457598e3eb10b5f1eb0c2ae3c8e4c48",
+  "runtime": {
+    "python": "3.11.16",
+    "brain": "0.3.2",
+    "cryptography": "50.0.2"
+  },
+  "tests": {
+    "brain": {
+      "tests": 481,
+      "result": "passed",
+      "log_sha256": "7a1ea6faa8208e14644e4b50243a70d9c05a9e323e471ebdd2575a5c4c8dd139"
+    },
+    "continuity": {
+      "tests": 11,
+      "result": "passed",
+      "log_sha256": "1f186cdb4d12e3577370396bf9aa0ad6b1f9eda6665a42783a655af1113abd1c"
+    }
+  },
+  "release": "/opt/conscience-c/releases/4480618c92b66dfe3d91c5e0494597b8a5c8acde",
+  "timer": "ActiveState=active\nSubState=waiting\nUnitFileState=enabled",
+  "service": "Result=success\nActiveState=inactive\nConditionResult=no",
+  "registry_original_files_unchanged": true,
+  "registry_processes_unchanged": true,
+  "registry_file_count_before": 21,
+  "registry_file_count_after": 21,
+  "brain_memory_present": false,
+  "active_plan_config_present": false,
+  "operational_examination_observed": false,
+  "continuous_service_observed": false,
+  "verification": {
+    "verified_at": "2026-10-09T07:29:45.752727+00:00",
+    "source_files_and_config_verified": true,
+    "files_verified": 96,
+    "units": {
+      "conscience-c-work.service": {
+        "matches_reviewed": true,
+        "sha256": "deb90e065b468b481345ac8f833c52047a4ca6b07e4e34b2755d4985af0e22ce"
+      },
+      "conscience-c-work.timer": {
+        "matches_reviewed": true,
+        "sha256": "95825bdd55ef43a1a2aa5cfc3eefc2d8a95d4a385e7529e18c6a326e70f62b12"
+      }
+    },
+    "current_release_matches": true,
+    "missing_memory_rejected": true,
+    "negative_check_exit": 2,
+    "brain_directory_files": [],
+    "active_plan_config_present": false,
+    "states": {
+      "conscience-c-work.timer": {
+        "NextElapseUSecRealtime": "Fri 2026-10-09 07:30:00 UTC",
+        "LastTriggerUSec": "Fri 2026-10-09 07:29:04 UTC",
+        "Result": "success",
+        "ActiveState": "active",
+        "SubState": "waiting",
+        "UnitFileState": "enabled",
+        "ConditionResult": "yes"
+      },
+      "conscience-c-work.service": {
+        "MainPID": "0",
+        "Result": "success",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "UnitFileState": "static",
+        "ConditionResult": "no"
+      },
+      "registre-mem.service": {
+        "MainPID": "228669",
+        "Result": "success",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "ConditionResult": "yes"
+      },
+      "registre-mem-caddy.service": {
+        "MainPID": "228700",
+        "Result": "success",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "ConditionResult": "yes"
+      }
+    },
+    "installed_packages": [
+      "cffi==2.1.1",
+      "conscience-c-brain @ file:///opt/conscience-c/releases/4480618c92b66dfe3d91c5e0494597b8a5c8acde/conscience-c/brain",
+      "cryptography==50.0.2",
+      "pycparser==3.1"
+    ]
+  },
+  "source_tree": "b89d168801a847778536432ae1268b1f087d2a2c",
+  "observation_kind": "aws_tool_observation_by_assistant",
+  "independent_validation": false,
+  "source_git_blob_files_verified": 91,
+  "deployment_configuration_files_verified": 5,
+  "prior_attempt": {
+    "archive_sha256": "2174918107a1b9317d8256a6666b333e79b44377965de3cd6c3f7133735dd924",
+    "result": "failed_before_release_selection",
+    "cause": "program_directories_inaccessible_to_mem_under_inherited_umask_077",
+    "preserved": true
+  },
+  "blocked_by": [
+    "existing_compatible_brain_memory_not_identified",
+    "recorded_bounded_plan_not_selected"
+  ],
+  "chatgpt_runtime_modified": false,
+  "aegis_live_claimed": false
+}

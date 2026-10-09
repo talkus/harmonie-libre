@@ -1,0 +1,12 @@
+[Unit]
+Description=Conscience C - check existing bounded plan every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=5s
+Persistent=true
+Unit=conscience-c-work.service
+
+[Install]
+WantedBy=timers.target
+
