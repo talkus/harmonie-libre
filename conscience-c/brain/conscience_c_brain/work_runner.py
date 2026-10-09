@@ -29,7 +29,7 @@ def examine_reserved_read(brain, plan_id, unit_id, attempt_id):
     if reports:
         prior = brain.gabriel_report(reports[-1]["event_hash"])
         report["objection_refs"] = prior["contestation_refs"]
-    return {"attempt_id": attempt_id, "basis_digest": brain._work_basis(unit),
+    return {"attempt_id": attempt_id, "basis_digest": brain._work_plan_bases(plan)[unit_id],
             "report": report, "execution_authority": False,
             "result_kind": "bounded_local_diagnostic"}
 

@@ -6,6 +6,8 @@ Ce projet transforme l'ancre **C(tₙ)** en logiciel testable. Il ne déclare pa
 au journal, aux reçus multi-échelles et à la réparation explicite. Une lecture
 seule ne modifie aucune affirmation ; un diagnostic ne donne aucune permission.
 
+**Coordination multi-échelle :** [CC-WORK-2](WORK_SCHEDULING.md) conserve les mêmes six rubriques à chaque échelle, transmet la priorité déclarée aux dépendances nécessaires et répartit les tentatives malgré un échec répété. Les choix se reprennent depuis le journal ; les anciens plans gardent leur comportement. Cette coordination locale n'est pas un service supervisé en permanence.
+
 **Audit du 26 septembre 2026 :** un compte rendu enregistré n'est pas un fait vérifié. Voir [l'audit des revérifications](AUDIT_REVALIDATION_2026-09-26.md), [l'audit des checkpoints](AUDIT_CHECKPOINTS_2026-09-26.md) et [la récupération des transitions](AUDIT_TRANSITIONS_2026-09-26.md).
 
 ## Invariants implémentés
