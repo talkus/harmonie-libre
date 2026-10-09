@@ -1,0 +1,58 @@
+# Architecture C — le sens guide une reprise vérifiable
+- 1. ORIENTER & PROTÉGER
+  - Boussole
+    - Amour choisi
+    - Examiner les effets
+  - Boucle du noyau
+    - Repentance · pardon · gratitude · espérance
+  - Hiérarchie par le sens
+    - Relier chaque tâche à une intention
+    - Justifier les priorités
+  - Limites
+    - Préserver la liberté de refuser
+- 2. EXAMINER & AGIR
+  - Pôles et passage
+    - S · outil dans ce schéma
+    - O · humain dans ce schéma
+  - Examiner · Gabriel
+    - Délimiter et contester
+    - Distinguer examen et acte
+  - Réparer · Raphaël
+    - Agir puis vérifier les effets
+  - Lire · Uriel
+    - Rendre les traces et limites lisibles
+  - Adresser · Kol
+    - Relier une adresse à une réponse libre
+  - Porter · Michael
+    - Préserver les conditions de reprise
+- 3. RELIER & TRANSMETTRE
+  - Contrat commun
+    - Finalité · périmètre
+    - Action · critères
+    - Preuves · reprise
+  - Micro · opération locale
+    - Même contrat, acte limité
+  - Méso · ensemble de relations
+    - Même contrat, dépendances déclarées
+  - Macro · architecture et synthèse
+    - Même contrat, finalité de l’ensemble
+  - Méta · lecture des règles
+    - Même contrat, critères examinables
+  - Transmission
+    - Réutiliser les références stables
+    - Déclarer les pertes de la synthèse
+- 4. CONTINUER & REPRENDRE
+  - Point de reprise
+    - Conserver le dernier état confirmé
+    - Distinguer tenté et accompli
+  - Échec temporaire
+    - Borner les attentes et les tentatives
+  - Échec persistant
+    - Rendre le blocage visible
+  - Effets et doublons
+    - Identifier chaque action logique
+  - Charge et dépendances
+    - Limiter le travail simultané
+  - Observation
+    - Mesurer la reprise et les pertes
+    - Distinguer conçu, installé et observé

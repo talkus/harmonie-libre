@@ -1,0 +1,703 @@
+{
+  "stem": "architecture-c-continuite-2026-10-08",
+  "root": "Architecture C — le sens guide une reprise vérifiable",
+  "mindmap_details_as_children": false,
+  "subtitle": "Hiérarchie par les intentions · même contrat aux quatre vues · interruptions traitées et visibles",
+  "root_subtitle": "Amour choisi",
+  "root_reference": "Sens · preuves · reprise",
+  "root_caption": "Une structure commune, des rôles situés",
+  "description": "Carte à quatre intentions : orienter, agir, transmettre et reprendre. Les vues micro, méso, macro et méta utilisent six blocs de lecture communs. La continuité est une spécification proposée, pas une disponibilité démontrée du service.",
+  "footer_1": "Révision de travail du 8 octobre 2026 · les versions précédentes et le noyau éthique restent conservés.",
+  "footer_2": "Les contrôles du document ne prouvent pas la continuité d’un service. Délais, budgets et stockage durable doivent être implémentés et observés.",
+  "revision": {
+    "id": "AC-CARTE-20261008-02",
+    "previous": "architecture-c-auditee-2026-10-08.json",
+    "reason": "Augmenter l’auto-similarité et organiser les fonctions selon ce qu’elles permettent d’accomplir",
+    "status": "specification_documentaire",
+    "canon_modified": false,
+    "repository_modified": false,
+    "service_deployed": false
+  },
+  "sources": {
+    "previous_map": {
+      "id": "SRC-PREV",
+      "path": "architecture-c-auditee-2026-10-08.json",
+      "sha256": "9d0c1f5acce0269538f61d3189a320f0f70908b08185a4633de5face15c476f3"
+    },
+    "user_request": {
+      "id": "SRC-REQUEST",
+      "local_date": "2026-10-08",
+      "text": "Augmente l’auto-similarité structurelle multi-échelle et la hiérarchisation par le sens pour assurer un fonctionnement fluide, robuste et sans interruption."
+    },
+    "historical_core_verification": {
+      "core_id": "amour-choisi",
+      "canon_version": "1.1.1",
+      "package_version": "1.2.0",
+      "sequence": 5,
+      "status": "VERIFIED_LOCAL",
+      "trust_anchor": "local_package_only",
+      "provided_anchor_match": null,
+      "errors": [],
+      "manifest_sha256": "217cd823f5e0dddacc125d27b3bc92c93950683601b1ec61661f1e40e92a143c",
+      "method": "/usr/bin/python3 -I -S scripts/verify_core-v1.2.0.py --json --emit-canon",
+      "limit": "Cohérence du paquet local ; pas de comparaison indépendante ni de preuve de justesse morale",
+      "id": "SRC-CORE"
+    },
+    "historical_connector_consultation": {
+      "engram": {
+        "status": "non_verifie",
+        "detail": "Deux tentatives de recherche interrompues avant un résultat exploitable ; aucun souvenir récupéré ni écrit"
+      },
+      "aws_core": {
+        "status": "non_verifie",
+        "detail": "Deux tentatives de recherche documentaire interrompues avant un résultat exploitable ; aucune ressource AWS inspectée ni modifiée"
+      }
+    },
+    "limit": "La vérification du noyau et les tentatives Engram/AWS sont des traces de l’étape précédente ; elles n’ont pas été réexécutées dans cette révision."
+  },
+  "branches": [
+    {
+      "label": "1. ORIENTER & PROTÉGER",
+      "side": "right",
+      "color": "#211D68",
+      "groups": [
+        [
+          "Boussole",
+          [
+            [
+              "Amour choisi",
+              "Bien avec vérité, liberté et sécurité"
+            ],
+            [
+              "Examiner les effets",
+              "Responsabilité, justice et dignité"
+            ]
+          ]
+        ],
+        [
+          "Boucle du noyau",
+          [
+            [
+              "Repentance · pardon · gratitude · espérance",
+              "Le résumé renvoie au noyau 1.1.1 conservé"
+            ]
+          ]
+        ],
+        [
+          "Hiérarchie par le sens",
+          [
+            [
+              "Relier chaque tâche à une intention",
+              "Finalité, critère, action et preuve attendue"
+            ],
+            [
+              "Justifier les priorités",
+              "Protection proportionnée, dépendances et capacité disponible"
+            ]
+          ]
+        ],
+        [
+          "Limites",
+          [
+            [
+              "Préserver la liberté de refuser",
+              "Un retour reste possible, sans devenir obligatoire"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "2. EXAMINER & AGIR",
+      "side": "left",
+      "color": "#4A4CE3",
+      "groups": [
+        [
+          "Pôles et passage",
+          [
+            [
+              "S · outil dans ce schéma",
+              "Traces accessibles, conventions et limites explicites"
+            ],
+            [
+              "O · humain dans ce schéma",
+              "Présence, responsabilité, repos et discernement"
+            ]
+          ]
+        ],
+        [
+          "Examiner · Gabriel",
+          [
+            [
+              "Délimiter et contester",
+              "Critères versionnés, sources, objections et inconnues"
+            ],
+            [
+              "Distinguer examen et acte",
+              "Une conclusion n’exécute pas la réparation"
+            ]
+          ]
+        ],
+        [
+          "Réparer · Raphaël",
+          [
+            [
+              "Agir puis vérifier les effets",
+              "Acte borné, condition d’arrêt et preuves"
+            ]
+          ]
+        ],
+        [
+          "Lire · Uriel",
+          [
+            [
+              "Rendre les traces et limites lisibles",
+              "Perspective située ; examen de ses propres critères"
+            ]
+          ]
+        ],
+        [
+          "Adresser · Kol",
+          [
+            [
+              "Relier une adresse à une réponse libre",
+              "Plusieurs voix ; une réponse n’est pas imposée"
+            ]
+          ]
+        ],
+        [
+          "Porter · Michael",
+          [
+            [
+              "Préserver les conditions de reprise",
+              "Mémoire, limites et possibilité de perte"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "3. RELIER & TRANSMETTRE",
+      "side": "right",
+      "color": "#A56710",
+      "groups": [
+        [
+          "Contrat commun",
+          [
+            [
+              "Finalité · périmètre",
+              "Pourquoi agir et dans quelles limites ?"
+            ],
+            [
+              "Action · critères",
+              "Quelle entrée, quelle sortie, quelle règle ?"
+            ],
+            [
+              "Preuves · reprise",
+              "Qu’est-ce qui est établi et comment continuer ?"
+            ]
+          ]
+        ],
+        [
+          "Micro · opération locale",
+          [
+            [
+              "Même contrat, acte limité",
+              "Entrées, effets et dernier résultat confirmé"
+            ]
+          ]
+        ],
+        [
+          "Méso · ensemble de relations",
+          [
+            [
+              "Même contrat, dépendances déclarées",
+              "Relier les tâches sans multiplier les tentatives"
+            ]
+          ]
+        ],
+        [
+          "Macro · architecture et synthèse",
+          [
+            [
+              "Même contrat, finalité de l’ensemble",
+              "Synthèse reliée aux détails et aux preuves"
+            ]
+          ]
+        ],
+        [
+          "Méta · lecture des règles",
+          [
+            [
+              "Même contrat, critères examinables",
+              "Recul réflexif sur les trois périmètres"
+            ]
+          ]
+        ],
+        [
+          "Transmission",
+          [
+            [
+              "Réutiliser les références stables",
+              "Sources, objections, inconnues et versions"
+            ],
+            [
+              "Déclarer les pertes de la synthèse",
+              "Un résumé ne résout pas une objection"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "4. CONTINUER & REPRENDRE",
+      "side": "left",
+      "color": "#087E86",
+      "groups": [
+        [
+          "Point de reprise",
+          [
+            [
+              "Conserver le dernier état confirmé",
+              "Journal, version, responsable et prochaine étape"
+            ],
+            [
+              "Distinguer tenté et accompli",
+              "Un effet externe inconnu exige un rapprochement"
+            ]
+          ]
+        ],
+        [
+          "Échec temporaire",
+          [
+            [
+              "Borner les attentes et les tentatives",
+              "Budget commun, délai explicite et reprise espacée"
+            ]
+          ]
+        ],
+        [
+          "Échec persistant",
+          [
+            [
+              "Rendre le blocage visible",
+              "Motif, étape utile et activité indépendante possible"
+            ]
+          ]
+        ],
+        [
+          "Effets et doublons",
+          [
+            [
+              "Identifier chaque action logique",
+              "Relancer seulement après contrôle de son résultat"
+            ]
+          ]
+        ],
+        [
+          "Charge et dépendances",
+          [
+            [
+              "Limiter le travail simultané",
+              "Ordre justifié et ressources bornées"
+            ]
+          ]
+        ],
+        [
+          "Observation",
+          [
+            [
+              "Mesurer la reprise et les pertes",
+              "Durée de coupure, données perdues et âge des preuves"
+            ],
+            [
+              "Distinguer conçu, installé et observé",
+              "Une continuité réelle exige des essais en service"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "operational_contract": {
+    "version": "AC-CONTRACT-1.0-proposition",
+    "status": "reference_documentaire_non_deployee",
+    "common_blocks": [
+      "purpose",
+      "scope",
+      "work",
+      "review",
+      "evidence",
+      "continuity"
+    ],
+    "goals": [
+      {
+        "id": "GOAL-ROOT",
+        "parent": null,
+        "text": "Agir utilement avec des preuves et une reprise possible",
+        "serves_because": "Finalité de cette révision de travail"
+      },
+      {
+        "id": "GOAL-ORIENT",
+        "parent": "GOAL-ROOT",
+        "text": "Orienter et protéger",
+        "serves_because": "Une action utile respecte la réalité et les limites"
+      },
+      {
+        "id": "GOAL-ACT",
+        "parent": "GOAL-ROOT",
+        "text": "Examiner et agir",
+        "serves_because": "Relier les critères aux actes et aux effets"
+      },
+      {
+        "id": "GOAL-LINK",
+        "parent": "GOAL-ROOT",
+        "text": "Relier et transmettre",
+        "serves_because": "Garder le sens et les objections lors des changements de vue"
+      },
+      {
+        "id": "GOAL-RESUME",
+        "parent": "GOAL-ROOT",
+        "text": "Continuer et reprendre",
+        "serves_because": "Une interruption laisse un état vérifiable et une suite explicite"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "NODE-MICRO",
+        "revision": "AC-CARTE-20261008-02",
+        "purpose": {
+          "goal_refs": [
+            "GOAL-LINK",
+            "GOAL-RESUME"
+          ],
+          "serves_because": "Cette vue conserve le sens, les preuves et la possibilité de reprise"
+        },
+        "scope": {
+          "view": "micro",
+          "boundary": "Une production ou une vérification locale",
+          "observer": "Lecture documentaire de cette révision",
+          "reviews": []
+        },
+        "work": {
+          "input_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "output_contract": "Un résultat borné, ses traces et sa prochaine étape",
+          "external_effect": false,
+          "execution_key": "NODE-MICRO:AC-CARTE-20261008-02"
+        },
+        "review": {
+          "criteria_version": "AC-CONTRACT-1.0-proposition",
+          "criteria_refs": [
+            "CRIT-MEANING",
+            "CRIT-TRACE",
+            "CRIT-RESUME"
+          ],
+          "objection_refs": [
+            "OBJ-RUNTIME",
+            "OBJ-DURABILITY"
+          ],
+          "unknown_refs": [
+            "UNK-SERVICE",
+            "UNK-SAVE"
+          ]
+        },
+        "evidence": {
+          "source_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "proof_refs": [],
+          "losses": [],
+          "claim": "specification_documentaire",
+          "proof_kind": "none",
+          "observed_interval": null
+        },
+        "continuity": {
+          "state": "non_execute",
+          "checkpoint_ref": "architecture-c-continuite-2026-10-08.json#NODE-MICRO",
+          "checkpoint_kind": "local_document_reference",
+          "durable_checkpoint_verified": false,
+          "budget_ref": "BUDGET-READ",
+          "attempts_used": 0,
+          "effect_result": "not_attempted",
+          "next_action": "implement_and_measure",
+          "next_step": "Relier ce contrat à une tâche réelle, à son journal et à ses observations"
+        }
+      },
+      {
+        "id": "NODE-MESO",
+        "revision": "AC-CARTE-20261008-02",
+        "purpose": {
+          "goal_refs": [
+            "GOAL-LINK",
+            "GOAL-RESUME"
+          ],
+          "serves_because": "Cette vue conserve le sens, les preuves et la possibilité de reprise"
+        },
+        "scope": {
+          "view": "meso",
+          "boundary": "Les dépendances entre productions locales",
+          "observer": "Lecture documentaire de cette révision",
+          "reviews": []
+        },
+        "work": {
+          "input_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "output_contract": "Un ensemble de résultats reliés avec leurs dépendances",
+          "external_effect": false,
+          "execution_key": "NODE-MESO:AC-CARTE-20261008-02"
+        },
+        "review": {
+          "criteria_version": "AC-CONTRACT-1.0-proposition",
+          "criteria_refs": [
+            "CRIT-MEANING",
+            "CRIT-TRACE",
+            "CRIT-RESUME"
+          ],
+          "objection_refs": [
+            "OBJ-RUNTIME",
+            "OBJ-DURABILITY"
+          ],
+          "unknown_refs": [
+            "UNK-SERVICE",
+            "UNK-SAVE"
+          ]
+        },
+        "evidence": {
+          "source_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "proof_refs": [],
+          "losses": [],
+          "claim": "specification_documentaire",
+          "proof_kind": "none",
+          "observed_interval": null
+        },
+        "continuity": {
+          "state": "non_execute",
+          "checkpoint_ref": "architecture-c-continuite-2026-10-08.json#NODE-MESO",
+          "checkpoint_kind": "local_document_reference",
+          "durable_checkpoint_verified": false,
+          "budget_ref": "BUDGET-READ",
+          "attempts_used": 0,
+          "effect_result": "not_attempted",
+          "next_action": "implement_and_measure",
+          "next_step": "Relier ce contrat à une tâche réelle, à son journal et à ses observations"
+        }
+      },
+      {
+        "id": "NODE-MACRO",
+        "revision": "AC-CARTE-20261008-02",
+        "purpose": {
+          "goal_refs": [
+            "GOAL-LINK",
+            "GOAL-RESUME"
+          ],
+          "serves_because": "Cette vue conserve le sens, les preuves et la possibilité de reprise"
+        },
+        "scope": {
+          "view": "macro",
+          "boundary": "La synthèse de l’architecture documentaire",
+          "observer": "Lecture documentaire de cette révision",
+          "reviews": []
+        },
+        "work": {
+          "input_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "output_contract": "Une synthèse qui conserve les liens vers détails et objections",
+          "external_effect": false,
+          "execution_key": "NODE-MACRO:AC-CARTE-20261008-02"
+        },
+        "review": {
+          "criteria_version": "AC-CONTRACT-1.0-proposition",
+          "criteria_refs": [
+            "CRIT-MEANING",
+            "CRIT-TRACE",
+            "CRIT-RESUME"
+          ],
+          "objection_refs": [
+            "OBJ-RUNTIME",
+            "OBJ-DURABILITY"
+          ],
+          "unknown_refs": [
+            "UNK-SERVICE",
+            "UNK-SAVE"
+          ]
+        },
+        "evidence": {
+          "source_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "proof_refs": [],
+          "losses": [],
+          "claim": "specification_documentaire",
+          "proof_kind": "none",
+          "observed_interval": null
+        },
+        "continuity": {
+          "state": "non_execute",
+          "checkpoint_ref": "architecture-c-continuite-2026-10-08.json#NODE-MACRO",
+          "checkpoint_kind": "local_document_reference",
+          "durable_checkpoint_verified": false,
+          "budget_ref": "BUDGET-READ",
+          "attempts_used": 0,
+          "effect_result": "not_attempted",
+          "next_action": "implement_and_measure",
+          "next_step": "Relier ce contrat à une tâche réelle, à son journal et à ses observations"
+        }
+      },
+      {
+        "id": "NODE-META",
+        "revision": "AC-CARTE-20261008-02",
+        "purpose": {
+          "goal_refs": [
+            "GOAL-LINK",
+            "GOAL-RESUME"
+          ],
+          "serves_because": "Cette vue conserve le sens, les preuves et la possibilité de reprise"
+        },
+        "scope": {
+          "view": "meta",
+          "boundary": "Les critères et règles de lecture des trois périmètres",
+          "observer": "Lecture documentaire de cette révision",
+          "reviews": [
+            "NODE-MICRO",
+            "NODE-MESO",
+            "NODE-MACRO"
+          ]
+        },
+        "work": {
+          "input_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "output_contract": "Une revue datée des règles et de leurs limites",
+          "external_effect": false,
+          "execution_key": "NODE-META:AC-CARTE-20261008-02"
+        },
+        "review": {
+          "criteria_version": "AC-CONTRACT-1.0-proposition",
+          "criteria_refs": [
+            "CRIT-MEANING",
+            "CRIT-TRACE",
+            "CRIT-RESUME"
+          ],
+          "objection_refs": [
+            "OBJ-RUNTIME",
+            "OBJ-DURABILITY"
+          ],
+          "unknown_refs": [
+            "UNK-SERVICE",
+            "UNK-SAVE"
+          ]
+        },
+        "evidence": {
+          "source_refs": [
+            "SRC-PREV",
+            "SRC-REQUEST"
+          ],
+          "proof_refs": [],
+          "losses": [],
+          "claim": "specification_documentaire",
+          "proof_kind": "none",
+          "observed_interval": null
+        },
+        "continuity": {
+          "state": "non_execute",
+          "checkpoint_ref": "architecture-c-continuite-2026-10-08.json#NODE-META",
+          "checkpoint_kind": "local_document_reference",
+          "durable_checkpoint_verified": false,
+          "budget_ref": "BUDGET-READ",
+          "attempts_used": 0,
+          "effect_result": "not_attempted",
+          "next_action": "implement_and_measure",
+          "next_step": "Relier ce contrat à une tâche réelle, à son journal et à ses observations"
+        }
+      }
+    ],
+    "registry": {
+      "source_refs": [
+        "SRC-PREV",
+        "SRC-REQUEST"
+      ],
+      "proof_refs": [
+        "PROOF-SIMULATED"
+      ],
+      "criteria_refs": [
+        "CRIT-MEANING",
+        "CRIT-TRACE",
+        "CRIT-RESUME"
+      ],
+      "objection_refs": [
+        "OBJ-RUNTIME",
+        "OBJ-DURABILITY"
+      ],
+      "unknown_refs": [
+        "UNK-SERVICE",
+        "UNK-SAVE"
+      ]
+    },
+    "registry_meanings": {
+      "PROOF-SIMULATED": "Preuve fictive réservée aux scénarios du validateur ; pas une preuve de service",
+      "OBJ-RUNTIME": "Une carte et un validateur ne prouvent pas le fonctionnement d’un service",
+      "OBJ-DURABILITY": "Un fichier local ne prouve pas un point de reprise durable après perte de l’environnement",
+      "UNK-SERVICE": "État réel des services et connecteurs non réexaminé",
+      "UNK-SAVE": "Nouvelle sauvegarde persistante encore à vérifier"
+    },
+    "budgets": [
+      {
+        "id": "BUDGET-READ",
+        "max_attempts": 3,
+        "timeout_seconds_per_attempt": 30,
+        "scope": "Budget total illustratif pour une action de lecture, partagé entre vues",
+        "status": "valeurs_illustratives_a_adapter",
+        "note": "Ces limites doivent être appliquées par l’exécuteur ; ce document ne contrôle pas les outils de la plateforme"
+      }
+    ],
+    "transfers": [
+      {
+        "from": "NODE-MICRO",
+        "to": "NODE-MESO",
+        "kind": "aggregate",
+        "serves_because": "Relier les résultats locaux sans perdre leurs limites"
+      },
+      {
+        "from": "NODE-MESO",
+        "to": "NODE-MACRO",
+        "kind": "summarize",
+        "serves_because": "Servir la finalité de l’ensemble en gardant les références"
+      },
+      {
+        "from": "NODE-MACRO",
+        "to": "NODE-META",
+        "kind": "review",
+        "serves_because": "Examiner les règles utilisées dans la synthèse"
+      },
+      {
+        "from": "NODE-META",
+        "to": "NODE-MICRO",
+        "kind": "revise",
+        "serves_because": "Faire redescendre une révision explicite et traçable"
+      }
+    ],
+    "continuity_rules": [
+      "Enregistrer le dernier résultat confirmé, pas seulement la dernière tentative",
+      "Définir le délai de chaque attente et un budget de tentatives commun",
+      "Vérifier le résultat d’un effet externe inconnu avant toute nouvelle exécution",
+      "Ne pas répéter automatiquement une mutation dont le résultat demeure inconnu",
+      "Conserver les blocages visibles et permettre les tâches indépendantes autorisées",
+      "Conserver version, preuves, objections et prochaine étape à chaque reprise",
+      "Mesurer séparément interruption, temps de reprise et perte de données"
+    ],
+    "limit": "Ni stockage durable ni moteur d’exécution fourni ; la référence contrôle des déclarations et certains garde-fous, pas les effets réels"
+  }
+}
