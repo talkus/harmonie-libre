@@ -45,6 +45,11 @@ def main():
     gp.add_argument("--reexamines")
     gp.add_argument("--revision-reason")
     sub.add_parser("gabriel-report").add_argument("report_ref")
+    wp = sub.add_parser("work-register", help="record a bounded coordination plan in existing memory")
+    wp.add_argument("plan", type=Path)
+    wp.add_argument("--provenance", required=True)
+    for command in ("work-view", "work-next", "work-recover"):
+        sub.add_parser(command).add_argument("plan_id")
     for command in ("gabriel-contest", "gabriel-correct", "gabriel-open-repair"):
         command_parser = sub.add_parser(command)
         command_parser.add_argument("report_ref")
@@ -56,14 +61,30 @@ def main():
             command_parser.add_argument("--evidence-ref", action="append", required=True)
 
     args = p.parse_args()
-    if args.cmd.startswith("gabriel-"):
+    if args.cmd.startswith(("gabriel-", "work-")):
         if not (Path(args.root) / "state.json").is_file():
-            p.error("Gabriel requires an existing memory; refusing to bootstrap a new one")
+            p.error("this operation requires an existing memory; refusing to bootstrap a new one")
         if args.cmd == "gabriel-examine" and args.record and not args.provenance:
             p.error("--record requires --provenance")
     b = ConscienceCBrain.load_or_bootstrap(Path(args.root))
 
-    if args.cmd.startswith("gabriel-"):
+    if args.cmd.startswith("work-"):
+        try:
+            if args.cmd == "work-register":
+                result = b.record_work_plan(
+                    json.loads(args.plan.read_text(encoding="utf-8")), provenance=args.provenance)
+            elif args.cmd == "work-view":
+                result = b.work_view(args.plan_id)
+            elif args.cmd == "work-recover":
+                result = b.work_recover_expired(args.plan_id)
+            else:
+                result = b.work_run_next(args.plan_id)
+        except (OSError, UnicodeError, ValueError) as exc:
+            p.error(str(exc))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if args.cmd == "work-next" and result["started"] and result["outcome"] != "completed":
+            raise SystemExit(1)
+    elif args.cmd.startswith("gabriel-"):
         try:
             if args.cmd == "gabriel-examine":
                 context = dict(scope_ref=args.scope, observer_ref=args.observer, subject_ref=args.subject,
@@ -103,3 +124,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

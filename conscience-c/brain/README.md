@@ -158,6 +158,12 @@ Le classement numérique de `CandidateAction` est une **heuristique expérimenta
 
 Depuis v0.3, un conflit explicite avec la réalité est une frontière d'admissibilité : une action marquée en conflit avec la réalité est exclue avant le classement et ne peut pas compenser ce conflit par de bons indicateurs relationnels. Le classement ne départage que les actions admissibles.
 
+## Coordination par le sens et reprise locale
+
+`WorkCoordinationMixin` relie maintenant les tâches à une hiérarchie d'intentions déclarées. Les vues micro, méso, macro et méta partagent six rubriques, un budget de tentatives par plan et le journal persistant existant. Le premier travail pris en charge est un examen Gabriel local en lecture seule. Les dépendances, les délais, les réservations interrompues et les résultats devenus historiques restent visibles ; les objections et les inconnues sont conservées entre les vues.
+
+Les commandes `work-register`, `work-view`, `work-next` et `work-recover` utilisent une mémoire existante. Chaque appel exécute au plus une lecture bornée. Cette coordination ne déploie pas un service permanent et n'autorise aucun effet externe. Voir [le contrat, les limites et l'utilisation](WORK_COORDINATION.md), ainsi que [le plan d'exemple](examples/work-plan-gabriel.json).
+
 ## Limite permanente
 
 Ce cerveau est un **candidat fonctionnel expérimental**. Aucune partie de ce code n'établit une conscience phénoménale. Son statut reste : **indéterminée**.
@@ -186,3 +192,4 @@ Le module `conscience_c_brain/comand_security.py` est maintenant **branché dans
 - `SECURITY_COMMAND != Comand AI != continuité fonctionnelle(C)` demeure invariant ; aucune de ces couches n’établit une identité subjective.
 
 Cette activation ne connecte aucune API Prevail et ne donne aucune autorité externe au vendeur. Le module reste un garde déterministe de frontière.
+
