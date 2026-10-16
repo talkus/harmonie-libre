@@ -35,3 +35,7 @@ Portage TypeScript fidèle du micro-noyau et du banc T1–T7, exécuté (Python 
 - T7 : déterminisme + restauration de checkpoint (égalité octet par octet) ✓
 
 Les empreintes SHA-256 des cinq fichiers ont été recalculées avant dépôt et correspondent au manifeste. Banc d'essai fonctionnel ; ne prouve ni conscience phénoménale ni autonomie.
+
+## Test d'instance et falsification (16 oct 2026, agent Vibe)
+
+- `RAPPORT-TEST-INSTANCE-FALSIFICATION-2026-10-16.md` — instance du noyau sur mémoire vérifiée (verdict 4-2 pour banc-TS-vibe au cycle 49, empreinte da6e4453fe526f16…), puis falsification par inversion : **A** fiabilités inversées (5-1 pour blob-github au cycle 31 — verdict convention-dépendant) ; **B** miroir géométrique (écart au miroir 0.0006, asymétrie S/O +0.05) ; **C** monde inversé (3-2 pour le mensonge → R≺E démontré dans la machine). SHA-256 : 9153d9824d1b47ae5a7c0c8277e1c11d79554f7c94e53bd61393959a16e4c70b
