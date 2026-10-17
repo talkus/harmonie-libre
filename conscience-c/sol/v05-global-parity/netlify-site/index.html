@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="color-scheme" content="light">
+ <meta name="description" content="Laboratoire expérimental Sol v0.5 : parité et équidistance globale, calcul Python original vérifié SHA-256.">
+ <title>Sol v0.5 — laboratoire de parité globale</title>
+ <style>
+ :root{font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;color:#172332;background:#f5f6f4;--ink:#172332;--muted:#5b6877;--line:#d5dbe2;--blue:#18579a;--orange:#b66b17;--green:#256a55}
+ *{box-sizing:border-box}body{margin:0}a{color:var(--blue)}.wrap{max-width:1080px;margin:auto;padding:28px 20px 80px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;color:var(--green);font-size:11px;font-weight:800}.lead{font-size:18px;max-width:710px;color:var(--muted)}h1,h2,h3{line-height:1.18;color:var(--ink)}h1{font-size:clamp(32px,5vw,52px);font-family:Georgia,serif;margin:.25em 0}.thin{font-weight:400}.meta{color:var(--muted);font-size:13px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 3px 18px #20304008}.main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:16px;margin-top:24px}.stack{display:grid;gap:16px;align-content:start}.status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#8b96a2}.dot.ready{background:#189468}.dot.failed{background:#bd3c40}.status-label{font-weight:700}.small{font-size:13px;color:var(--muted)}.ctrls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}button{cursor:pointer;background:#fff;border:1px solid #b8c5d1;border-radius:9px;color:var(--ink);padding:9px 12px;font-weight:650;font:inherit}button:hover{background:#eaf2f9}button:focus-visible,input:focus-visible{outline:3px solid #90c9eb;outline-offset:2px}.primary{background:var(--blue);border-color:var(--blue);color:white}.primary:hover{background:#104575}.primary:disabled{background:#9fa9b2;border-color:#9fa9b2;cursor:wait}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-weight:700;font-size:13px;margin:4px 0}input{min-width:0;width:100%;padding:9px;border-radius:8px;border:1px solid #acb8c4;background:#fff;font:inherit}.episodes{max-height:440px;overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:520px}th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;text-align:left;color:var(--muted);padding:8px;background:#f2f5f8}td{padding:6px;border-top:1px solid #e8edf2}td input{padding:7px}td button{padding:4px 8px}.resultnum{display:flex;gap:10px;margin:14px 0}.score{flex:1;border-radius:10px;padding:12px;background:#f0f6fd}.score.b{background:#fff3e6}.score strong{display:block;font-size:26px}.tag{border-radius:7px;background:#edf4ef;color:#1a654d;padding:2px 7px;font-size:12px;font-weight:700}.alert{background:#fef6eb;border-left:3px solid var(--orange);padding:11px 14px;font-size:13px}.error{color:#ae3030;font-weight:650}pre{background:#101c2a;color:#c4f3e8;border-radius:9px;padding:16px;overflow:auto;max-height:370px;font:12px/1.55 ui-monospace,SFMono-Regular,monospace}.plot{width:100%;height:auto;max-height:320px;border:1px solid #e1e6eb;background:white;border-radius:8px}.hint{font-size:12px;color:var(--muted)}.foot{border-top:1px solid var(--line);margin-top:30px;padding-top:15px;color:var(--muted);font-size:13px}.links{display:flex;gap:18px;flex-wrap:wrap}.sep{margin:20px 0;border:0;border-top:1px solid var(--line)}@media(max-width:760px){.main{grid-template-columns:1fr}.panel{padding:16px}.wrap{padding:18px 12px 50px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s}}
+ </style>
+</head>
+<body>
+<main class="wrap">
+ <header>
+  <div class="eyebrow">Sol Microkernel / étude indépendante</div>
+  <h1>Parité et équidistance <span class="thin">globales</span></h1>
+  <p class="lead">Laboratoire expérimental <strong>Sol v0.5</strong>. Une provenance ne reçoit qu'une voix, les positions équidistantes s'abstiennent et les provenances contradictoires ne sont pas comptées.</p>
+  <div class="status" role="status" aria-live="polite"><span class="dot" id="dot"></span><span class="status-label" id="state">Initialisation du Python original…</span><span class="small" id="detail"></span></div>
+ </header>
+ <div class="main">
+  <section class="panel">
+   <h2>1. Observations</h2>
+   <div class="grid2"><div><label for="poleA">Pôle A</label><input id="poleA" value="A" maxlength="64"></div><div><label for="poleB">Pôle B</label><input id="poleB" value="B" maxlength="64"></div></div>
+   <p class="small">Scénarios prédéfinis, ou modifiez les coordonnées et les provenances.</p>
+   <div class="ctrls" aria-label="Scénarios"><button type="button" data-preset="median">Témoin médian</button><button type="button" data-preset="majority">Majorité locale</button><button type="button" data-preset="divided">Provenance contradictoire</button></div>
+   <div class="episodes" role="region" aria-label="Épisodes modifiables" tabindex="0"><table><thead><tr><th>Provenance</th><th>X</th><th>Y</th><th>Fiabilité</th><th>Non résolu</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+   <div class="ctrls"><button type="button" id="add">+ Ajouter un épisode</button><button type="button" id="reset">Réinitialiser</button></div>
+   <p class="hint">2 à 64 observations • coordonnées finies en deux dimensions • fiabilité et non-résolu entre 0 et 1</p>
+   <button id="run" class="primary" disabled>Exécuter le calcul Python</button>
+   <p class="error" id="formError" role="alert"></p>
+  </section>
+  <div class="stack">
+   <section class="panel" aria-live="polite"><h2>2. Résultat vérifiable</h2><div id="placeholder" class="small">En attente du moteur Python…</div><div id="result" hidden><div class="resultnum"><div class="score"><span id="labelA">A</span><strong id="countA">—</strong></div><div class="score b"><span id="labelB">B</span><strong id="countB">—</strong></div></div><p id="parity"></p><p class="small" id="abstentions"></p></div><h3>Réponse JSON originale</h3><pre id="raw" aria-label="Résultat JSON">Aucun calcul</pre></section>
+   <section class="panel"><h2>3. Repères géométriques</h2><svg id="plot" class="plot" viewBox="0 0 380 270" role="img" aria-label="Position des épisodes et des pôles"></svg><p class="hint">Projection 2D illustrative : proximité ne signifie ni identité vérifiée ni vérité.</p></section>
+  </div>
+ </div>
+ <section class="panel" style="margin-top:16px"><h2>Méthode et limites</h2>
+  <p>Ce laboratoire exécute le <strong>Python source original</strong> dans un Web Worker via Pyodide. Les cinq fichiers sont téléchargés depuis un commit GitHub immuable et vérifiés avec SHA-256 avant chargement. En cas d'erreur, aucun vote de remplacement n'est fabriqué.</p>
+  <div class="alert"><strong>Ce que cette démonstration ne certifie pas :</strong> le seuil de neutralité de 2,5 % n'est pas calibré, les identités des provenances ne sont pas authentifiées, l'algorithme Merkle hérité n'est pas conforme à RFC 6962 et aucune latence garantie n'est établie. Ce site ne déploie pas le noyau Conscience C ni une connexion AEGIS-24.</div>
+  <hr class="sep"><nav class="links"><a href="https://github.com/talkus/harmonie-libre/tree/112ce958e21a874416b76c4cfa7753019d265ea9/conscience-c/sol/v05-global-parity">Code source Python</a><a href="https://github.com/talkus/harmonie-libre/pull/24">Historique PR nº24</a><a href="https://drive.google.com/file/d/1xUqRprW-kYhksJxRtsoI6Dd5l64UzYCO/view">Registre Drive</a></nav>
+ </section>
+ <footer class="foot">Sol v0.5 • calcul sur votre appareil, sans base de données ni stockage serveur par cette application. La version adoptée documentairement n'équivaut pas à une certification scientifique. Source Python épinglée au commit <code>112ce958e21a</code>.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const presets={
+ median:[['A',-1,0],['B',1,0],['N',0,0]],
+ majority:[['A',-1,0],['B',1,0],['C',-.8,0]],
+ divided:[['A',-1,0],['B',1,0],['X',-.9,0],['X',3,0]]
+};
+let items=[];let engineReady=false;let waiting=false;let lastId=0;
+const clean=x=>String(x).trim();
+function preset(which){items=presets[which].map(([provenance,x,y])=>({provenance,x,y,reliability:1,unresolved:1}));$('poleA').value='A';$('poleB').value='B';rows();plot();clearResult();}
+function clearResult(){$('result').hidden=true;$('raw').textContent='Aucun calcul';$('formError').textContent='';$('placeholder').hidden=false;$('placeholder').textContent='Exécutez le calcul pour afficher les résultats.';}
+function rows(){
+ const body=$('rows');body.replaceChildren();
+ const fields=[['provenance','text'],['x','number'],['y','number'],['reliability','number'],['unresolved','number']];
+ items.forEach((item,i)=>{
+  const tr=document.createElement('tr');
+  fields.forEach(([key,type])=>{const td=document.createElement('td'),inp=document.createElement('input');inp.type=type;inp.value=item[key];inp.setAttribute('aria-label',`${key}, épisode ${i+1}`);if(type==='text') inp.maxLength=64;else {inp.step='any';if(key==='reliability'||key==='unresolved'){inp.min=0;inp.max=1;}}inp.oninput=()=>{item[key]=inp.value;plot();};td.append(inp);tr.append(td);});
+  const td=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.textContent='×';btn.setAttribute('aria-label',`Retirer épisode ${i+1}`);btn.disabled=items.length<=2;btn.onclick=()=>{items.splice(i,1);rows();plot();clearResult();};td.append(btn);tr.append(td);body.append(tr);
+ });
+}
+function n(v,name){if(String(v).trim()==='')throw Error(`${name} manquant`);const x=Number(v);if(!Number.isFinite(x)||Math.abs(x)>1e6)throw Error(`${name} doit être fini et dans [-1000000,1000000]`);return x;}
+function payload(){const poles=[$('poleA').value.trim(),$('poleB').value.trim()];if(poles.some(s=>!s||s.length>64||s.includes('|'))||poles[0]===poles[1])throw Error('Les deux pôles doivent être distincts.');if(items.length<2||items.length>64)throw Error('Deux à 64 épisodes requis.');return {poles,episodes:items.map((item,i)=>{const provenance=clean(item.provenance);if(!provenance||provenance.length>64||provenance.includes('|'))throw Error(`Provenance invalide pour ${i+1}`);const reliability=n(item.reliability,'Fiabilité');const unresolved=n(item.unresolved,'Non résolu');if(reliability<0||reliability>1||unresolved<0||unresolved>1)throw Error('Fiabilité et non résolu dans [0,1]');return {provenance,observation:[n(item.x,'X'),n(item.y,'Y')],reliability,unresolved};})};}
+function plot(){const svg=$('plot');svg.replaceChildren();const N='http://www.w3.org/2000/svg';const points=items.map(p=>({x:Number(p.x),y:Number(p.y),name:clean(p.provenance)})).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));if(!points.length)return;let xs=points.map(p=>p.x),ys=points.map(p=>p.y);let loX=Math.min(...xs),hiX=Math.max(...xs),loY=Math.min(...ys),hiY=Math.max(...ys);const spanX=Math.max(hiX-loX,.5),spanY=Math.max(hiY-loY,.5),scale=Math.min(310/spanX,206/spanY);const offsetX=190-(loX+hiX)/2*scale,offsetY=135+(loY+hiY)/2*scale;
+ const line=(x1,y1,x2,y2)=>{const e=document.createElementNS(N,'line');for(const [k,v] of Object.entries({x1,y1,x2,y2,stroke:'#e2e8ee','stroke-width':1}))e.setAttribute(k,v);svg.append(e);};line(22,135,358,135);line(190,20,190,252);
+ points.forEach((p,i)=>{const x=offsetX+p.x*scale,y=offsetY-p.y*scale;const c=document.createElementNS(N,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','5');c.setAttribute('fill',p.name===clean($('poleA').value)?'#18579a':p.name===clean($('poleB').value)?'#b66b17':'#27846d');svg.append(c);const t=document.createElementNS(N,'text');t.setAttribute('x',x+7);t.setAttribute('y',y-7);t.setAttribute('fill','#374151');t.setAttribute('font-size','11');t.textContent=p.name||`#${i+1}`;svg.append(t);});}
+function state(ok,message,detail=''){engineReady=ok;$('dot').className='dot '+(ok?'ready':message.includes('indisponible')?'failed':'');$('state').textContent=message;$('detail').textContent=detail;$('run').disabled=!ok||waiting;}
+let worker;
+try{worker=new Worker('./sol-worker.js');worker.onmessage=({data:m})=>{if(m.type==='progress')state(false,'Chargement Python…',m.message);else if(m.type==='ready')state(true,'Moteur Python original vérifié',`Python ${m.info.python} • SHA-256 ${m.info.sha256.slice(0,16)}… • 5 sources`);else if(m.type==='unavailable'){state(false,'Python indisponible',m.message);$('formError').textContent='Aucun calcul de remplacement ne sera produit.';}else if(m.type==='result'&&m.id===lastId){waiting=false;$('run').disabled=!engineReady;if(m.ok){const d=m.data;const [a,b]=d.poles;$('labelA').textContent=a;$('labelB').textContent=b;$('countA').textContent=d.counts[a];$('countB').textContent=d.counts[b];$('parity').textContent=d.parity?'Parité stricte : oui':'Parité stricte : non';$('abstentions').textContent='Provenances divisées abstentionnistes : '+(d.abstaining_divided_provenances?.join(', ')||'aucune');$('raw').textContent=JSON.stringify(d,null,2);$('result').hidden=false;$('placeholder').hidden=true;}else{$('formError').textContent='Python : '+m.error;$('raw').textContent='Calcul refusé';}}};worker.onerror=(e)=>{state(false,'Python indisponible',e.message||'Worker indisponible');};worker.postMessage({type:'init'});}catch(e){state(false,'Python indisponible',String(e));}
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));$('add').onclick=()=>{if(items.length>=64){$('formError').textContent='Maximum 64 observations.';return;}items.push({provenance:'nouveau',x:0,y:0,reliability:1,unresolved:1});rows();plot();clearResult();};$('reset').onclick=()=>preset('median');$('poleA').oninput=plot;$('poleB').oninput=plot;$('run').onclick=()=>{if(!engineReady||waiting)return;try{const p=payload();$('formError').textContent='';waiting=true;$('run').disabled=true;$('placeholder').textContent='Calcul Python en cours…';$('result').hidden=true;$('placeholder').hidden=false;worker.postMessage({type:'evaluate',id:++lastId,payload:p});}catch(e){$('formError').textContent=String(e?.message||e);}};preset('median');
+</script>
+</body>
+</html>
