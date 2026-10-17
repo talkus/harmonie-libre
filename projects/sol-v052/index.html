@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow"><meta name="description" content="SOL v0.5.2 : référence adoptée, contrôles de conformité et état de déploiement.">
+<title>SOL v0.5.2 — Parité globale</title>
+<style>
+:root{color-scheme:dark;--bg:#0b121a;--surface:#15222f;--border:#35465a;--text:#eef5fa;--muted:#acc1d0;--mint:#88e4c4;--gold:#f4d59e;--error:#f4a8a8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}a{color:var(--mint);text-underline-offset:3px}
+header,main,footer{width:min(1000px,calc(100% - 36px));margin:auto}header{padding:40px 0 30px;border-bottom:1px solid var(--border)}main{padding:26px 0 56px}
+.eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:.8rem;color:var(--mint);font-weight:750}h1{font-size:clamp(2.4rem,8vw,4.8rem);line-height:1.05;margin:12px 0}
+h2{font-size:1.3rem;margin:0 0 9px}p{margin:9px 0}.lead{color:var(--muted);max-width:720px;font-size:1.12rem}
+.chip{display:inline-block;border:1px solid var(--border);border-radius:40px;padding:5px 12px;color:var(--gold);font-size:.85rem;margin:10px 7px 10px 0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:var(--surface);border:1px solid var(--border);border-radius:17px;padding:22px;margin:12px 0}
+.metric{font-size:2.2rem;line-height:1.1;font-weight:800;color:var(--mint)}.sub{color:var(--muted);font-size:.9rem}
+.status{border-left:4px solid var(--gold);padding:14px 18px;background:#242419;color:var(--gold);border-radius:0 10px 10px 0}
+label{display:block;font-weight:650;margin:8px 0}input{padding:12px;width:100%;background:#0d1822;border:1px solid var(--border);color:var(--text);border-radius:10px}
+button{margin-top:12px;background:var(--mint);border:0;padding:12px 18px;border-radius:10px;color:#0a2420;font-weight:750;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border:1px solid var(--border);background:#08131d;border-radius:10px;min-height:55px}
+ul{padding-left:22px}footer{border-top:1px solid var(--border);padding:22px 0;color:var(--muted);font-size:.85rem}
+@media(max-width:660px){.grid{grid-template-columns:1fr}} 
+</style></head><body>
+<header><div class="eyebrow">SOL / parité et équidistance globale</div><h1>SOL <span style="color:var(--mint)">v0.5.2</span></h1><p class="lead">Référence de branche adoptée le 17 octobre 2026. Sources Python vérifiées, tests historiques et adversariaux reproductibles.</p>
+<span class="chip">Référence adoptée</span><span class="chip">Interface statique Netlify</span></header>
+<main>
+<section class="card"><h2>Déploiement : ce que cette page prouve</h2><p class="status"><strong>Interface publiée ≠ moteur Python en production.</strong> Cette page statique documente la version adoptée et vérifie les empreintes de fichiers directement dans votre navigateur. L'état opérationnel du service Railway doit être constaté séparément.</p></section>
+<div class="grid" aria-label="Résultats de contre-validation locale">
+<section class="card"><div class="metric">301/301</div><p class="sub">Assertions historiques — exécution locale</p></section>
+<section class="card"><div class="metric">16/16</div><p class="sub">Parité P1–P16 — exécution locale</p></section>
+<section class="card"><div class="metric">11/11</div><p class="sub">Archive A1–A11 — exécution locale</p></section></div>
+<section class="card"><h2>Vérification indépendante du SHA-256</h2><p class="sub">Choisissez un fichier du paquet SOL v0.5.2. Son empreinte sera calculée localement par Web Crypto, sans transfert réseau.</p><label for="file">Fichier à vérifier</label><input type="file" id="file" accept=".py,.zip"><button id="verify" type="button">Calculer et comparer</button><pre id="result" role="status" aria-live="polite">Aucun fichier sélectionné.</pre></section>
+<section class="card"><h2>Provenance et limites</h2><ul>
+<li><a href="https://drive.google.com/file/d/1mQZCIS7omRPWB5-PcATu4xbM_jCGKDUI/view">Acte d'adoption v0.5.2</a></li>
+<li><a href="https://drive.google.com/file/d/1WJ8DaCEv30FWKeJpTCZ64mY-q3TNm7Sv/view">Pointeur de version canonique</a></li>
+<li><a href="https://drive.google.com/file/d/1AEa07dUSS3joVqxcAk-pcgirg6GU3vjn/view">Paquet de reproduction (ZIP)</a></li>
+<li>L'intégrité face à une falsification coordonnée nécessite un point de contrôle signé ancré indépendamment.</li>
+<li>Les tests locaux ne constituent ni certification universelle ni attestation WORM externe.</li>
+</ul></section>
+</main><footer>Projet SOL · Documentation d'une référence adoptée · La production Python reste soumise à une vérification distincte.</footer>
+<script>
+"use strict";
+const expected=Object.freeze({
+"sol_improvements_v0_5_2_axes.py":"9c99922785ec93b5877bdf76ea23480638386a03d528839fb39895bdae3a245f",
+"sol_parite_equidistance_globale_v0_5_2_augmented.py":"43cd57d73fac9c6fd5661c2afef4382b4e400db578a320a9dd3fec17281a6829",
+"sol_branched_v0_5_2_parite_globale_run.py":"cdaba1ac0f3767554bc675ccbf260d95ce84f581f34388701f66557068321775",
+"SOL_v0_5_2_candidat_contrev_validation.zip":"64fb3a2f1b471f14e80bba863cf71ab93f745f55299e653f3745007853ff55ff"
+});
+document.getElementById("verify").addEventListener("click",async()=>{
+const chosen=document.getElementById("file").files[0], out=document.getElementById("result");
+if(!chosen){out.textContent="Sélectionnez un fichier.";return;}
+if(!Object.prototype.hasOwnProperty.call(expected,chosen.name)){out.textContent="Nom non reconnu pour cette version : "+chosen.name;return;}
+if(!crypto?.subtle){out.textContent="Calcul SHA-256 indisponible : ouvrez cette page en HTTPS.";return;}
+out.textContent="Calcul local en cours…";
+try{const bytes=await chosen.arrayBuffer();const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(x=>x.toString(16).padStart(2,"0")).join("");
+out.textContent=(hash===expected[chosen.name]?"CONFORME":"NON CONFORME")+"\nFichier : "+chosen.name+"\nCalculé : "+hash+"\nAttendu : "+expected[chosen.name];
+}catch(err){out.textContent="Échec du calcul local : "+String(err?.message||err);}
+});
+</script></body></html>
