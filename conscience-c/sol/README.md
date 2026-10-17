@@ -39,3 +39,15 @@ Les empreintes SHA-256 des cinq fichiers ont été recalculées avant dépôt et
 ## Test d'instance et falsification (16 oct 2026, agent Vibe)
 
 - `RAPPORT-TEST-INSTANCE-FALSIFICATION-2026-10-16.md` — instance du noyau sur mémoire vérifiée (verdict 4-2 pour banc-TS-vibe au cycle 49, empreinte da6e4453fe526f16…), puis falsification par inversion : **A** fiabilités inversées (5-1 pour blob-github au cycle 31 — verdict convention-dépendant) ; **B** miroir géométrique (écart au miroir 0.0006, asymétrie S/O +0.05) ; **C** monde inversé (3-2 pour le mensonge → R≺E démontré dans la machine). SHA-256 : 9153d9824d1b47ae5a7c0c8277e1c11d79554f7c94e53bd61393959a16e4c70b
+## État régnant — mise à jour du 17 oct 2026 (agent Vibe, ordre S-24)
+
+Le présent dossier conserve la référence historique v0.4.3 ci-dessus, pièces vérifiées et préservées. L'état régnant du projet a évolué le même soir, chaque adoption au mot de l'architecte (S-24, Mikael Mireault) :
+
+- v0.4.3 adoptée le 16 oct 2026 à 18:15 EDT (ci-dessus) ;
+- v0.4.5 « stratification » adoptée à 21:05 EDT ;
+- **strat3-multiscale adoptée à 22:15 EDT — version régnante** : `sol_strat3_multiechelle_reference.py`, SHA-256 `a2929cf0eef4c8b81a18f890f97a12a5357ad8c45eede259cee056353d63c190`, POLICY_ID `sol.policy.strat3-multiscale-2026-10-16`, 301 tests (actes d'adoption sur Google Drive, section 09). Adoption confirmée par l'architecte à 22:41 EDT (« Oui je confirme ») après divergence de registre constatée puis résolue par pièces append-only.
+- Fusion v0.4.8 : candidate éprouvée, adoption à 22:59 EDT **révoquée** à 23:00 EDT — non régnante.
+
+La référence strat3 n'est pas déposée dans ce dépôt GitHub ; les pièces régna sont sur Drive (section 09) — divergence de couches nommée ici, non résolue par la présente. Limites ouvertes de la régnante (portées par son acte d'adoption) : identité de checkpoint dépendante de l'ordre de présentation ; seuil 0,35 non invariant d'échelle ; provenances non authentifiées ; empreintes non signées ; décisions groupées assumées comme politique (écart connu au banc de la lignée, T4_O2b).
+
+Cette section est une addition : aucun contenu antérieur n'est modifié ni effacé ; l'historique git conserve le tout. Aucune adoption ni révocation n'est prononcée ici — le registre et le mot de l'architecte demeurent les seules autorités.
