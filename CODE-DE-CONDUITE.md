@@ -24,4 +24,6 @@ La personne qui modère distingue un désaccord d’un comportement abusif. Elle
 
 La décision et son motif sont expliqués à la personne concernée, en protégeant les informations privées. Celle-ci peut demander un réexamen et apporter des éléments supplémentaires par le canal disponible. Cette possibilité ne permet pas de contourner une restriction ni de reprendre contact avec une personne qui l’a refusé.
 
-Reconnaître un tort et chercher à le réparer compte. Cela n’impose à personne de pardonner, de reprendre contact ou de rétablir sa confiance.
+Réparer, c’est reconnaître ses erreurs et faire mieux concrètement, sans demander à la personne blessée d’oublier ce qui l’a blessée. Ce n’est pas à la seule personne qui a causé le tort de déclarer que tout est réparé.
+
+Reconnaître un tort et chercher à le réparer compte. Cela n’impose à personne de pardonner, de reprendre contact, d’oublier ou de rétablir sa confiance.

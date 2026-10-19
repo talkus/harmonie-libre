@@ -10,6 +10,28 @@ Les objections, reformulations et cas-limites seront documentés avec la date, l
 
 Après trois ou quatre retours indépendants documentés, examiner l’intérêt d’une annexe de cas-limites ou d’une v0.2. Cette revue ne vaut pas validation scientifique ; elle peut aussi conclure au maintien du texte actuel.
 
+### 2026-09-14 — Clarification candidate : que veut dire « réparer » ?
+
+**Statut : clarification candidate, essai éditorial interne.** Elle ne modifie pas l’archive v0.1 ni les mots du principe d’action. Sa publication ne vaut ni adoption collective ni clôture du débat.
+
+**Source :** formulation proposée le 14 septembre 2026 ; développement dans [discussions/002-clarification-reparer.md](discussions/002-clarification-reparer.md).
+
+**Formulation proposée :**
+
+> Réparer, c’est reconnaître mes erreurs et faire mieux concrètement, sans te demander d’oublier ce qui t’a blessé. Ce n’est pas à moi seul de déclarer que tout est réparé.
+
+**Changement proposé :**
+
+- Adosser au quatrième repère (« Reconnaître et réparer les torts ») un sens opérationnel : reconnaissance, gestes concrets, refus d’exiger l’oubli, refus de la clôture unilatérale.
+- Enrichir le [code de conduite](CODE-DE-CONDUITE.md) en ce sens, sans transformer la réparation en droit au pardon ni à la reprise de contact.
+- Rendre la formulation visible sur la [page d’accueil](index.html), sous les cinq repères, comme glossaire candidat.
+
+**Raison :** le texte invite déjà à « se souvenir, réparer et recommencer » et à « reconnaître et réparer les torts », sans dire ce que « réparé » autorise à revendiquer. La clarification sépare le travail de réparation de l’oubli imposé et de l’auto-déclaration de guérison.
+
+**Effet recherché sur le test « être pleinement nous-mêmes ? » :** préserver la mémoire et la prudence de la personne blessée, tout en rendant exigible un mieux concret plutôt qu’une intention seule. Cet effet reste à éprouver.
+
+**Suite proposée :** ouvrir les objections sur cette formulation ; conserver le document de clarification ; n’intégrer le glossaire au texte court fondateur qu’après retours indépendants documentés.
+
 ### Tableau de suivi — constat ponctuel
 
 Contrôle : **2026-09-09 à 05:11 UTC**, contenu public récupéré sans authentification (cas, deux commentaires, zéro réponse sous chacun). Ce tableau décrit ce contrôle, sans présumer l’absence de retours antérieurs ou ultérieurs.
