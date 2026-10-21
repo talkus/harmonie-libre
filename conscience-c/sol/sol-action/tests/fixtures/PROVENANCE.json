@@ -1,0 +1,24 @@
+{
+  "schema": "SOL_ACTION_PORTABLE_FIXTURES_PROVENANCE/v1",
+  "copied_at": "2026-10-21T05:57:23.721641+00:00",
+  "status": "HISTORICAL_TEST_DATA_NOT_PROMOTION",
+  "legacy_worker_usage": "Parsed with ast.parse and ast.get_source_segment for exact compute_csv source comparison; never imported or executed.",
+  "corpus_usage": "JSON read as independent historical cases; expected results remain historical test data.",
+  "source_files": [
+    {
+      "initial_path": "/home/ubuntu/Documents/Codex/2026-10-20/referenced-chatgpt-conversation-this-is-an-4/outputs/sol-action/app/api/job.py",
+      "fixture_path": "legacy-worker.py",
+      "sha256": "7020d87d625529fd60f53b7cacfe966f20c017d9f62aecc2bfa230bb0df3ab87",
+      "bytes": 15326,
+      "copy_exact": true
+    },
+    {
+      "initial_path": "/home/ubuntu/Documents/Codex/2026-10-20/referenced-chatgpt-conversation-this-is-an-4/outputs/sol-action/audit/independent-corpus.json",
+      "fixture_path": "independent-corpus.json",
+      "sha256": "2772d430853400164687f14e283a65239f686a4979ba4d0dad63ce0a81f79b21",
+      "bytes": 156637,
+      "copy_exact": true
+    }
+  ],
+  "remote_calls": false
+}

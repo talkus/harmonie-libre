@@ -130,12 +130,13 @@ class DispatchTests(unittest.TestCase):
             self.dispatch(body, call_bridge=lambda *_: self.fail('client secret accepted'))
 
     def test_old_csv_worker_code_is_identical_and_frozen_corpus_still_matches(self):
-        old = ROOT.parents[1] / 'outputs/sol-action/app/api/job.py'
+        # Historical source fixture is parsed as data only, never imported or executed.
+        old = ROOT / 'tests/fixtures/legacy-worker.py'
         def segment(path):
             source = path.read_text(); tree = ast.parse(source)
             return ast.get_source_segment(source, next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'compute_csv'))
         self.assertEqual(segment(old), segment(ROOT / 'app/api/job.py'))
-        corpus = json.loads((ROOT.parents[1] / 'outputs/sol-action/audit/independent-corpus.json').read_text())
+        corpus = json.loads((ROOT / 'tests/fixtures/independent-corpus.json').read_text())
         for case in corpus['csv_cases']:
             with self.subTest(case=case['id']):
                 try: actual = job.compute_csv(case['csv'])
