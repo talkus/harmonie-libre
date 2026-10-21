@@ -13,13 +13,60 @@
     const completion = response && response.completion;
     return Boolean(response && response.ok === true && response.status === 'COMPLETED_BOUNDED' && response.current_reuse_authorized === true && !response.deduplicated && completion && completion.status === 'COMPLETED_BOUNDED' && completion.scope === 'CSV_EXACT_CENTS_ONLY' && Number.isFinite(Date.parse(completion.expires_at)) && Date.parse(completion.expires_at) > now && now >= receivedAt && elapsed >= 0 && elapsed < 60000);
   }
+  function verificationWindow(response, receivedAt, receivedMonotonic, sentMonotonic, sentAt = receivedAt) {
+    const verification = response && response.verification;
+    if (!response || response.ok !== true || response.action !== 'verify' || response.deduplicated || response.historical_status || response.status === 'HISTORICAL_NOT_CURRENT' || response.pending || !verification || verification.status !== 'PASS' || verification.current_reuse_authorized !== true) return null;
+    const serverTime = verification.verified_at === undefined ? verification.observed_at : verification.verified_at;
+    if (typeof serverTime !== 'string' || typeof verification.expires_at !== 'string') return null;
+    const verifiedAt = Date.parse(serverTime);
+    const observedAt = Date.parse(verification.observed_at);
+    const explicitVerifiedAt = Date.parse(verification.verified_at);
+    const expiresAt = Date.parse(verification.expires_at);
+    const lifetime = expiresAt - verifiedAt;
+    const roundtrip = receivedMonotonic - sentMonotonic;
+    if (![receivedAt, receivedMonotonic, sentMonotonic, sentAt, verifiedAt, expiresAt, roundtrip].every(Number.isFinite) || receivedAt < sentAt || roundtrip < 0 || lifetime <= 0 || lifetime > 60000 ||
+        (verification.verified_at !== undefined && verification.observed_at !== undefined && (typeof verification.observed_at !== 'string' || !Number.isFinite(observedAt) || !Number.isFinite(explicitVerifiedAt) || verification.observed_at !== verification.verified_at))) return null;
+    // Server time bounds the lifetime. Subtract the whole request duration, so a
+    // delayed response cannot start a new sixty-second window on receipt.
+    const budget = Math.min(lifetime - roundtrip, expiresAt - receivedAt);
+    if (budget <= 0) return null;
+    return {response, receivedAt, receivedMonotonic, lastWall: receivedAt, lastMonotonic: receivedMonotonic, deadline: receivedMonotonic + budget, revoked: false};
+  }
+  function currentVerification(window, now, monotonic) {
+    if (!window || window.revoked) return false;
+    const valid = Number.isFinite(now) && Number.isFinite(monotonic) && now >= window.lastWall && monotonic >= window.lastMonotonic && monotonic < window.deadline && now < Date.parse(window.response.verification.expires_at);
+    window.lastWall = now; window.lastMonotonic = monotonic;
+    if (!valid) window.revoked = true;
+    return valid;
+  }
+  function controlledRefusal(intent, response, historical = false) {
+    return Boolean(intent && intent.input && ['create', 'verify', 'complete'].includes(intent.action) && response && typeof response === 'object' && !Array.isArray(response) &&
+      response.ok === false && response.action === intent.action && response.job_id === intent.input.job_id && response.request_id === intent.input.request_id &&
+      (historical ? response.status === 'HISTORICAL_NOT_CURRENT' && response.historical_status === 'REJECTED' && response.needs_current_revalidation === true : response.status === 'REJECTED') &&
+      response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK' && response.effect_scope === 'CONTROLLED_CORE_DISPATCH_SUBTRANSACTION_ONLY' && response.core_effect_scope === 'THIS_RPC_SQL_TRANSACTION_ONLY' &&
+      response.receipt_recording_effect === 'APPEND_ONLY_BRIDGE_RECEIPT_RECORDED' && response.business_effect === 'NONE_CORE_ACTION_ROLLED_BACK' && response.receipt_kind === 'CONTROLLED_REFUSAL' && response.terminal === true && response.durable_refusal === true &&
+      response.worker_reexecuted === false && response.current_reuse_authorized === false && response.automatic_retry === false);
+  }
+  function liveCreateRefusal(intent, response) {
+    // Only the response to this live create call can establish its rollback.
+    // This is not a durable receipt and is never accepted during recovery.
+    return Boolean(intent && intent.action === 'create' && intent.input && response && typeof response === 'object' && !Array.isArray(response) &&
+      response.ok === false && response.status === 'REJECTED' && response.sqlstate === 'P0001' && response.action === 'create' && response.job_id === intent.input.job_id && response.request_id === intent.input.request_id &&
+      response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK' && response.effect_scope === 'THIS_RPC_SQL_TRANSACTION_ONLY' && response.current_reuse_authorized === false && response.automatic_retry === false &&
+      !response.deduplicated && !response.historical_status && !response.durable_refusal);
+  }
+  function refusalCode(response) {
+    // Only a stable, understood code is displayed. Arbitrary server text is not
+    // a user-facing error or an inferred diagnosis.
+    return response && response.error === 'FRESH_VERIFICATION_REQUIRED' ? 'FRESH_VERIFICATION_REQUIRED' : null;
+  }
   function newIntent(action, input, uuidProvider) {
     const copy = Object.assign({}, input);
     if (!['status', 'audit', 'receipt'].includes(action)) copy.request_id = uuidProvider();
     if (action === 'produce') copy.result_request_id = uuidProvider();
     return {action, input: copy};
   }
-  const helpers = {capability, currentCompletion, newIntent, validResult, SAMPLE, STORAGE_KEY};
+  const helpers = {capability, currentCompletion, verificationWindow, currentVerification, controlledRefusal, liveCreateRefusal, refusalCode, newIntent, validResult, SAMPLE, STORAGE_KEY};
   if (typeof module !== 'undefined' && module.exports) module.exports = helpers;
   root.SolAction = helpers;
   if (typeof document === 'undefined') return;
@@ -27,6 +74,7 @@
   let state = null;
   let busy = false;
   let authority = null;
+  let verificationAuthority = null;
   let message = {text: 'Votre demande sera conservée avant tout calcul.', kind: 'neutral'};
   const slots = root.SolIntentSlot;
   const MISSION_KEY = 'sol-action-mission-session-v1';
@@ -47,11 +95,12 @@
       state = visible; storageBlocked = false;
       if (changed) {
         authority = null;
+        verificationAuthority = null;
         if (notify) message = {text: state && state.pending ? 'Reprise partagée : l’intention ' + state.pending.intent.input.request_id + ' attend son reçu. Aucun calcul n’a été relancé.' : 'La tâche partagée a changé. Consultez son état ; les reçus restent historiques.', kind: 'unknown'};
       }
       return changed;
     } catch (error) {
-      storageBlocked = true; authority = null;
+      storageBlocked = true; authority = null; verificationAuthority = null;
       message = {text: error.message || 'La reprise locale est illisible et reste conservée.', kind: 'unknown'};
       return false;
     }
@@ -98,6 +147,23 @@
     state.history = (state.history || []).concat([{action, received_at: new Date().toISOString(), response}]).slice(-40);
   }
   function show(text, kind = 'neutral') { message = {text, kind}; render(); }
+  function verificationIsCurrent() {
+    if (!verificationAuthority || !state || verificationAuthority.response.job_id !== state.job_id || !slots.same(verificationAuthority.response.verification, state.verification) || verificationAuthority.response.source_sha256 !== state.source_sha256) { verificationAuthority = null; return false; }
+    return currentVerification(verificationAuthority, Date.now(), performance.now());
+  }
+  function showRefusal(response, known) {
+    const code = refusalCode(response);
+    const detail = code ? ' Code : ' + code + '.' : ' Aucun code reconnu n’est disponible dans cette vue.';
+    const scope = known ? ' L’action refusée est sans effet métier ; son reçu reste enregistré.' : ' L’issue globale reste inconnue ; l’intention est conservée.';
+    const next = code === 'FRESH_VERIFICATION_REQUIRED' ? (known ? ' Cliquez sur « Vérifier », puis sur « Clore » lorsque la vérification est actuelle.' : ' Rapprochez d’abord le reçu. Si le refus est confirmé, cliquez sur « Vérifier » avant de clore.') : ' Consultez le reçu et ses contrôles avant une nouvelle action explicite.';
+    show('Le serveur a refusé cette demande.' + detail + scope + next, known ? 'error' : 'unknown');
+  }
+  function recordRefusal(original, response, reconciliation) {
+    state.rejected_intents = (state.rejected_intents || []).concat([{intent: original.intent, response, reconciliation: reconciliation || undefined, proof_origin: response.durable_refusal === true ? 'DURABLE_SERVER_RECEIPT' : 'LIVE_CREATE_RPC_RESPONSE_ONLY', received_at: new Date().toISOString()}]);
+    state.pending = null;
+    verificationAuthority = null;
+    if (original.intent.action === 'create') { state.create_rejected = true; state.adaptation_draft = true; }
+  }
   function credentials() { return {job_id: state.job_id, capability: state.capability}; }
   function responseJob(response) {
     // The server envelope itself is the only operational response shape.
@@ -134,6 +200,8 @@
     if (busy) return;
     const expectedView = state && {job_id: state.job_id, capability: state.capability};
     authority = null; busy = true;
+    if (action !== 'complete') verificationAuthority = null;
+    const sentMonotonic = performance.now(), sentAt = Date.now();
     try {
       const reservation = await requireSlots().withKeys(slotKeys, () => {
         const latest = readState();
@@ -153,38 +221,48 @@
           if (latest.adaptation_draft) throw new Error('Une correction est en préparation. Enregistrez-la ou annulez-la explicitement.');
           state = latest;
         }
+        if (action === 'complete' && !verificationIsCurrent()) throw new Error('La vérification n’est plus actuelle dans cette session. Cliquez sur « Vérifier » avant de clore. Aucune demande de clôture n’a été envoyée.');
         const intent = newIntent(action, Object.assign(credentials(), additions), () => crypto.randomUUID());
         state.pending = {intent, prepared_at: new Date().toISOString()};
         persist();
-        return {intent, pending: state.pending, expected: credentials()};
+        // Complete is checked, reserved and sent under this same exclusive lock.
+        // The promise is boxed, so the network never holds the browser lock.
+        return {intent, pending: state.pending, expected: credentials(), response: action === 'complete' ? post(intent) : null};
       });
       render();
-      const sentMonotonic = performance.now();
-      const response = await send(reservation.intent, reservation.expected, reservation.pending);
+      const response = reservation.response ? await reservation.response : await send(reservation.intent, reservation.expected, reservation.pending);
+      const receivedAt = Date.now(), receivedMonotonic = performance.now();
       const outcome = await commit(reservation.expected, reservation.pending, () => {
         if (!correlated(reservation.intent, response)) {
           appendHistory(action, response);
           return 'UNRELATED';
         }
         adopt(response, action);
-        if (response.ok === false && response.status === 'REJECTED' && response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK') {
-          state.rejected_intents = (state.rejected_intents || []).concat([{intent: reservation.intent, response, received_at: new Date().toISOString()}]);
-          state.pending = null;
-          if (action === 'create') { state.create_rejected = true; state.adaptation_draft = true; }
+        if (controlledRefusal(reservation.intent, response)) {
+          recordRefusal({intent: reservation.intent}, response);
           return 'REJECTED';
+        }
+        if (liveCreateRefusal(reservation.intent, response)) {
+          recordRefusal({intent: reservation.intent}, response);
+          return 'REJECTED_CREATE_LIVE';
         }
         if (response.ok !== true || response.status === 'OUTCOME_UNKNOWN' || response.pending) return 'UNKNOWN';
         state.pending = null;
-        if (action === 'complete' && response.current_reuse_authorized === true && !response.deduplicated) authority = {response, receivedAt: Date.now(), monotonic: sentMonotonic};
+        if (action === 'verify') verificationAuthority = verificationWindow(response, receivedAt, receivedMonotonic, sentMonotonic, sentAt);
+        if (action === 'complete') {
+          verificationAuthority = null;
+          if (response.current_reuse_authorized === true && !response.deduplicated) authority = {response, receivedAt, monotonic: sentMonotonic, lastWall: receivedAt, lastMonotonic: receivedMonotonic};
+        }
         return 'RECORDED';
       });
       if (outcome === 'UNRELATED') throw new Error('L’issue de la demande n’est pas corrélée. Consultez son reçu sans la relancer.');
-      if (outcome === 'REJECTED') { show('La demande a été refusée sans effet pour cet appel. Le refus est conservé. ' + (action === 'create' ? 'Corrigez les entrées avant un nouvel enregistrement explicite.' : 'Consultez les contrôles et préparez une action explicite.'), 'error'); return; }
-      if (outcome === 'UNKNOWN') { show('L’issue reste inconnue ou bloquée. L’intention et ses identifiants sont conservés ; aucun calcul ne sera rejoué.', 'unknown'); return; }
+      if (outcome === 'REJECTED') { showRefusal(response, true); return; }
+      if (outcome === 'REJECTED_CREATE_LIVE') { show('La création a été refusée sans modification métier. Sa réponse est conservée dans ce navigateur ; aucun reçu durable de ce refus n’est établi. Corrigez les entrées, puis enregistrez explicitement la correction.', 'error'); return; }
+      if (outcome === 'UNKNOWN') { if (response.ok === false && response.status === 'REJECTED') showRefusal(response, false); else show('L’issue reste inconnue ou bloquée. L’intention et ses identifiants sont conservés ; aucun calcul ne sera rejoué.', 'unknown'); return; }
       const messages = {create: 'Demande conservée. Vous pouvez maintenant produire le résultat.', produce: 'Le calcul a produit un résultat. Lancez la vérification séparée.', verify: response.status === 'PASS' || (response.verification && response.verification.status === 'PASS') ? 'Le vérificateur a confirmé les contrats CSV. La clôture demandera une nouvelle observation.' : 'La vérification est conservée. Consultez sa portée avant de poursuivre.', complete: response.status === 'COMPLETED_BOUNDED' ? 'Clôture bornée reçue. Sa validité actuelle est affichée ci-dessous.' : 'La clôture ne confirme pas tous les contrôles. La tâche reste visible.'};
       show(messages[action] || 'Reçu conservé.', response.status === 'COMPLETED_BOUNDED' ? 'success' : 'neutral');
     } catch (error) {
-      authority = null; refreshState();
+      authority = null; verificationAuthority = null; refreshState();
       show(error.message && !/fetch|abort|network/i.test(error.message) ? error.message : 'La réponse n’est pas arrivée. Son issue reste inconnue : consultez le reçu, sans relancer l’action.', 'unknown');
     } finally { busy = false; render(); }
   }
@@ -194,7 +272,7 @@
     if (!state || storageBlocked) { render(); return; }
     const expected = credentials();
     const observedPending = state.pending;
-    if (action === 'status') authority = null;
+    authority = null; verificationAuthority = null;
     busy = true;
     try {
       render();
@@ -236,6 +314,15 @@
     if (response.ok !== true || response.pending !== false || response.status === 'OUTCOME_UNKNOWN' || response.outcome_known !== true || response.worker_reexecuted !== false) {
       message = {text: 'Le reçu ne permet pas d’établir l’issue. La tâche reste bloquée ; aucun calcul n’est relancé.', kind: 'unknown'}; return false;
     }
+    const refusal = response.reconciled_outcome;
+    if (response.receipt_kind === 'REFUSAL_RECONCILIATION') {
+      if (response.current_reuse_authorized !== false || response.automatic_retry !== false || response.target_request_id !== original.intent.input.request_id || response.target_action !== original.intent.action || !controlledRefusal(original.intent, refusal, true)) {
+        message = {text: 'Le refus historique ne correspond pas exactement à l’intention originale et à sa portée. L’issue reste inconnue.', kind: 'unknown'}; return false;
+      }
+      adopt(response, source);
+      recordRefusal(original, refusal, {intent, response});
+      return 'REJECTED';
+    }
     // The recovered reconciliation is a wrapper, never a replacement for the
     // original production identity. Its nested outcome must match that identity.
     const outcome = originalOutcome(original, response.reconciled_outcome);
@@ -254,7 +341,7 @@
     const intent = original.reconciliation && original.reconciliation.intent;
     if (!intent || intent.action !== 'reconcile' || !intent.input || typeof intent.input.request_id !== 'string') { show('L’identifiant du rapprochement conservé est illisible. L’intention originale reste conservée.', 'unknown'); return; }
     const expected = {job_id: intent.input.job_id, capability: intent.input.capability};
-    authority = null; busy = true;
+    authority = null; verificationAuthority = null; busy = true;
     try {
       render();
       state = requireCurrent(expected, original);
@@ -265,7 +352,9 @@
       if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt) || receipt.status !== 'HISTORICAL_NOT_CURRENT' || receipt.current_reuse_authorized !== false) throw new Error('Reçu historique illisible. L’intention originale reste conservée.');
       if (!slots.available()) { state = requireCurrent(expected, original); show('Reçu historique retrouvé. Le verrou entre onglets est indisponible : l’intention reste conservée, sans nouveau calcul ni nouvel envoi.', 'unknown'); return; }
       const applied = await commit(expected, original, () => applyReconciliation(original, intent, receipt, 'receipt-reconcile-observation'));
-      if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+      if (applied === 'REJECTED') showRefusal(receipt.reconciled_outcome, true);
+      else if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+      else render();
     } catch (error) { authority = null; refreshState(); show(error.message || 'Lecture du reçu indisponible : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
   }
@@ -275,7 +364,7 @@
     if (!state || !state.pending || storageBlocked) { render(); return; }
     if (state.pending.reconciliation) { await lookupReconciliation(state.pending); return; }
     const expected = credentials(), original = state.pending;
-    authority = null; busy = true;
+    authority = null; verificationAuthority = null; busy = true;
     try {
       const reservation = await requireSlots().withKeys(slotKeys, () => {
         state = requireCurrent(expected, original);
@@ -294,9 +383,20 @@
         if (!result) appendHistory('reconcile', response);
         return result;
       });
-      if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+      if (applied === 'REJECTED') showRefusal(response.reconciled_outcome, true);
+      else if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+      else render();
     } catch (error) { authority = null; refreshState(); show(error.message || 'Rapprochement sans réponse : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
+  }
+  function renderVerification() {
+    const current = verificationIsCurrent();
+    const element = $('verification-freshness');
+    const text = current ? 'Vérification actuelle dans cette session. Vous pouvez cliquer sur « Clore ».' : 'Clore exige une vérification actuelle dans cette session. Cliquez sur « Vérifier » pour la demander.';
+    if (element.textContent !== text) element.textContent = text;
+    element.hidden = !state || !validResult(state.result);
+    if (!current) $('complete').disabled = true;
+    return current;
   }
   function renderFreshness() {
     const element = $('freshness');
@@ -304,13 +404,17 @@
     if (!completion) { element.hidden = true; return; }
     element.hidden = false;
     const now = Date.now();
-    const current = authority && currentCompletion(authority.response, now, authority.receivedAt, performance.now() - authority.monotonic);
+    const monotonic = performance.now();
+    const current = authority && now >= authority.lastWall && monotonic >= authority.lastMonotonic && currentCompletion(authority.response, now, authority.receivedAt, monotonic - authority.monotonic);
+    if (authority) { authority.lastWall = now; authority.lastMonotonic = monotonic; }
+    if (!current) authority = null;
     element.className = 'freshness' + (current ? '' : ' expired');
     if (current) {
-      const seconds = Math.max(0, Math.min(60, Math.ceil((Date.parse(completion.expires_at) - now) / 1000), Math.ceil((60000 - (performance.now() - authority.monotonic)) / 1000)));
-      element.textContent = 'Clôture bornée actuelle · ' + seconds + ' s restantes · contrats CSV seulement · sens : UNKNOWN.';
+      const text = 'Clôture bornée actuelle · contrats CSV seulement · sens : UNKNOWN.';
+      if (element.textContent !== text) element.textContent = text;
     } else {
-      element.textContent = 'Clôture historique : sa validité actuelle a expiré ou n’est pas établie dans cette session. Demandez une nouvelle clôture pour la revalider.';
+      const text = 'Clôture historique : sa validité actuelle a expiré ou n’est pas établie dans cette session. Cliquez sur « Vérifier », puis sur « Clore » pour la revalider.';
+      if (element.textContent !== text) element.textContent = text;
       if (message.kind === 'success') { message = {text: 'La clôture conservée est désormais historique. Le résultat et ses preuves restent consultables.', kind: 'unknown'}; $('message').className = 'message unknown'; $('message').textContent = message.text; }
     }
   }
@@ -321,7 +425,7 @@
     const hasJob = Boolean(state);
     const pending = hasJob && Boolean(state.pending);
     let missionPending = false;
-    try { missionPending = Boolean(otherPending()); } catch (error) { storageBlocked = true; authority = null; message = {text: error.message, kind: 'unknown'}; $('message').textContent = message.text; $('message').className = 'message unknown'; }
+    try { missionPending = Boolean(otherPending()); } catch (error) { storageBlocked = true; authority = null; verificationAuthority = null; message = {text: error.message, kind: 'unknown'}; $('message').textContent = message.text; $('message').className = 'message unknown'; }
     const mutable = Boolean(slots && slots.available() && !storageBlocked && !missionPending);
     $('job-meta').hidden = !hasJob;
     const drafting = hasJob && state.adaptation_draft;
@@ -331,7 +435,7 @@
     ['status', 'audit'].forEach(id => { $(id).disabled = busy || !hasJob; });
     ['produce', 'verify', 'complete'].forEach(action => {
       const next = hasJob && state.next_step_id;
-      $(action).disabled = !mutable || busy || !hasJob || pending || drafting || !(next === action || (action === 'complete' && state.completion) || (action === 'verify' && validResult(state.result)));
+      $(action).disabled = !mutable || busy || !hasJob || pending || drafting || !(next === action || (action === 'complete' && state.completion) || (action === 'verify' && validResult(state.result))) || (action === 'complete' && !verificationIsCurrent());
       const ordered = ['produce', 'verify', 'complete'];
       const index = ordered.indexOf(next);
       const done = hasJob && (index > ordered.indexOf(action) || (action === 'produce' && validResult(state.result)) || (action === 'complete' && state.completion));
@@ -358,8 +462,9 @@
       $('totals').replaceChildren();
       result.totals.forEach(total => { const row = document.createElement('tr'); [total.currency, total.amount].forEach(value => { const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell); }); $('totals').appendChild(row); });
       const verification = state.verification;
-      $('result-proof').textContent = 'Source SHA-256 : ' + result.source_sha256 + '. ' + (verification && verification.status === 'PASS' ? 'Contrats CSV vérifiés à la date du reçu ; une clôture actuelle réexécute les contrôles.' : 'Résultat produit ; vérification distincte à consulter.') + ' Source déclarée par l’utilisateur ; vérité sémantique : UNKNOWN.';
+      $('result-proof').textContent = 'Source SHA-256 : ' + result.source_sha256 + '. ' + (verification && verification.status === 'PASS' ? 'Contrats CSV vérifiés à la date du reçu ; Clore exige une vérification actuelle dans cette session.' : 'Résultat produit ; vérification distincte à consulter.') + ' Source déclarée par l’utilisateur ; vérité sémantique : UNKNOWN.';
     }
+    renderVerification();
     renderFreshness();
   }
   $('job-form').addEventListener('submit', async event => {
@@ -413,12 +518,12 @@
   }).catch(() => {});
   function sharedChanged(event) {
     if (event && event.type === 'storage' && event.key !== null && !slotKeys.includes(event.key)) return;
-    authority = null; readOnlyView = null; refreshState(true); render();
+    authority = null; verificationAuthority = null; readOnlyView = null; refreshState(true); render();
   }
   root.addEventListener('storage', sharedChanged);
   root.addEventListener('pageshow', sharedChanged);
   document.addEventListener('visibilitychange', sharedChanged);
-  setInterval(() => { if (refreshState(true)) render(); else renderFreshness(); }, 500);
+  setInterval(() => { if (refreshState(true)) render(); else { renderVerification(); renderFreshness(); } }, 500);
   if (state) { $('mandate').value = state.mandate; $('requirements').value = state.requirements.join('\n'); $('source-csv').value = state.source_csv; }
   render();
 })(typeof globalThis === 'undefined' ? this : globalThis);

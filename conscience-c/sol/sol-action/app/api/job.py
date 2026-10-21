@@ -277,7 +277,13 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
                     "error": "RELEASE_BINDING_NOT_NEWLY_GRANTED", "automatic_retry": False,
                     "current_reuse_authorized": False}
     if action != "produce":
-        response = call_rpc(action, data)
+        # The recovery boundary checks request collisions for every command.
+        # It stores controlled refusals only for an already authorized job;
+        # refusing new-job creation never fabricates such a job or capability.
+        if action in {"create", "verify", "complete", "reconcile"}:
+            response = call_bridge("execute", {"core_action": action, "core_input": data})
+        else:
+            response = call_rpc(action, data)
         if response.get("ok") is False and response.get("status") == "REJECTED" and type(response.get("sqlstate")) is str:
             response = dict(response, job_id=data["job_id"], request_id=data.get("request_id"),
                             effect="NONE_SQL_TRANSACTION_ROLLED_BACK")
