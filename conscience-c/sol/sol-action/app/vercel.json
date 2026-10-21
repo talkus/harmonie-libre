@@ -6,6 +6,9 @@
     },
     "api/mcp.py": {
       "maxDuration": 10
+    },
+    "api/mission.py": {
+      "maxDuration": 30
     }
   },
   "headers": [

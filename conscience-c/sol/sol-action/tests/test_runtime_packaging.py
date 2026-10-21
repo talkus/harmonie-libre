@@ -22,7 +22,7 @@ class RuntimePackagingTests(unittest.TestCase):
             shutil.copytree(APP, bundle, ignore=shutil.ignore_patterns('public','__pycache__'))
             (bundle/'vercel.json').write_text('{"platform_normalized":true}')
             release = bridge_runtime.load_release(bundle)
-            self.assertEqual(set(release['files']), {'api/job.py','api/mcp.py','bridge_runtime.py'})
+            self.assertEqual(set(release['files']), {'api/job.py','api/mcp.py','api/mission.py','bridge_runtime.py'})
             self.assertTrue(mcp.release_manifest(bundle)['available'])
             (bundle/'api/job.py').write_text((bundle/'api/job.py').read_text()+'\n')
             with self.assertRaises(bridge_runtime.ReleaseCheckError):

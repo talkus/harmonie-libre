@@ -48,12 +48,12 @@ class PublicSurfaceTests(unittest.TestCase):
 
     def test_manifest_reads_exact_deployed_bytes_and_refuses_change(self):
         with tempfile.TemporaryDirectory() as d:
-            p=Path(d);(p/'api').mkdir();(p/'api/mcp.py').write_bytes(b'mcp');(p/'api/job.py').write_bytes(b'job')
-            files={name:hashlib.sha256((p/name).read_bytes()).hexdigest() for name in ['api/mcp.py','api/job.py']}
+            p=Path(d);(p/'api').mkdir();(p/'api/mcp.py').write_bytes(b'mcp');(p/'api/job.py').write_bytes(b'job');(p/'api/mission.py').write_bytes(b'mission');(p/'bridge_runtime.py').write_bytes(b'bridge')
+            files={name:hashlib.sha256((p/name).read_bytes()).hexdigest() for name in ['api/mcp.py','api/job.py','api/mission.py','bridge_runtime.py']}
             (p/'release-source.json').write_text(json.dumps({'schema':'SOL_ACTION_RELEASE_SOURCE/v1','files':files}))
             (p/'build-info.json').write_text(json.dumps({'source_commit':'b'*40}))
             self.assertTrue(m.release_manifest(p)['available'])
-            (p/'api/job.py').write_bytes(b'changed')
+            (p/'api/mission.py').write_bytes(b'changed')
             with self.assertRaises(ValueError):m.release_manifest(p)
 
 if __name__=='__main__':unittest.main()
