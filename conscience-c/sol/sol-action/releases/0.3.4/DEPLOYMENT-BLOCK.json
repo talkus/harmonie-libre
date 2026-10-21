@@ -1,0 +1,28 @@
+{
+  "schema": "SOL_DEPLOYMENT_BLOCK/v1",
+  "observed_on": "2026-10-21",
+  "project": "prj_hyo7zXyZ0qWkjVPmZCkblgCAafoP",
+  "team": "team_GUBQJ6FnUDMmZGWZcQvSpCfs",
+  "new_deployment": "NOT_CREATED",
+  "reason": "Vercel connector returned HTTP 403 forbidden for create Preview Deployment",
+  "unchanged_request_retried": false,
+  "cli_fallback": {
+    "executable_available": false,
+    "auth_file_available": false,
+    "token_environment_present": false,
+    "executed": false
+  },
+  "alias_still_points_to": "dpl_HS7hoKgF87HWMEdtN9jBR4vkjDav",
+  "old_version": "0.3.3",
+  "new_public_http_probe": "NOT_EXECUTED_NO_NEW_DEPLOYMENT",
+  "new_production_release_admission": "NOT_CREATED",
+  "new_guard_admission": "NOT_CREATED",
+  "further_action": "Restore deployment permission for the Vercel connector on this same project, then resume the exact prepared version. Keep original refusal and do not replay ambiguous business actions.",
+  "browser_fallback": {
+    "dashboard": "LOGIN_REQUIRED",
+    "continue_existing_login": "SECURITY_CHECK_INTERSTITIAL",
+    "captcha_solved": false,
+    "consent_or_access_granted": false,
+    "deployment_created": false
+  }
+}
