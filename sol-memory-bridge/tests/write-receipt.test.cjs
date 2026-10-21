@@ -45,8 +45,12 @@ test('unconfirmed timeout preserves intent for same-key retry',async()=>{
  const f=fixture({noop:true,timeout:true});
  await assert.rejects(()=>f.run(),/WRITE_UNCONFIRMED_RETRY_SAME_INTENT/);
  assert.equal(f.stats().saved.id,ID);
- await assert.rejects(()=>f.run(),/READBACK_ABSENT_OR_AMBIGUOUS/);
+ await assert.rejects(()=>f.run(),/WRITE_UNCONFIRMED_RETRY_SAME_INTENT/);
  assert.equal(f.stats().writes,2);assert.equal(f.stats().saved.id,ID);
+ f.setRows([{...input,idempotency_key:ID,event_id:ID,owner_id:OWNER,seq:3,event_hash:HASH}]);
+ const receipt=await f.run();
+ assert.equal(receipt.event_id,ID);assert.equal(f.stats().writes,2);
+ assert.equal(f.stats().saved,null);
 });
 test('changing fields with an outstanding attempt refuses rather than rekeys',async()=>{
  const f=fixture({noop:true,timeout:true});await assert.rejects(()=>f.run());
