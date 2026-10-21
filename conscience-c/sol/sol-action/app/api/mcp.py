@@ -5,7 +5,7 @@ import re
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 PROTOCOLS = {"2025-03-26", "2025-06-18", "2025-11-25"}
 ORIGIN = "https://sol-action-verifiee.vercel.app"
 LIMIT = 16384
@@ -18,6 +18,19 @@ TOOL = {
     "outputSchema": {"type": "object", "properties": {"available": {"type": "boolean"}, "release_hash": {"type": "string"}, "source_commit": {"type": "string"}, "source_files": {"type": "object"}, "file_scope": {"type": "string", "const": "BUNDLED_SERVER_FILES_ONLY"}, "source_repository": {"type": "string"}, "source_directory": {"type": "string"}, "does_not_establish": {"type": "array", "items": {"type": "string"}}}, "required": ["available", "release_hash", "source_commit", "source_files", "file_scope", "source_repository", "source_directory", "does_not_establish"], "additionalProperties": False},
     "annotations": {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
 }
+
+
+def bundle_diagnostics(base=None):
+    """Only public source filenames and hashes; no directory scan, env, CSV or secret."""
+    root = Path(base) if base else Path(__file__).resolve().parents[1]
+    checks = {}
+    for name in ("release-source.json", "build-info.json", "api/job.py", "api/mcp.py", "bridge_runtime.py", "vercel.json"):
+        try:
+            content = (root / name).read_bytes()
+            checks[name] = {"readable": True, "sha256": hashlib.sha256(content).hexdigest()}
+        except OSError:
+            checks[name] = {"readable": False}
+    return checks
 
 
 def release_manifest(base=None):
@@ -76,7 +89,8 @@ def dispatch(message, loader=release_manifest):
                 value = loader()
                 result = {"isError": False, "structuredContent": value, "content": [{"type": "text", "text": json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))}]}
             except Exception:
-                result = {"isError": True, "content": [{"type": "text", "text": "Release metadata unavailable or integrity mismatch. No verdict is established."}]}
+                failure = {"available": False, "reason": "Release metadata unavailable or integrity mismatch. No verdict is established.", "public_source_file_diagnostics": bundle_diagnostics()}
+                result = {"isError": True, "content": [{"type": "text", "text": json.dumps(failure, sort_keys=True, separators=(",", ":"))}]}
     else:
         return {"jsonrpc": "2.0", "id": ident, "error": {"code": -32601, "message": "Method not found"}}
     return {"jsonrpc": "2.0", "id": ident, "result": result}

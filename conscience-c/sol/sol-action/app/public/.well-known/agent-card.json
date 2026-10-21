@@ -2,7 +2,7 @@
   "protocolVersion": "0.3.0",
   "name": "SOL-Action — version publique",
   "description": "Public read-only release manifest of a bounded CSV application. This interface neither executes jobs nor exposes user data. Protocol conformance is not calculation correctness, safety, or general intelligence.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "url": "https://sol-action-verifiee.vercel.app/mcp",
   "preferredTransport": "JSONRPC",
   "capabilities": {
