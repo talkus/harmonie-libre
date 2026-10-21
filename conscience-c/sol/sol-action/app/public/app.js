@@ -121,7 +121,8 @@
     if (!valid) window.revoked = true;
     return valid;
   }
-  function controlledRefusal(intent, response, historical = false) {
+  function controlledRefusal(intent, response, historical = false, requirements) {
+    if (root.SolRequirements && root.SolRequirements.controlledRefusal(intent, response, historical, requirements)) return true;
     const receiptOrigin = response && (
       response.receipt_kind === 'CONTROLLED_REFUSAL' && response.receipt_recording_effect === 'APPEND_ONLY_BRIDGE_RECEIPT_RECORDED' ||
       intent && intent.action === 'create' && response.receipt_kind === 'CONTROLLED_CREATION_REFUSAL' && response.receipt_recording_effect === 'APPEND_ONLY_CREATION_GUARD_RECEIPT_RECORDED');
@@ -267,6 +268,11 @@
     return currentVerification(verificationAuthority, Date.now(), performance.now());
   }
   function showRefusal(response, known) {
+    if (response && response.receipt_kind === 'REQUIREMENTS_GUARD_REFUSAL') {
+      const scope = response.action === 'produce' ? 'Aucun begin ni calculateur n’a été lancé par cet appel.' : 'Aucune vérification ni clôture noyau n’a été lancée par cet appel ; le résultat antérieur reste conservé.';
+      show(known ? 'Le contrôle des exigences a refusé cette action. ' + scope + ' Le refus est enregistré. Consultez chaque ligne ci-dessous, puis préparez une correction explicite. Le mandat général reste UNKNOWN.' : 'Le contrôle des exigences annoncé ne suffit pas à établir l’issue. L’intention reste conservée ; retrouvez son reçu exact sans relancer le calcul.', known ? 'error' : 'unknown');
+      return;
+    }
     const code = refusalCode(response);
     const diagnosis = diagnosticFor(response);
     if (diagnosis) setDiagnostics([diagnosis]);
@@ -280,6 +286,11 @@
     state.pending = null;
     verificationAuthority = null;
     if (original.intent.action === 'create') { state.create_rejected = true; state.adaptation_draft = true; }
+    if (original.intent.action === 'produce' && response.receipt_kind === 'REQUIREMENTS_GUARD_REFUSAL') state.requirements_refused = true;
+  }
+  function knownRequirementsRefusal(value) {
+    return Boolean(value && value.requirements_refused === true && (value.rejected_intents || []).some(item =>
+      controlledRefusal(item.intent, item.response, item.response && item.response.status === 'HISTORICAL_NOT_CURRENT', value.requirements)));
   }
   function credentials() { return {job_id: state.job_id, capability: state.capability}; }
   function responseJob(response) {
@@ -300,6 +311,11 @@
     if (validResult(response.result)) state.result = response.result;
     if (response.verification) state.verification = response.verification;
     if (response.completion) state.completion = response.completion;
+    if (root.SolRequirements && root.SolRequirements.validGuard(response.requirements_guard, state.requirements)) state.requirements_guard = response.requirements_guard;
+    if (response.release_binding && typeof response.release_binding === 'object') state.release_binding = response.release_binding;
+    if (typeof response.result_sha256 === 'string') state.result_sha256 = response.result_sha256;
+    if (typeof response.requirements_release_hash === 'string') state.requirements_release_hash = response.requirements_release_hash;
+    if (typeof response.requirements_guard_runtime_hash === 'string') state.requirements_guard_runtime_hash = response.requirements_guard_runtime_hash;
     if (typeof response.source_sha256 === 'string') state.source_sha256 = response.source_sha256;
     appendHistory(action, response);
   }
@@ -332,10 +348,10 @@
           if (!format.ok) { setDiagnostics(format.errors); throw new Error('Les entrées doivent être corrigées avant l’enregistrement. Aucun envoi n’a eu lieu.'); }
           if (expectedView ? !slots.identity(latest, expectedView) || !latest.adaptation_draft : latest !== null) throw new Error('Un travail est déjà conservé ou a changé. Relisez sa reprise avant un nouvel enregistrement.');
           const previous = latest;
-          const parent = previous && !previous.create_rejected ? previous : null;
+          const parent = previous && !previous.create_rejected && !previous.independent_draft ? previous : null;
           if (parent && JSON.stringify(creation.requirements) !== JSON.stringify(parent.requirements)) throw new Error('Les exigences antérieures restent conservées exactement pour cette correction.');
           state = {version: 1, job_id: crypto.randomUUID(), capability: capability(crypto), mandate: creation.mandate, requirements: creation.requirements, source_csv: creation.source_csv, next_step_id: null, history: [], pending: null,
-            ancestors: previous ? (previous.ancestors || []).concat([{job_id: previous.job_id, capability: previous.capability, mandate: previous.mandate, requirements: previous.requirements, history: previous.create_rejected ? previous.history : undefined, source_csv: previous.create_rejected ? previous.source_csv : undefined, rejected_intents: previous.rejected_intents || []}]) : []};
+            ancestors: previous ? (previous.ancestors || []).concat([{job_id: previous.job_id, capability: previous.capability, mandate: previous.mandate, requirements: previous.requirements, history: previous.create_rejected || previous.independent_draft ? previous.history : undefined, source_csv: previous.create_rejected || previous.independent_draft ? previous.source_csv : undefined, rejected_intents: previous.rejected_intents || [], relation: previous.independent_draft ? 'INDEPENDENT_RESTART_AFTER_KNOWN_REFUSAL' : 'CORRECTION_REFERENCE_ONLY'}]) : []};
           additions = {mandate: creation.mandate, requirements: creation.requirements, source_csv: creation.source_csv, source_origin: {kind: 'declared'}};
           if (parent) { additions.parent_job_id = parent.job_id; additions.parent_capability = parent.capability; }
         } else {
@@ -346,6 +362,7 @@
         if (action === 'complete' && !verificationIsCurrent()) throw new Error('La vérification n’est plus actuelle dans cette session. Cliquez sur « Vérifier » avant de clore. Aucune demande de clôture n’a été envoyée.');
         const intent = newIntent(action, Object.assign(credentials(), additions), () => crypto.randomUUID());
         state.pending = {intent, prepared_at: new Date().toISOString()};
+        if (['produce', 'verify', 'complete'].includes(action)) state.pending.requirements_guard_flow = true;
         persist();
         // Complete is checked, reserved and sent under this same exclusive lock.
         // The promise is boxed, so the network never holds the browser lock.
@@ -360,7 +377,7 @@
           return 'UNRELATED';
         }
         adopt(response, action);
-        if (controlledRefusal(reservation.intent, response)) {
+        if (controlledRefusal(reservation.intent, response, false, state.requirements)) {
           recordRefusal({intent: reservation.intent}, response);
           return 'REJECTED';
         }
@@ -438,7 +455,7 @@
     }
     const refusal = response.reconciled_outcome;
     if (response.receipt_kind === 'REFUSAL_RECONCILIATION') {
-      if (response.current_reuse_authorized !== false || response.automatic_retry !== false || response.target_request_id !== original.intent.input.request_id || response.target_action !== original.intent.action || !controlledRefusal(original.intent, refusal, true)) {
+      if (response.current_reuse_authorized !== false || response.automatic_retry !== false || response.target_request_id !== original.intent.input.request_id || response.target_action !== original.intent.action || !controlledRefusal(original.intent, refusal, true, state.requirements)) {
         message = {text: 'Le refus historique ne correspond pas exactement à l’intention originale et à sa portée. L’issue reste inconnue.', kind: 'unknown'}; return false;
       }
       adopt(response, source);
@@ -480,6 +497,36 @@
     } catch (error) { authority = null; refreshState(); show(error.message || 'Lecture du reçu indisponible : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
   }
+  async function lookupRequirementsGuard(original) {
+    const intent = original.intent;
+    const expected = {job_id: intent.input.job_id, capability: intent.input.capability};
+    authority = null; verificationAuthority = null; busy = true;
+    try {
+      render(); state = requireCurrent(expected, original);
+      const response = await post({action: 'receipt', input: Object.assign({}, expected, {target_request_id: intent.input.request_id})});
+      if (response.ok !== true || response.action !== 'lookup_receipt' || response.job_id !== expected.job_id || response.target_request_id !== intent.input.request_id || response.current_reuse_authorized !== false || response.automatic_retry !== false) throw new Error('Lecture préalable non corrélée. L’intention originale reste conservée.');
+      if (response.found !== true) { show('Le reçu préalable reste absent : issue UNKNOWN. L’UUID est conservé, sans nouveau calcul ni nouveau rapprochement automatique.', 'unknown'); return; }
+      const receipt = response.receipt;
+      if (!receipt || receipt.job_id !== expected.job_id || receipt.request_id !== intent.input.request_id || receipt.status !== 'HISTORICAL_NOT_CURRENT' || receipt.current_reuse_authorized !== false) throw new Error('Le reçu ne correspond pas à la production conservée. L’intention reste inconnue.');
+      const refused = response.target_action === intent.action && controlledRefusal(intent, receipt, true, state.requirements);
+      const completed = intent.action !== 'produce' && response.target_action === intent.action && originalOutcome(original, receipt);
+      const admitted = intent.action === 'produce' && receipt.ok === true && ((response.target_action === 'produce' && receipt.production_request_id === intent.input.request_id && receipt.historical_status === 'BOUND_RELEASE' && receipt.requirements_and_begin_atomic === true && receipt.binding_and_begin_atomic === true && root.SolRequirements && root.SolRequirements.validGuard(receipt.requirements_guard, state.requirements) && receipt.requirements_guard.status === 'PASS') ||
+        (response.target_action === 'begin' && receipt.action === 'begin' && receipt.production_request_id === intent.input.request_id));
+      if (!refused && !admitted && !completed) throw new Error('Ce reçu n’établit pas un refus contrôlé, une admission ou une issue corrélée. L’intention reste conservée.');
+      if (!slots.available()) { show('Reçu historique retrouvé. Le verrou entre onglets est indisponible ; l’intention reste conservée, sans nouvel effet.', 'unknown'); return; }
+      await commit(expected, original, () => {
+        if (root.SolRequirements && root.SolRequirements.validGuard(receipt.requirements_guard, state.requirements)) state.requirements_guard = receipt.requirements_guard;
+        appendHistory('requirements-admission-receipt', response);
+        if (refused) { adopt(receipt, 'requirements-refusal-observation'); recordRefusal(original, receipt); }
+        else if (completed) { adopt(receipt, 'requirements-outcome-observation'); state.pending = null; }
+        else state.pending.admission_receipt_observed = true;
+      });
+      if (refused) showRefusal(receipt, true);
+      else if (completed) show('Le reçu exact de cette action a été retrouvé sans nouvel envoi. Son observation reste historique ; aucune vérification actuelle ni clôture générale n’en est déduite.', 'neutral');
+      else show('L’admission a été retrouvée comme historique ; elle ne prouve pas la fin du calcul. Cliquez à nouveau sur « Retrouver l’issue » pour demander explicitement son rapprochement, sans relancer le calculateur.', 'unknown');
+    } catch (error) { refreshState(); show(error.message || 'Reçu préalable indisponible ; issue inconnue.', 'unknown'); }
+    finally { busy = false; render(); }
+  }
   async function lookupCreation(original) {
     const intent = original.intent;
     const expected = {job_id: intent.input.job_id, capability: intent.input.capability};
@@ -510,6 +557,7 @@
     refreshState();
     if (!state || !state.pending || storageBlocked) { render(); return; }
     if (state.pending.intent && state.pending.intent.action === 'create') { await lookupCreation(state.pending); return; }
+    if (state.pending.intent && state.pending.requirements_guard_flow && !state.pending.admission_receipt_observed && !state.pending.reconciliation) { await lookupRequirementsGuard(state.pending); return; }
     if (state.pending.reconciliation) { await lookupReconciliation(state.pending); return; }
     const expected = credentials(), original = state.pending;
     authority = null; verificationAuthority = null; busy = true;
@@ -580,33 +628,40 @@
     $('job-meta').hidden = !hasJob;
     const drafting = hasJob && state.adaptation_draft;
     ['mandate', 'source-csv', 'sample', 'create'].forEach(id => { $(id).disabled = !mutable || busy || pending || (hasJob && !drafting); });
-    $('requirements').disabled = !mutable || busy || (hasJob && !(drafting && state.create_rejected === true && !pending));
-    $('requirements-help').textContent = hasJob && !state.create_rejected ? 'Les exigences d’une demande acceptée restent conservées exactement, y compris dans une correction.' : 'Une exigence par ligne, 1 à 32 au total ; 2 000 caractères maximum chacune.';
+    $('requirements').disabled = !mutable || busy || (hasJob && !(drafting && (state.create_rejected === true || state.independent_draft === true) && !pending));
+    $('requirements-help').textContent = drafting && state.independent_draft ? 'Nouvelle demande indépendante : vos modifications ne satisfont pas rétroactivement l’ancien mandat. L’ancien travail et son refus restent conservés.' : hasJob && !state.create_rejected ? 'Les exigences d’une demande acceptée restent conservées exactement, y compris dans une correction.' : 'Une exigence par ligne, 1 à 32 au total ; 2 000 caractères maximum chacune.';
     $('mission-panel').hidden = !(missionPending || (hasJob && state.create_rejected !== true && validResult(state.result)));
-    $('create').textContent = drafting ? 'Enregistrer la correction →' : 'Enregistrer cette demande →';
+    $('create').textContent = drafting && state.independent_draft ? 'Enregistrer la demande indépendante →' : drafting ? 'Enregistrer la correction →' : 'Enregistrer cette demande →';
     ['status', 'audit'].forEach(id => { $(id).disabled = busy || !hasJob; });
     ['produce', 'verify', 'complete'].forEach(action => {
       const next = hasJob && state.next_step_id;
       $(action).disabled = !mutable || busy || !hasJob || pending || drafting || !(next === action || (action === 'complete' && state.completion) || (action === 'verify' && validResult(state.result))) || (action === 'complete' && !verificationIsCurrent());
+      if (action === 'produce' && hasJob && state.requirements_refused === true) $(action).disabled = true;
       const ordered = ['produce', 'verify', 'complete'];
       const index = ordered.indexOf(next);
       const done = hasJob && (index > ordered.indexOf(action) || (action === 'produce' && validResult(state.result)) || (action === 'complete' && state.completion));
       $('step-' + action).className = done ? 'done' : next === action ? 'active' : '';
     });
     $('recovery').hidden = !pending;
-    $('reconcile').disabled = busy || !pending || storageBlocked || (!(slots && slots.available()) && !state.pending.reconciliation);
-    $('reconcile').textContent = pending && state.pending.reconciliation ? 'Consulter l’issue recherchée' : 'Retrouver l’issue de la demande';
+    const guardLookup = pending && state.pending.requirements_guard_flow && !state.pending.admission_receipt_observed && !state.pending.reconciliation;
+    $('reconcile').disabled = busy || !pending || storageBlocked || (!(slots && slots.available()) && !state.pending.reconciliation && !guardLookup);
+    $('reconcile').textContent = guardLookup ? 'Consulter le reçu préalable' : pending && state.pending.reconciliation ? 'Consulter l’issue recherchée' : 'Retrouver l’issue de la demande';
+    $('independent-request').hidden = !hasJob || !knownRequirementsRefusal(state) || drafting;
+    $('independent-request').disabled = !mutable || busy || pending || drafting;
+    $('independent-warning').hidden = $('independent-request').hidden;
     $('adapt').disabled = !mutable || busy || !hasJob || pending || drafting;
     $('adapt').hidden = drafting;
     $('cancel-adapt').hidden = !drafting;
     $('cancel-adapt').disabled = !mutable || busy;
     $('create').disabled = $('create').disabled || !mutable;
+    if (root.SolRequirements) root.SolRequirements.controls();
     if (hasJob) {
       $('saved-mandate').textContent = state.mandate;
       $('job-id').textContent = 'Tâche ' + state.job_id;
       $('saved-requirements').replaceChildren();
       (state.requirements || []).forEach(text => { const item = document.createElement('li'); item.textContent = text + ' — portée sémantique non vérifiée'; $('saved-requirements').appendChild(item); });
     }
+    if (root.SolRequirements) root.SolRequirements.render(hasJob ? state.requirements_guard : null, hasJob ? state.requirements : null);
     const result = hasJob && state.result;
     $('result').hidden = !validResult(result);
     if (validResult(result)) {
@@ -622,8 +677,8 @@
   $('job-form').addEventListener('submit', async event => {
     event.preventDefault();
     if (busy) return;
-    const mandate = $('mandate').value.trim();
-    const requirements = $('requirements').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    const mandate = $('mandate').value;
+    const requirements = $('requirements').value.split(/\r?\n/).filter(value => value.length > 0);
     const source = $('source-csv').value;
     const format = validateCreation(mandate, requirements, source);
     setDiagnostics(format.errors);
@@ -632,7 +687,7 @@
   });
   ['mandate', 'requirements', 'source-csv'].forEach(field => $(field).addEventListener('input', () => setDiagnostics(fieldDiagnostics.filter(x => x.field !== field))));
   $('sample').addEventListener('click', () => { $('mandate').value = 'Calculer les totaux de ce tableau fictif par devise et conserver chaque ligne.'; if (!state) $('requirements').value = DEFAULT_REQUIREMENTS.join('\n'); $('source-csv').value = SAMPLE; $('source-csv').focus(); });
-  async function draft(enabled) {
+  async function draft(enabled, independent = false) {
     if (busy) return;
     refreshState();
     if (!state || storageBlocked) { render(); return; }
@@ -645,15 +700,17 @@
         state = requireCurrent(expected);
         assertNoMissionPending();
         if (state.pending) throw new Error('Une intention attend son reçu exact. La reprise ne sera pas remplacée par une correction.');
-        state.adaptation_draft = enabled; persist();
+        if (independent && !knownRequirementsRefusal(state)) throw new Error('Une demande indépendante ne peut être préparée ici sans refus préalable durable connu.');
+        state.adaptation_draft = enabled; state.independent_draft = Boolean(enabled && independent); persist();
       });
       if (enabled) { $('mandate').value = state.mandate; $('requirements').value = state.requirements.join('\n'); $('source-csv').value = state.source_csv; }
-      show(enabled ? 'Préparez une correction. Elle créera un nouvel objet lié au précédent, avec les mêmes exigences et de nouveaux contrôles. L’historique reste conservé.' : 'Correction abandonnée. La tâche précédente reste conservée.', 'neutral');
+      show(enabled && independent ? 'Préparez une nouvelle demande indépendante. L’ancien travail et son refus restent conservés ; aucun résultat, permission ou contrôle n’est hérité. Modifier les exigences ne satisfait pas rétroactivement l’ancien mandat.' : enabled ? 'Préparez une correction. Elle créera un nouvel objet lié au précédent, avec les mêmes exigences et de nouveaux contrôles. L’historique reste conservé.' : 'Correction abandonnée. La tâche précédente reste conservée.', 'neutral');
       if (enabled) $('mandate').focus();
     } catch (error) { refreshState(); show(error.message, 'unknown'); }
     finally { busy = false; finishPreparation(); render(); }
   }
   $('adapt').addEventListener('click', () => draft(true));
+  $('independent-request').addEventListener('click', () => draft(true, true));
   $('cancel-adapt').addEventListener('click', () => draft(false));
   ['produce', 'verify', 'complete'].forEach(action => $(action).addEventListener('click', () => mutate(action, {expected_step_id: action})));
   $('status').addEventListener('click', () => read('status'));
@@ -663,11 +720,14 @@
     const url = URL.createObjectURL(new Blob([contents], {type}));
     const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'agir-' + state.job_id + '.' + suffix; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  $('download-json').addEventListener('click', () => {
-    if (!state || !validResult(state.result)) return;
-    const value = {schema: 'SOL_ACTION_EXPORT/v1', job_id: state.job_id, mandate: state.mandate, requirements: state.requirements, result: state.result, verification: state.verification || null, completion: state.completion || null, source_origin: 'CLIENT_DECLARED_NOT_AUTHENTICATED', semantic_truth: 'UNKNOWN', current_reuse_authorized: false, export_status: 'HISTORICAL_DOCUMENT_ONLY'};
+  function downloadProof() {
+    if (!state) return;
+    if (!root.SolRequirements) { show('Le module d’export de la portée n’est pas chargé. Aucun export incomplet n’est créé.', 'unknown'); return; }
+    const value = root.SolRequirements.exportBundle(state, new Date().toISOString());
     download(JSON.stringify(value, null, 2), 'application/json;charset=utf-8', 'json');
-  });
+  }
+  $('download-json').addEventListener('click', downloadProof);
+  $('download-proof').addEventListener('click', downloadProof);
   $('download-csv').addEventListener('click', () => { if (state && validResult(state.result)) download('currency,amount\r\n' + state.result.totals.map(x => x.currency + ',' + x.amount).join('\r\n') + '\r\n', 'text/csv;charset=utf-8', 'csv'); });
   // A dated public snapshot, if provided, is evidence of a connector read only.
   fetch('/provider-observation.json', {cache: 'no-store'}).then(response => response.ok ? response.json() : null).then(snapshot => {

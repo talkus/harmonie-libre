@@ -5,7 +5,7 @@ import re
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
-VERSION = "0.3.4"
+VERSION = "0.4.0"
 PROTOCOLS = {"2025-03-26", "2025-06-18", "2025-11-25"}
 ORIGIN = "https://sol-action-verifiee.vercel.app"
 LIMIT = 16384

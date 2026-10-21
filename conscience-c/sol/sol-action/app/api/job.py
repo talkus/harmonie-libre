@@ -1,5 +1,6 @@
 """Fixed CSV worker and capability-scoped RPC bridge. No arbitrary code or URLs."""
 import csv
+from datetime import datetime, timezone
 import hashlib
 import io
 import json
@@ -63,7 +64,7 @@ def correlated_response(response, action, data):
     if action in {"receipt", "creation_receipt"}:
         if response.get("action") != "lookup_receipt" or response.get("target_request_id") != data["target_request_id"]:
             raise UncertainOutcome("RPC_RECEIPT_CORRELATION_UNKNOWN")
-    elif action in {"create", "verify", "complete", "reconcile"}:
+    elif action in {"create", "produce", "verify", "complete", "reconcile"}:
         if response.get("action") != action or response.get("request_id") != data["request_id"]:
             raise UncertainOutcome("RPC_COMMAND_CORRELATION_UNKNOWN")
     return response
@@ -252,7 +253,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 def rpc(action, data, api_name="sol_action_api"):
-    if api_name not in {"sol_action_api", "sol_action_bridge_api", "sol_action_creation_api"}:
+    if api_name not in {"sol_action_api", "sol_action_bridge_api", "sol_action_creation_api", "sol_action_requirements_api"}:
         raise InputError("RPC_NAME_FORBIDDEN")
     url, key = public_configuration()
     request = urllib.request.Request(url + "/rest/v1/rpc/" + api_name,
@@ -274,14 +275,63 @@ def rpc(action, data, api_name="sol_action_api"):
         raise UncertainOutcome("RPC_OUTCOME_UNKNOWN") from exc
 
 
+
+def requirements_admission(guard, begun):
+    """Check exact scope and identity, without reimplementing SQL policy."""
+    if type(guard) is not dict or type(begun) is not dict:
+        return False
+    rows, expected, checks = guard.get("requirements"), begun.get("requirements"), guard.get("checks")
+    if (guard.get("status") != "PASS" or guard.get("phase") != "PRE_EFFECT_ADMISSION"
+            or type(rows) is not list or not rows or type(expected) is not list
+            or len(rows) != len(expected) or type(checks) is not list or not checks
+            or any(type(item) is not dict or item.get("verdict") != "PASS" for item in checks)
+            or any(type(item) is not dict or type(item.get("index")) is not int
+                   or item["index"] != index or item.get("text") != expected[index]
+                   or item.get("verdict") != "PASS" for index, item in enumerate(rows))):
+        return False
+    try:
+        checked = datetime.fromisoformat(guard["checked_at"].replace("Z", "+00:00"))
+        expires = datetime.fromisoformat(guard["expires_at"].replace("Z", "+00:00"))
+        now = datetime.now(timezone.utc)
+        return (checked.tzinfo is not None and expires.tzinfo is not None
+                and checked <= now < expires and 0 < (expires-checked).total_seconds() <= 60)
+    except (KeyError, ValueError, TypeError, AttributeError):
+        return False
+
+
+def requirements_refusal(receipt, data):
+    """Admit only a correlated, durable guard refusal, without guessing effect."""
+    if type(receipt) is not dict:
+        return False
+    guard = receipt.get("requirements_guard")
+    return (receipt.get("ok") is False and receipt.get("status") == "REJECTED"
+            and receipt.get("receipt_kind") == "REQUIREMENTS_GUARD_REFUSAL"
+            and receipt.get("action") == "produce"
+            and receipt.get("job_id") == data["job_id"]
+            and receipt.get("request_id") == data["request_id"]
+            and receipt.get("production_request_id") == data["request_id"]
+            and receipt.get("terminal") is True and receipt.get("durable_refusal") is True
+            and receipt.get("effect_scope") == "REQUIREMENTS_ADMISSION_BEFORE_BRIDGE_BIND_ONLY"
+            and receipt.get("business_effect") == "NO_BEGIN_OR_WORKER_STARTED_BY_THIS_CALL"
+            and receipt.get("receipt_recording_effect") == "APPEND_ONLY_REQUIREMENTS_GUARD_RECEIPT_RECORDED"
+            and receipt.get("worker_reexecuted") is False
+            and receipt.get("automatic_retry") is False
+            and receipt.get("current_reuse_authorized") is False
+            and type(guard) is dict and guard.get("status") in {"FAIL", "UNKNOWN"}
+            and guard.get("phase") == "PRE_EFFECT_ADMISSION"
+            and type(guard.get("requirements")) is list and bool(guard["requirements"]))
+
+
 def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
              release_loader=bridge_runtime.load_release, token_loader=bridge_runtime.server_token,
-             call_creation=None):
+             call_creation=None, call_requirements=None):
     action, data = validate_request(body)
     if call_bridge is None:
         call_bridge = lambda bridge_action, bridge_data: rpc(bridge_action, bridge_data, "sol_action_bridge_api")
     if call_creation is None:
         call_creation = lambda creation_action, creation_data: rpc(creation_action, creation_data, "sol_action_creation_api")
+    if call_requirements is None:
+        call_requirements = lambda guard_action, guard_data: rpc(guard_action, guard_data, "sol_action_requirements_api")
     if action == "creation_receipt":
         return correlated_response(call_creation("lookup_receipt", data), action, data)
     if action == "create":
@@ -296,27 +346,39 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
             "source_commit": release["source_commit"], "self_hash": release["self_hash"]})
         return correlated_response(response, action, data)
     if action == "receipt":
-        return correlated_response(call_bridge("lookup_receipt", data), action, data)
+        return correlated_response(call_requirements("lookup_receipt", data), action, data)
     if action == "produce":
         try:
             release = release_loader()
             token = token_loader()
         except Exception as exc:
             raise UncertainOutcome("RELEASE_OR_SERVER_CONFIGURATION_UNCONFIRMED") from exc
-        binding = call_bridge("bind", {
+        binding = call_requirements("bind", {
             "job_id": data["job_id"], "capability": data["capability"],
             "production_request_id": data["request_id"], "bridge_token": token,
             "release_hash": release["release_hash"], "manifest_hash": release["manifest_hash"],
             "source_commit": release["source_commit"], "self_hash": release["self_hash"]})
-        # Bind and the unchanged core begin are committed in one bridge transaction.
-        if (binding.get("ok") is not True or binding.get("status") != "BOUND_RELEASE"
+        # A known guard refusal is an observed receipt before bridge begin, not
+        # a fabricated rollback marker for the composite worker operation.
+        if requirements_refusal(binding, data):
+            return correlated_response(binding, "produce", data)
+        # The SQL guard and bridge begin are committed in one transaction.
+        if (type(binding) is not dict or binding.get("ok") is not True or binding.get("status") != "BOUND_RELEASE"
                 or binding.get("binding_granted") is not True or binding.get("deduplicated") is True
                 or binding.get("job_id") != data["job_id"]
                 or binding.get("production_request_id") != data["request_id"]
                 or binding.get("release_hash") != release["release_hash"]
                 or binding.get("self_hash") != release["self_hash"]
                 or binding.get("binding_and_begin_atomic") is not True
-                or type(binding.get("begin_receipt")) is not dict):
+                or type(binding.get("begin_receipt")) is not dict
+                or binding.get("requirements_and_begin_atomic") is not True
+                or binding.get("requirements_release_hash") != release["release_hash"]
+                or type(binding.get("requirements_guard_runtime_hash")) is not str
+                or not CAP.fullmatch(binding["requirements_guard_runtime_hash"])
+                or type(binding.get("requirements_guard")) is not dict
+                or binding["requirements_guard"].get("guard_runtime_hash") != binding["requirements_guard_runtime_hash"]
+                or not requirements_admission(binding.get("requirements_guard"), binding.get("begin_receipt"))
+                or binding["requirements_guard"].get("source_sha256") != binding["begin_receipt"].get("source_sha256")):
             return {"ok": False, "status": "OUTCOME_UNKNOWN", "action": "produce",
                     "job_id": data["job_id"], "request_id": data["request_id"],
                     "production_request_id": data["request_id"], "pending": True,
@@ -326,7 +388,9 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
         # The recovery boundary checks request collisions for every command.
         # Existing-job recovery remains in its pinned bridge. New creation uses
         # the additive, release-authorized boundary above, without a dummy job.
-        if action in {"verify", "complete", "reconcile"}:
+        if action in {"verify", "complete"}:
+            response = call_requirements("execute", {"core_action": action, "core_input": data})
+        elif action == "reconcile":
             response = call_bridge("execute", {"core_action": action, "core_input": data})
         else:
             response = call_rpc(action, data)
@@ -344,7 +408,10 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
     if (begun.get("ok") is not True or begun.get("status") != "RECORDED"
             or begun.get("begin_granted") is not True or begun.get("deduplicated") is True):
         return begun
-    if begun.get("production_request_id") != data["request_id"]:
+    if (begun.get("production_request_id") != data["request_id"]
+            or begun.get("job_id") != data["job_id"]
+            or begun.get("request_id") != data["request_id"]
+            or begun.get("action") != "begin"):
         raise UncertainOutcome("BEGIN_CORRELATION_UNKNOWN")
     source = begun.get("source_csv")
     try:
@@ -359,6 +426,12 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
         "request_id": data["result_request_id"], "expected_step_id": "produce",
         "production_request_id": data["request_id"], "worker_version": WORKER_VERSION,
         "result": result})
+    if (type(committed) is not dict or type(committed.get("ok")) is not bool
+            or committed.get("job_id") != data["job_id"]
+            or committed.get("request_id") != data["result_request_id"]
+            or committed.get("production_request_id") != data["request_id"]
+            or committed.get("action") != "result"):
+        raise UncertainOutcome("RESULT_CORRELATION_UNKNOWN")
     if committed.get("ok") is not True:
         # A rejected result transaction does not cancel the earlier durable begin.
         # Never forward its per-RPC no-effect marker as a composite no-effect claim.
@@ -368,6 +441,9 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
                           "production_request_id": data["request_id"], "pending": True,
                           "production_started": True, "automatic_retry": False,
                           "current_reuse_authorized": False})
+    # Preserve the actual server guard, with its own source, scope and time.
+    # It does not grade the worker result or grant semantic truth.
+    committed["requirements_guard"] = binding["requirements_guard"]
     return committed
 
 
