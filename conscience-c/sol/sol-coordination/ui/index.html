@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>SOL · Coordination — dossier local</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au dossier</a>
+  <header class="masthead">
+    <a class="wordmark" href="#main">SOL <span>Coordination</span></a>
+    <span class="local-mode">Lecture locale · aucun envoi</span>
+  </header>
+  <main id="main">
+    <div class="opening">
+      <div>
+        <h1>Reprendre sans perdre<br>le mandat.</h1>
+        <p class="lede">Le texte demandé, toutes les exigences et les traces d’une même chaîne de travail. Importez une réponse de lecture pour les examiner ensemble.</p>
+      </div>
+      <aside class="authority" aria-label="Limite de cette consultation">
+        <strong>État actuel : UNKNOWN</strong>
+        <p>Autorité actuelle : <code>false</code>. Une copie locale ne valide ni une action, ni une réussite générale.</p>
+        <p id="freshness">Aucune observation importée.</p>
+      </aside>
+    </div>
+
+    <section class="import-section" aria-labelledby="import-heading">
+      <div>
+        <h2 id="import-heading">Ouvrir une observation</h2>
+        <p>Choisissez le fichier JSON d’une réponse <code>bundle_status</code>. Son contenu reste dans cet onglet, sans sauvegarde automatique.</p>
+      </div>
+      <div class="import-controls">
+        <label class="button primary file-label">Importer un reçu JSON<input id="receipt-file" type="file" accept=".json,application/json" aria-label="Importer un reçu JSON local"></label>
+        <button id="clear" type="button" disabled>Fermer l’observation</button>
+      </div>
+      <details class="paste-disclosure">
+        <summary>Coller une réponse JSON</summary>
+        <label for="receipt-text">Réponse complète, sans clé ni secret</label>
+        <textarea id="receipt-text" rows="6" spellcheck="false" placeholder="Collez ici une réponse bundle_status…"></textarea>
+        <button id="import-text" type="button">Lire le texte collé</button>
+      </details>
+      <p id="import-message" class="notice" role="status" aria-live="polite">Les exports sont des données non authentifiées. Aucun statut importé n’autorise une action.</p>
+    </section>
+
+    <nav class="section-nav" aria-label="Dans ce dossier">
+      <a id="nav-mandates" href="#mandates" hidden>Mandat</a><a id="nav-requirements" href="#requirements" hidden>Exigences</a><a id="nav-resume" href="#resume" hidden>Reprise</a><a id="nav-provenance" href="#provenance" hidden>Provenance</a><a href="#connectors">Connecteurs</a>
+    </nav>
+
+    <div id="empty-state" class="empty-state">
+      <h2>Le dossier attend une lecture.</h2>
+      <p>Dans votre accès Supabase autorisé, retrouvez l’identifiant du dossier avec la lecture <code>list</code> de SOL-Coordination ou le relais Stele. Demandez ensuite <code>bundle_status</code> avec cet identifiant, puis importez sa réponse complète. Cette console ne se connecte à aucun compte.</p>
+    </div>
+
+    <div id="dossier" hidden>
+      <section id="mandates" class="document-section" aria-labelledby="mandates-heading">
+        <div class="section-heading"><h2 id="mandates-heading">Le mandat entier</h2><p id="bundle-label"></p></div>
+        <p class="section-intro">Le mandat racine et chaque complément sont conservés séparément. Leur présence ne prouve pas leur accomplissement.</p>
+        <div id="mandate-list"></div>
+      </section>
+
+      <section id="requirements" class="document-section" aria-labelledby="requirements-heading">
+        <div class="section-heading"><h2 id="requirements-heading">Toutes les exigences</h2><p id="requirements-count"></p></div>
+        <p class="section-intro">Chaque tâche garde ses propres textes, contrats et versions. Les exigences historiques ne sont ni fusionnées ni remplacées par un total favorable.</p>
+        <div id="requirement-list"></div>
+      </section>
+
+      <section id="resume" class="document-section" aria-labelledby="resume-heading">
+        <div class="section-heading"><h2 id="resume-heading">Reprise et blocages</h2><p>Consultation uniquement</p></div>
+        <div id="resume-list"></div>
+        <h3>Historique conservé</h3>
+        <p>Les tentatives et erreurs restent visibles. Un ancien reçu, même favorable, demeure historique.</p>
+        <div id="history-list"></div>
+      </section>
+
+      <section id="provenance" class="document-section" aria-labelledby="provenance-heading">
+        <div class="section-heading"><h2 id="provenance-heading">Versions et origine</h2><p>Déclarations reçues</p></div>
+        <div id="provenance-list"></div>
+        <details class="raw-disclosure"><summary>Voir la réponse normalisée complète</summary><pre id="raw-receipt" class="raw-output"></pre></details>
+      </section>
+
+      <section class="document-section" aria-labelledby="read-heading">
+        <h2 id="read-heading">Préparer une nouvelle lecture</h2>
+        <p class="section-intro">Ces boutons copient seulement une demande <code>bundle_status</code>. Exécutez-la séparément dans un accès autorisé. Aucune commande de mutation n’est préparée dans cette console.</p>
+        <div class="read-actions"><button id="copy-sql" type="button">Copier la lecture Supabase</button><button id="copy-api" type="button">Copier la lecture API</button><button id="export" type="button">Exporter cette copie locale</button></div>
+        <label for="read-command">Lecture à copier</label>
+        <textarea id="read-command" rows="5" readonly spellcheck="false"></textarea>
+        <p id="copy-message" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <section id="connectors" class="document-section" aria-labelledby="connectors-heading">
+      <div class="section-heading"><h2 id="connectors-heading">17 capacités examinées</h2><p id="catalogue-observation"></p></div>
+      <p class="section-intro">Ce catalogue décrit les outils exposés au chat lors de l’inventaire. Il ne prouve aucun compte connecté ni aucune intégration dans l’application. Les services ne sont pas contactés ici.</p>
+      <div id="connector-list" class="connector-list"></div>
+    </section>
+  </main>
+  <footer><p>SOL · Coordination — consultation locale sans autorité actuelle.</p><p>Une réussite bornée exige les contrôles actuels du service. La vérité sémantique et l’avantage général restent UNKNOWN.</p></footer>
+</body>
+</html>
