@@ -39,6 +39,36 @@ class UncertainOutcome(Exception):
     pass
 
 
+def unique_object(pairs):
+    """Reject ambiguous JSON before choosing which occurrence to trust."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("DUPLICATE_JSON_KEY")
+        result[key] = value
+    return result
+
+
+def correlated_response(response, action, data):
+    """Check the original envelope; never invent an identity or an effect."""
+    if type(response) is not dict or type(response.get("ok")) is not bool:
+        raise UncertainOutcome("RPC_RESPONSE_SHAPE")
+    claims_reference = response["ok"] or any(key in response for key in
+        ("job_id", "request_id", "target_request_id", "receipt", "effect", "sqlstate", "durable_refusal", "terminal"))
+    if not claims_reference:
+        # An opaque denial grants no correlation or absence-of-effect claim.
+        return response
+    if response.get("job_id") != data["job_id"]:
+        raise UncertainOutcome("RPC_JOB_CORRELATION_UNKNOWN")
+    if action == "receipt":
+        if response.get("action") != "lookup_receipt" or response.get("target_request_id") != data["target_request_id"]:
+            raise UncertainOutcome("RPC_RECEIPT_CORRELATION_UNKNOWN")
+    elif action in {"create", "verify", "complete", "reconcile"}:
+        if response.get("action") != action or response.get("request_id") != data["request_id"]:
+            raise UncertainOutcome("RPC_COMMAND_CORRELATION_UNKNOWN")
+    return response
+
+
 def compute_csv(source):
     """Produce exact Decimal totals; the separate SQL implementation verifies them."""
     if type(source) is not str or not 1 <= len(source.encode("utf-8")) <= MAX_SOURCE:
@@ -233,7 +263,7 @@ def rpc(action, data, api_name="sol_action_api"):
             raw = response.read(1048577)
         if len(raw) > 1048576:
             raise UncertainOutcome("RPC_RESPONSE_SIZE")
-        result = json.loads(raw)
+        result = json.loads(raw, object_pairs_hook=unique_object)
         if type(result) is not dict:
             raise UncertainOutcome("RPC_RESPONSE_SHAPE")
         return result
@@ -250,7 +280,7 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
     if call_bridge is None:
         call_bridge = lambda bridge_action, bridge_data: rpc(bridge_action, bridge_data, "sol_action_bridge_api")
     if action == "receipt":
-        return call_bridge("lookup_receipt", data)
+        return correlated_response(call_bridge("lookup_receipt", data), action, data)
     if action == "produce":
         try:
             release = release_loader()
@@ -284,10 +314,7 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
             response = call_bridge("execute", {"core_action": action, "core_input": data})
         else:
             response = call_rpc(action, data)
-        if response.get("ok") is False and response.get("status") == "REJECTED" and type(response.get("sqlstate")) is str:
-            response = dict(response, job_id=data["job_id"], request_id=data.get("request_id"),
-                            effect="NONE_SQL_TRANSACTION_ROLLED_BACK")
-        return response
+        return correlated_response(response, action, data)
     # Never issue a second begin: only the receipt returned by atomic bridge bind is used.
     begun = binding["begin_receipt"]
     if begun.get("ok") is False and begun.get("status") == "REJECTED" and type(begun.get("sqlstate")) is str:
@@ -364,7 +391,7 @@ class handler(BaseHTTPRequestHandler):
             raw = self.rfile.read(length)
             if len(raw) != length:
                 raise InputError("BODY_INCOMPLETE")
-            body = json.loads(raw.decode("utf-8"))
+            body = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_object)
             result = dispatch(body)
             self.reply(200, result)
         except (InputError, UnicodeError, ValueError) as exc:

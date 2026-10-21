@@ -21,7 +21,7 @@ class RefusalProxyTests(unittest.TestCase):
   for action in ['create','verify','complete','reconcile']:
    calls=[]
    def bridge(a,d):
-    calls.append((a,d));return {'ok':False,'status':'REJECTED','job_id':J,'request_id':R,'sqlstate':'P0001','error':'FRESH_VERIFICATION_REQUIRED','durable_refusal':True,'terminal':True}
+    calls.append((a,d));return {'ok':False,'status':'REJECTED','action':action,'job_id':J,'request_id':R,'sqlstate':'P0001','error':'FRESH_VERIFICATION_REQUIRED','durable_refusal':True,'terminal':True,'effect':'NONE_SQL_TRANSACTION_ROLLED_BACK'}
    result=job.dispatch(self.body(action),call_rpc=lambda*a:self.fail('direct core must not be called'),call_bridge=bridge,worker=lambda*a:self.fail('worker must not run'))
    self.assertEqual(calls,[('execute',{'core_action':action,'core_input':self.body(action)['input']})])
    self.assertTrue(result['durable_refusal']);self.assertEqual(result['effect'],'NONE_SQL_TRANSACTION_ROLLED_BACK')
@@ -34,12 +34,12 @@ class RefusalProxyTests(unittest.TestCase):
   result=job.dispatch(self.body('complete'),call_bridge=lambda*a:{'ok':False,'status':'REJECTED','error':'NOT_AUTHORIZED_OR_INVALID_REFERENCE'})
   self.assertNotIn('effect',result);self.assertNotIn('terminal',result)
  def test_historical_refusal_never_acquires_current_authority(self):
-  historical={'ok':False,'status':'HISTORICAL_NOT_CURRENT','historical_status':'REJECTED','job_id':J,'request_id':R,'durable_refusal':True,'current_reuse_authorized':False,'deduplicated':True}
+  historical={'ok':False,'action':'complete','status':'HISTORICAL_NOT_CURRENT','historical_status':'REJECTED','job_id':J,'request_id':R,'durable_refusal':True,'current_reuse_authorized':False,'deduplicated':True}
   result=job.dispatch(self.body('complete'),call_bridge=lambda*a:historical)
   self.assertEqual(result,historical);self.assertFalse(result['current_reuse_authorized'])
  def test_receipt_reads_do_not_execute_any_command(self):
   calls=[];body={'action':'receipt','input':{'job_id':J,'capability':C,'target_request_id':R}}
-  response=job.dispatch(body,call_bridge=lambda a,d:(calls.append((a,d)) or {'ok':True,'found':False}),call_rpc=lambda*a:self.fail('no core'),worker=lambda*a:self.fail('no worker'))
+  response=job.dispatch(body,call_bridge=lambda a,d:(calls.append((a,d)) or {'ok':True,'action':'lookup_receipt','job_id':J,'target_request_id':R,'found':False}),call_rpc=lambda*a:self.fail('no core'),worker=lambda*a:self.fail('no worker'))
   self.assertEqual(calls,[('lookup_receipt',body['input'])]);self.assertFalse(response['found'])
 
 if __name__=='__main__':unittest.main(verbosity=2)

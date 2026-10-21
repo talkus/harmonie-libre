@@ -5,10 +5,19 @@ import re
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 PROTOCOLS = {"2025-03-26", "2025-06-18", "2025-11-25"}
 ORIGIN = "https://sol-action-verifiee.vercel.app"
 LIMIT = 16384
+
+
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("DUPLICATE_JSON_KEY")
+        result[key] = value
+    return result
 
 TOOL = {
     "name": "release_manifest",
@@ -38,8 +47,8 @@ def release_manifest(base=None):
     raw = (root / "release-source.json").read_bytes()
     if len(raw) > 65536:
         raise ValueError("RELEASE_UNAVAILABLE")
-    source = json.loads(raw)
-    build = json.loads((root / "build-info.json").read_bytes())
+    source = json.loads(raw, object_pairs_hook=unique_object)
+    build = json.loads((root / "build-info.json").read_bytes(), object_pairs_hook=unique_object)
     commit = build.get("source_commit")
     if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise ValueError("RELEASE_UNAVAILABLE")
@@ -135,7 +144,7 @@ class handler(BaseHTTPRequestHandler):
             raw = self.rfile.read(length)
             if len(raw) != length:
                 raise ValueError("Invalid body")
-            message = json.loads(raw.decode("utf-8"))
+            message = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_object)
             answer = dispatch(message)
             self.reply(202 if answer is None else 200, answer)
         except Exception:

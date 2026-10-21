@@ -3,11 +3,93 @@
   const STORAGE_KEY = 'sol-action-session-v1';
   const SAMPLE = 'id,currency,amount\ncommande-1,EUR,120.50\ncommande-2,EUR,-20.25\ncommande-3,USD,35.10\ncommande-4,EUR,0.05\ncommande-5,USD,4.90\n';
   const DEFAULT_REQUIREMENTS = ['Conserver chaque ligne d’entrée.', 'Calculer exactement les totaux, sans arrondi intermédiaire.', 'Séparer les devises et identifier le tableau source.'];
+  const DIAGNOSTICS = {
+    INVALID_MANDATE: ['mandate', 'Écrivez une demande de 1 à 10 000 caractères.'],
+    INVALID_REQUIREMENTS: ['requirements', 'Indiquez 1 à 32 exigences, une par ligne, de 2 000 caractères maximum chacune.'],
+    CSV_SIZE: ['source-csv', 'Le tableau doit contenir entre 1 octet et 32 Kio.'],
+    CSV_ENCODING: ['source-csv', 'Retirez les caractères NUL et les marques BOM du tableau.'],
+    CSV_LINE_ENDING: ['source-csv', 'Utilisez des fins de ligne LF ou CRLF ; un retour CR isolé n’est pas accepté.'],
+    CSV_QUOTING: ['source-csv', 'Fermez les champs entre guillemets et doublez chaque guillemet intérieur.'],
+    CSV_HEADER: ['source-csv', 'La première ligne doit contenir exactement id,currency,amount.'],
+    CSV_ROWS: ['source-csv', 'Ajoutez 1 à 500 lignes de données après l’en-tête.'],
+    CSV_COLUMNS: ['source-csv', 'Chaque ligne doit contenir exactement trois champs, séparés par des virgules.'],
+    CSV_ID: ['source-csv', 'Utilisez un identifiant unique de 1 à 80 caractères : lettres, chiffres, puis . _ : ou - autorisés.'],
+    CSV_DUPLICATE_ID: ['source-csv', 'Cet identifiant apparaît déjà ; attribuez un identifiant différent à chaque ligne.'],
+    CSV_CURRENCY: ['source-csv', 'Écrivez la devise avec trois lettres majuscules, par exemple EUR.'],
+    CSV_AMOUNT: ['source-csv', 'Écrivez un montant avec 1 à 12 chiffres avant le point et au plus 2 décimales, par exemple -12.50.']
+  };
+  const DIAGNOSTIC_ALIASES = {
+    REQUIREMENTS: 'INVALID_REQUIREMENTS', REQUIREMENT_TEXT: 'INVALID_REQUIREMENTS',
+    'STRING_REQUIRED:mandate': 'INVALID_MANDATE', 'STRING_BOUNDS:mandate': 'INVALID_MANDATE',
+    'MISSING_FIELD:mandate': 'INVALID_MANDATE', 'STRING_REQUIRED:source_csv': 'CSV_SIZE', 'STRING_BOUNDS:source_csv': 'CSV_SIZE',
+    CSV_LONE_CR: 'CSV_LINE_ENDING', CSV_AFTER_QUOTE: 'CSV_QUOTING', CSV_QUOTE_IN_UNQUOTED: 'CSV_QUOTING',
+    CSV_UNCLOSED_QUOTE: 'CSV_QUOTING', CSV_ROW_LIMIT: 'CSV_ROWS', CSV_ROW_COUNT: 'CSV_ROWS'
+  };
+  function diagnosticFor(response, line) {
+    const rawCode = response && response.error;
+    if (typeof rawCode !== 'string') return null;
+    const code = Object.prototype.hasOwnProperty.call(DIAGNOSTICS, rawCode) ? rawCode : Object.prototype.hasOwnProperty.call(DIAGNOSTIC_ALIASES, rawCode) ? DIAGNOSTIC_ALIASES[rawCode] : null;
+    const item = code && DIAGNOSTICS[code];
+    if (!item) return null;
+    return {code, field: item[0], line: Number.isInteger(line) && line > 0 && line <= 32769 ? line : null, message: item[1]};
+  }
+  function fullMatch(pattern, value) {
+    if (typeof value !== 'string') return false;
+    const match = pattern.exec(value);
+    return Boolean(match && match[0] === value);
+  }
+  function validateCsv(source) {
+    const fail = (error, line) => ({ok: false, scope: 'INPUT_FORMAT_ONLY', errors: [diagnosticFor({error}, line)]});
+    if (typeof source !== 'string' || new TextEncoder().encode(source).length < 1 || new TextEncoder().encode(source).length > 32768) return fail('CSV_SIZE');
+    if (/[\u0000\ufeff]/.test(source)) return fail('CSV_ENCODING');
+    const records = [], starts = [];
+    let fields = [], value = '', mode = 'start', line = 1, start = 1, quoteStart = 1;
+    const field = () => { fields.push(value); value = ''; mode = 'start'; };
+    const record = () => { field(); records.push(fields); starts.push(start); fields = []; };
+    for (let i = 0; i < source.length; i++) {
+      const char = source[i];
+      if (mode === 'quoted') {
+        if (char === '"') {
+          if (source[i + 1] === '"') { value += '"'; i++; } else mode = 'after_quote';
+        } else { value += char; if (char === '\n') line++; }
+      } else if (char === ',') field();
+      else if (char === '\n' || char === '\r') {
+        if (char === '\r') { if (source[i + 1] !== '\n') return fail('CSV_LINE_ENDING', line); i++; }
+        record(); line++; start = line;
+      } else if (mode === 'after_quote') return fail('CSV_QUOTING', line);
+      else if (char === '"') {
+        if (mode !== 'start') return fail('CSV_QUOTING', line);
+        mode = 'quoted'; quoteStart = line;
+      } else { value += char; mode = 'unquoted'; }
+    }
+    if (mode === 'quoted') return fail('CSV_QUOTING', quoteStart);
+    if (mode !== 'start' || value !== '' || fields.length) record();
+    if (!records.length || records[0].length !== 3 || records[0].some((x, i) => x !== ['id', 'currency', 'amount'][i])) return fail('CSV_HEADER', 1);
+    if (records.length < 2 || records.length > 501) return fail('CSV_ROWS');
+    const seen = new Set();
+    for (let i = 1; i < records.length; i++) {
+      const row = records[i];
+      if (row.length !== 3) return fail('CSV_COLUMNS', starts[i]);
+      if (!fullMatch(/^[A-Za-z0-9][A-Za-z0-9_.:-]{0,79}$/, row[0])) return fail('CSV_ID', starts[i]);
+      if (seen.has(row[0])) return fail('CSV_DUPLICATE_ID', starts[i]);
+      if (!fullMatch(/^[A-Z]{3}$/, row[1])) return fail('CSV_CURRENCY', starts[i]);
+      if (!fullMatch(/^[+-]?[0-9]{1,12}(?:\.[0-9]{1,2})?$/, row[2])) return fail('CSV_AMOUNT', starts[i]);
+      seen.add(row[0]);
+    }
+    return {ok: true, scope: 'INPUT_FORMAT_ONLY', errors: [], rows: records.length - 1};
+  }
+  function validateCreation(mandate, requirements, source) {
+    const errors = [];
+    if (typeof mandate !== 'string' || !mandate.trim() || Array.from(mandate).length > 10000) errors.push(diagnosticFor({error: 'INVALID_MANDATE'}));
+    if (!Array.isArray(requirements) || !requirements.length || requirements.length > 32 || requirements.some(x => typeof x !== 'string' || !x.trim() || Array.from(x).length > 2000)) errors.push(diagnosticFor({error: 'INVALID_REQUIREMENTS'}));
+    const csv = validateCsv(source); errors.push(...csv.errors);
+    return {ok: errors.length === 0, scope: 'INPUT_FORMAT_ONLY', errors};
+  }
   function capability(cryptoProvider) {
     return Array.from(cryptoProvider.getRandomValues(new Uint8Array(32)), x => x.toString(16).padStart(2, '0')).join('');
   }
   function validResult(value) {
-    return Boolean(value && typeof value === 'object' && /^[a-f0-9]{64}$/.test(value.source_sha256) && Number.isInteger(value.rows) && value.rows > 0 && value.rows <= 500 && Array.isArray(value.row_ids) && value.row_ids.length === value.rows && Array.isArray(value.totals) && value.totals.every(x => x && /^[A-Z]{3}$/.test(x.currency) && /^-?[0-9]+\.[0-9]{2}$/.test(x.amount)));
+    return Boolean(value && typeof value === 'object' && fullMatch(/^[a-f0-9]{64}$/, value.source_sha256) && Number.isInteger(value.rows) && value.rows > 0 && value.rows <= 500 && Array.isArray(value.row_ids) && value.row_ids.length === value.rows && Array.isArray(value.totals) && value.totals.every(x => x && fullMatch(/^[A-Z]{3}$/, x.currency) && fullMatch(/^-?[0-9]+\.[0-9]{2}$/, x.amount)));
   }
   function currentCompletion(response, now, receivedAt, elapsed) {
     const completion = response && response.completion;
@@ -66,11 +148,41 @@
     if (action === 'produce') copy.result_request_id = uuidProvider();
     return {action, input: copy};
   }
-  const helpers = {capability, currentCompletion, verificationWindow, currentVerification, controlledRefusal, liveCreateRefusal, refusalCode, newIntent, validResult, SAMPLE, STORAGE_KEY};
+  const helpers = {capability, currentCompletion, verificationWindow, currentVerification, controlledRefusal, liveCreateRefusal, refusalCode, diagnosticFor, validateCsv, validateCreation, newIntent, validResult, SAMPLE, STORAGE_KEY};
   if (typeof module !== 'undefined' && module.exports) module.exports = helpers;
   root.SolAction = helpers;
   if (typeof document === 'undefined') return;
   const $ = id => document.getElementById(id);
+  function aria(element, name, value) {
+    if (typeof element.setAttribute === 'function') element.setAttribute(name, value);
+    else element[name === 'aria-busy' ? 'ariaBusy' : 'ariaInvalid'] = value;
+  }
+  // Shared by CSV and Mission preparation/transports. Busy never establishes
+  // that an effect succeeded or that a missing response is known.
+  const activities = new Map(); let activitySequence = 0;
+  const preparations = new Map();
+  root.SolUiActivity = {begin(channel, action) {
+    const labels = {prepare: 'Préparation de la demande : attente du verrou de reprise…', create: 'Enregistrement de la demande en cours…', produce: 'Calcul en cours…', verify: channel === 'mission' ? 'Vérification des liens en cours…' : 'Vérification du résultat en cours…', complete: 'Clôture en cours…', status: 'Consultation de l’état en cours…', audit: 'Contrôle du journal en cours…', receipt: 'Recherche du reçu en cours…', reconcile: 'Recherche de l’issue de la demande en cours…'};
+    if (preparations.has(channel)) { activities.delete(preparations.get(channel)); preparations.delete(channel); }
+    const key = ++activitySequence; activities.set(key, labels[action] || 'Demande en cours…');
+    if (action === 'prepare') preparations.set(channel, key);
+    function update() {
+      aria($('work-area'), 'aria-busy', activities.size ? 'true' : 'false');
+      const text = activities.size ? Array.from(activities.values()).join(' ') : '';
+      if ($('operation-status').textContent !== text) $('operation-status').textContent = text;
+    }
+    update(); return () => { activities.delete(key); if (preparations.get(channel) === key) preparations.delete(channel); update(); };
+  }};
+  let fieldDiagnostics = [];
+  function setDiagnostics(items) {
+    fieldDiagnostics = items.filter(Boolean);
+    ['mandate', 'requirements', 'source-csv'].forEach(field => {
+      const item = fieldDiagnostics.find(x => x.field === field);
+      aria($(field), 'aria-invalid', item ? 'true' : 'false');
+      $(field + '-error').hidden = !item;
+      $(field + '-error').textContent = item ? (item.line ? 'Ligne ' + item.line + ' : ' : '') + item.message : '';
+    });
+  }
   let state = null;
   let busy = false;
   let authority = null;
@@ -153,10 +265,12 @@
   }
   function showRefusal(response, known) {
     const code = refusalCode(response);
+    const diagnosis = diagnosticFor(response);
+    if (diagnosis) setDiagnostics([diagnosis]);
     const detail = code ? ' Code : ' + code + '.' : ' Aucun code reconnu n’est disponible dans cette vue.';
     const scope = known ? ' L’action refusée est sans effet métier ; son reçu reste enregistré.' : ' L’issue globale reste inconnue ; l’intention est conservée.';
     const next = code === 'FRESH_VERIFICATION_REQUIRED' ? (known ? ' Cliquez sur « Vérifier », puis sur « Clore » lorsque la vérification est actuelle.' : ' Rapprochez d’abord le reçu. Si le refus est confirmé, cliquez sur « Vérifier » avant de clore.') : ' Consultez le reçu et ses contrôles avant une nouvelle action explicite.';
-    show('Le serveur a refusé cette demande.' + detail + scope + next, known ? 'error' : 'unknown');
+    show('Le serveur a refusé cette demande.' + (diagnosis ? ' ' + diagnosis.message : detail) + scope + next, known ? 'error' : 'unknown');
   }
   function recordRefusal(original, response, reconciliation) {
     state.rejected_intents = (state.rejected_intents || []).concat([{intent: original.intent, response, reconciliation: reconciliation || undefined, proof_origin: response.durable_refusal === true ? 'DURABLE_SERVER_RECEIPT' : 'LIVE_CREATE_RPC_RESPONSE_ONLY', received_at: new Date().toISOString()}]);
@@ -189,12 +303,13 @@
   async function post(intent) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 27000);
+    const finish = root.SolUiActivity.begin('csv', intent.action);
     try {
       const response = await fetch('/api/job', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(intent), signal: controller.signal, cache: 'no-store'});
       const result = await response.json();
       if (!result || typeof result !== 'object' || Array.isArray(result)) throw new Error('Réponse illisible.');
       return result;
-    } finally { clearTimeout(timeout); }
+    } finally { clearTimeout(timeout); finish(); }
   }
   async function mutate(action, additions = {}, creation = null) {
     if (busy) return;
@@ -202,12 +317,16 @@
     authority = null; busy = true;
     if (action !== 'complete') verificationAuthority = null;
     const sentMonotonic = performance.now(), sentAt = Date.now();
+    const finishPreparation = root.SolUiActivity.begin('csv', 'prepare');
     try {
+      render();
       const reservation = await requireSlots().withKeys(slotKeys, () => {
         const latest = readState();
         assertNoMissionPending();
         if (latest && latest.pending) throw new Error('Une intention attend déjà son reçu exact : ' + latest.pending.intent.input.request_id + '. Aucun nouvel identifiant ne sera créé.');
         if (action === 'create') {
+          const format = validateCreation(creation.mandate, creation.requirements, creation.source_csv);
+          if (!format.ok) { setDiagnostics(format.errors); throw new Error('Les entrées doivent être corrigées avant l’enregistrement. Aucun envoi n’a eu lieu.'); }
           if (expectedView ? !slots.identity(latest, expectedView) || !latest.adaptation_draft : latest !== null) throw new Error('Un travail est déjà conservé ou a changé. Relisez sa reprise avant un nouvel enregistrement.');
           const previous = latest;
           const parent = previous && !previous.create_rejected ? previous : null;
@@ -257,14 +376,14 @@
       });
       if (outcome === 'UNRELATED') throw new Error('L’issue de la demande n’est pas corrélée. Consultez son reçu sans la relancer.');
       if (outcome === 'REJECTED') { showRefusal(response, true); return; }
-      if (outcome === 'REJECTED_CREATE_LIVE') { show('La création a été refusée sans modification métier. Sa réponse est conservée dans ce navigateur ; aucun reçu durable de ce refus n’est établi. Corrigez les entrées, puis enregistrez explicitement la correction.', 'error'); return; }
+      if (outcome === 'REJECTED_CREATE_LIVE') { const diagnosis = diagnosticFor(response); if (diagnosis) setDiagnostics([diagnosis]); show('La création a été refusée sans modification métier. ' + (diagnosis ? diagnosis.message + ' ' : '') + 'Sa réponse est conservée dans ce navigateur ; aucun reçu durable de ce refus n’est établi. Corrigez les entrées, puis enregistrez explicitement la correction.', 'error'); return; }
       if (outcome === 'UNKNOWN') { if (response.ok === false && response.status === 'REJECTED') showRefusal(response, false); else show('L’issue reste inconnue ou bloquée. L’intention et ses identifiants sont conservés ; aucun calcul ne sera rejoué.', 'unknown'); return; }
       const messages = {create: 'Demande conservée. Vous pouvez maintenant produire le résultat.', produce: 'Le calcul a produit un résultat. Lancez la vérification séparée.', verify: response.status === 'PASS' || (response.verification && response.verification.status === 'PASS') ? 'Le vérificateur a confirmé les contrats CSV. La clôture demandera une nouvelle observation.' : 'La vérification est conservée. Consultez sa portée avant de poursuivre.', complete: response.status === 'COMPLETED_BOUNDED' ? 'Clôture bornée reçue. Sa validité actuelle est affichée ci-dessous.' : 'La clôture ne confirme pas tous les contrôles. La tâche reste visible.'};
       show(messages[action] || 'Reçu conservé.', response.status === 'COMPLETED_BOUNDED' ? 'success' : 'neutral');
     } catch (error) {
       authority = null; verificationAuthority = null; refreshState();
       show(error.message && !/fetch|abort|network/i.test(error.message) ? error.message : 'La réponse n’est pas arrivée. Son issue reste inconnue : consultez le reçu, sans relancer l’action.', 'unknown');
-    } finally { busy = false; render(); }
+    } finally { busy = false; finishPreparation(); render(); }
   }
   async function read(action) {
     if (busy) return;
@@ -365,7 +484,9 @@
     if (state.pending.reconciliation) { await lookupReconciliation(state.pending); return; }
     const expected = credentials(), original = state.pending;
     authority = null; verificationAuthority = null; busy = true;
+    const finishPreparation = root.SolUiActivity.begin('csv', 'prepare');
     try {
+      render();
       const reservation = await requireSlots().withKeys(slotKeys, () => {
         state = requireCurrent(expected, original);
         const target = original.intent.input.request_id;
@@ -387,7 +508,7 @@
       else if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
       else render();
     } catch (error) { authority = null; refreshState(); show(error.message || 'Rapprochement sans réponse : issue inconnue.', 'unknown'); }
-    finally { busy = false; render(); }
+    finally { busy = false; finishPreparation(); render(); }
   }
   function renderVerification() {
     const current = verificationIsCurrent();
@@ -429,8 +550,10 @@
     const mutable = Boolean(slots && slots.available() && !storageBlocked && !missionPending);
     $('job-meta').hidden = !hasJob;
     const drafting = hasJob && state.adaptation_draft;
-    ['mandate', 'source-csv', 'sample', 'create'].forEach(id => { $(id).disabled = busy || (hasJob && !drafting); });
-    $('requirements').disabled = busy || hasJob;
+    ['mandate', 'source-csv', 'sample', 'create'].forEach(id => { $(id).disabled = !mutable || busy || pending || (hasJob && !drafting); });
+    $('requirements').disabled = !mutable || busy || (hasJob && !(drafting && state.create_rejected === true && !pending));
+    $('requirements-help').textContent = hasJob && !state.create_rejected ? 'Les exigences d’une demande acceptée restent conservées exactement, y compris dans une correction.' : 'Une exigence par ligne, 1 à 32 au total ; 2 000 caractères maximum chacune.';
+    $('mission-panel').hidden = !(missionPending || (hasJob && state.create_rejected !== true && validResult(state.result)));
     $('create').textContent = drafting ? 'Enregistrer la correction →' : 'Enregistrer cette demande →';
     ['status', 'audit'].forEach(id => { $(id).disabled = busy || !hasJob; });
     ['produce', 'verify', 'complete'].forEach(action => {
@@ -443,7 +566,7 @@
     });
     $('recovery').hidden = !pending;
     $('reconcile').disabled = busy || !pending || storageBlocked || (!(slots && slots.available()) && !state.pending.reconciliation);
-    $('reconcile').textContent = pending && state.pending.reconciliation ? 'Consulter le reçu du rapprochement' : 'Rapprocher le reçu';
+    $('reconcile').textContent = pending && state.pending.reconciliation ? 'Consulter l’issue recherchée' : 'Retrouver l’issue de la demande';
     $('adapt').disabled = !mutable || busy || !hasJob || pending || drafting;
     $('adapt').hidden = drafting;
     $('cancel-adapt').hidden = !drafting;
@@ -473,9 +596,12 @@
     const mandate = $('mandate').value.trim();
     const requirements = $('requirements').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
     const source = $('source-csv').value;
-    if (!mandate || !requirements.length || requirements.length > 32 || requirements.some(x => x.length > 2000) || new TextEncoder().encode(source).length > 32768) { show('Vérifiez la demande, 1 à 32 exigences et un CSV de 32 Kio maximum.', 'error'); return; }
+    const format = validateCreation(mandate, requirements, source);
+    setDiagnostics(format.errors);
+    if (!format.ok) { const first = format.errors[0]; show((first.line ? 'Ligne ' + first.line + ' : ' : '') + first.message + ' Les données restent dans le formulaire ; aucun envoi n’a eu lieu.', 'error'); $(first.field).focus(); return; }
     await mutate('create', {}, {mandate, requirements, source_csv: source});
   });
+  ['mandate', 'requirements', 'source-csv'].forEach(field => $(field).addEventListener('input', () => setDiagnostics(fieldDiagnostics.filter(x => x.field !== field))));
   $('sample').addEventListener('click', () => { $('mandate').value = 'Calculer les totaux de ce tableau fictif par devise et conserver chaque ligne.'; if (!state) $('requirements').value = DEFAULT_REQUIREMENTS.join('\n'); $('source-csv').value = SAMPLE; $('source-csv').focus(); });
   async function draft(enabled) {
     if (busy) return;
@@ -483,7 +609,9 @@
     if (!state || storageBlocked) { render(); return; }
     const expected = credentials();
     busy = true;
+    const finishPreparation = root.SolUiActivity.begin('csv', 'prepare');
     try {
+      render();
       await requireSlots().withKeys(slotKeys, () => {
         state = requireCurrent(expected);
         assertNoMissionPending();
@@ -494,7 +622,7 @@
       show(enabled ? 'Préparez une correction. Elle créera un nouvel objet lié au précédent, avec les mêmes exigences et de nouveaux contrôles. L’historique reste conservé.' : 'Correction abandonnée. La tâche précédente reste conservée.', 'neutral');
       if (enabled) $('mandate').focus();
     } catch (error) { refreshState(); show(error.message, 'unknown'); }
-    finally { busy = false; render(); }
+    finally { busy = false; finishPreparation(); render(); }
   }
   $('adapt').addEventListener('click', () => draft(true));
   $('cancel-adapt').addEventListener('click', () => draft(false));

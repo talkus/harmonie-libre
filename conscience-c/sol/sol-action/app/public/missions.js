@@ -195,12 +195,13 @@
   async function post(action, input) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
+    const finish = root.SolUiActivity ? root.SolUiActivity.begin('mission', action) : () => {};
     try {
       const response = await fetch('/api/mission', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action, input}), signal: controller.signal, cache: 'no-store'});
       const value = await response.json();
       if (!response.ok || !object(value)) throw new Error('Réponse illisible ou refusée. L’intention éventuelle reste conservée.');
       return value;
-    } finally { clearTimeout(timeout); }
+    } finally { clearTimeout(timeout); finish(); }
   }
   function matching(value, input) {
     return object(value) && value.ok === true && value.job_id === input.job_id && value.mission_id === input.mission_id &&
@@ -246,6 +247,7 @@
     const item = selected();
     if (!item) return;
     authority = null; busy = true; controls();
+    const finishPreparation = root.SolUiActivity ? root.SolUiActivity.begin('mission', 'prepare') : () => {};
     try {
       const reservation = await requireSlots().withKeys(slotKeys, () => {
         const credentials = job();
@@ -272,7 +274,7 @@
     } catch (error) {
       refreshSaved();
       message((error.message || 'Réponse indisponible.') + (saved.pending ? ' Intention conservée : ' + saved.pending.input.request_id + '. Aucun nouvel envoi automatique.' : ''), 'unknown');
-    } finally { busy = false; controls(); }
+    } finally { busy = false; finishPreparation(); controls(); }
   }
   async function receipt() {
     if (busy) return;
