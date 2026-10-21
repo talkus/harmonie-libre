@@ -16,7 +16,7 @@ function fixture(opts={}) {
  const readByKey=async key =>{reads++;assert.equal(key,ID);return stored;};
  const write=async payload=>{
    writes++;assert.equal(payload.idempotency_key,ID);
-   if(opts.noop)return;
+   if(opts.noop){if(opts.timeout)throw Error('network timeout');return;}
    stored=[{...row,...(opts.alteredRow||{})}];
    if(opts.timeout)throw Error('network timeout');
  };
