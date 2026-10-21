@@ -18,7 +18,7 @@ class RefusalProxyTests(unittest.TestCase):
   if action=='create':data.update(mandate='Synthetic fixture',requirements=['Exact cents'],source_csv='id,currency,amount\na,EUR,0.10\n',source_origin={'kind':'declared'})
   return {'action':action,'input':data}
  def test_existing_commands_cross_boundary_once(self):
-  for action in ['create','verify','complete','reconcile']:
+  for action in ['verify','complete','reconcile']:
    calls=[]
    def bridge(a,d):
     calls.append((a,d));return {'ok':False,'status':'REJECTED','action':action,'job_id':J,'request_id':R,'sqlstate':'P0001','error':'FRESH_VERIFICATION_REQUIRED','durable_refusal':True,'terminal':True,'effect':'NONE_SQL_TRANSACTION_ROLLED_BACK'}

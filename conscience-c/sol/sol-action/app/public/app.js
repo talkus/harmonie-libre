@@ -122,11 +122,14 @@
     return valid;
   }
   function controlledRefusal(intent, response, historical = false) {
+    const receiptOrigin = response && (
+      response.receipt_kind === 'CONTROLLED_REFUSAL' && response.receipt_recording_effect === 'APPEND_ONLY_BRIDGE_RECEIPT_RECORDED' ||
+      intent && intent.action === 'create' && response.receipt_kind === 'CONTROLLED_CREATION_REFUSAL' && response.receipt_recording_effect === 'APPEND_ONLY_CREATION_GUARD_RECEIPT_RECORDED');
     return Boolean(intent && intent.input && ['create', 'verify', 'complete'].includes(intent.action) && response && typeof response === 'object' && !Array.isArray(response) &&
       response.ok === false && response.action === intent.action && response.job_id === intent.input.job_id && response.request_id === intent.input.request_id &&
       (historical ? response.status === 'HISTORICAL_NOT_CURRENT' && response.historical_status === 'REJECTED' && response.needs_current_revalidation === true : response.status === 'REJECTED') &&
       response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK' && response.effect_scope === 'CONTROLLED_CORE_DISPATCH_SUBTRANSACTION_ONLY' && response.core_effect_scope === 'THIS_RPC_SQL_TRANSACTION_ONLY' &&
-      response.receipt_recording_effect === 'APPEND_ONLY_BRIDGE_RECEIPT_RECORDED' && response.business_effect === 'NONE_CORE_ACTION_ROLLED_BACK' && response.receipt_kind === 'CONTROLLED_REFUSAL' && response.terminal === true && response.durable_refusal === true &&
+      receiptOrigin && response.business_effect === 'NONE_CORE_ACTION_ROLLED_BACK' && response.terminal === true && response.durable_refusal === true &&
       response.worker_reexecuted === false && response.current_reuse_authorized === false && response.automatic_retry === false);
   }
   function liveCreateRefusal(intent, response) {
@@ -144,7 +147,7 @@
   }
   function newIntent(action, input, uuidProvider) {
     const copy = Object.assign({}, input);
-    if (!['status', 'audit', 'receipt'].includes(action)) copy.request_id = uuidProvider();
+    if (!['status', 'audit', 'receipt', 'creation_receipt'].includes(action)) copy.request_id = uuidProvider();
     if (action === 'produce') copy.result_request_id = uuidProvider();
     return {action, input: copy};
   }
@@ -162,7 +165,7 @@
   const activities = new Map(); let activitySequence = 0;
   const preparations = new Map();
   root.SolUiActivity = {begin(channel, action) {
-    const labels = {prepare: 'Préparation de la demande : attente du verrou de reprise…', create: 'Enregistrement de la demande en cours…', produce: 'Calcul en cours…', verify: channel === 'mission' ? 'Vérification des liens en cours…' : 'Vérification du résultat en cours…', complete: 'Clôture en cours…', status: 'Consultation de l’état en cours…', audit: 'Contrôle du journal en cours…', receipt: 'Recherche du reçu en cours…', reconcile: 'Recherche de l’issue de la demande en cours…'};
+    const labels = {prepare: 'Préparation de la demande : attente du verrou de reprise…', create: 'Enregistrement de la demande en cours…', produce: 'Calcul en cours…', verify: channel === 'mission' ? 'Vérification des liens en cours…' : 'Vérification du résultat en cours…', complete: 'Clôture en cours…', status: 'Consultation de l’état en cours…', audit: 'Contrôle du journal en cours…', receipt: 'Recherche du reçu en cours…', creation_receipt: 'Recherche de l’issue de création en cours…', reconcile: 'Recherche de l’issue de la demande en cours…'};
     if (preparations.has(channel)) { activities.delete(preparations.get(channel)); preparations.delete(channel); }
     const key = ++activitySequence; activities.set(key, labels[action] || 'Demande en cours…');
     if (action === 'prepare') preparations.set(channel, key);
@@ -477,10 +480,36 @@
     } catch (error) { authority = null; refreshState(); show(error.message || 'Lecture du reçu indisponible : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
   }
+  async function lookupCreation(original) {
+    const intent = original.intent;
+    const expected = {job_id: intent.input.job_id, capability: intent.input.capability};
+    authority = null; verificationAuthority = null; busy = true;
+    try {
+      render();
+      state = requireCurrent(expected, original);
+      const response = await post({action: 'creation_receipt', input: Object.assign({}, expected, {target_request_id: intent.input.request_id})});
+      if (response.ok !== true || response.action !== 'lookup_receipt' || response.job_id !== expected.job_id || response.target_request_id !== intent.input.request_id || response.current_reuse_authorized !== false || response.automatic_retry !== false) throw new Error('Lecture de création non corrélée. L’intention originale reste conservée.');
+      if (response.found !== true) { show('L’issue de l’enregistrement reste inconnue. La demande et son identifiant sont conservés ; aucun nouvel envoi n’est effectué.', 'unknown'); return; }
+      const receipt = response.receipt;
+      if (!receipt || response.target_action !== 'create' || receipt.status !== 'HISTORICAL_NOT_CURRENT' || receipt.current_reuse_authorized !== false || receipt.job_id !== expected.job_id || receipt.request_id !== intent.input.request_id || receipt.action !== 'create') throw new Error('Le reçu ne correspond pas à la création conservée. L’issue reste inconnue.');
+      const refused = controlledRefusal(intent, receipt, true);
+      const accepted = !refused && originalOutcome(original, receipt);
+      if (!refused && !accepted) throw new Error('Le reçu ne prouve ni une création acceptée ni un refus contrôlé. L’intention reste conservée.');
+      await commit(expected, original, () => {
+        if (refused) recordRefusal(original, receipt);
+        else { adopt(receipt, 'creation-receipt-observation'); state.pending = null; }
+        appendHistory('creation-receipt', response);
+      });
+      if (refused) show('Le refus d’enregistrement a été retrouvé. Aucun travail n’a été lancé par cette demande refusée. Sa preuve et la demande originale sont conservées ; vous pouvez préparer une demande corrigée.', 'error');
+      else show('La demande enregistrée a été retrouvée sans nouvel envoi. ' + (receipt.next_step_id === 'produce' ? 'Étape suivante : Produire. ' : '') + 'Cette lecture historique ne vérifie pas le résultat et ne permet pas de clore.', 'neutral');
+    } catch (error) { refreshState(); show(error.message || 'Lecture de création indisponible : issue inconnue.', 'unknown'); }
+    finally { busy = false; render(); }
+  }
   async function reconcile() {
     if (busy) return;
     refreshState();
     if (!state || !state.pending || storageBlocked) { render(); return; }
+    if (state.pending.intent && state.pending.intent.action === 'create') { await lookupCreation(state.pending); return; }
     if (state.pending.reconciliation) { await lookupReconciliation(state.pending); return; }
     const expected = credentials(), original = state.pending;
     authority = null; verificationAuthority = null; busy = true;

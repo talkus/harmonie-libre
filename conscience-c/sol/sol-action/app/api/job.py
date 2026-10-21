@@ -60,7 +60,7 @@ def correlated_response(response, action, data):
         return response
     if response.get("job_id") != data["job_id"]:
         raise UncertainOutcome("RPC_JOB_CORRELATION_UNKNOWN")
-    if action == "receipt":
+    if action in {"receipt", "creation_receipt"}:
         if response.get("action") != "lookup_receipt" or response.get("target_request_id") != data["target_request_id"]:
             raise UncertainOutcome("RPC_RECEIPT_CORRELATION_UNKNOWN")
     elif action in {"create", "verify", "complete", "reconcile"}:
@@ -168,7 +168,7 @@ def valid_uuid(value):
 def validate_request(body):
     exact_keys(body, ["action", "input"], ["action", "input"])
     action = body["action"]
-    if type(action) is not str or action not in {"create", "status", "produce", "verify", "complete", "reconcile", "audit", "receipt"}:
+    if type(action) is not str or action not in {"create", "status", "produce", "verify", "complete", "reconcile", "audit", "receipt", "creation_receipt"}:
         raise InputError("UNKNOWN_ACTION")
     data = body["input"]
     common = ["job_id", "capability"]
@@ -178,9 +178,9 @@ def validate_request(body):
         "verify": ["request_id", "expected_step_id"],
         "complete": ["request_id", "expected_step_id"],
         "reconcile": ["request_id", "production_request_id", "target_request_id"],
-        "status": [], "audit": [], "receipt": ["target_request_id"]
+        "status": [], "audit": [], "receipt": ["target_request_id"], "creation_receipt": ["target_request_id"]
     }[action]
-    required = common + ([] if action in {"status", "audit", "receipt"} else ["request_id"])
+    required = common + ([] if action in {"status", "audit", "receipt", "creation_receipt"} else ["request_id"])
     exact_keys(data, common + extra, required)
     valid_uuid(data["job_id"])
     if type(data["capability"]) is not str or not CAP.fullmatch(data["capability"]):
@@ -191,7 +191,7 @@ def validate_request(body):
     if action in {"produce", "verify", "complete"}:
         if data.get("expected_step_id") != action:
             raise InputError("EXPECTED_STEP_REQUIRED")
-    if action == "receipt" and "target_request_id" not in data:
+    if action in {"receipt", "creation_receipt"} and "target_request_id" not in data:
         raise InputError("ORIGINAL_REQUEST_REQUIRED")
     if action == "produce" and "result_request_id" not in data:
         raise InputError("RESULT_REQUEST_REQUIRED")
@@ -252,7 +252,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 def rpc(action, data, api_name="sol_action_api"):
-    if api_name not in {"sol_action_api", "sol_action_bridge_api"}:
+    if api_name not in {"sol_action_api", "sol_action_bridge_api", "sol_action_creation_api"}:
         raise InputError("RPC_NAME_FORBIDDEN")
     url, key = public_configuration()
     request = urllib.request.Request(url + "/rest/v1/rpc/" + api_name,
@@ -275,10 +275,26 @@ def rpc(action, data, api_name="sol_action_api"):
 
 
 def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
-             release_loader=bridge_runtime.load_release, token_loader=bridge_runtime.server_token):
+             release_loader=bridge_runtime.load_release, token_loader=bridge_runtime.server_token,
+             call_creation=None):
     action, data = validate_request(body)
     if call_bridge is None:
         call_bridge = lambda bridge_action, bridge_data: rpc(bridge_action, bridge_data, "sol_action_bridge_api")
+    if call_creation is None:
+        call_creation = lambda creation_action, creation_data: rpc(creation_action, creation_data, "sol_action_creation_api")
+    if action == "creation_receipt":
+        return correlated_response(call_creation("lookup_receipt", data), action, data)
+    if action == "create":
+        try:
+            release = release_loader()
+            token = token_loader()
+        except Exception as exc:
+            raise UncertainOutcome("RELEASE_OR_SERVER_CONFIGURATION_UNCONFIRMED") from exc
+        response = call_creation("create_guarded", {
+            "core_input": data, "bridge_token": token,
+            "release_hash": release["release_hash"], "manifest_hash": release["manifest_hash"],
+            "source_commit": release["source_commit"], "self_hash": release["self_hash"]})
+        return correlated_response(response, action, data)
     if action == "receipt":
         return correlated_response(call_bridge("lookup_receipt", data), action, data)
     if action == "produce":
@@ -308,9 +324,9 @@ def dispatch(body, call_rpc=rpc, worker=compute_csv, call_bridge=None,
                     "current_reuse_authorized": False}
     if action != "produce":
         # The recovery boundary checks request collisions for every command.
-        # It stores controlled refusals only for an already authorized job;
-        # refusing new-job creation never fabricates such a job or capability.
-        if action in {"create", "verify", "complete", "reconcile"}:
+        # Existing-job recovery remains in its pinned bridge. New creation uses
+        # the additive, release-authorized boundary above, without a dummy job.
+        if action in {"verify", "complete", "reconcile"}:
             response = call_bridge("execute", {"core_action": action, "core_input": data})
         else:
             response = call_rpc(action, data)
