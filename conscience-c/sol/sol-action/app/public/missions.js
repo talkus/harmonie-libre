@@ -41,6 +41,7 @@
   let busy = false;
   let missions = [];
   let listedJob = null;
+  let listedIdentity = null;
   let listedAt = null;
   let listValidated = false;
   let jobChanged = false;
@@ -50,38 +51,62 @@
     $('mission-message').textContent = text;
     $('mission-message').className = 'message ' + kind;
   }
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) {
-      const data = JSON.parse(raw);
-      if (!object(data) || data.version !== 1 || (data.job_id !== null && !UUID.test(data.job_id)) ||
-          (data.mission_id !== null && !UUID.test(data.mission_id))) throw new Error('invalid');
-      if (data.pending && (!object(data.pending) || data.pending.action !== 'verify' || !object(data.pending.input) ||
-          !UUID.test(data.pending.input.job_id) || !UUID.test(data.pending.input.mission_id) || !UUID.test(data.pending.input.request_id))) throw new Error('invalid');
-      saved = data;
-      if (saved.pending) message('Une vérification attend son reçu exact. UUID conservé : ' + saved.pending.input.request_id + '. Consultez-le sans créer une autre intention.', 'unknown');
+  const slots = root.SolIntentSlot;
+  const slotKeys = [JOB_KEY, KEY];
+  function requireSlots() {
+    if (!slots) throw new Error('Le contrôle de reprise entre onglets n’est pas chargé. Aucune nouvelle vérification ne sera envoyée.');
+    return slots;
+  }
+  function readSaved() {
+    return requireSlots().read(KEY, slots.validMission) || {version: 1, job_id: null, mission_id: null, pending: null};
+  }
+  function refreshSaved(notify = false) {
+    try {
+      const latest = readSaved();
+      const changed = !slots.same(latest, saved);
+      const priorPending = saved.pending;
+      saved = latest; storageBlocked = false;
+      if (changed) {
+        authority = null;
+        if (notify && saved.pending) message('Une vérification attend son reçu exact. UUID conservé : ' + saved.pending.input.request_id + '. Aucun nouvel envoi automatique.', 'unknown');
+        else if (notify && priorPending) message('La reprise partagée a changé dans un autre onglet. Consultez les liens ; aucun ancien reçu n’est devenu actuel.', 'unknown');
+      }
+      return changed;
+    } catch (error) {
+      storageBlocked = true; authority = null;
+      message(error.message || 'La reprise locale est illisible et reste conservée.', 'unknown');
+      return false;
     }
-  } catch (_) {
-    storageBlocked = true;
-    message('La reprise des liens est illisible ou indisponible. Aucune nouvelle vérification ne sera envoyée ; les données locales restent conservées.', 'unknown');
-  }
-  function save(value = saved) {
-    if (storageBlocked) throw new Error('La reprise locale est indisponible. Aucune nouvelle intention ne peut être envoyée.');
-    try { localStorage.setItem(KEY, JSON.stringify(value)); }
-    catch (_) { throw new Error('La sauvegarde de l’intention a échoué. Aucune nouvelle requête de vérification ne sera envoyée.'); }
-  }
-  function clearPending() {
-    const next = Object.assign({}, saved, {pending: null});
-    save(next);
-    saved = next;
   }
   function job() {
-    let value;
-    try { value = JSON.parse(localStorage.getItem(JOB_KEY) || 'null'); } catch (_) { value = null; }
-    if (!object(value) || !UUID.test(value.job_id) || typeof value.capability !== 'string' || !HASH.test(value.capability)) {
-      throw new Error('Enregistrez ou reprenez d’abord un travail CSV dans ce navigateur. Aucun lien n’est créé automatiquement.');
-    }
+    const value = requireSlots().read(JOB_KEY, slots.validJob);
+    if (!value) throw new Error('Enregistrez ou reprenez d’abord un travail CSV dans ce navigateur. Aucun lien n’est créé automatiquement.');
     return {job_id: value.job_id, capability: value.capability};
+  }
+  function assertJob(expected) {
+    const current = job();
+    if (!slots.identity(current, expected)) throw new Error('La tâche ou sa clé de reprise a changé. L’intention originale reste conservée ; aucun nouvel appel n’est envoyé.');
+    return current;
+  }
+  async function clearPending(expected, credentials) {
+    return requireSlots().withKeys(slotKeys, () => {
+      assertJob(credentials);
+      const latest = readSaved();
+      if (!slots.same(latest.pending, expected)) throw new Error('Une autre intention occupe la reprise partagée. Elle reste conservée ; le reçu reçu ne lui donne aucune autorité.');
+      slots.write(KEY, Object.assign({}, latest, {pending: null}));
+      saved = readSaved();
+    });
+  }
+  async function sendVerification(input, credentials, pending) {
+    // Start fetch in the locked callback, but return a box so the lock is not
+    // held across the network. The durable pending prevents another reservation.
+    const packet = await requireSlots().withKeys(slotKeys, () => {
+      assertJob(credentials);
+      const latest = readSaved();
+      if (!slots.same(latest.pending, pending)) throw new Error('L’intention partagée a changé avant l’envoi. Aucun nouvel appel n’est envoyé.');
+      return {response: post('verify', Object.assign({}, input, {capability: credentials.capability}))};
+    });
+    return packet.response;
   }
   function selected() { return missions.find(item => item.mission_id === $('mission-select').value) || null; }
   function copyProvenance(reason) {
@@ -92,8 +117,8 @@
   function checkJobChange() {
     if (!listedJob) return false;
     let current = null;
-    try { const value = JSON.parse(localStorage.getItem(JOB_KEY) || 'null'); if (object(value) && UUID.test(value.job_id)) current = value.job_id; } catch (_) { /* Reading metadata grants no action. */ }
-    if (current === listedJob) return false;
+    try { current = job(); } catch (_) { /* Invalid shared data grants no action. */ }
+    if (slots && slots.identity(current, listedIdentity)) return false;
     const changed = !jobChanged || listValidated;
     listValidated = false; jobChanged = true; authority = null;
     copyProvenance('Le travail du navigateur a changé ou est indisponible. Consulter ses liens avant toute nouvelle vérification.');
@@ -101,10 +126,11 @@
     return changed;
   }
   function controls() {
+    refreshSaved();
     checkJobChange();
     $('mission-load').disabled = busy;
     $('mission-select').disabled = busy || Boolean(saved.pending) || missions.length === 0;
-    $('mission-verify').disabled = busy || !listValidated || storageBlocked || Boolean(saved.pending) || !selected();
+    $('mission-verify').disabled = busy || !listValidated || storageBlocked || !slots || !slots.available() || Boolean(saved.pending) || !selected();
     $('mission-receipt').hidden = !saved.pending;
     $('mission-receipt').disabled = busy || !saved.pending || storageBlocked;
     $('mission-pending-id').hidden = !saved.pending;
@@ -153,7 +179,7 @@
     freshness();
   }
   function freshness() {
-    if (checkJobChange()) controls();
+    if (refreshSaved(true) || checkJobChange()) controls();
     const fresh = authority && currentTechnical(authority.response, Date.now(), authority.receivedAt, performance.now() - authority.monotonic);
     if (fresh) {
       const seconds = Math.max(0, Math.min(60, Math.ceil((Date.parse(shownReport.expires_at) - Date.now()) / 1000), Math.ceil((60000 - (performance.now() - authority.monotonic)) / 1000)));
@@ -188,13 +214,16 @@
     if (busy) return;
     authority = null; listValidated = false; busy = true; controls(); freshness();
     try {
+      refreshSaved();
       const credentials = job();
+      assertJob(credentials);
       const response = await post('status', credentials);
+      assertJob(credentials);
       if (response.ok !== true || response.job_id !== credentials.job_id || response.status !== 'HISTORICAL_NOT_CURRENT' || response.current_reuse_authorized !== false || !Array.isArray(response.missions)) throw new Error('La liste des missions n’est pas corrélée à cette tâche. Aucun lien n’est adopté.');
       if (!response.missions.every(item => object(item) && UUID.test(item.mission_id) && HASH.test(item.definition_hash) && object(item.definition) && object(item.definition.job) &&
           typeof item.definition.job.mandate === 'string' && Array.isArray(item.definition.job.requirements) && item.definition.job.requirements.every(value => typeof value === 'string') &&
           HASH.test(item.definition.job.source_sha256) && matrix(item.definition.requirements_matrix))) throw new Error('Une définition reçue est incomplète. Aucune vérification ne sera préparée depuis cette réponse.');
-      missions = response.missions; listedJob = credentials.job_id; listedAt = new Date().toISOString(); listValidated = true; jobChanged = false;
+      missions = response.missions; listedJob = credentials.job_id; listedIdentity = credentials; listedAt = new Date().toISOString(); listValidated = true; jobChanged = false;
       copyProvenance('Lecture historique corrélée à cette tâche. Une vérification explicite demande un nouveau contrôle.');
       shownReport = null; $('mission-report-details').hidden = true; freshness();
       $('mission-select').replaceChildren(text('option', missions.length ? 'Choisir une mission enregistrée' : 'Aucune mission enregistrée'));
@@ -213,44 +242,62 @@
     finally { busy = false; controls(); }
   }
   async function verify() {
-    if (busy || !listValidated || saved.pending || storageBlocked) return;
+    if (busy || !listValidated) return;
     const item = selected();
     if (!item) return;
-    authority = null; busy = true;
+    authority = null; busy = true; controls();
     try {
-      const credentials = job();
-      if (credentials.job_id !== listedJob) throw new Error('La tâche du navigateur a changé. Consultez ses liens avant de préparer une vérification.');
-      const input = {job_id: credentials.job_id, mission_id: item.mission_id, request_id: crypto.randomUUID()};
-      saved = {version: 1, job_id: input.job_id, mission_id: input.mission_id, pending: {action: 'verify', input, prepared_at: new Date().toISOString()}};
-      save(); controls(); freshness();
+      const reservation = await requireSlots().withKeys(slotKeys, () => {
+        const credentials = job();
+        const latest = readSaved();
+        saved = latest;
+        if (latest.pending) throw new Error('Une vérification attend déjà son reçu exact. UUID conservé : ' + latest.pending.input.request_id + '.');
+        const parent = slots.read(JOB_KEY, slots.validJob);
+        if (parent.pending) throw new Error('Le travail CSV attend encore son reçu. Rapprochez cette intention avant une nouvelle vérification de mission.');
+        if (!slots.identity(credentials, listedIdentity) || !listValidated) throw new Error('La tâche du navigateur a changé. Consultez ses liens avant de préparer une vérification.');
+        const input = {job_id: credentials.job_id, mission_id: item.mission_id, request_id: crypto.randomUUID()};
+        const pending = {action: 'verify', input, prepared_at: new Date().toISOString()};
+        slots.write(KEY, {version: 1, job_id: input.job_id, mission_id: input.mission_id, pending});
+        saved = readSaved();
+        return {input, credentials, pending};
+      });
+      controls(); freshness();
       const monotonic = performance.now();
-      const response = await post('verify', Object.assign({}, input, {capability: credentials.capability}));
-      if (!matching(response, input) || !sameMatrix(response, input.mission_id)) throw new Error('Le reçu ne correspond pas à l’intention et à toutes ses exigences. Conservez l’identifiant et consultez son reçu sans relancer.');
-      clearPending();
+      const response = await sendVerification(reservation.input, reservation.credentials, reservation.pending);
+      if (!matching(response, reservation.input) || !sameMatrix(response, reservation.input.mission_id)) throw new Error('Le reçu ne correspond pas à l’intention et à toutes ses exigences. Conservez l’identifiant et consultez son reçu sans relancer.');
+      await clearPending(reservation.pending, reservation.credentials);
       if (currentTechnical(response, Date.now(), Date.now(), performance.now() - monotonic)) authority = {response, receivedAt: Date.now(), monotonic};
-      report(response.report, 'LIVE_VERIFY', input.mission_id);
+      report(response.report, 'LIVE_VERIFY', reservation.input.mission_id);
       message(response.report.technical_verdict === 'PASS' ? 'Contrôles techniques reçus. La demande générale reste UNKNOWN ; les dates et toutes les exigences restent visibles.' : 'Le contrôle technique ne confirme pas le résultat et ses liens. Le reçu est conservé, sans décision sur le mandat général.', response.report.technical_verdict === 'PASS' ? 'neutral' : 'unknown');
-    } catch (error) { message((error.message || 'Réponse indisponible.') + (saved.pending ? ' Intention conservée : ' + saved.pending.input.request_id + '. Aucun nouvel envoi automatique.' : ''), 'unknown'); }
-    finally { busy = false; controls(); }
+    } catch (error) {
+      refreshSaved();
+      message((error.message || 'Réponse indisponible.') + (saved.pending ? ' Intention conservée : ' + saved.pending.input.request_id + '. Aucun nouvel envoi automatique.' : ''), 'unknown');
+    } finally { busy = false; controls(); }
   }
   async function receipt() {
-    if (busy || !saved.pending || storageBlocked) return;
+    if (busy) return;
+    refreshSaved();
+    if (!saved.pending || storageBlocked) return;
     const pending = saved.pending;
     authority = null; busy = true; controls(); freshness();
     try {
       const credentials = job();
       if (credentials.job_id !== pending.input.job_id) throw new Error('L’intention appartient à une autre tâche. Son identifiant reste conservé.');
       const input = {job_id: pending.input.job_id, mission_id: pending.input.mission_id, target_request_id: pending.input.request_id, capability: credentials.capability};
+      assertJob(credentials);
+      if (!slots.same(readSaved().pending, pending)) throw new Error('La reprise partagée a changé. Son intention reste conservée.');
       const response = await post('receipt', input);
       if (response.ok !== true || response.job_id !== input.job_id || response.mission_id !== input.mission_id || response.target_request_id !== input.target_request_id || response.current_reuse_authorized !== false) throw new Error('Consultation du reçu non corrélée. L’intention originale reste inconnue.');
       if (response.found !== true) { message('Reçu absent : issue UNKNOWN. L’intention et son UUID restent conservés ; aucune vérification n’est rejouée.', 'unknown'); return; }
       // SQL preserves the original receipt status. The read-only wrapper and
       // disabled authority make it historical; its text is not a current grant.
       if (response.status !== 'HISTORICAL_NOT_CURRENT' || !matching(response.receipt, pending.input) || response.receipt.current_reuse_authorized !== false || !sameMatrix(response.receipt, input.mission_id)) throw new Error('Le reçu historique est incomplet ou lié à une autre intention. L’intention originale reste conservée.');
-      clearPending();
+      assertJob(credentials);
+      if (!slots.same(readSaved().pending, pending)) throw new Error('Une autre intention est conservée. Ce reçu historique ne peut pas l’effacer.');
+      if (slots.available()) await clearPending(pending, credentials);
       report(response.receipt.report, 'HISTORICAL_RECEIPT', input.mission_id);
-      message('Reçu exact retrouvé en lecture seule. Il reste historique ; aucune vérification n’a été rejouée. Demande générale : UNKNOWN.', 'neutral');
-    } catch (error) { message(error.message || 'Reçu indisponible ; intention conservée.', 'unknown'); }
+      message('Reçu exact retrouvé en lecture seule. Il reste historique ; aucune vérification n’a été rejouée. ' + (slots.available() ? '' : 'Le verrou entre onglets est indisponible : l’intention reste conservée. ') + 'Demande générale : UNKNOWN.', 'neutral');
+    } catch (error) { refreshSaved(); message(error.message || 'Reçu indisponible ; intention conservée.', 'unknown'); }
     finally { busy = false; controls(); }
   }
   $('mission-load').addEventListener('click', load);
@@ -266,8 +313,15 @@
     } else { $('mission-definition').hidden = true; $('mission-report-details').hidden = true; freshness(); }
     controls();
   });
+  function sharedChanged(event) {
+    if (event && event.type === 'storage' && event.key !== null && ![KEY, JOB_KEY].includes(event.key)) return;
+    authority = null; refreshSaved(true); controls(); freshness();
+  }
   setInterval(freshness, 500);
-  document.addEventListener('visibilitychange', freshness);
-  root.addEventListener('pageshow', freshness);
+  document.addEventListener('visibilitychange', sharedChanged);
+  root.addEventListener('pageshow', sharedChanged);
+  root.addEventListener('storage', sharedChanged);
+  refreshSaved(true);
+  if (slots && !slots.available()) message(slots.unavailable().message, 'unknown');
   controls();
 })(typeof globalThis === 'undefined' ? this : globalThis);

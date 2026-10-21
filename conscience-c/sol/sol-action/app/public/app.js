@@ -28,23 +28,72 @@
   let busy = false;
   let authority = null;
   let message = {text: 'Votre demande sera conservée avant tout calcul.', kind: 'neutral'};
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed && parsed.version === 1 && typeof parsed.job_id === 'string' && /^[0-9a-f]{64}$/.test(parsed.capability)) {
-        state = parsed;
-        message = {text: state.pending ? 'Reprise : l’intention conservée attend son reçu. Aucun calcul n’a été relancé.' : 'Tâche retrouvée. Consultez son état ; toute clôture affichée reste historique après une reprise.', kind: 'unknown'};
+  const slots = root.SolIntentSlot;
+  const MISSION_KEY = 'sol-action-mission-session-v1';
+  const slotKeys = [STORAGE_KEY, MISSION_KEY];
+  let storageBlocked = false;
+  let readOnlyView = null;
+  function requireSlots() {
+    if (!slots) throw new Error('Le contrôle de reprise entre onglets n’est pas chargé. Aucune nouvelle action ne sera envoyée.');
+    return slots;
+  }
+  function readState() { return requireSlots().read(STORAGE_KEY, slots.validJob); }
+  function refreshState(notify = false) {
+    try {
+      const latest = readState();
+      if (readOnlyView && (slots.available() || !slots.same(latest, readOnlyView.base))) readOnlyView = null;
+      const visible = readOnlyView ? readOnlyView.value : latest;
+      const changed = !slots.same(state, visible);
+      state = visible; storageBlocked = false;
+      if (changed) {
+        authority = null;
+        if (notify) message = {text: state && state.pending ? 'Reprise partagée : l’intention ' + state.pending.intent.input.request_id + ' attend son reçu. Aucun calcul n’a été relancé.' : 'La tâche partagée a changé. Consultez son état ; les reçus restent historiques.', kind: 'unknown'};
       }
+      return changed;
+    } catch (error) {
+      storageBlocked = true; authority = null;
+      message = {text: error.message || 'La reprise locale est illisible et reste conservée.', kind: 'unknown'};
+      return false;
     }
-  } catch (_) {
-    message = {text: 'La reprise locale est indisponible. Autorisez le stockage de ce site avant de commencer.', kind: 'error'};
   }
-  function save() {
-    if (!state) return;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-    catch (_) { throw new Error('La sauvegarde locale a échoué. Aucune nouvelle requête ne sera envoyée.'); }
+  function otherPending() {
+    const mission = requireSlots().read(MISSION_KEY, slots.validMission);
+    return mission && mission.pending;
   }
+  function assertNoMissionPending() {
+    const pending = otherPending();
+    if (pending) throw new Error('Une vérification de mission attend son reçu exact : ' + pending.input.request_id + '. Retrouvez ce reçu avant une nouvelle action CSV.');
+  }
+  function requireCurrent(expected, pending) {
+    const latest = readState();
+    if (!slots.identity(latest, expected)) throw new Error('La tâche ou sa clé a changé dans un autre onglet. Aucun ancien reçu ne remplace la reprise partagée.');
+    if (pending !== undefined && !slots.same(latest.pending, pending)) throw new Error('Une autre intention est conservée. L’ancien retour ne peut pas l’effacer ni autoriser une suite.');
+    return latest;
+  }
+  function persist() {
+    slots.write(STORAGE_KEY, state);
+    state = readState();
+  }
+  async function commit(expected, pending, callback) {
+    return requireSlots().withKeys(slotKeys, () => {
+      state = requireCurrent(expected, pending);
+      const result = callback();
+      persist();
+      return result;
+    });
+  }
+  async function send(intent, expected, pending, blockMission = true) {
+    const packet = await requireSlots().withKeys(slotKeys, () => {
+      state = requireCurrent(expected, pending);
+      if (blockMission) assertNoMissionPending();
+      // Fetch starts under the lock. The promise is boxed so the durable pending,
+      // rather than a long-held network lock, excludes a second reservation.
+      return {response: post(intent)};
+    });
+    return packet.response;
+  }
+  refreshState(true);
+  if (slots && !slots.available()) message = {text: slots.unavailable().message, kind: 'unknown'};
   function appendHistory(action, response) {
     state.history = (state.history || []).concat([{action, received_at: new Date().toISOString(), response}]).slice(-40);
   }
@@ -81,57 +130,94 @@
       return result;
     } finally { clearTimeout(timeout); }
   }
-  async function mutate(action, additions = {}) {
-    if (!state || busy || state.pending) return;
-    const intent = newIntent(action, Object.assign(credentials(), additions), () => crypto.randomUUID());
-    state.pending = {intent, prepared_at: new Date().toISOString()};
-    authority = null;
-    busy = true;
+  async function mutate(action, additions = {}, creation = null) {
+    if (busy) return;
+    const expectedView = state && {job_id: state.job_id, capability: state.capability};
+    authority = null; busy = true;
     try {
-      // Save identifiers and exact intention before the first network operation.
-      save(); render();
+      const reservation = await requireSlots().withKeys(slotKeys, () => {
+        const latest = readState();
+        assertNoMissionPending();
+        if (latest && latest.pending) throw new Error('Une intention attend déjà son reçu exact : ' + latest.pending.intent.input.request_id + '. Aucun nouvel identifiant ne sera créé.');
+        if (action === 'create') {
+          if (expectedView ? !slots.identity(latest, expectedView) || !latest.adaptation_draft : latest !== null) throw new Error('Un travail est déjà conservé ou a changé. Relisez sa reprise avant un nouvel enregistrement.');
+          const previous = latest;
+          const parent = previous && !previous.create_rejected ? previous : null;
+          if (parent && JSON.stringify(creation.requirements) !== JSON.stringify(parent.requirements)) throw new Error('Les exigences antérieures restent conservées exactement pour cette correction.');
+          state = {version: 1, job_id: crypto.randomUUID(), capability: capability(crypto), mandate: creation.mandate, requirements: creation.requirements, source_csv: creation.source_csv, next_step_id: null, history: [], pending: null,
+            ancestors: previous ? (previous.ancestors || []).concat([{job_id: previous.job_id, capability: previous.capability, mandate: previous.mandate, requirements: previous.requirements, history: previous.create_rejected ? previous.history : undefined, source_csv: previous.create_rejected ? previous.source_csv : undefined, rejected_intents: previous.rejected_intents || []}]) : []};
+          additions = {mandate: creation.mandate, requirements: creation.requirements, source_csv: creation.source_csv, source_origin: {kind: 'declared'}};
+          if (parent) { additions.parent_job_id = parent.job_id; additions.parent_capability = parent.capability; }
+        } else {
+          if (!slots.identity(latest, expectedView)) throw new Error('La tâche ou sa clé a changé. Consultez le travail conservé avant une nouvelle action.');
+          if (latest.adaptation_draft) throw new Error('Une correction est en préparation. Enregistrez-la ou annulez-la explicitement.');
+          state = latest;
+        }
+        const intent = newIntent(action, Object.assign(credentials(), additions), () => crypto.randomUUID());
+        state.pending = {intent, prepared_at: new Date().toISOString()};
+        persist();
+        return {intent, pending: state.pending, expected: credentials()};
+      });
+      render();
       const sentMonotonic = performance.now();
-      const response = await post(intent);
-      if (!correlated(intent, response)) {
-        appendHistory(action, response); save();
-        throw new Error('L’issue de la demande n’est pas corrélée. Consultez son reçu sans la relancer.');
-      }
-      adopt(response, action);
-      if (response.ok === false && response.status === 'REJECTED' && response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK') {
-        state.rejected_intents = (state.rejected_intents || []).concat([{intent, response, received_at: new Date().toISOString()}]);
+      const response = await send(reservation.intent, reservation.expected, reservation.pending);
+      const outcome = await commit(reservation.expected, reservation.pending, () => {
+        if (!correlated(reservation.intent, response)) {
+          appendHistory(action, response);
+          return 'UNRELATED';
+        }
+        adopt(response, action);
+        if (response.ok === false && response.status === 'REJECTED' && response.effect === 'NONE_SQL_TRANSACTION_ROLLED_BACK') {
+          state.rejected_intents = (state.rejected_intents || []).concat([{intent: reservation.intent, response, received_at: new Date().toISOString()}]);
+          state.pending = null;
+          if (action === 'create') { state.create_rejected = true; state.adaptation_draft = true; }
+          return 'REJECTED';
+        }
+        if (response.ok !== true || response.status === 'OUTCOME_UNKNOWN' || response.pending) return 'UNKNOWN';
         state.pending = null;
-        if (action === 'create') { state.create_rejected = true; state.adaptation_draft = true; }
-        save(); show('La demande a été refusée sans effet pour cet appel. Le refus est conservé. ' + (action === 'create' ? 'Corrigez les entrées avant un nouvel enregistrement explicite.' : 'Consultez les contrôles et préparez une action explicite.'), 'error');
-        return;
-      }
-      if (response.ok !== true || response.status === 'OUTCOME_UNKNOWN' || response.pending) {
-        save(); show('L’issue reste inconnue ou bloquée. L’intention et ses identifiants sont conservés ; aucun calcul ne sera rejoué.', 'unknown');
-        return;
-      }
-      state.pending = null;
-      if (action === 'complete' && response.current_reuse_authorized === true && !response.deduplicated) authority = {response, receivedAt: Date.now(), monotonic: sentMonotonic};
-      save();
+        if (action === 'complete' && response.current_reuse_authorized === true && !response.deduplicated) authority = {response, receivedAt: Date.now(), monotonic: sentMonotonic};
+        return 'RECORDED';
+      });
+      if (outcome === 'UNRELATED') throw new Error('L’issue de la demande n’est pas corrélée. Consultez son reçu sans la relancer.');
+      if (outcome === 'REJECTED') { show('La demande a été refusée sans effet pour cet appel. Le refus est conservé. ' + (action === 'create' ? 'Corrigez les entrées avant un nouvel enregistrement explicite.' : 'Consultez les contrôles et préparez une action explicite.'), 'error'); return; }
+      if (outcome === 'UNKNOWN') { show('L’issue reste inconnue ou bloquée. L’intention et ses identifiants sont conservés ; aucun calcul ne sera rejoué.', 'unknown'); return; }
       const messages = {create: 'Demande conservée. Vous pouvez maintenant produire le résultat.', produce: 'Le calcul a produit un résultat. Lancez la vérification séparée.', verify: response.status === 'PASS' || (response.verification && response.verification.status === 'PASS') ? 'Le vérificateur a confirmé les contrats CSV. La clôture demandera une nouvelle observation.' : 'La vérification est conservée. Consultez sa portée avant de poursuivre.', complete: response.status === 'COMPLETED_BOUNDED' ? 'Clôture bornée reçue. Sa validité actuelle est affichée ci-dessous.' : 'La clôture ne confirme pas tous les contrôles. La tâche reste visible.'};
       show(messages[action] || 'Reçu conservé.', response.status === 'COMPLETED_BOUNDED' ? 'success' : 'neutral');
     } catch (error) {
+      authority = null; refreshState();
       show(error.message && !/fetch|abort|network/i.test(error.message) ? error.message : 'La réponse n’est pas arrivée. Son issue reste inconnue : consultez le reçu, sans relancer l’action.', 'unknown');
     } finally { busy = false; render(); }
   }
   async function read(action) {
-    if (!state || busy) return;
+    if (busy) return;
+    readOnlyView = null; refreshState();
+    if (!state || storageBlocked) { render(); return; }
+    const expected = credentials();
+    const observedPending = state.pending;
     if (action === 'status') authority = null;
     busy = true;
     try {
       render();
-      const response = await post({action, input: credentials()});
-      if (response.ok !== true || !responseJob(response)) throw new Error('Lecture non confirmée. L’état actuel reste inconnu.');
+      requireCurrent(expected, observedPending);
+      const response = await post({action, input: expected});
+      if (response.ok !== true || response.job_id !== expected.job_id) throw new Error('Lecture non confirmée. L’état actuel reste inconnu.');
+      const apply = () => {
+        if (action === 'audit') appendHistory(action, response);
+        else adopt(response, action);
+      };
+      if (slots.available()) await commit(expected, observedPending, apply);
+      else {
+        state = requireCurrent(expected, observedPending);
+        const base = JSON.parse(JSON.stringify(state));
+        apply();
+        readOnlyView = {base, value: state};
+      }
       if (action === 'audit') {
-        appendHistory(action, response);
         const audit = response.audit || response;
         $('journal-status').textContent = audit.status === 'PASS' && audit.chain_valid === true && audit.relations_valid === true && audit.source_hash_valid === true && audit.definition_hash_valid === true ? 'Journal contrôlé par le serveur pour cette tâche.' : 'Contrôle du journal reçu ; intégrité non confirmée dans cette vue.';
-      } else adopt(response, action);
-      save(); show(state.pending ? 'État consulté. L’intention conservée attend toujours son rapprochement ; cette lecture ne l’a pas rejouée.' : 'État consulté. Les reçus antérieurs restent historiques ; Clore demande une nouvelle preuve.', 'neutral');
-    } catch (error) { show(error.message || 'Lecture indisponible.', 'unknown'); }
+      }
+      show((state.pending ? 'État consulté. L’intention conservée attend toujours son rapprochement ; cette lecture ne l’a pas rejouée.' : 'État consulté. Les reçus antérieurs restent historiques ; Clore demande une nouvelle preuve.') + (slots.available() ? '' : ' Verrou entre onglets indisponible : cette lecture ne modifie pas la reprise partagée.'), 'neutral');
+    } catch (error) { authority = null; refreshState(); show(error.message || 'Lecture indisponible.', 'unknown'); }
     finally { busy = false; render(); }
   }
   function originalOutcome(original, response) {
@@ -148,7 +234,7 @@
   function applyReconciliation(original, intent, response, source) {
     if (!correlated(intent, response) || response.action !== 'reconcile') throw new Error('Rapprochement non corrélé. L’intention reste inconnue.');
     if (response.ok !== true || response.pending !== false || response.status === 'OUTCOME_UNKNOWN' || response.outcome_known !== true || response.worker_reexecuted !== false) {
-      show('Le reçu ne permet pas d’établir l’issue. La tâche reste bloquée ; aucun calcul n’est relancé.', 'unknown'); return false;
+      message = {text: 'Le reçu ne permet pas d’établir l’issue. La tâche reste bloquée ; aucun calcul n’est relancé.', kind: 'unknown'}; return false;
     }
     // The recovered reconciliation is a wrapper, never a replacement for the
     // original production identity. Its nested outcome must match that identity.
@@ -157,48 +243,59 @@
     const productionRecovered = original.intent.action === 'produce' && response.production_request_id === original.intent.input.request_id && validResult(response.result) &&
       typeof expectedSource === 'string' && /^[a-f0-9]{64}$/.test(expectedSource) && response.source_sha256 === expectedSource && response.result.source_sha256 === expectedSource && outcome && outcome.source_sha256 === expectedSource;
     if (!outcome || (original.intent.action === 'produce' && !productionRecovered) || (!productionRecovered && outcome.pending)) {
-      show('L’issue originale n’est pas confirmée. L’intention reste conservée.', 'unknown'); return false;
+      message = {text: 'L’issue originale n’est pas confirmée. L’intention reste conservée.', kind: 'unknown'}; return false;
     }
     adopt(response, source);
     if (validResult(outcome.result) && !state.result) state.result = outcome.result;
     state.pending = null;
-    save(); show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
     return true;
   }
   async function lookupReconciliation(original) {
     const intent = original.reconciliation && original.reconciliation.intent;
-    if (!intent || intent.action !== 'reconcile' || !intent.input || intent.input.job_id !== state.job_id || typeof intent.input.request_id !== 'string') {
-      show('L’identifiant du rapprochement conservé est illisible. L’intention originale reste conservée.', 'unknown'); return;
-    }
+    if (!intent || intent.action !== 'reconcile' || !intent.input || typeof intent.input.request_id !== 'string') { show('L’identifiant du rapprochement conservé est illisible. L’intention originale reste conservée.', 'unknown'); return; }
+    const expected = {job_id: intent.input.job_id, capability: intent.input.capability};
     authority = null; busy = true;
     try {
       render();
-      // A lookup has no mutation UUID and never replaces the durable intention.
-      const response = await post({action: 'receipt', input: Object.assign(credentials(), {target_request_id: intent.input.request_id})});
-      if (!responseJob(response) || response.ok !== true || response.target_request_id !== intent.input.request_id || response.current_reuse_authorized !== false || response.automatic_retry !== false) throw new Error('Lecture du reçu non corrélée. L’intention originale reste conservée.');
+      state = requireCurrent(expected, original);
+      const response = await post({action: 'receipt', input: Object.assign({}, expected, {target_request_id: intent.input.request_id})});
+      if (response.job_id !== expected.job_id || response.ok !== true || response.target_request_id !== intent.input.request_id || response.current_reuse_authorized !== false || response.automatic_retry !== false) throw new Error('Lecture du reçu non corrélée. L’intention originale reste conservée.');
       if (response.found !== true) { show('Le reçu du rapprochement reste absent ou inconnu. L’intention originale est conservée ; aucun calcul n’est relancé.', 'unknown'); return; }
       const receipt = response.receipt;
       if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt) || receipt.status !== 'HISTORICAL_NOT_CURRENT' || receipt.current_reuse_authorized !== false) throw new Error('Reçu historique illisible. L’intention originale reste conservée.');
-      applyReconciliation(original, intent, receipt, 'receipt-reconcile-observation');
-    } catch (error) { show(error.message || 'Lecture du reçu indisponible : issue inconnue.', 'unknown'); }
+      if (!slots.available()) { state = requireCurrent(expected, original); show('Reçu historique retrouvé. Le verrou entre onglets est indisponible : l’intention reste conservée, sans nouveau calcul ni nouvel envoi.', 'unknown'); return; }
+      const applied = await commit(expected, original, () => applyReconciliation(original, intent, receipt, 'receipt-reconcile-observation'));
+      if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+    } catch (error) { authority = null; refreshState(); show(error.message || 'Lecture du reçu indisponible : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
   }
   async function reconcile() {
-    if (!state || !state.pending || busy) return;
-    const original = state.pending;
-    // An ambiguous reconciliation is looked up by its exact UUID, never replayed.
-    if (original.reconciliation) { await lookupReconciliation(original); return; }
-    const target = original.intent.input.request_id;
-    const addition = {target_request_id: target};
-    if (original.intent.action === 'produce') addition.production_request_id = target;
-    const intent = newIntent('reconcile', Object.assign(credentials(), addition), () => crypto.randomUUID());
-    original.reconciliation = {intent, prepared_at: new Date().toISOString()};
+    if (busy) return;
+    refreshState();
+    if (!state || !state.pending || storageBlocked) { render(); return; }
+    if (state.pending.reconciliation) { await lookupReconciliation(state.pending); return; }
+    const expected = credentials(), original = state.pending;
     authority = null; busy = true;
     try {
-      save(); render();
-      const response = await post(intent);
-      if (!applyReconciliation(original, intent, response, 'reconcile-observation')) { appendHistory('reconcile', response); save(); }
-    } catch (error) { show(error.message || 'Rapprochement sans réponse : issue inconnue.', 'unknown'); }
+      const reservation = await requireSlots().withKeys(slotKeys, () => {
+        state = requireCurrent(expected, original);
+        const target = original.intent.input.request_id;
+        const addition = {target_request_id: target};
+        if (original.intent.action === 'produce') addition.production_request_id = target;
+        const intent = newIntent('reconcile', Object.assign(credentials(), addition), () => crypto.randomUUID());
+        state.pending.reconciliation = {intent, prepared_at: new Date().toISOString()};
+        persist();
+        return {intent, pending: state.pending};
+      });
+      render();
+      const response = await send(reservation.intent, expected, reservation.pending, false);
+      const applied = await commit(expected, reservation.pending, () => {
+        const result = applyReconciliation(original, reservation.intent, response, 'reconcile-observation');
+        if (!result) appendHistory('reconcile', response);
+        return result;
+      });
+      if (applied) show('Issue rapprochée sans relancer le calcul. Toute clôture retrouvée reste historique.', 'neutral');
+    } catch (error) { authority = null; refreshState(); show(error.message || 'Rapprochement sans réponse : issue inconnue.', 'unknown'); }
     finally { busy = false; render(); }
   }
   function renderFreshness() {
@@ -218,10 +315,14 @@
     }
   }
   function render() {
+    refreshState();
     $('message').textContent = message.text;
     $('message').className = 'message ' + message.kind;
     const hasJob = Boolean(state);
     const pending = hasJob && Boolean(state.pending);
+    let missionPending = false;
+    try { missionPending = Boolean(otherPending()); } catch (error) { storageBlocked = true; authority = null; message = {text: error.message, kind: 'unknown'}; $('message').textContent = message.text; $('message').className = 'message unknown'; }
+    const mutable = Boolean(slots && slots.available() && !storageBlocked && !missionPending);
     $('job-meta').hidden = !hasJob;
     const drafting = hasJob && state.adaptation_draft;
     ['mandate', 'source-csv', 'sample', 'create'].forEach(id => { $(id).disabled = busy || (hasJob && !drafting); });
@@ -230,19 +331,20 @@
     ['status', 'audit'].forEach(id => { $(id).disabled = busy || !hasJob; });
     ['produce', 'verify', 'complete'].forEach(action => {
       const next = hasJob && state.next_step_id;
-      $(action).disabled = busy || !hasJob || pending || drafting || !(next === action || (action === 'complete' && state.completion) || (action === 'verify' && validResult(state.result)));
+      $(action).disabled = !mutable || busy || !hasJob || pending || drafting || !(next === action || (action === 'complete' && state.completion) || (action === 'verify' && validResult(state.result)));
       const ordered = ['produce', 'verify', 'complete'];
       const index = ordered.indexOf(next);
       const done = hasJob && (index > ordered.indexOf(action) || (action === 'produce' && validResult(state.result)) || (action === 'complete' && state.completion));
       $('step-' + action).className = done ? 'done' : next === action ? 'active' : '';
     });
     $('recovery').hidden = !pending;
-    $('reconcile').disabled = busy || !pending;
+    $('reconcile').disabled = busy || !pending || storageBlocked || (!(slots && slots.available()) && !state.pending.reconciliation);
     $('reconcile').textContent = pending && state.pending.reconciliation ? 'Consulter le reçu du rapprochement' : 'Rapprocher le reçu';
-    $('adapt').disabled = busy || !hasJob || pending || drafting;
+    $('adapt').disabled = !mutable || busy || !hasJob || pending || drafting;
     $('adapt').hidden = drafting;
     $('cancel-adapt').hidden = !drafting;
-    $('cancel-adapt').disabled = busy;
+    $('cancel-adapt').disabled = !mutable || busy;
+    $('create').disabled = $('create').disabled || !mutable;
     if (hasJob) {
       $('saved-mandate').textContent = state.mandate;
       $('job-id').textContent = 'Tâche ' + state.job_id;
@@ -260,31 +362,37 @@
     }
     renderFreshness();
   }
-  $('job-form').addEventListener('submit', event => {
+  $('job-form').addEventListener('submit', async event => {
     event.preventDefault();
-    if (busy || (state && !state.adaptation_draft)) return;
-    const previous = state && state.adaptation_draft ? state : null;
-    const parent = previous && !previous.create_rejected ? previous : null;
+    if (busy) return;
     const mandate = $('mandate').value.trim();
     const requirements = $('requirements').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
     const source = $('source-csv').value;
     if (!mandate || !requirements.length || requirements.length > 32 || requirements.some(x => x.length > 2000) || new TextEncoder().encode(source).length > 32768) { show('Vérifiez la demande, 1 à 32 exigences et un CSV de 32 Kio maximum.', 'error'); return; }
-    if (parent && JSON.stringify(requirements) !== JSON.stringify(parent.requirements)) { show('Les exigences antérieures restent conservées exactement pour cette correction.', 'error'); return; }
-    state = {version: 1, job_id: crypto.randomUUID(), capability: capability(crypto), mandate, requirements, source_csv: source, next_step_id: null, history: [], pending: null, ancestors: previous ? (previous.ancestors || []).concat([{job_id: previous.job_id, capability: previous.capability, mandate: previous.mandate, requirements: previous.requirements, history: previous.create_rejected ? previous.history : undefined, source_csv: previous.create_rejected ? previous.source_csv : undefined, rejected_intents: previous.rejected_intents || []}]) : []};
-    const fields = {mandate, requirements, source_csv: source, source_origin: {kind: 'declared'}};
-    if (parent) { fields.parent_job_id = parent.job_id; fields.parent_capability = parent.capability; }
-    mutate('create', fields);
+    await mutate('create', {}, {mandate, requirements, source_csv: source});
   });
   $('sample').addEventListener('click', () => { $('mandate').value = 'Calculer les totaux de ce tableau fictif par devise et conserver chaque ligne.'; if (!state) $('requirements').value = DEFAULT_REQUIREMENTS.join('\n'); $('source-csv').value = SAMPLE; $('source-csv').focus(); });
-  $('adapt').addEventListener('click', () => {
-    if (!state || state.pending || busy) return;
-    state.adaptation_draft = true;
-    $('mandate').value = state.mandate; $('requirements').value = state.requirements.join('\n'); $('source-csv').value = state.source_csv;
-    try { save(); show('Préparez une correction. Elle créera un nouvel objet lié au précédent, avec les mêmes exigences et de nouveaux contrôles. L’historique reste conservé.', 'neutral'); }
-    catch (error) { state.adaptation_draft = false; show(error.message, 'error'); }
-    $('mandate').focus();
-  });
-  $('cancel-adapt').addEventListener('click', () => { if (!state || busy) return; state.adaptation_draft = false; try { save(); show('Correction abandonnée. La tâche précédente reste conservée.', 'neutral'); } catch (error) { show(error.message, 'error'); } });
+  async function draft(enabled) {
+    if (busy) return;
+    refreshState();
+    if (!state || storageBlocked) { render(); return; }
+    const expected = credentials();
+    busy = true;
+    try {
+      await requireSlots().withKeys(slotKeys, () => {
+        state = requireCurrent(expected);
+        assertNoMissionPending();
+        if (state.pending) throw new Error('Une intention attend son reçu exact. La reprise ne sera pas remplacée par une correction.');
+        state.adaptation_draft = enabled; persist();
+      });
+      if (enabled) { $('mandate').value = state.mandate; $('requirements').value = state.requirements.join('\n'); $('source-csv').value = state.source_csv; }
+      show(enabled ? 'Préparez une correction. Elle créera un nouvel objet lié au précédent, avec les mêmes exigences et de nouveaux contrôles. L’historique reste conservé.' : 'Correction abandonnée. La tâche précédente reste conservée.', 'neutral');
+      if (enabled) $('mandate').focus();
+    } catch (error) { refreshState(); show(error.message, 'unknown'); }
+    finally { busy = false; render(); }
+  }
+  $('adapt').addEventListener('click', () => draft(true));
+  $('cancel-adapt').addEventListener('click', () => draft(false));
   ['produce', 'verify', 'complete'].forEach(action => $(action).addEventListener('click', () => mutate(action, {expected_step_id: action})));
   $('status').addEventListener('click', () => read('status'));
   $('audit').addEventListener('click', () => read('audit'));
@@ -303,7 +411,14 @@
   fetch('/provider-observation.json', {cache: 'no-store'}).then(response => response.ok ? response.json() : null).then(snapshot => {
     if (snapshot && snapshot.provider === 'StorageChain' && snapshot.connector_read_executed === true && typeof snapshot.observed_at === 'string' && typeof snapshot.public_summary === 'string') $('storagechain-status').textContent = 'StorageChain · lecture observée le ' + snapshot.observed_at + ' : ' + snapshot.public_summary + ' Cette observation datée ne prouve pas un accès actuel.';
   }).catch(() => {});
-  setInterval(renderFreshness, 500);
+  function sharedChanged(event) {
+    if (event && event.type === 'storage' && event.key !== null && !slotKeys.includes(event.key)) return;
+    authority = null; readOnlyView = null; refreshState(true); render();
+  }
+  root.addEventListener('storage', sharedChanged);
+  root.addEventListener('pageshow', sharedChanged);
+  document.addEventListener('visibilitychange', sharedChanged);
+  setInterval(() => { if (refreshState(true)) render(); else renderFreshness(); }, 500);
   if (state) { $('mandate').value = state.mandate; $('requirements').value = state.requirements.join('\n'); $('source-csv').value = state.source_csv; }
   render();
 })(typeof globalThis === 'undefined' ? this : globalThis);
