@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/job.py": {
+      "maxDuration": 30,
+      "includeFiles": "{release-source.json,build-info.json,bridge_runtime.py,public/**,public/.well-known/**,api/**,vercel.json}"
+    },
+    "api/mcp.py": {
+      "maxDuration": 10,
+      "includeFiles": "{release-source.json,build-info.json,bridge_runtime.py,public/**,public/.well-known/**,api/**,vercel.json}"
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schema": "SOL_ACTION_CONDUCT_DISCLOSURE/v1",
+  "compensation": {"paid_by":"other","referral_fee":false,"listing_fee":false,"success_fee_pct":0,"disclosure_url":"https://sol-action-verifiee.vercel.app/conduct-disclosure.json"},
+  "description": "Demonstration developed at the user's request. This application implements no referral, listing, success fee or billing mechanism. Hosting remains governed by the owner's provider accounts. This is a declaration, not an audit of those accounts.",
+  "mcp_scope": "Only the public release manifest is exposed. Business jobs remain capability-protected outside MCP.",
+  "does_not_establish": ["Correctness of CSV totals", "Truth of input data", "General advantage over Codex", "Security certification", "Authenticated truth of this compensation declaration"]
+}

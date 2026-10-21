@@ -1,0 +1,25 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "SOL-Action — version publique",
+  "description": "Public read-only release manifest of a bounded CSV application. This interface neither executes jobs nor exposes user data. Protocol conformance is not calculation correctness, safety, or general intelligence.",
+  "version": "0.2.0",
+  "url": "https://sol-action-verifiee.vercel.app/mcp",
+  "preferredTransport": "JSONRPC",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "extensions": [{
+      "uri": "https://w3id.org/horizonshield/conduct/v1",
+      "required": false,
+      "params": {
+        "compensation": {"paid_by":"other","referral_fee":false,"listing_fee":false,"success_fee_pct":0,"disclosure_url":"https://sol-action-verifiee.vercel.app/conduct-disclosure.json"},
+        "measured_endpoints": ["https://sol-action-verifiee.vercel.app/mcp"]
+      }
+    }]
+  },
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [{"id":"release_manifest","name":"Read the release manifest","description":"Returns public source commit and file hashes only; never a job, CSV, capability or secret.","tags":["read-only","release-provenance"]}],
+  "compensation": {"paid_by":"other","referral_fee":false,"listing_fee":false,"success_fee_pct":0,"disclosure_url":"https://sol-action-verifiee.vercel.app/conduct-disclosure.json"},
+  "limitations": ["Compensation is a declaration, not externally authenticated.","No A2A task execution or delegation is implemented.","No assertion of correctness, safety, or complete semantic coverage."]
+}

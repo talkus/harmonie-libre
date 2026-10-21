@@ -1,0 +1,5 @@
+{
+  "allow_tool_call": true,
+  "endpoints": ["https://sol-action-verifiee.vercel.app/mcp"],
+  "scope": "Consent is limited to the deterministic public read-only release_manifest tool. No job operation or private data is exposed at this endpoint."
+}
