@@ -81,5 +81,6 @@ check('fresh_bounded_completion',r.get('ok') is True and r.get('status')=='COMPL
 r=post('status')
 check('status_does_not_refresh_authority',r.get('current_reuse_authorized') is False)
 r=post('audit')
-check('append_only_job_chain_valid',r.get('audit',{}).get('valid') is True)
+audit=r.get('audit',{})
+check('append_only_job_chain_valid',audit.get('status')=='PASS' and all(audit.get(k) is True for k in ['chain_valid','relations_valid','source_hash_valid','definition_hash_valid']))
 print(json.dumps({'job_id':plan['job_id'],'passed':sum(x['passed'] for x in checks),'total':len(checks)},ensure_ascii=False))
