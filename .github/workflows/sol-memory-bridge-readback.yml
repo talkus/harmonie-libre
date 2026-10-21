@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Test write-readback non-replay gate without secrets
-        run: node --test sol-memory-bridge/tests/write-receipt.test.cjs
+        run: node --test sol-memory-bridge/tests/*.test.cjs
       - name: Validate Edge source syntax boundary
         run: |
           node --check sol-memory-bridge/bridge-write-protocol.js
