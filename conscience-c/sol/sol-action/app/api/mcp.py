@@ -5,7 +5,7 @@ import re
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 PROTOCOLS = {"2025-03-26", "2025-06-18", "2025-11-25"}
 ORIGIN = "https://sol-action-verifiee.vercel.app"
 LIMIT = 16384
@@ -13,9 +13,9 @@ LIMIT = 16384
 TOOL = {
     "name": "release_manifest",
     "title": "Version publique du service SOL-Action",
-    "description": "Read this deployment's source manifest and pinned GitHub commit. Read-only. No job data. This is not a certificate of calculation correctness or safety.",
+    "description": "Read hashes of the listed bundled server files and the pinned GitHub commit. CDN assets are checked separately at deployment time. Read-only; no job data or correctness certificate.",
     "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
-    "outputSchema": {"type": "object", "properties": {"available": {"type": "boolean"}, "release_hash": {"type": "string"}, "source_commit": {"type": "string"}, "source_files": {"type": "object"}, "source_repository": {"type": "string"}, "source_directory": {"type": "string"}, "does_not_establish": {"type": "array", "items": {"type": "string"}}}, "required": ["available", "release_hash", "source_commit", "source_files", "source_repository", "source_directory", "does_not_establish"], "additionalProperties": False},
+    "outputSchema": {"type": "object", "properties": {"available": {"type": "boolean"}, "release_hash": {"type": "string"}, "source_commit": {"type": "string"}, "source_files": {"type": "object"}, "file_scope": {"type": "string", "const": "BUNDLED_SERVER_FILES_ONLY"}, "source_repository": {"type": "string"}, "source_directory": {"type": "string"}, "does_not_establish": {"type": "array", "items": {"type": "string"}}}, "required": ["available", "release_hash", "source_commit", "source_files", "file_scope", "source_repository", "source_directory", "does_not_establish"], "additionalProperties": False},
     "annotations": {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False},
 }
 
@@ -45,8 +45,8 @@ def release_manifest(base=None):
             raise ValueError("RELEASE_UNAVAILABLE")
     digest = hashlib.sha256(raw).hexdigest()
     release_hash = hashlib.sha256((digest + ":" + commit).encode("ascii")).hexdigest()
-    return {"available": True, "release_hash": release_hash, "source_commit": commit, "source_files": files, "source_repository": "https://github.com/talkus/harmonie-libre", "source_directory": "conscience-c/sol/sol-action",
-            "does_not_establish": ["Correctness of CSV inputs or totals", "Semantic satisfaction of a general mandate", "Independent runtime or machine attestation", "Safety or conduct of unlisted tools", "Unchanging future deployment"]}
+    return {"available": True, "release_hash": release_hash, "source_commit": commit, "source_files": files, "file_scope": "BUNDLED_SERVER_FILES_ONLY", "source_repository": "https://github.com/talkus/harmonie-libre", "source_directory": "conscience-c/sol/sol-action",
+            "does_not_establish": ["Correctness of CSV inputs or totals", "Semantic satisfaction of a general mandate", "Independent runtime or machine attestation", "Runtime reading of CDN assets; their HTTP checks are separate and dated", "Safety or conduct of unlisted tools", "Unchanging future deployment"]}
 
 
 def dispatch(message, loader=release_manifest):

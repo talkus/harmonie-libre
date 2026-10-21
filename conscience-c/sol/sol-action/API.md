@@ -1,4 +1,4 @@
-# SOL-Action Bridge 0.1.0 — nouvelle extension additive
+# SOL-Action Bridge 0.1.0 — extension additive, candidate corrigée v2
 
 Ancien contrat conservé : `public.sol_action_api(text,jsonb)`, schéma `sol_action`, worker `SOL-ACTION-PY/0.1.0` et oracle SQL inchangés. Le fichier `backend.sql` crée exclusivement `sol_action_bridge` et `public.sol_action_bridge_api(p_action text,p_input jsonb default '{}') returns jsonb`. Ne pas rejouer une installation ambiguë : CREATE SCHEMA échoue si elle existe déjà.
 
@@ -30,13 +30,15 @@ Deux tables privées append-only : `releases` et `bindings`. Elles sont sous RLS
 
 `releases` contient : `release_hash`, `manifest_hash`, `source_commit`, `source_files` (objet chemin→SHA256), `deployment_id`, `deployment_url`, `token_sha256`, empreintes courantes des runtimes SQL core et bridge et date/acteur d'admission. `token_sha256` est SHA256 du token **texte UTF-8**, jamais le token brut. Les empreintes SQL ont des valeurs par défaut calculées lors de l'admission. Le registre reste de confiance opérateur ; un INSERT ne constitue ni promotion ni preuve fournisseur.
 
-Fichier `app/release-source.json`, produit après gel de tous les fichiers source :
+Fichier `app/release-source.json`, produit après gel des quatre fichiers serveur effectivement attendus dans le bundle Python :
 
 ```json
-{"schema":"SOL_ACTION_RELEASE_SOURCE/v1","files":{"api/job.py":"SHA256_REEL","bridge_runtime.py":"SHA256_REEL","public/app.js":"SHA256_REEL"}}
+{"schema":"SOL_ACTION_RELEASE_SOURCE/v1","files":{"api/job.py":"SHA256_REEL","api/mcp.py":"SHA256_REEL","bridge_runtime.py":"SHA256_REEL","vercel.json":"SHA256_REEL"}}
 ```
 
-Inclure tous les fichiers effectifs de cette release (y compris le MCP et l'interface ajoutés par les autres parties de la tâche), mais exclure `release-source.json` et `build-info.json` pour éviter une référence à sa propre empreinte. Les chemins sont relatifs et confinés à l'application, 128 fichiers maximum, hashes hexadécimaux minuscules. `api/job.py` et `bridge_runtime.py` sont obligatoires.
+Pour cette candidate v2, la liste est exactement : `api/job.py`, `api/mcp.py`, `bridge_runtime.py` et `vercel.json`, chacun associé au SHA256 de ses octets. Le contrôle annonce `file_scope:BUNDLED_SERVER_FILES_ONLY`. Il exclut les fichiers `public/*`, le manifeste lui-même et `build-info.json`. Les chemins restent relatifs et confinés à l'application ; les empreintes sont hexadécimales minuscules. L'absence d'un fichier attendu doit refuser le contrôle, sans miroir ni substitution par une copie CDN.
+
+Les fichiers publics de l'interface restent reliés au commit GitHub. Leur livraison est contrôlée séparément par des lectures HTTP du CDN, avec URL, déploiement ou alias observé, date UTC, code HTTP et SHA256 des octets reçus, comparés aux fichiers du commit. Cette observation externe datée ne prouve pas leur présence dans le processus Python, ni leur état futur après déplacement d'un alias.
 
 Après le commit GitHub, produire `app/build-info.json` :
 
@@ -48,11 +50,9 @@ Calculs exacts : `manifest_hash = SHA256(octets exacts de release-source.json)` 
 
 Dans le runtime Vercel, `SOL_BRIDGE_TOKEN` doit être une variable privée de 64 caractères hexadécimaux minuscules indépendants. Ne jamais l'écrire dans le code, le manifeste, `vercel.json`, les fichiers publics, GitHub ou les reçus. Le détenteur de ce secret peut se présenter comme le wrapper ; ce mécanisme n'est pas une attestation matérielle d'identité.
 
-Avant toute nouvelle production, `bridge_runtime.py` relit le manifeste, le build-info et les octets réels de chaque fichier, vérifie chaque empreinte, puis calcule l'empreinte réelle `self_hash` de `api/job.py`. Il refuse les fichiers absents, chemins sortants, schémas inconnus et doublons de clés JSON. Inclure ces fichiers dans le bundle Vercel, car les assets CDN ne sont pas automatiquement lisibles par Python :
+Avant toute nouvelle production, `bridge_runtime.py` relit le manifeste, le build-info et les octets réels des quatre fichiers serveur, vérifie chaque empreinte, puis calcule l'empreinte réelle `self_hash` de `api/job.py`. Il refuse les fichiers absents, chemins sortants, schémas inconnus et doublons de clés JSON. Ce contrôle local ne télécharge pas les fichiers publics du CDN.
 
-```json
-{"functions":{"api/job.py":{"maxDuration":30,"includeFiles":"{release-source.json,build-info.json,bridge_runtime.py,public/**,api/**}"}}}
-```
+Le diagnostic du 21 octobre 2026 a relu le [builder Python Vercel](https://github.com/vercel/vercel/blob/main/packages/python/src/index.ts), blob Git observé `abc51249f9c454d6f046a18e43e80dad328d35df` : `public/**` figure dans ses exclusions prédéfinies et ce code ne lit pas `includeFiles`. L'ancienne configuration `includeFiles` n'établissait donc pas la présence des assets publics dans la fonction. La candidate v2 la retire et réduit le manifeste aux quatre fichiers serveur ; leur inclusion réelle reste à vérifier dans le nouveau déploiement. La lecture de cette source du builder ne prouve pas à elle seule la version exacte utilisée par Vercel pour un déploiement donné.
 
 Le wrapper appelle ensuite `bind` avec exactement : `job_id,capability,production_request_id,release_hash,manifest_hash,source_commit,self_hash,bridge_token`. `production_request_id` est l'UUID déjà préparé du futur begin. L'admission, le token, le job et les empreintes sont contrôlés avant toute insertion.
 
@@ -61,6 +61,8 @@ Le bind prend le verrou job du noyau existant. Il refuse un ancien begin ou rés
 Le bridge appelle l'ancien `sol_action.dispatch('begin', ...)` avec ce même UUID dans **la même transaction** que la binding. Il exige un begin nouveau et corrélé avant l'insertion finale ; un refus contrôlé du noyau est converti en exception afin d'annuler le bloc entier. Une erreur d'insertion de la binding annule aussi le begin. Aucun ancien corps n'est modifié. La réponse nouvelle ajoute `binding_and_begin_atomic:true,begin_receipt:{...}` avec le reçu réel du begin. Le wrapper utilise exclusivement ce reçu : il n'envoie jamais de second appel begin. Une binding passée ne rappelle ni le noyau ni le worker. Une réponse perdue laisse donc soit aucune des deux lignes, soit les deux ; lookup_receipt peut retrouver le begin historique. L'absence de résultat après begin garde le pending original, sans relance automatique. La fenêtre ancienne begin-avant-worker reste explicitement possible ; aucune nouvelle fenêtre binding-sans-intention n'est revendiquée comme résolue par une répétition.
 
 ## Portée des preuves
+
+La preview `dpl_bcBJNStnWYpRbYdjy77zwtKwDZAo` a rendu une erreur de métadonnées ou d'intégrité lors de `release_manifest` ; le service antérieur a été rétabli et aucun job métier n'y a été lancé. Cette erreur reste conservée. La correction v2 constitue une nouvelle candidate à contrôler : elle ne reprend aucun succès de déploiement, de calcul ou de contrôle externe de la candidate précédente. Un manifeste localement correct ne vaut pas validation du nouveau runtime ; les réponses serveur actuelles et les observations CDN datées restent des preuves distinctes.
 
 Le token et le selfhash attestent au plus une réservation faite par le détenteur du secret et la comparaison locale des octets annoncés. Ils ne prouvent ni une machine hostile isolée, ni une signature Vercel, ni le lien matériel entre un processus et un résultat. L'ancienne RPC demeure accessible avec ses anciens droits ; elle ne reçoit aucune nouvelle attestation de version. Une binding n'ajoute aucun verdict favorable à ses reçus. L'oracle SQL indépendant et son périmètre CSV restent séparés.
 

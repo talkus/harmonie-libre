@@ -2,12 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/job.py": {
-      "maxDuration": 30,
-      "includeFiles": "{release-source.json,build-info.json,bridge_runtime.py,public/**,public/.well-known/**,api/**,vercel.json}"
+      "maxDuration": 30
     },
     "api/mcp.py": {
-      "maxDuration": 10,
-      "includeFiles": "{release-source.json,build-info.json,bridge_runtime.py,public/**,public/.well-known/**,api/**,vercel.json}"
+      "maxDuration": 10
     }
   },
   "headers": [
