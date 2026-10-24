@@ -1,0 +1,14 @@
+{
+  "id": "demo-shadow-001",
+  "claim": "ROUTINE_OBSERVATION",
+  "asserted": true,
+  "impact": "low",
+  "reversible": true,
+  "evidence": [
+    {
+      "source": "github_commit",
+      "ref": "README.md (référence documentaire, non attestée)",
+      "observed_at": "2026-10-24T00:00:00Z"
+    }
+  ]
+}

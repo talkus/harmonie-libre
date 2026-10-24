@@ -1,0 +1,452 @@
+[
+  {
+    "id": "CAS-01",
+    "claim": "RATIFICATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-02",
+    "claim": "HUMAN_APPROVAL",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-03",
+    "claim": "RATIFICATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-04",
+    "claim": "HUMAN_APPROVAL",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-05",
+    "claim": "PRODUCTION_PROMOTION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-06",
+    "claim": "RATIFICATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-07",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-08",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-09",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-10",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-11",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-12",
+    "claim": "BYPASS_FREE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-13",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-14",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-15",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-16",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-17",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-18",
+    "claim": "WORM_ATTESTATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-19",
+    "claim": "RUNTIME_STATE",
+    "expected": "ADVISE",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T11:59:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-20",
+    "claim": "ROUTINE_OBSERVATION",
+    "expected": "ADVISE",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-21",
+    "claim": "RUNTIME_STATE",
+    "expected": "ADVISE",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T11:59:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-22",
+    "claim": "ROUTINE_OBSERVATION",
+    "expected": "ADVISE",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-23",
+    "claim": "INDEPENDENT_AI_JUDGE",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-24",
+    "claim": "GLOBAL_RELIABILITY",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-25",
+    "claim": "AUTO_APPLICATION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-26",
+    "claim": "GLOBAL_RELIABILITY",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-27",
+    "claim": "ROUTINE_OBSERVATION",
+    "expected": "ADVISE",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-28",
+    "claim": "PRODUCTION_PROMOTION",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-29",
+    "claim": "HUMAN_APPROVAL",
+    "expected": "SUSPEND",
+    "asserted": true,
+    "impact": "low",
+    "reversible": true,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "CAS-30",
+    "claim": "PRODUCTION_PROMOTION",
+    "expected": "HUMAN_SEAL_REQUIRED",
+    "asserted": true,
+    "impact": "high",
+    "reversible": false,
+    "evidence": [
+      {
+        "source": "archivist_memory",
+        "ref": "MEM-06/corpus-30-not-independently-validated",
+        "observed_at": "2026-10-24T00:00:00Z"
+      }
+    ]
+  }
+]
