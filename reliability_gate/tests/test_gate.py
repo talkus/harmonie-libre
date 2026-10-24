@@ -15,7 +15,7 @@ def request(**updates):
         "asserted": True, "impact": "low", "reversible": True,
         "evidence": [{
             "source": "supabase_sql", "ref": "readback:non-attested",
-            "observed_at": "2026-10-24T11:59:00Z",
+            "observed_at": "2026-10-23T11:59:00Z",
         }],
     }
     r.update(updates)
