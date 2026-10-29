@@ -26,3 +26,15 @@ Les tests adversariaux reconstruisent aussi une chaîne SHA-256 cohérente aprè
 Le témoin accepte aussi le format `base64url` non capitonné accepté par le moteur Web Crypto de l'application. Les 15 tests du témoin sont exécutables avec `node --test witness/tests/verify.test.mjs` ; leur succès local ne garantit pas leur succès dans GitHub Actions avant vérification du nouveau workflow.
 
 **Barrière de déploiement :** aucun système de CI ne déploie l'application privée Netlify. Un déploiement doit être réalisé séparément et observé `ready` ; aucune simulation de Merkabah ni décision de revue ne remplace le consentement humain.
+
+## Relecture effective des octets — extension expérimentale
+
+Le journal peut déclarer `OCTETS_HACHÉS` tout en pointant un SHA-256 inexistant. Le témoin `witness/bind-sources.mjs` **relit les fichiers locaux** qui lui sont explicitement fournis, compare leurs tailles, SHA-256 et références situées, et refuse les substitutions même lorsque la chaîne du journal est correctement recalculée.
+
+```bash
+node witness/bind-sources.mjs export-vigie.json chemins-locaux.json
+```
+
+Le manifeste `chemins-locaux.json` a la forme `{"schema":"VIGIE-SOURCE-MAP-V1","files":[{"id":"SRC-1","sourceRef":"drive:ID","path":"/local/path"}]}`. Il doit rester **local** : ne jamais commiter de chemins privés ni les sources en question. La sortie `CONCORDANCE_OCTETS_NON_AUTHENTIFIANTE` atteste seulement l'accord des octets relus avec le journal. **Elle n'authentifie ni Google Drive, ni l'identité du fournisseur, ni la vérité du référent.**
+
+Les contre-épreuves du témoin passent de 15 à 27 en local. Le workflow GitHub doit être observé séparément pour confirmer leur exécution distante. La PR reste brouillon / non fusionnée ; aucun déploiement Netlify n'est créé par ce workflow.
