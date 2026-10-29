@@ -5,6 +5,7 @@
  */
 import {readFileSync} from 'node:fs';
 const H64=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
+const GIT_SHA=x=>typeof x==='string'&&/^[a-f0-9]{40}$/.test(x);
 const S=x=>typeof x==='string'&&x.trim().length>0;
 const integer=x=>Number.isSafeInteger(x)&&x>0;
 const reasons=Object.freeze({
@@ -21,7 +22,7 @@ export function evaluateRelease(x,{expected,nowISO,ttlMinutes=60}={}){
  const gaps=[];const add=(bad,reason)=>{if(bad&&!gaps.includes(reason))gaps.push(reason);};
  try{
   if(!x||x.schema!=='VIGIE-TRIADE-SNAPSHOT-V1'||!expected||
-    !S(expected.repo)||!integer(expected.pr)||!H64(expected.head)||
+    !S(expected.repo)||!integer(expected.pr)||!GIT_SHA(expected.head)||
     !S(expected.siteId)||!H64(expected.sourceSha)||!H64(expected.deploySha)||
     !Number.isFinite(Date.parse(nowISO))||!(Number.isFinite(ttlMinutes)&&ttlMinutes>0)){
    add(true,reasons.SNAPSHOT);
