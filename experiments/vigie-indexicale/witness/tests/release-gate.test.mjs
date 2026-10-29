@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {evaluateRelease} from '../release-gate.mjs';
-const H='a'.repeat(64),J='b'.repeat(64),D='c'.repeat(64);
+const H='a'.repeat(40),J='b'.repeat(64),D='c'.repeat(64);
 const now='2026-10-29T13:00:00Z';
 const pins={repo:'synthetic/example',pr:31,head:H,siteId:'test-site',sourceSha:J,deploySha:D};
 const base=()=>({schema:'VIGIE-TRIADE-SNAPSHOT-V1',observedAt:now,
@@ -31,4 +31,5 @@ test('PR encore en brouillon => ne peut devenir prête',()=>{const x=base();x.gi
 test('revue non attestée => refuse',()=>{const x=base();x.review.status='unknown';fails(x,'REVUE_HUMAINE_NON_ATTESTEE')});
 test('cohérence ne donne jamais la vérité ni autorisation',()=>{const r=gate(base());assert.equal(r.ok,true);assert.equal(r.status,'CANDIDAT_CONCORDANT_NON_AUTORISE');assert.equal(r.authorization,'NOT_ASSESSED');assert.equal(r.epistemic,'E0');assert.equal(r.snapshotAuthenticity,'NOT_ESTABLISHED')});
 test('un dossier propriétaire et une CI verte ne compensent pas un deploy absent',()=>{const x=base();x.netlify.deploy={};x.browser={status:'blocked'};const r=gate(x);assert.ok(r.blockers.includes('NETLIFY_DEPLOIEMENT_READY_NON_ATTESTE'));assert.ok(r.blockers.includes('NAVIGATEUR_SUR_DEPLOIEMENT_NON_ATTESTE'))});
+test('GitHub SHA de 40 caracteres accepte comme pin',()=>{const r=gate(base());assert.equal(r.ok,true)});
 test('pins incomplets rejettent même un snapshot complet',()=>{const r=evaluateRelease(base(),{expected:{...pins,head:'x'},nowISO:now});assert.equal(r.ok,false);assert.ok(r.blockers.includes('SNAPSHOT_INCOMPLET_OU_OBSOLETE'))});
