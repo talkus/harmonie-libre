@@ -67,3 +67,21 @@ node --test witness/tests/*.test.mjs
 ```
 
 La première application aux faits observés le 29 octobre 2026 reste **BLOCKED_EVIDENCE** : PR brouillon, Netlify sans déploiement `ready` identifié, navigateur non vérifié, revue humaine externe non attestée. Aucun workflow de ce dépôt ne publie les fichiers privés de Vigie.
+
+## Vérification distante des fichiers statiques Netlify — v0.7
+
+Un projet Netlify existant, une URL plausible ou un résultat CI réussi ne prouvent pas qu'une version déterminée de Vigie est servie. Le témoin `witness/netlify-remote-probe.mjs` compare **les octets HTTPS** de sept fichiers visibles avec les empreintes de l'archive statique v0.5 : `fixtures/netlify-site-v05-sha256.json`. Il refuse redirections, faux sous-domaines, SSO (HTTP 401/302), substitutions binaires, CSP ou `nosniff` manquants et types MIME invalides.
+
+Une installation disposant des **fichiers locaux de l'archive privée Drive** peut exécuter, après publication autorisée du site :
+
+```sh
+node witness/netlify-remote-probe.mjs \
+  https://vigie-indexicale-tikkun.netlify.app/ \
+  /chemin/local/du/site/public \
+  fixtures/netlify-site-v05-sha256.json
+node --test witness/tests/*.test.mjs
+```
+
+Cette opération **n'exige aucun secret Netlify** et **n'envoie aucun octet privé**. Elle ne contourne pas la protection SSO : si elle ne peut lire les octets protégés, le résultat est un refus explicite, non un succès de façade. La correspondance éventuelle des octets n'atteste ni l'identité du déploiement, ni le fait que le code ait fonctionné dans un navigateur, ni la source historique, ni l'autorisation humaine. `epistemic=E0` reste obligatoire. Les 19 contre-épreuves de ce module s'ajoutent aux 67 tests précédemment contrôlés ; un nouveau décompte CI doit être vérifié sur le commit courant.
+
+**Cette PR reste un projet de revue et ne publie ni le code privé Netlify, ni les documents privés Drive, ni un jeton d'accès.** La publication reste une action distincte à réaliser sur le projet Vigie protégé puis à confirmer par son identifiant de déploiement.
