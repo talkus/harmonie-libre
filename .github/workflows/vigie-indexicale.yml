@@ -1,0 +1,21 @@
+name: Vigie Indexicale — témoin expérimental
+on:
+  pull_request:
+    paths:
+      - 'experiments/vigie-indexicale/**'
+      - '.github/workflows/vigie-indexicale.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Contre-épreuves du témoin indépendant
+        run: node --test experiments/vigie-indexicale/witness/tests/*.test.mjs
+      - name: Octets source-vers-Netlify — Python sans dépendances
+        run: python3 -m unittest discover -s experiments/vigie-indexicale/delivery/tests -p 'test_*.py' -v
