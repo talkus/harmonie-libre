@@ -17,3 +17,5 @@ jobs:
           node-version: '22'
       - name: Contre-épreuves du témoin indépendant
         run: node --test experiments/vigie-indexicale/witness/tests/*.test.mjs
+      - name: Octets source-vers-Netlify — Python sans dépendances
+        run: python3 -m unittest discover -s experiments/vigie-indexicale/delivery/tests -p 'test_*.py' -v
