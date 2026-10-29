@@ -30,7 +30,7 @@ export function evaluateRelease(x,{expected,nowISO,ttlMinutes=60}={}){
    add(!Number.isFinite(observed)||observed>now+300000||now-observed>ttlMinutes*60000,reasons.SNAPSHOT);
    const gh=x.github||{},pr=gh.pr||{},ci=gh.ci||{};
    add(gh.repo!==expected.repo||pr.number!==expected.pr||pr.head!==expected.head||
-     pr.state!=='open'||pr.draft!==true||pr.merged!==false,reasons.GITHUB);
+     pr.state!=='open'||pr.merged!==false,reasons.GITHUB);
    add(ci.head!==expected.head||ci.conclusion!=='success'||!integer(ci.runId)||
      !integer(ci.tests)||ci.failed!==0,reasons.CI);
    const drive=x.drive||{},src=drive.source||{},dep=drive.deploy||{};
@@ -45,7 +45,7 @@ export function evaluateRelease(x,{expected,nowISO,ttlMinutes=60}={}){
    add(browser.status!=='pass'||browser.deployId!==d.id||!S(browser.origin)||
      (S(d.url)&&browser.origin!==d.url),reasons.BROWSER);
    const review=x.review||{};
-   add(review.status!=='approved'||!S(review.externalRef)||review.subjectRef===review.reviewerRef||
+   add(pr.draft!==false||review.status!=='approved'||!S(review.externalRef)||review.subjectRef===review.reviewerRef||
      !S(review.reviewerRef),reasons.REVIEW);
   }
  }catch{add(true,reasons.SNAPSHOT);}
