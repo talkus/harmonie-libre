@@ -38,3 +38,16 @@ node witness/bind-sources.mjs export-vigie.json chemins-locaux.json
 Le manifeste `chemins-locaux.json` a la forme `{"schema":"VIGIE-SOURCE-MAP-V1","files":[{"id":"SRC-1","sourceRef":"drive:ID","path":"/local/path"}]}`. Il doit rester **local** : ne jamais commiter de chemins privés ni les sources en question. La sortie `CONCORDANCE_OCTETS_NON_AUTHENTIFIANTE` atteste seulement l'accord des octets relus avec le journal. **Elle n'authentifie ni Google Drive, ni l'identité du fournisseur, ni la vérité du référent.**
 
 Les contre-épreuves du témoin passent de 15 à 27 en local. Le workflow GitHub doit être observé séparément pour confirmer leur exécution distante. La PR reste brouillon / non fusionnée ; aucun déploiement Netlify n'est créé par ce workflow.
+
+## Ancrage contradictoire v0.5 — quorum de clés hors journal
+
+Le témoin `witness/anchor-verify.mjs` vérifie un **préfixe historique** du journal contre un checkpoint signé par au moins **deux clés Ed25519 distinctes**, épinglées dans un fichier de confiance `VIGIE-TRUST-V1` fourni séparément. Il refuse une clé réutilisée depuis les événements `VERIFIER`, une signature invalide, un checkpoint étranger, une clé dupliquée, une ancre précédente manquante et une réécriture du préfixe. La portion non ancrée du journal reste explicitement identifiée.
+
+```sh
+node witness/anchor-verify.mjs export-vigie.json anchor.json trust-separe.json [previous-anchor.json]
+node --test witness/tests/*.test.mjs
+```
+
+**Aucune clé privée n'est stockée dans le dépôt.** Les clés de test sont générées au cours de l'exécution des tests. Le code ne reconnaît ni les personnes, ni l'indépendance effective des dépositaires, ni la date réelle de garde du reçu : il retourne `independentCustody: NOT_ESTABLISHED`, `epistemic: E0`, `authorization: NOT_ASSESSED` même en cas de signature concordante. Le fichier trust lui-même doit être validé et gardé par une procédure humaine distincte ; deux clés créées par la même personne ne prouvent pas deux témoins indépendants. Le stockage d'un reçu dans Google Drive n'est pas un WORM matériel.
+
+Cette suite est un **candidat d'audit**, non un mécanisme de déploiement ou une adoption canonique. Le site Vigie Netlify reste protégé et doit être déployé et testé séparément.
