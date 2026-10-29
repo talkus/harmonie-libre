@@ -1,0 +1,118 @@
+{
+  "schema": "VIGIE-V1",
+  "events": [
+    {
+      "seq": 1,
+      "type": "SOURCE",
+      "at": "2026-10-29T03:26:14.449Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "id": "SRC-SYNTH",
+        "name": "synthetic.txt",
+        "sourceRef": "fixture:synth-public",
+        "parentId": "none",
+        "context": "fixture-synthetique-1",
+        "tEvent": "2026-10-25T11:00:00Z",
+        "kRecord": "2026-10-29T03:26:14.448Z",
+        "sha256": "ccebb70e0041018f5285232262a931f15fd31f1fa1e71d0d81af79ad1d575db9",
+        "bytes": 42,
+        "falsifier": "Source bytes differ from declared digest",
+        "reading": "OCTETS_HACHÉS",
+        "proof": "LOCAL_BYTES_ONLY"
+      },
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "a3d72dbbb268b28689b0e08d0a86fcc82f4720ec8107952d74e595248e1200f6"
+    },
+    {
+      "seq": 2,
+      "type": "QUESTION",
+      "at": "2026-10-29T03:26:14.451Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "id": "Q-SYNTH",
+        "sourceId": "SRC-SYNTH",
+        "recipient": "observateur-externe",
+        "cost": "Sans cette source la vérification échoue",
+        "gap": "La valeur du référent demeure inconnue",
+        "context": "fixture-synthetique-1",
+        "createdAt": "2026-10-29T03:26:14.451Z",
+        "status": "GAP_MARKED"
+      },
+      "prev": "a3d72dbbb268b28689b0e08d0a86fcc82f4720ec8107952d74e595248e1200f6",
+      "hash": "321db6b4058da05669b36190ba27a24731657cd276d526bb24bb975682b64326"
+    },
+    {
+      "seq": 3,
+      "type": "ANSWER",
+      "at": "2026-10-29T03:26:14.451Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "questionId": "Q-SYNTH",
+        "respondent": "observateur-externe",
+        "provenance": "fixture:synth-public",
+        "falsifier": "Signature ou bytes en désaccord",
+        "content": "Le témoin affirme avoir reçu la trace.",
+        "priorState": "GAP_MARKED",
+        "state": "ANSWER_CLAIMED",
+        "status": "NON_AUTHENTIFIÉ"
+      },
+      "prev": "321db6b4058da05669b36190ba27a24731657cd276d526bb24bb975682b64326",
+      "hash": "b66735c2d6f2f8acacc789d5b6b00864214bbdbabc53a62a0c2589797fef9729"
+    },
+    {
+      "seq": 4,
+      "type": "CLAIM",
+      "at": "2026-10-29T03:26:14.452Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "id": "CL-SYNTH",
+        "sourceId": "SRC-SYNTH",
+        "statement": "Les octets sources sont bien ceux de la fixture synthétique.",
+        "falsifier": "Comparer octets avec empreinte publiée",
+        "subject": "auteur-de-claim",
+        "proposer": "outil-proposant",
+        "context": "fixture-synthetique-1",
+        "statementHash": "5ec8177da47e38c4744350ce71fd5575fe41d09afce41a1e0f332b508c2f9003",
+        "createdAt": "2026-10-29T03:26:14.452Z",
+        "epistemic": "E0",
+        "authorization": "NOT_ASSESSED",
+        "execution": "NOT_PERFORMED"
+      },
+      "prev": "b66735c2d6f2f8acacc789d5b6b00864214bbdbabc53a62a0c2589797fef9729",
+      "hash": "9123154d60a2488b0cd1282a4b24b1b30f0b0137c03c69104570afae1028ca29"
+    },
+    {
+      "seq": 5,
+      "type": "VERIFIER",
+      "at": "2026-10-29T03:26:14.455Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "id": "tiers-fixture",
+        "keyB64": "lg00QNhSBoODPFFsrUnmyO557PKfgLYghijXiwjSiPk=",
+        "context": "fixture-synthetique-1",
+        "at": "2026-10-29T03:26:14.455Z",
+        "scope": "CLÉ_PINNÉE_LOCALEMENT_IDENTITÉ_NON_PROUVÉE"
+      },
+      "prev": "9123154d60a2488b0cd1282a4b24b1b30f0b0137c03c69104570afae1028ca29",
+      "hash": "14482397a08c427d00385414069965d76c3d2bd90e685e6bf0221568fc989c1a"
+    },
+    {
+      "seq": 6,
+      "type": "REVIEW",
+      "at": "2026-10-29T03:26:14.458Z",
+      "context": "fixture-synthetique-1",
+      "data": {
+        "claimId": "CL-SYNTH",
+        "verifierId": "tiers-fixture",
+        "decision": "SATISFIED",
+        "signatureB64": "RY4GTcK/vfyPVmkireOToIpUcPex69jVmtVa/u0gYmiBon92JKsJAOifWzptVkfCyg8pWsdU3s4F2XI03wYRAA==",
+        "sourceHash": "ccebb70e0041018f5285232262a931f15fd31f1fa1e71d0d81af79ad1d575db9",
+        "statementHash": "5ec8177da47e38c4744350ce71fd5575fe41d09afce41a1e0f332b508c2f9003",
+        "context": "fixture-synthetique-1",
+        "status": "SIGNATURE_VALIDE_CLÉ_LOCALE_IDENTITÉ_NON_VÉRIFIÉE"
+      },
+      "prev": "14482397a08c427d00385414069965d76c3d2bd90e685e6bf0221568fc989c1a",
+      "hash": "ce955fbc887e910c3b977e87e1d8d2db0394c2726bbddcc617bb255c4b4dd6cc"
+    }
+  ]
+}
