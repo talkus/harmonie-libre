@@ -5,7 +5,7 @@ const H='a'.repeat(64),J='b'.repeat(64),D='c'.repeat(64);
 const now='2026-10-29T13:00:00Z';
 const pins={repo:'synthetic/example',pr:31,head:H,siteId:'test-site',sourceSha:J,deploySha:D};
 const base=()=>({schema:'VIGIE-TRIADE-SNAPSHOT-V1',observedAt:now,
- github:{repo:pins.repo,pr:{number:31,head:H,state:'open',draft:true,merged:false},ci:{head:H,conclusion:'success',runId:123,tests:46,failed:0}},
+ github:{repo:pins.repo,pr:{number:31,head:H,state:'open',draft:false,merged:false},ci:{head:H,conclusion:'success',runId:123,tests:46,failed:0}},
  drive:{source:{sha256:J,bytes:100,shared:false,permissions:['user:owner']},deploy:{sha256:D,bytes:80,shared:false,permissions:['user:owner']}},
  netlify:{siteId:'test-site',requiresSSOTeamLogin:true,deploy:{id:'deploy-1',siteId:'test-site',state:'ready',url:'https://v.test'}},
  browser:{status:'pass',deployId:'deploy-1',origin:'https://v.test'},
@@ -27,6 +27,7 @@ test('Netlify READY d un autre site => refuse',()=>{const x=base();x.netlify.dep
 test('aperçu navigateur d un autre deploy => refuse',()=>{const x=base();x.browser.deployId='preview-2';fails(x,'NAVIGATEUR_SUR_DEPLOIEMENT_NON_ATTESTE')});
 test('navigateur bloqué => refuse',()=>{const x=base();x.browser.status='blocked';fails(x,'NAVIGATEUR_SUR_DEPLOIEMENT_NON_ATTESTE')});
 test('auto-évaluation => refuse',()=>{const x=base();x.review.reviewerRef='system';fails(x,'REVUE_HUMAINE_NON_ATTESTEE')});
+test('PR encore en brouillon => ne peut devenir prête',()=>{const x=base();x.github.pr.draft=true;fails(x,'REVUE_HUMAINE_NON_ATTESTEE')});
 test('revue non attestée => refuse',()=>{const x=base();x.review.status='unknown';fails(x,'REVUE_HUMAINE_NON_ATTESTEE')});
 test('cohérence ne donne jamais la vérité ni autorisation',()=>{const r=gate(base());assert.equal(r.ok,true);assert.equal(r.status,'CANDIDAT_CONCORDANT_NON_AUTORISE');assert.equal(r.authorization,'NOT_ASSESSED');assert.equal(r.epistemic,'E0');assert.equal(r.snapshotAuthenticity,'NOT_ESTABLISHED')});
 test('un dossier propriétaire et une CI verte ne compensent pas un deploy absent',()=>{const x=base();x.netlify.deploy={};x.browser={status:'blocked'};const r=gate(x);assert.ok(r.blockers.includes('NETLIFY_DEPLOIEMENT_READY_NON_ATTESTE'));assert.ok(r.blockers.includes('NAVIGATEUR_SUR_DEPLOIEMENT_NON_ATTESTE'))});
