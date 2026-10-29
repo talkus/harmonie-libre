@@ -51,3 +51,19 @@ node --test witness/tests/*.test.mjs
 **Aucune clé privée n'est stockée dans le dépôt.** Les clés de test sont générées au cours de l'exécution des tests. Le code ne reconnaît ni les personnes, ni l'indépendance effective des dépositaires, ni la date réelle de garde du reçu : il retourne `independentCustody: NOT_ESTABLISHED`, `epistemic: E0`, `authorization: NOT_ASSESSED` même en cas de signature concordante. Le fichier trust lui-même doit être validé et gardé par une procédure humaine distincte ; deux clés créées par la même personne ne prouvent pas deux témoins indépendants. Le stockage d'un reçu dans Google Drive n'est pas un WORM matériel.
 
 Cette suite est un **candidat d'audit**, non un mécanisme de déploiement ou une adoption canonique. Le site Vigie Netlify reste protégé et doit être déployé et testé séparément.
+
+## Barrière de publication tripartite v0.6
+
+Le module `witness/release-gate.mjs` exige des instantanés **distincts et récents** des trois services :
+- GitHub : numéro/état de PR, SHA de tête et exécution CI du **même** SHA ;
+- Drive : deux empreintes archivées, taille et permissions propriétaire seulement ;
+- Netlify : ID du site, ID du déploiement et état `ready`, plus test navigateur sur cet identifiant précis.
+
+Une revue externe explicite reste requise ; **une PR en brouillon ne satisfait pas la barrière de revue**. L'exécution locale de la barrière ne télécharge aucune donnée : un instantané JSON peut être fabriqué et son origine doit être contrôlée indépendamment. Même lorsque tout concorde, le verdict est `CANDIDAT_CONCORDANT_NON_AUTORISE`, `epistemic:E0`, `authorization:NOT_ASSESSED`.
+
+```sh
+node witness/release-gate.mjs snapshot-observe.json pins-externes.json 2026-10-29T13:00:00Z
+node --test witness/tests/*.test.mjs
+```
+
+La première application aux faits observés le 29 octobre 2026 reste **BLOCKED_EVIDENCE** : PR brouillon, Netlify sans déploiement `ready` identifié, navigateur non vérifié, revue humaine externe non attestée. Aucun workflow de ce dépôt ne publie les fichiers privés de Vigie.
