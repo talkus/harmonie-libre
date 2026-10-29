@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: '22'
       - name: Contre-épreuves du témoin indépendant
-        run: node --test experiments/vigie-indexicale/witness/tests/verify.test.mjs
+        run: node --test experiments/vigie-indexicale/witness/tests/*.test.mjs
