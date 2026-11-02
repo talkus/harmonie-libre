@@ -1,0 +1,22 @@
+name: 72 portes v1.1.1 canonical integrity
+on:
+  pull_request:
+    paths:
+      - 'projects/72-portes/**'
+      - '.github/workflows/72-portes.yml'
+  push:
+    paths:
+      - 'projects/72-portes/**'
+      - '.github/workflows/72-portes.yml'
+permissions:
+  contents: read
+jobs:
+  canonical-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate canonical CSV content, checksums, cycles, pivots, axes and transitions
+        run: python3 projects/72-portes/valider.py
