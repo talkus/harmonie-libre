@@ -1,0 +1,32 @@
+{
+  "format": "72-portes-canonical-csv-manifest-v1",
+  "version": "1.1.1",
+  "encoding": "UTF-8",
+  "delimiter": ";",
+  "source_of_truth": [
+    "axes.csv",
+    "portes.csv",
+    "transitions.csv"
+  ],
+  "files": {
+    "axes.csv": {
+      "bytes": 466,
+      "sha256": "92ddc51b53ebae8cf365f6d08e8990d0acc375362a4d3c224a4ec577a7cff6ed"
+    },
+    "portes.csv": {
+      "bytes": 2437,
+      "sha256": "e90e9f6de90818169f36752aca7ad576390af65fe2db367201692b7083e919bf"
+    },
+    "transitions.csv": {
+      "bytes": 4304,
+      "sha256": "cf49f7dc783f6bfb5848f2377c6e47831cf706003e2077321090477094e9ca68"
+    }
+  },
+  "status": {
+    "structural_cross_validation": "PASS",
+    "deepbom_artifact_analysis": "NOT_APPLICABLE_CSV_UNSUPPORTED",
+    "manual_v1_1_1": "GRAMMAR_REFERENCED_NOT_SUPPLIED",
+    "v2_0_proposals": "RESERVED_NOT_APPLIED"
+  },
+  "note": "Owner-provided canonical tables; SHA-256 identifies exact exported file bytes, not semantic correctness or independent attestation."
+}
