@@ -83,3 +83,8 @@ Les versions du texte fondateur sont conservées. Toute évolution du sens donne
 La page contient des liens vers `talkus/harmonie-libre`. Si le dépôt est publié sous un autre compte ou nom, les mettre à jour dans `index.html`.
 
 Références : [GitHub Discussions](https://docs.github.com/en/discussions), [configuration de la source GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+
+
+## Les 72 Portes — lexique canonique v1.1.1
+
+Les [trois tables canoniques](projects/72-portes/README.md) (72 portes, 71 transitions, 9 axes) et l'[errata E5 Sable / Argile](projects/72-portes/ERRATA_v1.1.1.md) sont conservés dans un module distinct des 231 Portes. Les CSV sont le lexique de référence; le manuel v1.1.1 demeure sa grammaire. La vérification déterministe et les empreintes SHA-256 sont exécutées en CI. DEEPBOM Artifact Evidence ne prend pas en charge ces CSV : aucune synchronisation avec cet analyseur de modèles n'est revendiquée.
