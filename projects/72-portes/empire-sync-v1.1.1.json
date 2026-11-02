@@ -1,0 +1,117 @@
+{
+  "format": "72-portes-empire-sync-contract-v1",
+  "version": "1.1.1",
+  "effective_date": "2026-11-02",
+  "status": "CANONICAL_DATA_IN_MAIN__EMPIRE_HANDOFF_PREPARED_NOT_EXECUTED",
+  "repository": "talkus/harmonie-libre",
+  "module": "projects/72-portes",
+  "roles": {
+    "codex": "sole_repository_writer",
+    "empire": "optional_advisory_partner_no_automatic_application"
+  },
+  "source_of_truth": [
+    "axes.csv",
+    "portes.csv",
+    "transitions.csv"
+  ],
+  "manual": {
+    "version": "1.1.1",
+    "role": "GRAMMAR",
+    "text_supplied_in_this_change": false
+  },
+  "canonical_lexicon": {
+    "format": "CSV",
+    "encoding": "UTF-8",
+    "delimiter": ";",
+    "source": "owner_provided"
+  },
+  "files": {
+    "axes.csv": {
+      "bytes": 466,
+      "sha256": "92ddc51b53ebae8cf365f6d08e8990d0acc375362a4d3c224a4ec577a7cff6ed"
+    },
+    "portes.csv": {
+      "bytes": 2437,
+      "sha256": "e90e9f6de90818169f36752aca7ad576390af65fe2db367201692b7083e919bf"
+    },
+    "transitions.csv": {
+      "bytes": 4304,
+      "sha256": "cf49f7dc783f6bfb5848f2377c6e47831cf706003e2077321090477094e9ca68"
+    }
+  },
+  "expected": {
+    "portes": 72,
+    "transitions": 71,
+    "familles": 16,
+    "pivots": 12,
+    "axes": 9,
+    "polaires": 2,
+    "dynamiques": 7,
+    "cycles": {
+      "I": 12,
+      "II": 12,
+      "III": 12,
+      "IV": 12,
+      "V": 12,
+      "VI": 12
+    },
+    "transitions_by_cycle": {
+      "I": 11,
+      "II": 12,
+      "III": 12,
+      "IV": 12,
+      "V": 12,
+      "VI": 12
+    }
+  },
+  "corrections": {
+    "E5": {
+      "argile": {
+        "n": 25,
+        "position_chemin": 24,
+        "cycle": "II"
+      },
+      "sable": {
+        "n": 24,
+        "position_chemin": 25,
+        "cycle": "III"
+      },
+      "boundary_transition": "T24",
+      "incoming_cycle_rule": "cycle of arrival"
+    },
+    "T12": {
+      "arrives": "Miroir",
+      "cycle": "II"
+    },
+    "T60": {
+      "arrives": "Porte",
+      "cycle": "VI"
+    }
+  },
+  "reserved_v2_0": [
+    {
+      "id": "F4_F13_LETTRE",
+      "status": "NOT_APPLIED",
+      "note": "Lettre demeure F13; déplacement à F4 nécessiterait recalcul des densités F4=7 F13=6"
+    },
+    {
+      "id": "AXES_INTRA_INTER_FAMILLES",
+      "status": "NOT_APPLIED",
+      "note": "Distinction intra/inter-familles en réserve, orthogonale à polaire/dynamique"
+    }
+  ],
+  "controls": {
+    "validator": "valider.py",
+    "sync_validator": "verifier_empire.py",
+    "ci": ".github/workflows/72-portes.yml",
+    "artifact": "72-portes-empire-source-v1-1-1"
+  },
+  "export_policy": {
+    "no_private_credentials": true,
+    "no_secrets": true,
+    "no_model_cost_authorized": true,
+    "source_only": true,
+    "external_model_call_completed": false
+  },
+  "caveat": "A prepared synchronized handoff packet is not proof that an external Empire model has ingested or reviewed it."
+}

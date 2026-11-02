@@ -21,3 +21,20 @@ jobs:
           python-version: '3.11'
       - name: Verify canonical CSV SHA-256 and all cross-table invariants
         run: python3 projects/72-portes/valider.py
+      - name: Verify Empire sync contract never drifts from canonical data or applies v2.0
+        run: python3 projects/72-portes/verifier_empire.py
+      - name: Package bounded canonical evidence for Empire (no model dispatch)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 72-portes-empire-source-v1-1-1
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            projects/72-portes/axes.csv
+            projects/72-portes/portes.csv
+            projects/72-portes/transitions.csv
+            projects/72-portes/empreintes.json
+            projects/72-portes/empire-sync-v1.1.1.json
+            projects/72-portes/EMPIRE_SYNC.md
+            projects/72-portes/valider.py
+            projects/72-portes/verifier_empire.py

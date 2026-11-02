@@ -43,3 +43,7 @@ Ainsi `T23` aboutit à Argile (II), `T24` aboutit à Sable (III). Les autres cro
 Ce nouveau module est **distinct** de [`../231-portes/`](../231-portes/), qui décrit un autre système. Les contrôles effectués établissent la cohérence **structurelle** du lexique remis : ils ne démontrent pas les interprétations narratives ou métaphysiques du manuel.
 
 **DEEPBOM Artifact Evidence :** le connecteur ChatGPT v2.5.0 n'analyse que des artefacts de déploiement de modèles IA (TFLite, ONNX, GGUF, SafeTensors, Core ML, ExecuTorch). Aucun de ces formats n'a été fourni avec les trois CSV ; **aucune synchronisation ni analyse DEEPBOM n'est donc revendiquée**. Les tables restent disponibles dans ce dépôt, avec leurs empreintes, pour une éventuelle intégration future par un mécanisme compatible. Les empreintes ne sont pas un certificat DEEPBOM.
+
+## Synchronisation @Empire LLM for Codex — contrat de preuve
+
+La version 1.1.1 est **déjà intégrée** : les trois CSV et leurs empreintes SHA-256 ne changent pas avec cette étape. Le dossier ajoute [`empire-sync-v1.1.1.json`](empire-sync-v1.1.1.json), [`EMPIRE_SYNC.md`](EMPIRE_SYNC.md) et `verifier_empire.py` : un paquet borné que le routeur Empire peut lire, vérifier et critiquer sous contrôle de Codex. Le flux GitHub Actions publie un artefact `72-portes-empire-source-v1-1-1` après validation. **Ce dépôt ne prétend pas qu'un modèle externe Empire a été invoqué ou qu'il a écrit dans le dépôt.** Aucun déplacement de Lettre et aucune typologie v2.0 supplémentaire n'ont été appliqués.
