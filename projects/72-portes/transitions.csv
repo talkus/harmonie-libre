@@ -1,0 +1,72 @@
+id;position;de_n;de_nom;vers_n;vers_nom;nom_transition;cycle
+T1;1;1;Source;2;Voile;L'origine devient mystère;I
+T2;2;2;Voile;4;Souffle;Derrière le voile, quelque chose respire;I
+T3;3;4;Souffle;3;Nom;Ce qui respire cherche à être nommé;I
+T4;4;3;Nom;10;Silence;Le nom apparaît depuis le silence;I
+T5;5;10;Silence;9;Parole;Le silence devient expression;I
+T6;6;9;Parole;11;Seuil;Toute parole ouvre un passage;I
+T7;7;11;Seuil;12;Chemin;Le passage devient mouvement;I
+T8;8;12;Chemin;5;Eau;Marcher, c'est apprendre à couler;I
+T9;9;5;Eau;7;Terre;Le flux cherche un lieu où demeurer;I
+T10;10;7;Terre;8;Air;L'ancrage permet l'ouverture;I
+T11;11;8;Air;6;Feu;Le souffle nourrit l'énergie;I
+T12;12;6;Feu;13;Miroir;L'énergie éclaire la conscience;II
+T13;13;13;Miroir;14;Ombre;Voir conduit à découvrir l'invisible;II
+T14;14;14;Ombre;16;Nuit;L'ombre ouvre la traversée obscure;II
+T15;15;16;Nuit;15;Aube;Toute nuit prépare une naissance;II
+T16;16;15;Aube;17;Éclat;La lumière grandit;II
+T17;17;17;Éclat;18;Cendre;Toute lumière laisse une trace;II
+T18;18;18;Cendre;22;Graine;La fin devient commencement;II
+T19;19;22;Graine;19;Racine;Le possible cherche un ancrage;II
+T20;20;19;Racine;20;Branche;L'enracinement permet l'expansion;II
+T21;21;20;Branche;21;Fruit;La croissance devient offrande;II
+T22;22;21;Fruit;23;Pierre;Ce qui mûrit cherche à durer;II
+T23;23;23;Pierre;25;Argile;La stabilité demande encore à être façonnée;II
+T24;24;25;Argile;24;Sable;Toute forme peut se disperser;III
+T25;25;24;Sable;26;Cristal;Le chaos peut s'organiser;III
+T26;26;26;Cristal;27;Sel;La clarté devient saveur;III
+T27;27;27;Sel;28;Huile;La préservation devient douceur;III
+T28;28;28;Huile;30;Pain;Le soin nourrit;III
+T29;29;30;Pain;29;Vin;La nourriture devient célébration;III
+T30;30;29;Vin;31;Lampe;La joie révèle;III
+T31;31;31;Lampe;33;Étincelle;Toute lumière commence petitement;III
+T32;32;33;Étincelle;32;Flamme;Le germe devient puissance;III
+T33;33;32;Flamme;34;Braise;L'intensité devient permanence;III
+T34;34;34;Braise;35;Fumée;La chaleur devient signe;III
+T35;35;35;Fumée;36;Ciel;Le signe monte vers l'ouvert;III
+T36;36;36;Ciel;37;Abîme;L'immensité appelle une profondeur équivalente;IV
+T37;37;37;Abîme;38;Puits;Le vertige cherche un accès;IV
+T38;38;38;Puits;39;Fontaine;Ce qui est profond remonte;IV
+T39;39;39;Fontaine;40;Rivière;Le jaillissement devient chemin;IV
+T40;40;40;Rivière;41;Mer;Tous les chemins convergent;IV
+T41;41;41;Mer;44;Nuée;L'immensité s'élève;IV
+T42;42;44;Nuée;42;Pluie;Ce qui s'élève revient en don;IV
+T43;43;42;Pluie;43;Rosée;Le don devient délicatesse;IV
+T44;44;43;Rosée;45;Vent;La fraîcheur appelle le souffle;IV
+T45;45;45;Vent;46;Tempête;Le souffle devient puissance;IV
+T46;46;46;Tempête;47;Écho;Après le tumulte demeure la résonance;IV
+T47;47;47;Écho;48;Chant;La résonance devient création;IV
+T48;48;48;Chant;49;Cri;La voix retrouve sa force primitive;V
+T49;49;49;Cri;50;Murmure;La force apprend la nuance;V
+T50;50;50;Murmure;51;Lèvre;L'intention approche de l'expression;V
+T51;51;51;Lèvre;52;Langue;L'organe devient langage;V
+T52;52;52;Langue;53;Lettre;La parole cherche à durer;V
+T53;53;53;Lettre;54;Point;Toute écriture naît d'un signe;V
+T54;54;54;Point;55;Ligne;Le centre devient direction;V
+T55;55;55;Ligne;56;Cercle;La direction découvre le retour;V
+T56;56;56;Cercle;57;Carré;Le cycle devient structure;V
+T57;57;57;Carré;58;Triangle;La stabilité cherche la relation;V
+T58;58;58;Triangle;59;Croix;La relation rencontre l'incarnation;V
+T59;59;59;Croix;60;Étoile;L'intersection devient orientation;V
+T60;60;60;Étoile;61;Porte;L'orientation révèle un accès;VI
+T61;61;61;Porte;63;Serrure;Toute ouverture possède son gardien;VI
+T62;62;63;Serrure;62;Clé;La limite appelle la compréhension;VI
+T63;63;62;Clé;64;Pont;Comprendre permet de relier;VI
+T64;64;64;Pont;65;Échelle;Relier permet d'élever;VI
+T65;65;65;Échelle;66;Aile;L'élévation devient liberté;VI
+T66;66;66;Aile;67;Œil;Le recul donne la vision;VI
+T67;67;67;Œil;68;Main;Ce qui est vu demande à être accompli;VI
+T68;68;68;Main;69;Cœur;L'action cherche son sens;VI
+T69;69;69;Cœur;70;Couronne;L'amour devient responsabilité;VI
+T70;70;70;Couronne;71;Trône;La responsabilité devient gouvernement;VI
+T71;71;71;Trône;72;Repos;La souveraineté trouve la paix;VI
