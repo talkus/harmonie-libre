@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Transmissions — les pieces publiees de L'Harmonie libre : le sens ne se stocke pas, il se transmet.">
+  <meta name="theme-color" content="#f8f5ee">
+  <title>Transmissions — L’Harmonie libre</title>
+  <style>
+    :root { color-scheme: light; --paper:#f8f5ee; --ink:#233c34; --muted:#536359; --line:#cbd0c1; --green:#28523e; --accent:#b77748; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:1.0625rem; line-height:1.7; }
+    a { color:var(--green); text-underline-offset:.24em; }
+    a:hover { text-decoration-thickness:2px; }
+    a:focus-visible { outline:3px solid var(--accent); outline-offset:5px; }
+    .wrap { width:min(1080px,calc(100% - 3rem)); margin-inline:auto; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding-block:1.6rem; border-bottom:1px solid var(--line); }
+    .brand { font-weight:650; text-decoration:none; letter-spacing:-.02em; color:var(--ink); }
+    nav { display:flex; gap:1.4rem; font-size:.88rem; }
+    nav a { text-decoration:none; }
+    .eyebrow { color:var(--muted); text-transform:uppercase; font-size:.73rem; font-weight:650; letter-spacing:.14em; margin:0 0 1.4rem; }
+    h1 { font-family:Georgia,"Times New Roman",serif; font-weight:400; letter-spacing:-.045em; line-height:1.12; font-size:clamp(2.2rem,4.6vw,3.4rem); margin:0 0 1.2rem; }
+    .intro { max-width:640px; color:var(--muted); margin:0 0 1rem; }
+    main { padding-block:3.5rem 1rem; }
+    .piece { border-top:1px solid var(--line); padding-block:1.8rem; display:grid; grid-template-columns:220px 1fr; gap:2rem; }
+    .piece .date { color:var(--muted); font-size:.88rem; }
+    .piece h2 { font-family:Georgia,"Times New Roman",serif; font-weight:400; font-size:1.55rem; line-height:1.25; margin:0 0 .5rem; }
+    .piece p { margin:0; color:var(--muted); max-width:640px; }
+    footer { border-top:1px solid var(--line); padding-block:1.5rem 2.5rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-size:.8rem; color:var(--muted); }
+    footer p { margin:0; }
+    @media(max-width:740px) { .piece { grid-template-columns:1fr; gap:.6rem; } header { flex-wrap:wrap; gap:.7rem; } nav { gap:1.1rem; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="index.html">L’Harmonie libre</a>
+      <nav aria-label="Navigation principale"><a href="index.html#texte">Le texte</a><a href="index.html#agir">Les gestes</a><a href="index.html#securite">Sécurité</a><a href="index.html#participer">Participer</a><a href="projects/">Projets</a><a href="transmissions.html">Transmissions</a></nav>
+    </header>
+    <main>
+      <p class="eyebrow">Le lieu public des pièces</p>
+      <h1>Transmissions</h1>
+      <p class="intro">Le sens ne se stocke pas : il se transmet, ou il meurt. Cette page rassemble les pièces publiées au fil des échanges — chacune portée ici telle qu’elle a été écrite, avec sa date et son adresse permanente.</p>
+      <article class="piece">
+        <div class="date">2026-11-14</div>
+        <div>
+          <h2><a href="https://github.com/talkus/harmonie-libre/blob/main/transmission-sens-fleuve-2026-11-14.md">La transmission du sens</a></h2>
+          <p>Née d un échange de la nuit du 13 au 14 novembre 2026 : le sens ne se stocke pas, il se transmet — le Fleuve de Feu, la perte du sens, et le geste qui le refait.</p>
+        </div>
+      </article>
+    </main>
+    <footer>
+      <p>L’Harmonie libre — construire ensemble sans devenir pareils.</p>
+      <p><a href="index.html">Accueil</a></p>
+    </footer>
+  </div>
+</body>
+</html>
