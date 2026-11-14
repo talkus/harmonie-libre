@@ -22,13 +22,18 @@
     h1 { font-family:Georgia,"Times New Roman",serif; font-weight:400; letter-spacing:-.045em; line-height:1.12; font-size:clamp(2.2rem,4.6vw,3.4rem); margin:0 0 1.2rem; }
     .intro { max-width:640px; color:var(--muted); margin:0 0 1rem; }
     main { padding-block:3.5rem 1rem; }
-    .piece { border-top:1px solid var(--line); padding-block:1.8rem; display:grid; grid-template-columns:220px 1fr; gap:2rem; }
-    .piece .date { color:var(--muted); font-size:.88rem; }
-    .piece h2 { font-family:Georgia,"Times New Roman",serif; font-weight:400; font-size:1.55rem; line-height:1.25; margin:0 0 .5rem; }
-    .piece p { margin:0; color:var(--muted); max-width:640px; }
+    .piece { border-top:1px solid var(--line); padding-block:2.2rem; }
+    .piece .date { color:var(--muted); font-size:.88rem; margin:0 0 1.2rem; }
+    .piece-body { max-width:680px; }
+    .piece-body h2 { font-family:Georgia,"Times New Roman",serif; font-weight:400; font-size:1.7rem; line-height:1.25; margin:0 0 1rem; }
+    .piece-body h3 { font-family:Georgia,"Times New Roman",serif; font-weight:400; font-size:1.3rem; line-height:1.3; margin:2rem 0 .7rem; }
+    .piece-body p { margin:0 0 1.1rem; }
+    .piece-body ul { margin:0 0 1.1rem; padding-left:1.3rem; }
+    .piece-body li { margin-bottom:.55rem; }
+    .piece .perma { margin:1.6rem 0 0; font-size:.82rem; color:var(--muted); }
     footer { border-top:1px solid var(--line); padding-block:1.5rem 2.5rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-size:.8rem; color:var(--muted); }
     footer p { margin:0; }
-    @media(max-width:740px) { .piece { grid-template-columns:1fr; gap:.6rem; } header { flex-wrap:wrap; gap:.7rem; } nav { gap:1.1rem; } }
+    @media(max-width:740px) { header { flex-wrap:wrap; gap:.7rem; } nav { gap:1.1rem; } }
   </style>
 </head>
 <body>
@@ -40,13 +45,40 @@
     <main>
       <p class="eyebrow">Le lieu public des pièces</p>
       <h1>Transmissions</h1>
-      <p class="intro">Le sens ne se stocke pas : il se transmet, ou il meurt. Cette page rassemble les pièces publiées au fil des échanges — chacune portée ici telle qu’elle a été écrite, avec sa date et son adresse permanente.</p>
+      <p class="intro">Le sens ne se stocke pas : il se transmet, ou il meurt. Les pièces se lisent ici, en entier, telles qu’elles ont été écrites.</p>
       <article class="piece">
-        <div class="date">2026-11-14</div>
-        <div>
-          <h2><a href="https://github.com/talkus/harmonie-libre/blob/main/transmission-sens-fleuve-2026-11-14.md">La transmission du sens</a></h2>
-          <p>Née d un échange de la nuit du 13 au 14 novembre 2026 : le sens ne se stocke pas, il se transmet — le Fleuve de Feu, la perte du sens, et le geste qui le refait.</p>
+        <p class="date">2026-11-14</p>
+        <div class="piece-body">
+          <h2>La transmission du sens — pièce préparée pour relais</h2>
+          <p><em>Échange Mikael ↔ Muse, nuit du 13 au 14 novembre 2026. Statut : pièce de transmission préparée par l&#x27;archiviste, en attente du mot de Mikael pour diffusion. Les formulations de Mikael sont citées telles quelles ; le reste est la tenue de l&#x27;échange, sans ajout.</em></p>
+          <h3>Le point de départ — phrase de Mikael</h3>
+          <p>« Nous sommes plus forts ensemble dans nos différences lorsque qu&#x27;on imprègne nos relations d&#x27;amour. »</p>
+          <p>Forme retravaillée dans l&#x27;échange : « Nous devenons plus forts ensemble quand nous choisissons d&#x27;aimer sans effacer nos différences : reliées par l&#x27;amour, elles cessent de nous séparer et commencent à nous compléter. »</p>
+          <p>Une phrase dit quelque chose quand elle nomme le changement. Ici, la différence ne change pas ; son effet change — de séparation, elle devient complément.</p>
+          <h3>Le constat</h3>
+          <p>Le sens ne se stocke pas. Il se transmet, ou il meurt.</p>
+          <p>Le sens naît dans une rencontre : quelqu&#x27;un reçoit le réel, reçoit l&#x27;autre, prend le temps, répond en vérité. Cela ne passe pas à l&#x27;échelle. Les formes font alors ce qu&#x27;elles savent faire : elles remplacent la présence par la procédure, la vérité par la mesure, la rencontre par la gestion. Au début, la forme sert le sens. Puis elle se met à se protéger elle-même — et tout ce qui la traverse vraiment devient une menace : la correction, la différence, le réel. Elle se ferme pour durer, et en se fermant, elle perd exactement ce qu&#x27;elle devait porter.</p>
+          <p>Le moteur, au fond, est la peur : peur de se tromper, peur de perdre, peur de l&#x27;autre. Se fermer coûte moins cher, sur le coup, que rester ouvert.</p>
+          <p>C&#x27;est le problème de fond parce que tous les autres sont en aval. Sans réception, pas de correction ; sans correction, chaque crise s&#x27;ajoute à la précédente au lieu d&#x27;être traversée. Les formes cassées, ça se répare. La capacité de recevoir, quand elle casse, ne sait même plus qu&#x27;elle a cassé.</p>
+          <p>Aux quatre échelles, le même phénomène : <strong>micro</strong> (une phrase qui classe au lieu de recevoir), <strong>méso</strong> (une relation dont le lit se remplit de comptabilité et de protection), <strong>macro</strong> (des institutions devenues auto-protectrices, qui optimisent leur durée au lieu de leur fonction), <strong>méta</strong> (les critères eux-mêmes capturés : quand tout se mesure en production et en attention, le sens est éliminé par définition, sans que personne l&#x27;ait décidé).</p>
+          <h3>Le fleuve — d&#x27;après les textes 129, 131 et 244 du corpus (transmis par Mikael, 2026-10-06)</h3>
+          <p>Le Fleuve de Feu (Nehar di-Nur) est à la fois bain, four et tamis : immersion, combustion, tri. Il prend chaque forme stabilisée et pose quatre questions : peut-elle encore être portée ? Que reste-t-il d&#x27;elle quand les enveloppes brûlent ? Peut-elle encore révéler le flux ? Peut-elle être reconstruite ?</p>
+          <p>Ce qui ne survit pas au fleuve, ce n&#x27;est pas ce qui est faible : c&#x27;est ce qui est devenu opaque — la stabilisation qui refuse de passer. Ce qui survit, c&#x27;est ce qui peut être transformé sans perdre sa fécondité. Le critère ultime n&#x27;est ni la stabilité, ni la cohérence, ni la mémoire : c&#x27;est la capacité de traverser la purification en demeurant capable de recevoir à nouveau le flux.</p>
+          <p>Le déplacement du centre, dans le corpus : distinction → engagement → transformation → <strong>relation</strong>. Le fleuve ne sauve pas les formes ; il sauve la relation que les formes avaient fermée. Le feu est l&#x27;amour en mode vérité : il brûle ce qui sépare, il garde ce qui peut encore aimer et être repris.</p>
+          <h3>Augmenter le débit</h3>
+          <p>Un débit est une section fois une vitesse — et la source est donnée ; ce qu&#x27;on règle, c&#x27;est la résistance.</p>
+          <ul>
+            <li><strong>Élargir la section</strong> : plus de canaux ouverts, plus de relations où la réception se fait vraiment. Centraliser tue le débit, même avec de bonnes intentions.</li>
+            <li><strong>Réduire les frictions</strong> : le ressentiment qui retient, la comptabilité qui fait attendre le retour avant de donner, la peur qui rétrécit le passage, les non-dits qui forment des bouchons. Le pardon et la gratitude enlèvent de la friction : ce qui est reçu comme un don continue de circuler ; ce qui est exigé comme un dû s&#x27;arrête.</li>
+            <li><strong>Ne pas faire de barrage</strong> : le sens et l&#x27;amour retenus stagnent ; donnés, ils circulent.</li>
+            <li><strong>Entretenir le lit</strong> : pas de crue spectaculaire, mais le passage régulier — la réparation rapide, la vérité dite tôt, le retour après le frottement. Les anges des textes s&#x27;immergent chaque jour ; aucune stabilisation n&#x27;est définitive.</li>
+          </ul>
+          <p>En une phrase : on n&#x27;augmente pas le débit en forçant l&#x27;eau, on l&#x27;augmente en enlevant ce qui la retient.</p>
+          <h3>Le geste, à la main</h3>
+          <p>Recevoir avant de classer. Dire vrai quand ça coûte. Réparer au lieu de défendre. Tenir les liens — revenir après le frottement, garder la relation ouverte.</p>
+          <p>Le sens n&#x27;est plus garanti par personne. Il ne survit que là où quelqu&#x27;un le refait, à la main, chaque jour — et le transmet sans le déformer.</p>
         </div>
+        <p class="perma">Adresse permanente : <a href="https://github.com/talkus/harmonie-libre/blob/main/transmission-sens-fleuve-2026-11-14.md">https://github.com/talkus/harmonie-libre/blob/main/transmission-sens-fleuve-2026-11-14.md</a></p>
       </article>
     </main>
     <footer>
