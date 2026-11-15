@@ -1,0 +1,615 @@
+{
+  "project": "MERKABAH",
+  "version": "0.1.0-candidate",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "scenes": [
+    "Ezekiel_1",
+    "Ezekiel_10"
+  ],
+  "sources": [
+    {
+      "id": "ez1",
+      "type": "biblical",
+      "reference": "Ezekiel 1:1-28"
+    },
+    {
+      "id": "ez10",
+      "type": "biblical",
+      "reference": "Ezekiel 10:1-22"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "kebar",
+      "type": "watercourse",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "ruach",
+      "type": "spirit_movement",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "expanse",
+      "type": "crystalline_expanse",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "throne",
+      "type": "sapphire_like_throne",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "radiance",
+      "type": "radiant_figure",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_1",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_1_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_1_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_1_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_1_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_1_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_2",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_2_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_2_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_2_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_2_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_2_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_3",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_3_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_3_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_3_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_3_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_3_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_4",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_4_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_4_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_4_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_4_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_4_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "cherub_1",
+      "to": "wheel_1",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_1",
+      "to": "cherub_1",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "wheel_2",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_2",
+      "to": "cherub_2",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "wheel_3",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_3",
+      "to": "cherub_3",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "wheel_4",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_4",
+      "to": "cherub_4",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "throne",
+      "to": "expanse",
+      "type": "above",
+      "source": "ez1"
+    },
+    {
+      "from": "radiance",
+      "to": "throne",
+      "type": "upon",
+      "source": "ez1"
+    }
+  ]
+}
