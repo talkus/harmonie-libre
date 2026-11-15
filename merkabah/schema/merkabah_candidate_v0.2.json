@@ -1,0 +1,992 @@
+{
+  "project": "MERKABAH",
+  "version": "0.2.0-candidate",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "scenes": [
+    "Ezekiel_1",
+    "Ezekiel_10"
+  ],
+  "sources": [
+    {
+      "id": "ez1",
+      "type": "biblical",
+      "reference": "Ezekiel 1:1-28"
+    },
+    {
+      "id": "ez10",
+      "type": "biblical",
+      "reference": "Ezekiel 10:1-22"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "kebar",
+      "type": "watercourse",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:1-3"
+    },
+    {
+      "id": "ruach",
+      "type": "spirit_movement",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:12,20-21"
+    },
+    {
+      "id": "expanse",
+      "type": "crystalline_expanse",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:22-23"
+    },
+    {
+      "id": "throne",
+      "type": "sapphire_like_throne",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:26"
+    },
+    {
+      "id": "radiance",
+      "type": "radiant_figure",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:26-28"
+    },
+    {
+      "id": "cherub_1",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:5-6"
+    },
+    {
+      "id": "wheel_1",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true,
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15-18"
+    },
+    {
+      "id": "cherub_1_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_1_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_1_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_1_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_1_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_1_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_1_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_1_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_2",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:5-6"
+    },
+    {
+      "id": "wheel_2",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true,
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15-18"
+    },
+    {
+      "id": "cherub_2_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_2_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_2_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_2_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_2_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_2_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_2_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_2_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_3",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:5-6"
+    },
+    {
+      "id": "wheel_3",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true,
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15-18"
+    },
+    {
+      "id": "cherub_3_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_3_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_3_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_3_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_3_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_3_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_3_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_3_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_4",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:5-6"
+    },
+    {
+      "id": "wheel_4",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true,
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15-18"
+    },
+    {
+      "id": "cherub_4_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_4_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_4_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_4_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10"
+    },
+    {
+      "id": "cherub_4_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_4_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_4_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    },
+    {
+      "id": "cherub_4_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11,23"
+    }
+  ],
+  "edges": [
+    {
+      "from": "cherub_1",
+      "to": "wheel_1",
+      "type": "beside",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "wheel_1",
+      "to": "cherub_1",
+      "type": "moves_with",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:19-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:12,20-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:22-23",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_human",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_lion",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_ox",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_eagle",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_1",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_2",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_3",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_4",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "wheel_2",
+      "type": "beside",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "wheel_2",
+      "to": "cherub_2",
+      "type": "moves_with",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:19-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:12,20-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:22-23",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_human",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_lion",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_ox",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_eagle",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_1",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_2",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_3",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_4",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "wheel_3",
+      "type": "beside",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "wheel_3",
+      "to": "cherub_3",
+      "type": "moves_with",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:19-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:12,20-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:22-23",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_human",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_lion",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_ox",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_eagle",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_1",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_2",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_3",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_4",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "wheel_4",
+      "type": "beside",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "wheel_4",
+      "to": "cherub_4",
+      "type": "moves_with",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:19-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:12,20-21",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:22-23",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_human",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_lion",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_ox",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_eagle",
+      "type": "has_face",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_1",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_2",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_3",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_4",
+      "type": "has_wing",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,11",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "throne",
+      "to": "expanse",
+      "type": "above",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:26",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "radiance",
+      "to": "throne",
+      "type": "upon",
+      "source": "ez1",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:26-28",
+      "status": "TEXTUAL"
+    }
+  ],
+  "created_date": "2026-11-15",
+  "lineage": {
+    "based_on": "merkabah/schema/merkabah_candidate_v0.1.json",
+    "blob_sha": "e270e137042f1c2196cc02b047c98c96d458b2e5",
+    "mode": "DERIVED_NEW_CANDIDATE_NO_HISTORY_REWRITE"
+  },
+  "observations": [
+    {
+      "id": "EZ1_FACES",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,10",
+      "status": "TEXTUAL",
+      "statement": "Each of four living beings has four faces: human, lion, ox, eagle."
+    },
+    {
+      "id": "EZ1_WINGS_HANDS",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:6,8,11,23",
+      "status": "TEXTUAL",
+      "statement": "Four wings per being; human-like hands under wings; some wings touch, some cover."
+    },
+    {
+      "id": "EZ1_LIMBS",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:7",
+      "status": "TEXTUAL",
+      "statement": "Straight legs and soles resembling calf feet; material and metric geometry not specified."
+    },
+    {
+      "id": "EZ1_WHEELS",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:15-18",
+      "status": "TEXTUAL",
+      "statement": "Four adjacent wheels, wheel-within-wheel construction, eyes around rims."
+    },
+    {
+      "id": "EZ1_MOTION",
+      "scene": "Ezekiel_1",
+      "verse_ref": "Ezekiel 1:9,12,17,19-21",
+      "status": "TEXTUAL",
+      "statement": "Motion in indicated directions without turning; wheels rise, move and stop together with living beings."
+    },
+    {
+      "id": "EZ10_HAND",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:7-8",
+      "status": "TEXTUAL",
+      "statement": "Human-hand-like form under cherub wings; a cherub passes glowing coals."
+    },
+    {
+      "id": "EZ10_EYES",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:9-12",
+      "status": "TEXTUAL",
+      "statement": "Four wheels and extensive eye imagery; avoid treating every eye location as a physically verified surface."
+    },
+    {
+      "id": "EZ10_FACES",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:14",
+      "status": "TEXTUAL",
+      "statement": "Names faces cherub, human, lion and eagle; first designation differs from ox in 1:10."
+    },
+    {
+      "id": "EZ10_MOTION",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:11,16-17,19,22",
+      "status": "TEXTUAL",
+      "statement": "Cherubim and adjacent wheels move and rise together; forward motion without turning."
+    },
+    {
+      "id": "EZ10_GLORY",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:18-19",
+      "status": "TEXTUAL",
+      "statement": "Glory departs the temple threshold, comes over cherubim, and pauses by the eastern gate."
+    },
+    {
+      "id": "EZ10_IDENTITY",
+      "scene": "Ezekiel_10",
+      "verse_ref": "Ezekiel 10:15,20-22",
+      "status": "TEXTUAL",
+      "statement": "Narrator identifies these cherubim with living creatures by the Kebar."
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "FACE_OX_VS_CHERUB",
+      "verses": [
+        "Ezekiel 1:10",
+        "Ezekiel 10:14",
+        "Ezekiel 10:22"
+      ],
+      "status": "UNRESOLVED",
+      "question": "Whether 'face of cherub' in Ez 10:14 is to be geometrically identified with ox in Ez 1:10",
+      "variants": [
+        "retain_distinct_textual_labels",
+        "interpret_cherub_as_ox"
+      ],
+      "rule": "Do not silently harmonize textual labels or duplicate anatomical face components."
+    },
+    {
+      "id": "WHEEL_GEOMETRY",
+      "verses": [
+        "Ezekiel 1:16",
+        "Ezekiel 10:10"
+      ],
+      "status": "UNRESOLVED",
+      "question": "Concentric nested rings versus intersecting perpendicular wheels",
+      "variants": [
+        "nested",
+        "intersecting"
+      ],
+      "rule": "3D choice must be recorded as inference, not biblical fact."
+    }
+  ],
+  "motion_contract": {
+    "state": "PROPOSED_CONSTRAINT_NOT_SIMULATED",
+    "references": [
+      "Ezekiel 1:9,12,17,19-21",
+      "Ezekiel 10:11,16-17,19,22"
+    ],
+    "conditions": [
+      "four beings and associated wheels share move, rise, stop events within each scene",
+      "no forced body rotation to change direction of travel",
+      "no synchronization mechanism invented beyond the textual ruach relation"
+    ],
+    "accepts_3d_only_after": [
+      "model provenance review",
+      "separate Ezekiel 1 and Ezekiel 10 scene validation",
+      "independent reviewer acceptance"
+    ]
+  },
+  "interpretation_layer": {
+    "status": "NOT_INCLUDED",
+    "policy": "Keep Architecture C and chosen-love correspondence in a separate overlay, never as textual bible fact."
+  }
+}
