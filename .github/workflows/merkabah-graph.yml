@@ -1,0 +1,22 @@
+name: Merkabah candidate graph checks
+on:
+  pull_request:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-graph.yml'
+  push:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-graph.yml'
+jobs:
+  graph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate candidate graph
+        run: python merkabah/tests/validate_graph.py merkabah/schema/merkabah_candidate_v0.1.json
+      - name: Run mutation tests
+        run: python -m unittest discover -s merkabah/tests -v
