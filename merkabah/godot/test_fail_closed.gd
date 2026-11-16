@@ -33,6 +33,23 @@ func _run() -> void:
 		_fail("Scène Ez 10 non validée n'a pas été bloquée")
 		return
 	sim.active_scene = "Ez_1"
+	# Ruach absent : aucune phase et aucun déplacement ne progressent.
+	sim.omega_ruach = 0.0
+	var before_phases: Array[float] = sim.cherub_phases.duplicate()
+	var before_wheels: Array[float] = sim.wheel_thetas.duplicate()
+	r = sim.step_merkabah(0.1)
+	if not r.get("ok", false) or not r.get("paused", false) or sim.group_position != initial_position or sim.psi_tron != initial_psi:
+		_fail("Ruach nul : la scène n'est pas restée immobile")
+		return
+	if sim.cherub_phases != before_phases or sim.wheel_thetas != before_wheels:
+		_fail("Ruach nul : les phases ont changé malgré la pause")
+		return
+	sim.omega_ruach = -1.0
+	r = sim.step_merkabah(0.1)
+	if r.get("ok", true) or sim.group_position != initial_position:
+		_fail("Ruach négatif : non bloqué")
+		return
+	sim.omega_ruach = 0.42
 	r = sim.step_merkabah(-0.1)
 	if r.get("ok", true) or sim.group_position != initial_position:
 		_fail("Durée négative non bloquée")
