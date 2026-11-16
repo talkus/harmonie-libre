@@ -1,0 +1,19 @@
+name: Merkabah candidate validation
+on:
+  pull_request:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-candidate.yml'
+  workflow_dispatch:
+jobs:
+  structural-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Python unit tests (v0.1 and v0.3)
+        run: python -m unittest discover -s merkabah/tests -p 'test*.py' -v
