@@ -1,0 +1,25 @@
+name: Merkabah - audit du candidat
+on:
+  push:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-candidate.yml'
+  pull_request:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-candidate.yml'
+permissions:
+  contents: read
+jobs:
+  candidate-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Vérifications structurelles et tests adversariaux
+        run: python -m unittest discover -s merkabah/tests -v
+      - name: Rapport explicite des lacunes de preuves
+        run: python merkabah/tools/audit_candidate.py --json
