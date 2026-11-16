@@ -26,4 +26,11 @@ jobs:
           echo "MERKABAH_EXPERIMENTAL_GRAPH=$RUNNER_TEMP/merkabah-experimental-v03.json" >> "$GITHUB_ENV"
       - name: Verify crosswalk and read-only overlay on exact pinned source
         run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
+      - name: Publish research-enhanced candidate (read-only source graph)
+        uses: actions/upload-artifact@v4
+        with:
+          name: merkabah-102-115-recherche-candidat-2026
+          path: ${{ runner.temp }}/merkabah-research-view.json
+          retention-days: 14
+          if-no-files-found: error
       - run: echo 'Contrôle documentaire seulement — pas de certification morale ni de nouveau canon.'
