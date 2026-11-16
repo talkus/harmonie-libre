@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/merkabah/candidate-0.3.schema.json",
+  "title": "Merkabah - graphe candidat par scène",
+  "type": "object",
+  "required": ["project", "version", "status", "scenes", "sources", "nodes", "edges", "notes"],
+  "properties": {
+    "project": {"const": "MERKABAH"},
+    "version": {"type": "string", "minLength": 1},
+    "status": {"const": "PROPOSED_NOT_VALIDATED"},
+    "scenes": {"type": "array", "items": {"enum": ["ez1", "ez10"]}, "uniqueItems": true, "minItems": 2, "maxItems": 2},
+    "sources": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "object", "required": ["edition", "url"], "properties": {"edition": {"type": "string", "minLength": 1}, "url": {"type": "string", "format": "uri"}}}},
+    "notes": {"type": "array", "items": {"type": "string"}},
+    "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}},
+    "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}}
+  },
+  "$defs": {
+    "reference": {"type": "object", "required": ["source", "verse"], "properties": {"source": {"type": "string", "minLength": 1}, "verse": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "references": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/reference"}},
+    "status": {"enum": ["TEXTUEL", "DEDUIT", "INTERPRETATION", "INCONNU"]},
+    "node": {"type": "object", "required": ["id", "scene", "type", "status", "references"], "properties": {"id": {"type": "string", "minLength": 1}, "scene": {"enum": ["ez1", "ez10"]}, "type": {"type": "string", "minLength": 1}, "status": {"$ref": "#/$defs/status"}, "references": {"$ref": "#/$defs/references"}, "rim_reference": {"$ref": "#/$defs/reference"}}},
+    "edge": {"type": "object", "required": ["from", "to", "scene", "type", "status", "references"], "properties": {"from": {"type": "string", "minLength": 1}, "to": {"type": "string", "minLength": 1}, "scene": {"enum": ["ez1", "ez10"]}, "type": {"type": "string", "minLength": 1}, "status": {"$ref": "#/$defs/status"}, "references": {"$ref": "#/$defs/references"}}, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}
