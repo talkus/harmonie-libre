@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Merkabah candidate graph v0.2",
+  "type": "object",
+  "required": [
+    "version",
+    "status",
+    "nodes",
+    "edges"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "const": "PROPOSITION_NON_VALIDEE"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "scene",
+          "epistemic_status",
+          "sources"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "cherub",
+              "face",
+              "wing",
+              "wheel",
+              "ruach",
+              "expanse",
+              "throne",
+              "context",
+              "feature",
+              "figure"
+            ]
+          },
+          "scene": {
+            "enum": [
+              "EZ1",
+              "EZ10",
+              "BOTH",
+              "CONTEXT"
+            ]
+          },
+          "epistemic_status": {
+            "enum": [
+              "TEXTUEL",
+              "DEDUIT",
+              "INTERPRETATION",
+              "INCONNU"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "relation",
+          "scene",
+          "epistemic_status",
+          "sources"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "relation": {
+            "enum": [
+              "has_face",
+              "has_wing",
+              "beside",
+              "moves_with",
+              "driven_by",
+              "beneath",
+              "above",
+              "contains",
+              "described_in",
+              "contradicts"
+            ]
+          },
+          "scene": {
+            "enum": [
+              "EZ1",
+              "EZ10",
+              "BOTH",
+              "CONTEXT"
+            ]
+          },
+          "epistemic_status": {
+            "enum": [
+              "TEXTUEL",
+              "DEDUIT",
+              "INTERPRETATION",
+              "INCONNU"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
