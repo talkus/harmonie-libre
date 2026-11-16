@@ -1,5 +1,6 @@
 """Prototype Blender schématique, NON VALIDÉ. blender --background --python merkabah_blender_candidate.py"""
 import bpy, math
+from pathlib import Path
 from mathutils import Vector
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -31,6 +32,8 @@ for i,(x,y) in enumerate([(-3,-3),(3,-3),(3,3),(-3,3)],1):
   limb(p+f"_leg_{s}",(x+s*.25,y,1.15),(x+s*.25,y,.45),.14,bronze)
   sphere(p+f"_foot_{s}",(x+s*.25,y-.10,.35),(.24,.20,.12),bronze)
   sphere(p+f"_hand_{s}",(x+s*.49,y,1.58),(.13,.13,.13),bronze)
+ for hand_idx,(dx,dy) in enumerate([(0,-.5),(0,.5)],1):
+  sphere(p+f"_hand_frontback_{hand_idx}",(x+dx,y+dy,1.58),(.13,.13,.13),bronze)
  wx,wy,wz=x+1.35,y,1.0
  ring(p+"_outer_ring",(wx,wy,wz),.82,.09,(math.pi/2,0,0),bronze)
  ring(p+"_inner_ring",(wx,wy,wz),.68,.08,(0,math.pi/2,0),bronze)
@@ -43,8 +46,13 @@ for name,loc,scale,material in [
  bpy.ops.mesh.primitive_cube_add(size=1,location=loc)
  o=bpy.context.object;o.name=name;o.scale=scale;o.data.materials.append(material)
 bpy.context.scene["STATUS"]="PROPOSED_NOT_VALIDATED"
-bpy.context.scene["EZ10_14"]="UNCERTAIN: cherub versus human face"
+bpy.context.scene["EZ10_14"]="UNCERTAIN: Ez 10:14 lists cherub, human, lion, eagle; Ez 1:10 lists human, lion, ox, eagle. Do not infer identity."
 bpy.context.scene["MOTION"]="NOT IMPLEMENTED"
+bpy.context.scene["SCENE_RENDERED"]="EZEKIEL_1_ONLY"
+bpy.context.scene["EYES_EZ10_12"]="BODY_AND_WING_EYES_NOT_IMPLEMENTED"
+bpy.context.scene["GEOMETRIC_STATUS"]="INTERPRETATION; sizes and face placements illustrative"
 bpy.context.scene["WARNING"]="Primitive layout and orientation are illustrative, not proven by biblical text"
-bpy.ops.wm.save_as_mainfile(filepath=bpy.path.abspath("//merkabah_candidate.blend"))
-print("MERKABAH: draft 3D saved; NO movement and NO exegetical validation")
+out = Path(__file__).resolve().parent / "generated" / "merkabah_candidate.blend"
+out.parent.mkdir(parents=True,exist_ok=True)
+bpy.ops.wm.save_as_mainfile(filepath=str(out))
+print("MERKABAH: draft 3D saved at "+str(out)+"; NO movement and NO exegetical validation")
