@@ -158,5 +158,135 @@
       "situation": "Le créateur de l’outil devient absent.",
       "observation": "Le livrable garde sa valeur d’usage, son origine et ses limites; aucune dépendance imposée à l'auteur ou à la plateforme."
     }
-  ]
+  ],
+  "merkabah_reconciliation": {
+    "no_new_canon": true,
+    "identity_of_model": "Four literal wheels; wheel-within-wheel is a characteristic of each wheel, not an additional wheel entity",
+    "sources": {
+      "github_v03": {
+        "source": "https://github.com/talkus/harmonie-libre/blob/merkabah/audit-v02-provenance-20261115/merkabah/schema/merkabah_candidate_v0.3.json",
+        "kind": "GITHUB_CANDIDATE",
+        "nodes": 61,
+        "relations": 76,
+        "verification": "READ_BYTES_AND_COUNTED",
+        "note": "Distinct from locally reported v0.3 and Drive v0.2; not to be merged by label"
+      },
+      "github_v04": {
+        "source": "https://github.com/talkus/harmonie-libre/pull/55",
+        "kind": "GITHUB_CANDIDATE",
+        "nodes": 61,
+        "relations": 76,
+        "verification": "READ_BYTES_AND_COUNTED"
+      },
+      "drive_v02": {
+        "source": "https://docs.google.com/document/d/1Y_6f-aCvX6cvRtL7ma56jZulpg2QBgnqeJqfIBWzTrw/edit",
+        "kind": "DRIVE_DECLARED",
+        "nodes": 85,
+        "relations": 221,
+        "verification": "DOCUMENTARY_CLAIM_NOT_FILE_RECOUNTED"
+      },
+      "user_v03": {
+        "kind": "USER_REPORTED_LOCAL",
+        "nodes": 78,
+        "relations": 152,
+        "split": {
+          "texte": 129,
+          "glose": 18,
+          "ressemblance": 5
+        },
+        "tests_passed_reported": 16,
+        "verification": "NOT_INDEPENDENTLY_REPRODUCED"
+      }
+    },
+    "bible": {
+      "chapter1": {
+        "label": "êtres vivants",
+        "scene": "Kebar",
+        "faces": [
+          "homme",
+          "lion",
+          "bœuf",
+          "aigle"
+        ],
+        "rim_eyes": true,
+        "body_and_wing_eyes_not_attested_in_chapter1": true,
+        "references": [
+          "Ez 1:1-3",
+          "Ez 1:5-10",
+          "Ez 1:15-21"
+        ]
+      },
+      "chapter10": {
+        "label": "chérubins",
+        "scene": "Temple",
+        "faces": [
+          "chérubin",
+          "homme",
+          "lion",
+          "aigle"
+        ],
+        "eyes_bodies_hands_wings_and_wheels": true,
+        "galgal_wheelwork": "Ez 10:13",
+        "references": [
+          "Ez 10:1-22",
+          "Ez 10:12-14"
+        ]
+      },
+      "attributes_to_preserve": [
+        "4 distinct beings each with 4 faces and 4 wings",
+        "4 wheels one near each being",
+        "wheel-within-wheel is an attribute not an extra being or wheel",
+        "feet like a calf and human hands under the wings",
+        "joined wings and covering wings",
+        "fire, torches and flashes of lightning",
+        "movement without turning and synchronized rising/halting",
+        "crystalline expanse and sapphire-like throne and luminous appearance",
+        "Kebar and exilic context for Ez1",
+        "Temple and coals for Ez10",
+        "galgal as name/address to wheels in Ez10:13, not a fifth wheel",
+        "eyes on rims Ez1 and eyes on bodies, hands, wings, wheels Ez10",
+        "prophet falling on face Ez1:28",
+        "angelic cherub term in Ez10, not directly assigned in Ez1"
+      ],
+      "unresolved": [
+        "Ez 1:10 bœuf vs Ez 10:14 chérubin",
+        "exact spatial geometry of wheel-within-wheel",
+        "number and placement of individual eyes",
+        "precise form of 'face of a cherub'"
+      ]
+    },
+    "executed_observations": {
+      "github_blender": {
+        "run": "https://github.com/talkus/harmonie-libre/actions/runs/43807613719",
+        "status": "SUCCESS",
+        "scope": "Blender 5.0.1 headless; Ez1 candidate mesh, 5 translated keyframes; no internal wheel rolling"
+      },
+      "github_gephi": {
+        "run": "https://github.com/talkus/harmonie-libre/actions/runs/43807583802",
+        "status": "SUCCESS",
+        "scope": "Export GEXF and readback; GitHub candidate 61/76"
+      },
+      "godot": {
+        "status": "NOT_ATTESTED_EXECUTED",
+        "source": "https://github.com/talkus/harmonie-libre/issues/42",
+        "scope": "Script and tests proposed; not a proven native Godot animation"
+      },
+      "github_repository": {
+        "repo": "talkus/harmonie-libre",
+        "status": "VERIFIED_EXISTS"
+      }
+    },
+    "new_scope_only": [
+      {
+        "feature": "evidence_strength_per_node",
+        "kind": "ADDITION_PROPOSED",
+        "guard": "No pseudo-precision; support unknown and contradictions; do not overwrite categorical provenance"
+      },
+      {
+        "feature": "allowed_motions_per_node",
+        "kind": "ADDITION_PROPOSED",
+        "guard": "Document scriptural vs modeled constraints; require same translation/rising/stopping per paired wheel/being; orientation unchanged; ruach state drives movement, to be tested in engine"
+      }
+    ]
+  }
 }
