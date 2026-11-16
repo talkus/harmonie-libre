@@ -156,9 +156,15 @@
       "L_K22_vertices": 231,
       "L_K22_edges": 4620,
       "corpus_declared_export_edges": 1225,
-      "export_subgraph_identity": "NOT_ESTABLISHED_FROM_DOCUMENT_ALONE",
+      "export_subgraph_identity": "DERIVED_GRAPH_ON_72_PORTES_WITH_SHARED_LETTER_PIVOTS_NOT_THE_FULL_LINE_GRAPH_L_K22",
       "corpus_reported_no_isolates_scope": "72_PORTES_NOT_288_SPARKS",
-      "difference_requires_audit": true
+      "difference_requires_audit": true,
+      "explanation_source": "https://docs.google.com/document/d/1SpR0I1NYDUzVqUIClKL2a_qbiQWVNSPg8rxtn2hyulI/edit",
+      "export_node_count_declared": 72,
+      "export_density_declared_percent": 47.93,
+      "export_edge_evidence_status": "DECLARED_IN_ARCHIVE_NOT_RECOUNTED_FROM_GEXF",
+      "projected_inter_spark_couplings_declared": 19600,
+      "spark_coupling_derivation": "1225 * 4 * 4"
     },
     "layout": {
       "shape_count": 6,
