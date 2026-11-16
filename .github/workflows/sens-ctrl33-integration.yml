@@ -15,5 +15,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m unittest discover -s docs/sens -p 'test_correspondances_sens.py' -v
+      - run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
       - run: echo 'Contrôle documentaire seulement — pas de certification morale ni de nouveau canon.'
