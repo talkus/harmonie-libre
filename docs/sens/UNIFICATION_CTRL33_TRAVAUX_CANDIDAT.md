@@ -15,6 +15,9 @@ En Ézéchiel 1, les créatures sont d'abord appelées **êtres vivants**; Ézé
 
 **Ajouts réellement proposés, et non déjà accomplis :** expliciter, par nœud, la force et les limites de la preuve, et les mouvements autorisés. Les attributs de provenance existent déjà, il ne s'agit pas de les dupliquer ni de leur attribuer une confiance numérique arbitraire. Voir `RECTIFICATIF_MERKABAH_SOURCE_ET_SENS.md` et `correspondances_sens_v01.json`.
 
+## 0ter. Une seconde v0.3 GitHub a été retrouvée
+La branche `merkabah/experimental-v03-two-scenes` contient 102 nœuds et 115 relations, répartis en deux scènes (Ez1 52/61; Ez10 50/54). Les quatre roues de chaque scène restent des entités uniques; leur « roue dans la roue » est un attribut. Elle diffère du candidat v0.3 61/76 de la PR #55, et du 78/152 rapporté. Voir le rectificatif Merkabah détaillé et les hashes dans le registre JSON.
+
 ## 1. Ce qui existe déjà (ne pas reconstruire)
 - CTRL-33 contient exactement le principe ci-dessus, neuf articulations C33_01..09 et ses preuves documentées.
 - Le recueil CTRL-29–35 le relie à l'anti-conformité, à l'amour libre, aux six garde-fous, à l'élargissement du monde et à la dignité envers soi.
