@@ -24,8 +24,8 @@ C'est un schéma **1 — 3 — 2**, six boîtes pour un centre + cinq piliers p�
 **3. Correction mathématique vérifiable :**
 - `K_22` complet : 22 sommets et `22 × 21 / 2 = 231` arêtes.
 - Son graphe linéaire complet `L(K_22)` : 231 sommets, chacun de degré 40, donc **`231 × 40 / 2 = 4 620` arêtes**.
-- La matrice R33 annonce `1 225` arêtes dans son export GEXF décrit comme `L(K_22)`. Un tel compte n'est PAS celui de `L(K_22)` complet. Il faut inspecter le fichier GEXF et sa construction pour savoir s'il s'agit d'un **sous-graphe, d'une transformation différente ou d'une erreur d'étiquetage**. La vérification documentaire ne remplace pas cette épreuve.
-- Le « 0 isolat » trouvé dans le document concerne le réseau annoncé **72/72 portes connectées**, et n'établit pas indépendamment « zéro étincelle orpheline parmi 288 ».
+- La matrice R33 annonce `1 225` arêtes dans son export GEXF appelé `L(K_22)`. La **[documentation V6](https://docs.google.com/document/d/1SpR0I1NYDUzVqUIClKL2a_qbiQWVNSPg8rxtn2hyulI/edit)** explique qu'il s'agit d'un **réseau dérivé sur 72 Portes** (une Porte = un nom de trois lettres), reliées par **lettre pivot partagée**. Il ne s'agit donc pas du `L(K_22)` complet à 231 sommets et 4 620 arêtes : l'appellation était mathématiquement abrégée et ambiguë. Dans ce graphe **72 sommets / 1 225 arêtes déclarés**, la densité calculée est `1 225 / C(72,2) = 47,93 %`. Le document en déduit `1 225 × 16 = 19 600` couplages potentiels entre quatre étincelles par Porte. Ces comptes sont **déclarés dans la source documentaire**, pas recomptés ici à partir du fichier GEXF ou de la base SQLite.
+- Le « 0 isolat » trouvé dans le document concerne le réseau annoncé **72/72 Portes connectées**, et non un audit indépendant des 288 étincelles; ce dernier devrait vérifier les couplages réellement matérialisés et non seulement le produit de 16 par arête.
 
 ## Fondement conceptuel déjà archivé
 
