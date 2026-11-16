@@ -22,6 +22,17 @@ class TestMerkabahCorrections(unittest.TestCase):
         self.assertEqual(src["drive_v02"]["verification"],"DOCUMENTARY_CLAIM_NOT_FILE_RECOUNTED")
         self.assertEqual(sum(src["user_v03"]["split"].values()),152)
 
+    def test_experimental_branch_not_conflated(self):
+        sources=self.v["sources"]
+        exp=sources["github_v03_experimental"]
+        self.assertEqual((exp["nodes"],exp["relations"]),(102,115))
+        self.assertEqual((exp["by_scene"]["ez1"]["nodes"],exp["by_scene"]["ez10"]["nodes"]),(52,50))
+        self.assertEqual(exp["by_scene"]["ez1"]["wheels"],4)
+        self.assertEqual(exp["by_scene"]["ez10"]["wheels"],4)
+        self.assertEqual(exp["wheel_inside_wheel_representation"],"BOOLEAN_ATTRIBUTE_OF_EACH_SCENE_WHEEL")
+        self.assertEqual(sum(exp["edge_status_counts"].values()),115)
+        self.assertNotEqual(exp["blob_sha"],sources["github_v03"].get("blob_sha"))
+
     def test_two_biblical_scenes_and_eyes(self):
         b=self.v["bible"]
         self.assertIn("bœuf",b["chapter1"]["faces"])
