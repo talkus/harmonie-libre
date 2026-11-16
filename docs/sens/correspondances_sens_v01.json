@@ -270,7 +270,7 @@
         "status": "EXECUTED_HEADLESS_LOGIC_ONLY",
         "run": "https://github.com/talkus/harmonie-libre/actions/runs/43942313230",
         "engine": "Godot 4.4.1",
-        "scope": "Native GDScript test of gates/ruach zero in PR #57; no 3D scene or video executed; no biblical validation"
+        "scope": "Native Godot GDScript logic tests of guards, permitted step and ruach-zero immobility; no complete 3D scene or exported video; no biblical validation"
       },
       "github_repository": {
         "repo": "talkus/harmonie-libre",
