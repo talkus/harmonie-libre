@@ -29,6 +29,15 @@ def build_researched_model(graph, research):
     if not entries or len({e["id"] for e in entries}) != len(entries):
         raise ValueError("Missing or duplicate research IDs")
     out = construct_overlay(graph)
+    # Portable model: exact original nodes/edges copied verbatim and kept separate.
+    # The research annotations never enter the historical graph itself.
+    out["original_graph"] = {
+        "version": graph["version"],
+        "scenes": copy.deepcopy(graph["scenes"]),
+        "sources": copy.deepcopy(graph["sources"]),
+        "nodes": copy.deepcopy(graph["nodes"]),
+        "edges": copy.deepcopy(graph["edges"])
+    }
     out["evidence_as_of"] = research["researched_as_of"]
     out["research_status"] = research["status"]
     out["research_sources"] = copy.deepcopy(research["sources"])
