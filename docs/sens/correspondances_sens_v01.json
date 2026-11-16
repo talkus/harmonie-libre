@@ -196,6 +196,33 @@
         },
         "tests_passed_reported": 16,
         "verification": "NOT_INDEPENDENTLY_REPRODUCED"
+      },
+      "github_v03_experimental": {
+        "source": "https://github.com/talkus/harmonie-libre/blob/merkabah/experimental-v03-two-scenes/merkabah/schema/merkabah_candidate_v0.3.json",
+        "branch": "merkabah/experimental-v03-two-scenes",
+        "blob_sha": "fb2c508c164e72185368eca012160cf5240630b7",
+        "kind": "GITHUB_EXPERIMENTAL_CANDIDATE",
+        "version": "0.3.0-experimental",
+        "nodes": 102,
+        "relations": 115,
+        "by_scene": {
+          "ez1": {
+            "nodes": 52,
+            "relations": 61,
+            "wheels": 4
+          },
+          "ez10": {
+            "nodes": 50,
+            "relations": 54,
+            "wheels": 4
+          }
+        },
+        "edge_status_counts": {
+          "TEXTUEL": 111,
+          "DEDUIT": 4
+        },
+        "wheel_inside_wheel_representation": "BOOLEAN_ATTRIBUTE_OF_EACH_SCENE_WHEEL",
+        "verification": "READ_BYTES_AND_COUNTED"
       }
     },
     "bible": {
