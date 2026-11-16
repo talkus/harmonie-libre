@@ -32,7 +32,7 @@ L’erreur de la roue dans la roue en est l'exemple décisif : **les quatre roue
 - **Drive v0.2 (rapport 15 nov.)** : 85 nœuds, 221 relations déclarés; les octets du graphe complet n'ont pas été recomptés ici. Source : https://docs.google.com/document/d/1Y_6f-aCvX6cvRtL7ma56jZulpg2QBgnqeJqfIBWzTrw/edit
 - **Blender 5.0.1 réellement exécuté en CI** : https://github.com/talkus/harmonie-libre/actions/runs/43807613719. Scène Ez1 schématique, cinq images clés vérifiées, géométrie interprétative.
 - **Gephi / NetworkX GEXF réellement exporté en CI** : https://github.com/talkus/harmonie-libre/actions/runs/43807583802; candidat GitHub 61/76.
-- **Godot natif** : pas de preuve d'exécution dans les sources inspectées; script et tests seuls ≠ animation réelle. Voir https://github.com/talkus/harmonie-libre/issues/42.
+- **Godot natif** : moteur Godot 4.4.1 **exécuté en CI** le 16 novembre, `SUCCESS`, tests de logique préflight, ruach nul et refus d'états interdits; aucun mesh animé, aucune scène complète ni vidéo : https://github.com/talkus/harmonie-libre/actions/runs/43942313230. Revue d'assemblage #42 toujours ouverte.
 
 ## Seulement deux chantiers nouveaux réellement ciblés
 
