@@ -30,10 +30,11 @@ class TestMerkabahCorrections(unittest.TestCase):
         self.assertTrue(b["chapter1"]["body_and_wing_eyes_not_attested_in_chapter1"])
         self.assertIn("Ez 10:13",b["chapter10"]["galgal_wheelwork"])
 
-    def test_record_blender_but_no_godot_claim(self):
+    def test_record_blender_and_logic_only_godot(self):
         e=self.v["executed_observations"]
         self.assertEqual(e["github_blender"]["status"],"SUCCESS")
-        self.assertEqual(e["godot"]["status"],"NOT_ATTESTED_EXECUTED")
+        self.assertEqual(e["godot"]["status"],"EXECUTED_HEADLESS_LOGIC_ONLY")
+        self.assertIn("logic", e["godot"]["scope"].lower())
         self.assertEqual(len(self.v["new_scope_only"]),2)
 
 if __name__=="__main__":
