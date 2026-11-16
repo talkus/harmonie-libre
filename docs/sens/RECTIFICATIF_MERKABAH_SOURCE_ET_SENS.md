@@ -46,3 +46,15 @@ Ne pas réécrire le graphe v0.3 à 78/152 avant d'avoir les octets, la provenan
 Une représentation est bonne lorsqu'elle **laisse être ce qu'elle représente**. La fidélité n'est pas l'accumulation de détails ni la puissance du moteur : elle consiste à ne pas déformer les distinctions, à supporter la contradiction, à rendre la correction possible et à ne pas se faire passer pour la source. CTRL-33 appliqué au travail technique veut aussi dire que le projet peut survivre à son auteur, à la plateforme et à ses propres erreurs.
 
 Sources complémentaires : https://classic.net.bible.org/passage.php?passage=Eze+1%3A10%3B10%3A14%2C21%3B41%3A18 ; https://www.biblegateway.com/passage/?search=Ezekiel+10%3A12-16&version=NRSVUE%3BNIV%3BKJV%3BNKJV ; https://github.com/talkus/harmonie-libre/pull/55
+
+## Autre v0.3 retrouvée : expérience deux scènes (rectificatif additionnel)
+
+Une troisième filière GitHub existe : [`merkabah/experimental-v03-two-scenes`](https://github.com/talkus/harmonie-libre/blob/merkabah/experimental-v03-two-scenes/merkabah/schema/merkabah_candidate_v0.3.json) contient **102 nœuds / 115 relations**, version `0.3.0-experimental`, blob `fb2c508c164e72185368eca012160cf5240630b7`, lu directement.
+
+- Ézéchiel 1 : **52 nœuds, 61 relations**, dont quatre êtres et quatre roues.
+- Ézéchiel 10 : **50 nœuds, 54 relations**, dont quatre êtres et quatre roues.
+- Les huit entrées `wheel` du fichier correspondent à **quatre roues par scène distincte**, et non à huit roues dans une vision.
+- `wheel_inside_wheel=true` est une **propriété** de chacune, non un second nœud-roue.
+- Sur cette filière, 111 relations sont classées TEXTUEL et 4 DEDUIT. C'est un autre schéma que celui de PR #55 : ne pas fusionner les comptes, les scènes ou les versions par leur seul nom `v0.3`.
+
+La version **78/152** rapportée par l'utilisateur n'est toujours pas retrouvée à l'octet près dans les sources consultées. Il faut rechercher son identifiant (fichier/commit), **sans reconstruire 78 nœuds pour faire cadrer un nombre**.
