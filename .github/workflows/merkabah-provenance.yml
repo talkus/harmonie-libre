@@ -1,0 +1,19 @@
+name: Merkabah provenance checks
+on:
+  pull_request:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-provenance.yml'
+  workflow_dispatch:
+jobs:
+  node-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Tests du contrôleur (mutations)
+        run: node --test merkabah/tests/test_audit_integrite.mjs
+      - name: Rapport de provenance v0.2 (non bloquant tant que la réparation n'est pas intégrée)
+        run: node merkabah/tools/run_audit.mjs merkabah/schema/merkabah_candidate_v0.2.json
