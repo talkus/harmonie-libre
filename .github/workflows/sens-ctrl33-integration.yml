@@ -22,14 +22,14 @@ jobs:
           git fetch --depth=1 origin merkabah/experimental-v03-two-scenes
           git show FETCH_HEAD:merkabah/schema/merkabah_candidate_v0.3.json > "$RUNNER_TEMP/merkabah-experimental-v03.json"
           python docs/sens/merkabah_qualitative_overlay.py "$RUNNER_TEMP/merkabah-experimental-v03.json"
-          python docs/sens/model_update_recent_research.py "$RUNNER_TEMP/merkabah-experimental-v03.json" --out "$RUNNER_TEMP/merkabah-research-view.json"
+          python docs/sens/model_integrer_ecorces_etincelles.py "$RUNNER_TEMP/merkabah-experimental-v03.json" --out "$RUNNER_TEMP/merkabah-research-view.json"
           echo "MERKABAH_EXPERIMENTAL_GRAPH=$RUNNER_TEMP/merkabah-experimental-v03.json" >> "$GITHUB_ENV"
       - name: Verify crosswalk and read-only overlay on exact pinned source
         run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
       - name: Publish research-enhanced candidate (read-only source graph)
         uses: actions/upload-artifact@v4
         with:
-          name: merkabah-102-115-recherche-candidat-2026
+          name: merkabah-102-115-r33-288-etincelles-candidat-2026
           path: ${{ runner.temp }}/merkabah-research-view.json
           retention-days: 14
           if-no-files-found: error
