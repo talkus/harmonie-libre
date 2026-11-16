@@ -22,9 +22,17 @@ jobs:
           sudo apt-get install -y blender
           blender --version
       - name: Build candidate .blend
-        run: blender --background --factory-startup --python merkabah/blender/merkabah_blender_candidate.py
+        run: |
+          set -o pipefail
+          blender --background --factory-startup --python merkabah/blender/merkabah_blender_candidate.py 2>&1 | tee blender-build.log
+          test -s merkabah/blender/generated/merkabah_candidate.blend
+          if grep -q 'Traceback (most recent call last)' blender-build.log; then exit 1; fi
       - name: Audit the generated .blend with Blender
-        run: blender --background merkabah/blender/generated/merkabah_candidate.blend --python merkabah/blender/validate_blend.py
+        run: |
+          set -o pipefail
+          blender --background merkabah/blender/generated/merkabah_candidate.blend --python merkabah/blender/validate_blend.py 2>&1 | tee blender-audit.log
+          grep -q '"status": "PASS"' blender-audit.log
+          if grep -q 'Traceback (most recent call last)' blender-audit.log; then exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
           name: merkabah-ezekiel1-blender-candidate
