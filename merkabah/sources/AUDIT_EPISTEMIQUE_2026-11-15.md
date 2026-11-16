@@ -38,3 +38,14 @@ Les manuscrits et les traductions divergent sur Éz 10:14 ; conserver les deux l
 5. **#43** : audit par une personne distincte du producteur, avant décision humaine finale.
 
 `python merkabah/tools/audit_candidate.py --json` retourne **BLOCKER** (erreur structurelle) ou **GAP** (preuve manquante) ; `--strict` refuse de conclure en présence de GAP. Ne pas interpréter une sortie non bloquante comme « fidèle à Ézéchiel ».
+
+
+## Addendum — retrouvaille du noyau séparé dans Drive (même journée)
+
+Après le premier audit, l'accès authentifié au Drive connecté a permis de **lire réellement** le fichier textuel `merkabah_core.py` (5 587 octets). Son SHA-256, calculé sur les octets téléchargés, est `daa229e628910a00840f79cb3d7e32eba6b033b3ed0722611acd6a3fb52ce8a8`, identique à l'empreinte mentionnée dans un rapport Drive v0.2 daté du 15 novembre. La démo locale de ce fichier a été exécutée : K=0,04 → FRAGMENTATION (R=0,45) ; K=0,28 → COUPLAGE_JUSTE (R=0,75) ; K=2,50 → CAPTURE (R=0,99) ; refus de l'auto-tempo.
+
+**Ce contrôle vérifie une copie accessible et reproductible, pas l'origine historique du canon.** Le noyau à quatre vertus/oscillateurs n'est **pas** le graphe de reconstruction biblique 3D. La chaîne de filiation et la correspondance exacte au fichier initial `artifacts/merkabah_core.py` restent à contre-valider. Ne pas fusionner ces deux couches.
+
+Un document Drive intitulé `MERKABAH_V0_2_EXECUTION_LOCALE_37_42_ET_DELEGATION_43_R33_V21_2026-11-15.md` **déclare** d'autres artefacts (graphe 85 nœuds/221 arêtes, scripts Blender et Godot, archives ZIP), mais ces résultats ne sont pas tous recontrôlés ici : ne pas les promouvoir en état GitHub exécuté.
+
+Le prototype Lovable existant est construit, mais une nouvelle mission de correction n'a pas pu être transmise : l'espace Lovable a épuisé ses crédits. **Aucun achat ni déploiement n'a été tenté.** Délégation opérationnelle bloquée tant qu'un collaborateur habilité ne reprend pas la tâche.
