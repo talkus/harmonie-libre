@@ -41,6 +41,8 @@ class ClosedTaxonomyLabels:
         if not all(isinstance(v, str) and v.strip()
                    for v in (source_ref, lineage_id, actor, reason)):
             raise ValueError("source, lineage, actor and reason required")
+        if not self.audit():
+            raise ValueError("cannot append to corrupted label history")
         heads = self._view_heads()
         if heads.get((entry_id, axis)) != previous_hash:
             raise ValueError("stale prior axis hash")
@@ -54,6 +56,8 @@ class ClosedTaxonomyLabels:
         return dict(record)
 
     def current(self, entry_id):
+        if not self.audit():
+            raise ValueError("cannot read corrupted label history")
         entry_id = str(entry_id)
         history = [dict(r) for r in self.records if r["entry_id"] == entry_id]
         latest = {}
