@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {auditMerkabah} from '../tools/audit_integrite.mjs';
+const base=JSON.parse(fs.readFileSync('merkabah/schema/merkabah_candidate_v0.1.json','utf8'));
+const clone=()=>JSON.parse(JSON.stringify(base));
+test('v0.1 cardinalité et associations sans blocage',()=>{const r=auditMerkabah(base);assert.equal(r.counts.nodes,45);assert.equal(r.counts.edges,50);assert.equal(r.findings.filter(x=>x.level==='BLOCKER').length,0)});
+test('une face en moins est détectée',()=>{const g=clone();g.nodes=g.nodes.filter(x=>x.id!=='cherub_1_face_human');assert.ok(auditMerkabah(g).findings.some(x=>x.code==='FACES_1'))});
+test('une arête orpheline est détectée',()=>{const g=clone();g.edges[0].to='absent';assert.ok(auditMerkabah(g).findings.some(x=>x.code==='ORPHAN_EDGES'))});
+test('une source non déclarée est détectée',()=>{const g=clone();g.nodes[0].source='ez1:999';assert.ok(auditMerkabah(g).findings.some(x=>x.code==='UNDECLARED_NODE_SOURCES'))});
+test('une cinquième roue est détectée',()=>{const g=clone();g.nodes.push({id:'wheel_5',type:'wheel_within_wheel',source:'ez1'});assert.ok(auditMerkabah(g).findings.some(x=>x.code==='CARDINALITY_WHEEL_WITHIN_WHEEL'))});
