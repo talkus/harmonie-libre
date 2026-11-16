@@ -1,0 +1,33 @@
+name: Merkabah Blender headless structural artifact
+on:
+  push:
+    paths:
+      - 'merkabah/blender/**'
+      - '.github/workflows/merkabah-blender-headless.yml'
+  pull_request:
+    paths:
+      - 'merkabah/blender/**'
+      - '.github/workflows/merkabah-blender-headless.yml'
+permissions:
+  contents: read
+jobs:
+  blender-headless:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender in isolated runner
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Build candidate .blend
+        run: blender --background --factory-startup --python merkabah/blender/merkabah_blender_candidate.py
+      - name: Audit the generated .blend with Blender
+        run: blender --background merkabah/blender/generated/merkabah_candidate.blend --python merkabah/blender/validate_blend.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merkabah-ezekiel1-blender-candidate
+          path: merkabah/blender/generated/merkabah_candidate.blend
+          retention-days: 30
+          if-no-files-found: error
