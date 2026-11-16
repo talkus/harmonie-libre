@@ -1,0 +1,948 @@
+{
+  "project": "MERKABAH",
+  "version": "0.3.0-candidate",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "scenes": [
+    "Ezekiel_1",
+    "Ezekiel_10"
+  ],
+  "sources": [
+    {
+      "id": "ez1",
+      "type": "biblical",
+      "reference": "Ezekiel 1:1-28"
+    },
+    {
+      "id": "ez10",
+      "type": "biblical",
+      "reference": "Ezekiel 10:1-22"
+    },
+    {
+      "id": "ez1:7",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 1:7",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez1:8",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 1:8",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:1",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:1",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:4",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:4",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:19",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:19",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:14",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:14",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:18",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:18",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    },
+    {
+      "id": "ez10:20",
+      "type": "biblical_verse",
+      "reference": "Ezekiel 10:20",
+      "verification": "REFERENCE_ONLY_NOT_TEXT_COLLATION"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "kebar",
+      "type": "watercourse",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "ruach",
+      "type": "spirit_movement",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "expanse",
+      "type": "crystalline_expanse",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "throne",
+      "type": "sapphire_like_throne",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "radiance",
+      "type": "radiant_figure",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_1",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_1_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_1_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_1_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_1_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_1_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_2",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_2_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_2_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_2_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_2_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_2_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_3",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_3_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_3_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_3_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_3_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_3_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4",
+      "type": "living_being",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "wheel_4",
+      "type": "wheel_within_wheel",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "eyes_on_rim": true
+    },
+    {
+      "id": "cherub_4_face_human",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "human"
+    },
+    {
+      "id": "cherub_4_face_lion",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "lion"
+    },
+    {
+      "id": "cherub_4_face_ox",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "ox"
+    },
+    {
+      "id": "cherub_4_face_eagle",
+      "type": "face",
+      "source": "ez1",
+      "status": "TEXTUAL",
+      "form": "eagle"
+    },
+    {
+      "id": "cherub_4_wing_1",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_2",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_3",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_wing_4",
+      "type": "wing",
+      "source": "ez1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_legs",
+      "type": "legs",
+      "form": "straight",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_feet",
+      "type": "feet",
+      "form": "like_calf_foot_burnished_bronze",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_1_hands",
+      "type": "hands",
+      "form": "human",
+      "source": "ez1:8",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_legs",
+      "type": "legs",
+      "form": "straight",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_feet",
+      "type": "feet",
+      "form": "like_calf_foot_burnished_bronze",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_2_hands",
+      "type": "hands",
+      "form": "human",
+      "source": "ez1:8",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_legs",
+      "type": "legs",
+      "form": "straight",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_feet",
+      "type": "feet",
+      "form": "like_calf_foot_burnished_bronze",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_3_hands",
+      "type": "hands",
+      "form": "human",
+      "source": "ez1:8",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_legs",
+      "type": "legs",
+      "form": "straight",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_feet",
+      "type": "feet",
+      "form": "like_calf_foot_burnished_bronze",
+      "source": "ez1:7",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherub_4_hands",
+      "type": "hands",
+      "form": "human",
+      "source": "ez1:8",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "cherubim_ez10",
+      "type": "cherubim_collective",
+      "source": "ez10:1",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "glory_ez10",
+      "type": "kavod_glory",
+      "source": "ez10:4",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "east_gate",
+      "type": "location",
+      "source": "ez10:19",
+      "status": "TEXTUAL"
+    },
+    {
+      "id": "face_discrepancy_ez10_14",
+      "type": "interpretive_note",
+      "note": "Ez 10:14 lists cherub/lion/eagle/ox; Ez 1:10 lists human/lion/ox/eagle - first face named cherub instead of human; unresolved, kept open",
+      "source": "ez10:14",
+      "status": "UNCERTAIN"
+    }
+  ],
+  "edges": [
+    {
+      "from": "cherub_1",
+      "to": "wheel_1",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_1",
+      "to": "cherub_1",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "wheel_2",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_2",
+      "to": "cherub_2",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "wheel_3",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_3",
+      "to": "cherub_3",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "wheel_4",
+      "type": "beside",
+      "source": "ez1"
+    },
+    {
+      "from": "wheel_4",
+      "to": "cherub_4",
+      "type": "moves_with",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "ruach",
+      "type": "directed_by",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "expanse",
+      "type": "beneath",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_human",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_lion",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_ox",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_face_eagle",
+      "type": "has_face",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_1",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_2",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_3",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_wing_4",
+      "type": "has_wing",
+      "source": "ez1"
+    },
+    {
+      "from": "throne",
+      "to": "expanse",
+      "type": "above",
+      "source": "ez1"
+    },
+    {
+      "from": "radiance",
+      "to": "throne",
+      "type": "upon",
+      "source": "ez1"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_legs",
+      "type": "has_legs",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_feet",
+      "type": "has_feet",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_1",
+      "to": "cherub_1_hands",
+      "type": "has_hands",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_1_hands",
+      "to": "cherub_1",
+      "type": "under_wings",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_legs",
+      "type": "has_legs",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_feet",
+      "type": "has_feet",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_2",
+      "to": "cherub_2_hands",
+      "type": "has_hands",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_2_hands",
+      "to": "cherub_2",
+      "type": "under_wings",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_legs",
+      "type": "has_legs",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_feet",
+      "type": "has_feet",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_3",
+      "to": "cherub_3_hands",
+      "type": "has_hands",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_3_hands",
+      "to": "cherub_3",
+      "type": "under_wings",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_legs",
+      "type": "has_legs",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_feet",
+      "type": "has_feet",
+      "source": "ez1:7"
+    },
+    {
+      "from": "cherub_4",
+      "to": "cherub_4_hands",
+      "type": "has_hands",
+      "source": "ez1:8"
+    },
+    {
+      "from": "cherub_4_hands",
+      "to": "cherub_4",
+      "type": "under_wings",
+      "source": "ez1:8"
+    },
+    {
+      "from": "glory_ez10",
+      "to": "cherubim_ez10",
+      "type": "above",
+      "source": "ez10:18"
+    },
+    {
+      "from": "glory_ez10",
+      "to": "east_gate",
+      "type": "stopped_at",
+      "source": "ez10:19"
+    },
+    {
+      "from": "cherubim_ez10",
+      "to": "cherub_1",
+      "type": "identity_with",
+      "source": "ez10:20",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherubim_ez10",
+      "to": "cherub_2",
+      "type": "identity_with",
+      "source": "ez10:20",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherubim_ez10",
+      "to": "cherub_3",
+      "type": "identity_with",
+      "source": "ez10:20",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "cherubim_ez10",
+      "to": "cherub_4",
+      "type": "identity_with",
+      "source": "ez10:20",
+      "status": "TEXTUAL"
+    },
+    {
+      "from": "face_discrepancy_ez10_14",
+      "to": "cherub_1_face_human",
+      "type": "questions",
+      "source": "ez10:14",
+      "status": "UNCERTAIN"
+    },
+    {
+      "from": "face_discrepancy_ez10_14",
+      "to": "cherub_2_face_human",
+      "type": "questions",
+      "source": "ez10:14",
+      "status": "UNCERTAIN"
+    },
+    {
+      "from": "face_discrepancy_ez10_14",
+      "to": "cherub_3_face_human",
+      "type": "questions",
+      "source": "ez10:14",
+      "status": "UNCERTAIN"
+    },
+    {
+      "from": "face_discrepancy_ez10_14",
+      "to": "cherub_4_face_human",
+      "type": "questions",
+      "source": "ez10:14",
+      "status": "UNCERTAIN"
+    }
+  ],
+  "derived_from": "merkabah/schema/merkabah_candidate_v0.2.json",
+  "status_legend": {
+    "TEXTUAL": "stated by the received text",
+    "DERIVED": "interpretive derivation from the text",
+    "UNCERTAIN": "unresolved textual divergence, kept open"
+  },
+  "changelog": [
+    "v0.2 (2026-11-16, scribe Vibe): addition pure - constat 1 repare (scene Ez10 testable: cherubim_ez10, glory_ez10, east_gate, ez10:20 identite textuelle, ez10:14 divergence des faces UNCERTAIN)",
+    "v0.2: constat 2 repare (mains et jambes Ez 1:7-8: legs/feet/hands par cherubin)",
+    "v0.2: constat 3 repare (gradation exercee: UNCERTAIN sur ez10:14)",
+    "v0.3: 8 références de versets manquantes enregistrées sans revendiquer une collation des traductions ou de l'hébreu; tests de provenance adaptés; statut candidat maintenu."
+  ]
+}

@@ -1,0 +1,29 @@
+name: Merkabah v0.4 Gephi export candidate
+on:
+  push:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-gephi-v04.yml'
+  pull_request:
+    paths:
+      - 'merkabah/**'
+      - '.github/workflows/merkabah-gephi-v04.yml'
+permissions:
+  contents: read
+jobs:
+  gephi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check 'networkx>=3.2,<4'
+      - run: python -m unittest discover -s merkabah/tests -p 'test*.py' -v
+      - run: python merkabah/tools/export_gephi_v04.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merkabah-v04-gephi-candidate-gexf12
+          path: merkabah/exports/merkabah_v04_candidate.gexf
+          if-no-files-found: error
+          retention-days: 30

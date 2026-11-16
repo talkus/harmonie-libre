@@ -1,0 +1,41 @@
+name: Merkabah Blender headless structural artifact
+on:
+  push:
+    paths:
+      - 'merkabah/blender/**'
+      - '.github/workflows/merkabah-blender-headless.yml'
+  pull_request:
+    paths:
+      - 'merkabah/blender/**'
+      - '.github/workflows/merkabah-blender-headless.yml'
+permissions:
+  contents: read
+jobs:
+  blender-headless:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender in isolated runner
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+      - name: Build candidate .blend
+        run: |
+          set -o pipefail
+          blender --background --factory-startup --python merkabah/blender/merkabah_blender_candidate.py 2>&1 | tee blender-build.log
+          test -s merkabah/blender/generated/merkabah_candidate.blend
+          if grep -q 'Traceback (most recent call last)' blender-build.log; then exit 1; fi
+      - name: Audit the generated .blend with Blender
+        run: |
+          set -o pipefail
+          blender --background merkabah/blender/generated/merkabah_candidate.blend --python merkabah/blender/validate_blend.py 2>&1 | tee blender-audit.log
+          grep -q '"status": "PASS"' blender-audit.log
+          if grep -q 'Traceback (most recent call last)' blender-audit.log; then exit 1; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merkabah-ezekiel1-blender-candidate
+          path: merkabah/blender/generated/merkabah_candidate.blend
+          retention-days: 30
+          if-no-files-found: error
