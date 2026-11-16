@@ -1,0 +1,19 @@
+name: Sens CTRL-33 crosswalk — structural contract (candidate)
+on:
+  pull_request:
+    paths:
+      - 'docs/sens/**'
+      - '.github/workflows/sens-ctrl33-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s docs/sens -p 'test_correspondances_sens.py' -v
+      - run: echo 'Contrôle documentaire seulement — pas de certification morale ni de nouveau canon.'
