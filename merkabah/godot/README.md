@@ -14,7 +14,15 @@ Le script source Drive déclarait `validate_yechidah` mais `step_merkabah` n'app
 
 ## Tests
 - Statiques, sans Godot : `python -m unittest discover -s merkabah/tests -p 'test_godot_preflight_static.py' -v`.
-- Comportement moteur, **à exécuter sur un poste équipé de Godot 4** : `godot --headless --path merkabah/godot --script res://test_fail_closed.gd`.
+- Comportement moteur, **exécutés dans Godot 4.4.1 sur GitHub Actions** : `godot --headless --path merkabah/godot --script res://test_fail_closed.gd`.
+
+## Rectificatif d'exécution — 16 novembre 2026
+
+**Un résultat Godot natif existe désormais, mais uniquement pour la logique.** Dans GitHub Actions, Godot 4.4.1 a exécuté le test comportemental `test_fail_closed.gd` et s'est terminé avec SUCCESS : https://github.com/talkus/harmonie-libre/actions/runs/43942313230.
+
+Vérifiés dans le moteur : refus du tempo produit par les roues, rejet du couplage interdit, de la scène Ez10 non couverte, de durée négative et de fréquence de souffle négative, immobilité des phases et positions lorsque `omega_ruach = 0`, et avancement normal permis avec `omega_ruach = 0.42`.
+
+La règle « ruach nul -> aucun mouvement » est une **contrainte de simulation proposée**, non une démonstration textuelle que le mouvement serait physiquement impossible sans un paramètre numérique. Il ne s'agit pas de la vérification d'une scène 3D finie; aucune transformation des quatre instances Node3D / roue n'a été vue ni une vidéo exportée. Voir le contrôle contradictoire #43.
 
 ## Ce que ce travail ne fait PAS
 - Il ne génère pas de mesh, de caméra ni de vidéo, et `group_position` n'est pas encore appliquée aux transformations de quatre instances Node3D.
