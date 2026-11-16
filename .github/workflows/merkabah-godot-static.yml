@@ -1,0 +1,23 @@
+name: Merkabah M5 static source guard (candidate)
+on:
+  pull_request:
+    paths:
+      - 'merkabah/godot/**'
+      - 'merkabah/tests/test_godot_preflight_static.py'
+      - '.github/workflows/merkabah-godot-static.yml'
+  workflow_dispatch:
+
+jobs:
+  static-contract-only:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify fail-closed gate is before state changes
+        run: python -m unittest discover -s merkabah/tests -p 'test_godot_preflight_static.py' -v
+      - name: Scope disclosure
+        run: echo 'Static test only. No Godot executable, 3D scene, or exegetical approval.'
