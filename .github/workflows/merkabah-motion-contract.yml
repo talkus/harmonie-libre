@@ -1,0 +1,20 @@
+name: Merkabah movement contract (candidate)
+on:
+  pull_request:
+    paths:
+      - 'merkabah/motion/**'
+      - 'merkabah/tests/test_motion_contract.py'
+      - '.github/workflows/merkabah-motion-contract.yml'
+  push:
+    branches:
+      - 'feature/merkabah-motion-contract-ez1-20261115'
+jobs:
+  motion_contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test source-linked motion invariants
+        run: python -m unittest discover -s merkabah/tests -p 'test_motion_contract.py' -v
