@@ -1,0 +1,26 @@
+name: Merkabah M5 — Godot native headless logic candidate
+on:
+  pull_request:
+    paths:
+      - 'merkabah/godot/**'
+      - '.github/workflows/merkabah-godot-headless.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  godot-logic-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch pinned official Godot engine and verify SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --output godot.zip 'https://github.com/godotengine/godot-builds/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip'
+          echo 'd6e382fb531019f85630c1f485a561a0d20c4a2344b6c3847735cfee7da812aa  godot.zip' | sha256sum --check --
+          unzip -q godot.zip
+          chmod +x Godot_v4.4.1-stable_linux.x86_64
+      - name: Run Godot M5 behavioral guard tests (no 3D geometry certification)
+        run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path merkabah/godot --script res://test_fail_closed.gd
+      - name: Disclosure
+        run: echo 'Native Godot script behavior only; no mesh, exported video, or biblical validation.'
