@@ -1,0 +1,174 @@
+{
+  "schema": "pont-visuel-1-3-2-v0.1",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "modelAuthority": "none",
+  "date": "2026-11-16",
+  "kind": "SYMBOLIC_INTERPRETATION_NOT_BIBLICAL_GRAPH",
+  "centre": {
+    "id": "centre",
+    "titre": "Amour choisi (Centre ouvert)",
+    "source": "CTRL-33",
+    "text": "Exister nous donne la possibilité d’être. Aimer, c’est choisir de contribuer à ce que l’autre puisse être et devenir, sans lui retirer cette même possibilité."
+  },
+  "tiers": [
+    {
+      "level": 0,
+      "count": 1,
+      "ids": [
+        "centre"
+      ]
+    },
+    {
+      "level": 1,
+      "count": 3,
+      "ids": [
+        "soi",
+        "autre",
+        "choix"
+      ]
+    },
+    {
+      "level": 2,
+      "count": 2,
+      "ids": [
+        "responsabilite",
+        "esperance"
+      ]
+    }
+  ],
+  "boxes": [
+    {
+      "id": "centre",
+      "label": "Amour choisi (Centre ouvert)",
+      "pillar": "CTRL-33",
+      "role": "intention non possessive",
+      "level": 0
+    },
+    {
+      "id": "soi",
+      "label": "Je compte",
+      "pillar": "Boussole et INV-11",
+      "role": "dignité envers soi; postures qui se corrigent",
+      "level": 1
+    },
+    {
+      "id": "autre",
+      "label": "Tu comptes",
+      "pillar": "Merkabah",
+      "role": "coordination sans assimilation, sans lecture biblique des vertus",
+      "level": 1
+    },
+    {
+      "id": "choix",
+      "label": "Nos choix comptent",
+      "pillar": "Fleuve",
+      "role": "continuité, conséquences et reprise",
+      "level": 1
+    },
+    {
+      "id": "responsabilite",
+      "label": "Responsabilité",
+      "pillar": "Architecture C",
+      "role": "S≠O, journal et réalité avant récit; consentement et correction",
+      "level": 2
+    },
+    {
+      "id": "esperance",
+      "label": "Espérance",
+      "pillar": "288 Étincelles",
+      "role": "72×4 registres de lectures symboliques; Tikkun et reprise",
+      "level": 2
+    }
+  ],
+  "diagram_directed_links": [
+    [
+      "centre",
+      "soi"
+    ],
+    [
+      "centre",
+      "autre"
+    ],
+    [
+      "centre",
+      "choix"
+    ],
+    [
+      "soi",
+      "autre"
+    ],
+    [
+      "autre",
+      "choix"
+    ],
+    [
+      "soi",
+      "responsabilite"
+    ],
+    [
+      "choix",
+      "esperance"
+    ],
+    [
+      "esperance",
+      "responsabilite"
+    ]
+  ],
+  "references": {
+    "boussole": "https://drive.google.com/file/d/1T12Zbljk9ZuT2NGDHBuA3jhBdWVjyCYF/view",
+    "fleuve": "https://drive.google.com/file/d/1RmGgLXdbkPzjq4C2VJ55U5xl2-ylGqFn/view",
+    "fleuve_feu": "https://drive.google.com/file/d/1jnRAuPbu0ZgBHLQtcfFKNwDvY-qUXg1w/view",
+    "merka_provenance": "https://docs.google.com/document/d/186jcOZB8saswpuFvAzyNMryueYj_2HmMAtx-sjUzjYE/edit",
+    "merka_biblical": "https://github.com/talkus/harmonie-libre/tree/merkabah/experimental-v03-two-scenes",
+    "matrix288": "https://docs.google.com/document/d/1Gd9MbXfvAIoSROU8SiNNVbVheoZEOzQ9ZHJdAOyGwrQ/edit",
+    "ctrl33": "https://docs.google.com/document/d/1t8s1gpsQ5OvCcbIRfknnG-UlIe--XFyDNi3E3pSQZg4/edit",
+    "ctrl37": "https://docs.google.com/document/d/1zKH5fOoLEI0rIOmPqurzSG7mF6iIuQL6lsDOUNo5rlg/edit"
+  },
+  "boundaries": {
+    "biblical_vision_and_interpretive_virtues": "NOT_IDENTICAL",
+    "biblical_wheels_per_scene": 4,
+    "original_merka_python_core": {
+      "path": "artifacts/merkabah_core.py",
+      "status": "CANON_NOT_VERIFIED",
+      "verification": "Original bytes not obtained; mathematical calibration claimed in handoff only."
+    },
+    "k_calibration": {
+      "fragmentation": 0.04,
+      "just_coupling": 0.28,
+      "capture": 2.5,
+      "status": "REPORTED_EXPERIMENTAL_MODEL_NOT_BIBLICAL_FACT_OR_MORAL_SCORE"
+    },
+    "spark_count": {
+      "ports": 72,
+      "postures": 4,
+      "sparks": 288,
+      "role": "DEDUCED_SYMBOLIC_CORPUS_NOT_EZEKIEL_LITERAL"
+    },
+    "spark_cycle": [
+      "D1_ORIGINE",
+      "D2_ECORCE",
+      "D3_ACTE_RECONNAISSANCE",
+      "D4_RETOUR_ETINCELLE"
+    ],
+    "topology": {
+      "K22_vertices": 22,
+      "K22_edges": 231,
+      "L_K22_vertices": 231,
+      "L_K22_edges": 4620,
+      "corpus_declared_export_edges": 1225,
+      "export_subgraph_identity": "NOT_ESTABLISHED_FROM_DOCUMENT_ALONE",
+      "corpus_reported_no_isolates_scope": "72_PORTES_NOT_288_SPARKS",
+      "difference_requires_audit": true
+    },
+    "layout": {
+      "shape_count": 6,
+      "rows": [
+        1,
+        3,
+        2
+      ],
+      "svg_direct_hex_colors": "USER_SUPPLIED_VERSION",
+      "svg_style_issue": "Prior light-dark() missing support caused black on black; explicit fill and stroke repaired."
+    }
+  }
+}
