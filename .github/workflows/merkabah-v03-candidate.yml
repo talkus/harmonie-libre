@@ -1,0 +1,30 @@
+name: Merkabah v0.3 candidate checks
+on:
+  pull_request:
+    paths:
+      - 'merkabah/schema/merkabah_candidate_v0.3.json'
+      - 'merkabah/tests/test_graph_v03.py'
+      - '.github/workflows/merkabah-v03-candidate.yml'
+  workflow_dispatch:
+jobs:
+  candidate-structure:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Structural and provenance tests on committed bytes
+        run: python -m unittest discover -s merkabah/tests -p 'test_graph_v03.py' -v
+      - name: Verify candidate is not approved
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('merkabah/schema/merkabah_candidate_v0.3.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert d['status']=='PROPOSED_NOT_VALIDATED'
+          print('Candidate remains unvalidated; exegesis and visual review are separate gates.')
+          PY
