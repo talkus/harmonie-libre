@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Merkabah candidate graph v0.2",
+  "type": "object",
+  "required": [
+    "version",
+    "status",
+    "scenes",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "const": "CANDIDATE_UNVERIFIED"
+    },
+    "scenes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "EZ1",
+          "EZ10"
+        ]
+      },
+      "minItems": 2
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "scene",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "cherub",
+              "face",
+              "wing",
+              "wheel",
+              "hand",
+              "leg",
+              "foot",
+              "ruach",
+              "expanse",
+              "throne",
+              "setting",
+              "other"
+            ]
+          },
+          "scene": {
+            "enum": [
+              "EZ1",
+              "EZ10",
+              "BOTH"
+            ]
+          },
+          "evidence": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "relation",
+          "evidence"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "relation": {
+            "enum": [
+              "has_face",
+              "has_wing",
+              "beside",
+              "moves_with",
+              "driven_by",
+              "beneath",
+              "above",
+              "has_part",
+              "cited_by",
+              "derived_from",
+              "contradicts"
+            ]
+          },
+          "evidence": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": [
+        "status",
+        "source",
+        "locator"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "TEXTUEL",
+            "DEDUIT",
+            "INTERPRETATION",
+            "INCONNU"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "locator": {
+          "type": "string"
+        },
+        "assumption": {
+          "type": "string"
+        },
+        "limitation": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
