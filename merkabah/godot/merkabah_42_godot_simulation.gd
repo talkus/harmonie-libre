@@ -49,6 +49,17 @@ func step_merkabah(dt: float) -> Dictionary:
 	var preflight: Dictionary = validate_yechidah(active_scene, "translation_corps_roues_et_arret_communs")
 	if not preflight.get("ok", false):
 		return {"ok": false, "reason": preflight.get("reason", "guard_rejected"), "active_scene": active_scene}
+	# Le ruach donne le tempo : aucune mutation quand sa fréquence est nulle.
+	# Règle de simulation candidate, non une preuve ontologique.
+	if is_nan(omega_ruach) or is_inf(omega_ruach) or omega_ruach < 0.0:
+		return {"ok": false, "reason": "invalid_ruach", "active_scene": active_scene}
+	if is_zero_approx(omega_ruach):
+		return {
+			"ok": true, "paused": true, "reason": "ruach_zero_no_movement",
+			"group_position": [group_position.x, group_position.y, group_position.z],
+			"cherub_yaw_rotation_delta": 0.0,
+			"active_scene": active_scene
+		}
 	# 1. Translation holonomique du groupe sans rotation de lacet des porteurs (Ez 1:12,17)
 	group_position += group_velocity * dt
 	psi_tron = fmod(psi_tron + omega_ruach * dt, TAU)
