@@ -11,15 +11,15 @@ class TestSixFormesSymbolique(unittest.TestCase):
         cls.d=json.loads(DATA.read_text(encoding="utf-8"))
 
     def test_counts_and_meanings(self):
-        self.assertEqual(cls.d["status"],"PROPOSED_NOT_VALIDATED")
-        self.assertEqual([t["count"] for t in cls.d["tiers"]],[1,3,2])
-        self.assertEqual(len(cls.d["boxes"]),6)
-        self.assertEqual(len({b["id"] for b in cls.d["boxes"]}),6)
-        self.assertEqual([b["label"] for b in cls.d["boxes"] if b["level"]==1],
+        self.assertEqual(self.d["status"],"PROPOSED_NOT_VALIDATED")
+        self.assertEqual([t["count"] for t in self.d["tiers"]],[1,3,2])
+        self.assertEqual(len(self.d["boxes"]),6)
+        self.assertEqual(len({b["id"] for b in self.d["boxes"]}),6)
+        self.assertEqual([b["label"] for b in self.d["boxes"] if b["level"]==1],
                          ["Je compte","Tu comptes","Nos choix comptent"])
 
     def test_exact_separation_of_sources(self):
-        boundaries=cls.d["boundaries"]
+        boundaries=self.d["boundaries"]
         self.assertEqual(boundaries["biblical_vision_and_interpretive_virtues"],"NOT_IDENTICAL")
         self.assertEqual(boundaries["original_merka_python_core"]["status"],"CANON_NOT_VERIFIED")
         self.assertEqual(boundaries["biblical_wheels_per_scene"],4)
@@ -29,7 +29,7 @@ class TestSixFormesSymbolique(unittest.TestCase):
         self.assertEqual(boundaries["spark_cycle"][2],"D3_ACTE_RECONNAISSANCE")
 
     def test_line_graph_math_and_unknown_report(self):
-        g=cls.d["boundaries"]["topology"]
+        g=self.d["boundaries"]["topology"]
         self.assertEqual(g["K22_edges"],22*21//2)
         self.assertEqual(g["L_K22_vertices"],231)
         self.assertEqual(g["L_K22_edges"],231*40//2)
@@ -43,10 +43,10 @@ class TestSixFormesSymbolique(unittest.TestCase):
         self.assertEqual(g["corpus_reported_no_isolates_scope"],"72_PORTES_NOT_288_SPARKS")
 
     def test_arrows_do_not_make_new_biblical_relations(self):
-        ids={b["id"] for b in cls.d["boxes"]}
-        self.assertEqual(len(cls.d["diagram_directed_links"]),8)
-        self.assertTrue(all(a in ids and b in ids for a,b in cls.d["diagram_directed_links"]))
-        self.assertEqual(cls.d["kind"],"SYMBOLIC_INTERPRETATION_NOT_BIBLICAL_GRAPH")
+        ids={b["id"] for b in self.d["boxes"]}
+        self.assertEqual(len(self.d["diagram_directed_links"]),8)
+        self.assertTrue(all(a in ids and b in ids for a,b in self.d["diagram_directed_links"]))
+        self.assertEqual(self.d["kind"],"SYMBOLIC_INTERPRETATION_NOT_BIBLICAL_GRAPH")
 
 if __name__=="__main__":
     unittest.main()
