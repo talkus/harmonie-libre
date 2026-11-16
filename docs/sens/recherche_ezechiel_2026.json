@@ -1,0 +1,300 @@
+{
+  "schema": "merka-recherche-2026-11-16-v1",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "kind": "LITERATURE_OVERLAY_NOT_CANON",
+  "researched_as_of": "2026-11-16",
+  "source_graph": {
+    "branch": "merkabah/experimental-v03-two-scenes",
+    "blob_sha": "fb2c508c164e72185368eca012160cf5240630b7",
+    "nodes": 102,
+    "edges": 115,
+    "unchanged": true
+  },
+  "rules": {
+    "never_make_nodes_from_hypotheses": true,
+    "never_conflate_scenes": true,
+    "do_not_promote_scholarly_hypothesis_to_text": true,
+    "no_automatic_coordinates": true,
+    "translation_profiles_explicit": true,
+    "human_review_before_merge": true
+  },
+  "sources": {
+    "AELF_1": {
+      "title": "Livre d’Ézéchiel, chapitre 1",
+      "url": "https://www.aelf.org/bible/Ez/1",
+      "publisher": "AELF",
+      "published": "édition courante",
+      "kind": "BIBLICAL_TRANSLATION"
+    },
+    "AELF_10": {
+      "title": "Livre d’Ézéchiel, chapitre 10",
+      "url": "https://www.aelf.org/bible/Ez/10",
+      "publisher": "AELF",
+      "published": "édition courante",
+      "kind": "BIBLICAL_TRANSLATION"
+    },
+    "NABRE_1": {
+      "title": "Ezekiel 1",
+      "url": "https://bible.usccb.org/bible/ezekiel/1",
+      "publisher": "USCCB/NABRE",
+      "published": "édition courante",
+      "kind": "BIBLICAL_TRANSLATION"
+    },
+    "NET_10_12": {
+      "title": "Ezekiel 10:12 — comparative versions and textual note",
+      "url": "https://classic.net.bible.org/verse.php?book=Eze&chapter=10&theme=false&verse=12",
+      "publisher": "NET Bible",
+      "published": "édition courante",
+      "kind": "TEXTUAL_CRITICISM_NOTE"
+    },
+    "SEGEV_ZILBERG_2025": {
+      "title": "The Composition of the Book of Ezekiel in Light of Babylonian Sources",
+      "url": "https://cris.biu.ac.il/en/publications/the-composition-of-the-book-of-ezekiel-in-light-of-babylonian-sou/",
+      "doi": "10.1515/zaw-2025-2007",
+      "authors": "Yair Segev; Peter Zilberg",
+      "published": "2025-05-01",
+      "publisher": "Zeitschrift für die alttestamentliche Wissenschaft 137(2), 279–289",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    },
+    "KEPPER_2026": {
+      "title": "The Chronotopes of Ezekiel, Baruch, and Sapientia: Three Case Studies",
+      "url": "https://www.degruyterbrill.com/document/doi/10.1515/9783112240366/pdf",
+      "doi": "10.1515/9783112240366",
+      "authors": "Martina Kepper",
+      "published": "2026",
+      "publisher": "Chronoi – Topoi, pp. 119–140, De Gruyter Brill",
+      "kind": "SCHOLARLY_BOOK_CHAPTER"
+    },
+    "ARTHUR_2026": {
+      "title": "Ezekiel’s Radical Iconoclasm",
+      "url": "https://academic.oup.com/jts/article/77/1/15/8482653",
+      "doi": "10.1093/jts/flag006",
+      "authors": "David Arthur",
+      "published": "2026-02-13",
+      "publisher": "The Journal of Theological Studies 77(1), 15–31",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    },
+    "GOLDINGAY_2024": {
+      "title": "Ezekiel 10:2—Sprinkle Not Scatter",
+      "url": "https://www.academia.edu/144160592/Ezekiel_10_Sprinkle_Not_Scatter",
+      "doi": "10.1163/15685330-BJA10130",
+      "authors": "John Goldingay",
+      "published": "2024",
+      "publisher": "Vetus Testamentum 74, 78–84 (online 2023-03-27)",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    },
+    "STRONG_2026": {
+      "title": "The Recognition Formula in the Book of Ezekiel: The Prophet’s Imagination of Hope",
+      "url": "https://www.mdpi.com/2077-1444/17/9/1068",
+      "doi": "10.3390/rel17091068",
+      "authors": "John T. Strong",
+      "published": "2026-09-11",
+      "publisher": "Religions 17(9), 1068",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    },
+    "WARDLAW_2026": {
+      "title": "Ezekiel as an Oral-Derived Text: Toward the Macroanalysis of Prophetic Discourse",
+      "url": "https://jlcr.diu.edu/article/163114-ezekiel-as-an-oral-derived-text-toward-the-macroanalysis-of-prophetic-discourse",
+      "doi": "10.64830/001c.163114",
+      "authors": "Terrance R. Wardlaw",
+      "published": "2026",
+      "publisher": "Journal of Language, Culture, and Religion 7(1), 1–35",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    },
+    "ADALI_2025": {
+      "title": "Marking Nations Around New Jerusalem: The Mental Map of Ezekiel in the Babylonian Context",
+      "url": "https://www.mdpi.com/2077-1444/16/5/648",
+      "doi": "10.3390/rel16050648",
+      "authors": "Selim Ferruh Adalı",
+      "published": "2025-05-20",
+      "publisher": "Religions 16(5), 648",
+      "kind": "PEER_REVIEWED_SCHOLARSHIP"
+    }
+  },
+  "findings": [
+    {
+      "id": "KEBAR_DATE_2025",
+      "level": "SCHOLARLY_HYPOTHESIS",
+      "target_node_ids": [
+        "ez1_kebar"
+      ],
+      "reference": "Ez 1:1–3; 3:15; 10:15,20,22",
+      "source_ids": [
+        "SEGEV_ZILBERG_2025"
+      ],
+      "claim": "Segev et Zilberg proposent, d’après des documents administratifs akkadiens, une construction du canal Kabar sous Cambyse et une mise en service vers le règne de Darius Ier; SI le Kebar biblique désigne ce canal, les mentions du lieu pourraient refléter une rédaction ultérieure.",
+      "limits": [
+        "Datation issue d’une analyse d’archives déjà connues, non une fouille nouvelle du lieu de la vision.",
+        "Identité Kebar/Kabar et datation du trajet sont discutées; aucune localisation précise du récit ne s’impose."
+      ],
+      "rendering_implication": "Afficher le Kebar comme décor textuel babylonien non géolocalisé avec mention 'position et chronologie historiques discutées'; ne pas placer un point GPS certain.",
+      "assertion_mode": "POSSIBILITY_NOT_FACT"
+    },
+    {
+      "id": "KEBAR_LOCATION_2026",
+      "level": "SCHOLARLY_HYPOTHESIS",
+      "target_node_ids": [
+        "ez1_kebar"
+      ],
+      "reference": "Ez 1:1–3",
+      "source_ids": [
+        "KEPPER_2026"
+      ],
+      "claim": "Kepper, dans une étude des rapports entre temps et espace narratifs, souligne que l’identification géographique exacte du Kebar reste incertaine et traite les versions hébraïques et grecques comme des configurations littéraires qui ne sont pas interchangeables.",
+      "limits": [
+        "La conclusion littéraire n’établit pas une autre localisation archéologique.",
+        "Cette lecture ne prouve pas que l’événement décrit se serait produit à une date ultérieure."
+      ],
+      "rendering_implication": "Séparer l’emplacement nommé par le texte de toute hypothèse de tracé historique et conserver le champ 'historical_coordinate': null.",
+      "assertion_mode": "UNCERTAINTY_PRESERVED"
+    },
+    {
+      "id": "CULTIC_ICONOCLASM_2026",
+      "level": "SCHOLARLY_HYPOTHESIS",
+      "target_node_ids": [
+        "ez1_throne",
+        "ez1_expanse",
+        "ez1_wheel_1",
+        "ez1_wheel_2",
+        "ez1_wheel_3",
+        "ez1_wheel_4"
+      ],
+      "reference": "Ez 1:4–28 et parallèles cultuels de 1 R 7",
+      "source_ids": [
+        "ARTHUR_2026"
+      ],
+      "claim": "Arthur propose une lecture polémique/iconoclaste dans laquelle les ressemblances, la posture fixe, le trône et les roues réemploieraient des motifs iconographiques et des objets cultuels de l’Antiquité.",
+      "limits": [
+        "Il s’agit d’une proposition exégétique parmi d’autres, et non d’un objet cultuel archéologiquement identifié comme source directe.",
+        "L’orthogonalité supposée des deux jantes est une reconstruction spatiale; 'roue dans la roue' ne décrit pas un nombre supplémentaire de roues."
+      ],
+      "rendering_implication": "Offrir une annotation 'hypothèse de parallèles cultuels' et garder la géométrie précise facultative, non certifiée.",
+      "assertion_mode": "ALTERNATIVE_INTERPRETATION"
+    },
+    {
+      "id": "EYES_EZ1_TRANSLATIONS",
+      "level": "TRANSLATION_VARIANT",
+      "target_node_ids": [
+        "ez1_wheel_1",
+        "ez1_wheel_2",
+        "ez1_wheel_3",
+        "ez1_wheel_4"
+      ],
+      "reference": "Ez 1:18",
+      "source_ids": [
+        "AELF_1",
+        "NABRE_1"
+      ],
+      "claim": "L’AELF française utilise 'scintillements' autour des roues; la NABRE rend le même passage en évoquant des yeux tout autour des jantes.",
+      "limits": [
+        "Ne pas fusionner les mots des deux traductions dans une affirmation textuelle unique.",
+        "Le texte ne dénombre pas les yeux et n’établit pas une sculpture précise."
+      ],
+      "rendering_implication": "Deux profils alternatifs: scintillements (AELF) ou yeux sur jantes (NABRE), avec étiquette de traduction; ne pas ajouter une entité-œil obligatoirement unique par rayon.",
+      "rendering_profiles": [
+        "AELF_SCINTILLEMENTS",
+        "NABRE_YEUX_JANTES"
+      ],
+      "assertion_mode": "TRANSLATION_DEPENDENT"
+    },
+    {
+      "id": "EYES_EZ10_TRANSLATIONS",
+      "level": "TRANSLATION_VARIANT",
+      "target_node_ids": [
+        "ez10_wheel_1",
+        "ez10_wheel_2",
+        "ez10_wheel_3",
+        "ez10_wheel_4",
+        "ez10_being_1",
+        "ez10_being_2",
+        "ez10_being_3",
+        "ez10_being_4"
+      ],
+      "reference": "Ez 10:12",
+      "source_ids": [
+        "AELF_10",
+        "NET_10_12"
+      ],
+      "claim": "L’AELF parle de scintillements sur corps, dos, mains, ailes et roues; plusieurs traductions dont NET/NIV disent 'yeux'. Une note NET indique que les mots correspondant à 'tout leur corps' manquent dans la Septante.",
+      "limits": [
+        "La note sur la Septante ne signifie pas absence de tout regard/éclat sur les ailes ou roues.",
+        "L’identification de parties anatomiques dans les manuscrits et les traductions doit rester sourcée; ne pas rendre des yeux corporels comme fait universel sans profil."
+      ],
+      "rendering_implication": "Profils de rendu pour Ez10: source AELF = éclats sur tous ces éléments; source NET/NIV = yeux sur corps/ailes/mains/roues; option signalant la variante Septante du début du verset.",
+      "rendering_profiles": [
+        "AELF_SCINTILLEMENTS_CORPS",
+        "NET_YEUX_CORPS",
+        "LXX_VARIANTE_TEXTE"
+      ],
+      "assertion_mode": "TRANSLATION_DEPENDENT"
+    },
+    {
+      "id": "COALS_SPRINKLE_2024",
+      "level": "SCHOLARLY_HYPOTHESIS",
+      "target_node_ids": [
+        "ez10_coals",
+        "ez10_linen_man"
+      ],
+      "reference": "Ez 10:2",
+      "source_ids": [
+        "GOLDINGAY_2024",
+        "AELF_10"
+      ],
+      "claim": "Goldingay propose de lire l’action des braises sur la ville comme une aspersion purificatrice plutôt que seulement une dispersion annonçant le jugement.",
+      "limits": [
+        "Le débat concerne la valeur d’un verbe hébreu, pas l’existence des braises, de l’homme vêtu de lin ou de la ville.",
+        "La lecture du jugement reste présente dans d’autres traductions et commentaires."
+      ],
+      "rendering_implication": "Représenter l’action explicitement décrite; présenter 'purification' et 'jugement' comme interprétations concurrentes, sans donner au feu une intention univoque.",
+      "assertion_mode": "ALTERNATIVE_INTERPRETATION"
+    },
+    {
+      "id": "HOPE_RECOGNITION_2026",
+      "level": "LITERARY_INTERPRETATION",
+      "target_node_ids": [],
+      "reference": "Livre entier, notamment Ez 33–48",
+      "source_ids": [
+        "STRONG_2026"
+      ],
+      "claim": "Strong interprète la répétition d’une formule de reconnaissance divine comme une structure qui traverse le jugement et ouvre une espérance de restauration dans le livre d’Ézéchiel.",
+      "limits": [
+        "Lecture de l’ensemble du livre, pas signification lexicale d’une roue ni validation des quatre vertus de notre projet.",
+        "La correspondance avec CTRL-33 appartient à la couche interprétative et reste facultative."
+      ],
+      "rendering_implication": "Ajouter seulement un commentaire narratif séparé du graphe textuel et de la scène géométrique.",
+      "assertion_mode": "DISCOURSE_ONLY"
+    },
+    {
+      "id": "ORAL_MACROSTRUCTURE_2026",
+      "level": "LITERARY_INTERPRETATION",
+      "target_node_ids": [],
+      "reference": "Ez 1:1–3:15 et motifs récurrents du livre",
+      "source_ids": [
+        "WARDLAW_2026"
+      ],
+      "claim": "Wardlaw propose d’analyser Ézéchiel comme discours issu de traditions orales, où récits d’appel, répétitions et échos structurent l’interprétation globale.",
+      "limits": [
+        "Un cadre de lecture littéraire ne résout pas la géométrie des roues.",
+        "Ne pas présenter une relation entre passages comme relation spatiale entre créatures."
+      ],
+      "rendering_implication": "Conserver les liens de discours au niveau des références et hypothèses, sans les requalifier comme nœuds physiques.",
+      "assertion_mode": "DISCOURSE_ONLY"
+    },
+    {
+      "id": "MESOPOTAMIAN_MENTAL_MAP_2025",
+      "level": "LITERARY_INTERPRETATION",
+      "target_node_ids": [],
+      "reference": "Carte des peuples et Nouvelle Jérusalem dans le livre",
+      "source_ids": [
+        "ADALI_2025"
+      ],
+      "claim": "Adalı rapproche la géographie mentale des peuples chez Ézéchiel de traditions cartographiques mésopotamiennes.",
+      "limits": [
+        "Ne prouve ni la disposition cardinale exacte des quatre êtres ni la position physique du char.",
+        "Ne change pas les quatre directions de mouvement décrites dans Ez1."
+      ],
+      "rendering_implication": "Annotation de contexte culturel du livre, sans angle ni direction géographique imposés à la caméra.",
+      "assertion_mode": "DISCOURSE_ONLY"
+    }
+  ]
+}

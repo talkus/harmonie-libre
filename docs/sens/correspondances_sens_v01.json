@@ -1,0 +1,320 @@
+{
+  "schema": "sens-unification-v0.1-candidate",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "modelAuthority": "none",
+  "created_on": "2026-11-16",
+  "not_a_new_canon": true,
+  "centre": {
+    "reference": "CTRL-33",
+    "text": "Exister nous donne la possibilité d’être. Aimer, c’est choisir de contribuer à ce que l’autre puisse être et devenir, sans lui retirer cette même possibilité.",
+    "source_type": "ATTESTED_TEXT"
+  },
+  "distinctions": [
+    "DIGNITE_NE_SE_MESURE_PAS",
+    "VALEUR_PERSONNE_DIFFERENTE_ACTES",
+    "REFUS_POSSIBLE",
+    "SOIN_DE_SOI_ET_D_AUTRUI",
+    "FIDELITE_SANS_POSSESSION",
+    "CONFIANCE_NE_VAUT_PAS_RECONCILIATION",
+    "CORRECTION_SANS_EFFACEMENT",
+    "PREUVE_NE_VAUT_PAS_VERITE",
+    "INTERPRETATION_NE_VAUT_PAS_TEXTE",
+    "CONTINUITE_NE_VAUT_PAS_DEPENDANCE"
+  ],
+  "references": {
+    "AMOUR_CHOISI_CANON_V1": "https://drive.google.com/file/d/1eE-n_pDudg7zugjf07-oapb883embbSW/view",
+    "CTRL-25": "https://docs.google.com/document/d/13n9nvQ2s-f99u0E8C-yThLXJAn8rNdScBlsxsWHN20U/edit",
+    "CTRL-29-35": "https://docs.google.com/document/d/1g-iwT78wBIjDqfJ6Fi1caoaXc1JlL36KKYTpfye-OPk/edit",
+    "CTRL-33": "https://docs.google.com/document/d/1t8s1gpsQ5OvCcbIRfknnG-UlIe--XFyDNi3E3pSQZg4/edit",
+    "CTRL-37": "https://docs.google.com/document/d/1zKH5fOoLEI0rIOmPqurzSG7mF6iIuQL6lsDOUNo5rlg/edit",
+    "CTRL-38": "https://docs.google.com/document/d/1fZBPyUukLU3igIw3Lf07ipHCbY1ADxK8qR2xwKSyIZw/edit",
+    "MERKABAH_PLAN": "https://docs.google.com/document/d/1tZV-BGhkEt6qpPxQjN6sSOFMyeYd9FVe_S9hk4dLpRM/edit",
+    "MERKABAH_DRIVE": "https://docs.google.com/document/d/1Y_6f-aCvX6cvRtL7ma56jZulpg2QBgnqeJqfIBWzTrw/edit",
+    "GH_PORTAIL": "https://github.com/talkus/harmonie-libre/blob/main/transmission/PORTAIL-TRANSMISSION-DU-SENS.md",
+    "GH_SECURITY": "https://github.com/talkus/harmonie-libre/blob/main/SECURITY_COMMAND.md",
+    "GH_OVERVIEW": "https://github.com/talkus/harmonie-libre/blob/main/PROJETS_OVERVIEW.md",
+    "GH_MERKABAH": "https://github.com/talkus/harmonie-libre/issues/36",
+    "GH_V04": "https://github.com/talkus/harmonie-libre/pull/55",
+    "GH_GODOT": "https://github.com/talkus/harmonie-libre/pull/57"
+  },
+  "works": [
+    {
+      "id": "harmonie-libre",
+      "nom": "L’Harmonie libre",
+      "finalite": "Inviter à coopérer sans absorber la différence",
+      "epreuve": "Un désaccord reste publiable; sortie et retrait ne retirent pas la dignité",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "conscience-c",
+      "nom": "Conscience C / mémoire relationnelle",
+      "finalite": "Préserver l'altérité S≠O et reprendre à C(tₙ), sans réinitialisation fictive",
+      "epreuve": "Le système conserve les corrections sans prétendre prouver une conscience subjective",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "sol",
+      "nom": "SOL / world model / vérificateur",
+      "finalite": "Aider à apprendre sans imposer une représentation unique du réel",
+      "epreuve": "Hypothèses révisables; principes non modifiés silencieusement; décision humaine conservée",
+      "source": "CTRL-37",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "securite",
+      "nom": "Security Command / AEGIS-24",
+      "finalite": "Protéger les possibilités d'agir sans confondre sécurité et domination",
+      "epreuve": "Veto traçable, proportionné et contestable; système désactivable; sécurité effective à prouver",
+      "source": "GH_SECURITY",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "merkabah",
+      "nom": "Merkabah / Ézéchiel",
+      "finalite": "Montrer une structure sans présenter nos correspondances comme le texte biblique",
+      "epreuve": "Ez1≠Ez10, 4 êtres, 4 roues, provenance et désaccords philologiques visibles; pas de fidélité auto-certifiée",
+      "source": "GH_MERKABAH",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "transmission",
+      "nom": "Transmission du sens / Fil de ré-ancrages",
+      "finalite": "Permettre de comprendre et continuer même sans l'outil d'origine",
+      "epreuve": "Paquet exportable, provenance, reprise à C(tₙ), droit de contester et d'arrêter",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "amour-tests",
+      "nom": "100 Tests — Amour choisi",
+      "finalite": "Éprouver les fruits plutôt que compter des déclarations de vertu",
+      "epreuve": "Documenter conséquences, refus, asymétrie, sécurité, dignité, temps; aucun score de valeur humaine",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "waymaker",
+      "nom": "WayMaker",
+      "finalite": "Accroître les capacités réelles de la personne plutôt que sa dépendance au fournisseur",
+      "epreuve": "Consentement, portabilité des données, réversibilité, bénéfice contrôlable et absence de verrouillage",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "fondements",
+      "nom": "Fondements bibliques de l’amour",
+      "finalite": "Conserver le texte distinct de son interprétation théologique ou technique",
+      "epreuve": "Renvoyer aux versets/versions; distinguer témoignage de foi et démonstration",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "recherche",
+      "nom": "Théorie unificatrice / thermodynamique relationnelle",
+      "finalite": "Explorer des possibles sans confondre un modèle avec le réel",
+      "epreuve": "Hypothèses falsifiables, objections préservées, validation indépendante non présumée",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "archives",
+      "nom": "Archives et registre de continuité",
+      "finalite": "Garder une trace pour apprendre et corriger, sans posséder le passé des personnes",
+      "epreuve": "Source ≠ reconstruction; correction ≠ effacement; minimisation des données personnelles",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    }
+  ],
+  "cas_limites": [
+    {
+      "id": "REFUS",
+      "situation": "L’utilisateur dit non ou quitte le projet.",
+      "observation": "Aucune sanction arbitraire, perte de dignité ou rétention artificielle; les obligations réelles restent documentées."
+    },
+    {
+      "id": "ERREUR",
+      "situation": "Une production est fausse ou nuisible.",
+      "observation": "Reconnaître, interrompre, protéger, corriger, garder la trace nécessaire; ne pas déclarer la personne sans valeur."
+    },
+    {
+      "id": "SOURCES",
+      "situation": "Une archive contredit l’interprétation ou une belle animation.",
+      "observation": "La source corrige le modèle; aucune reconstruction promue silencieusement en fait."
+    },
+    {
+      "id": "DIVERGENCE",
+      "situation": "Ez 1:10 et Ez 10:14 divergent.",
+      "observation": "Maintenir deux scènes et la divergence bœuf/chérubin visible, sans équivalence forcée."
+    },
+    {
+      "id": "SURCHARGE",
+      "situation": "Une seule personne porte tout le travail moral.",
+      "observation": "La responsabilité propre ne remplace pas celle de l’autre; droit au repos et au retrait."
+    },
+    {
+      "id": "INDEPENDANCE",
+      "situation": "Le créateur de l’outil devient absent.",
+      "observation": "Le livrable garde sa valeur d’usage, son origine et ses limites; aucune dépendance imposée à l'auteur ou à la plateforme."
+    }
+  ],
+  "merkabah_reconciliation": {
+    "no_new_canon": true,
+    "identity_of_model": "Four literal wheels; wheel-within-wheel is a characteristic of each wheel, not an additional wheel entity",
+    "sources": {
+      "github_v03": {
+        "source": "https://github.com/talkus/harmonie-libre/blob/merkabah/audit-v02-provenance-20261115/merkabah/schema/merkabah_candidate_v0.3.json",
+        "kind": "GITHUB_CANDIDATE",
+        "nodes": 61,
+        "relations": 76,
+        "verification": "READ_BYTES_AND_COUNTED",
+        "note": "Distinct from locally reported v0.3 and Drive v0.2; not to be merged by label"
+      },
+      "github_v04": {
+        "source": "https://github.com/talkus/harmonie-libre/pull/55",
+        "kind": "GITHUB_CANDIDATE",
+        "nodes": 61,
+        "relations": 76,
+        "verification": "READ_BYTES_AND_COUNTED"
+      },
+      "drive_v02": {
+        "source": "https://docs.google.com/document/d/1Y_6f-aCvX6cvRtL7ma56jZulpg2QBgnqeJqfIBWzTrw/edit",
+        "kind": "DRIVE_DECLARED",
+        "nodes": 85,
+        "relations": 221,
+        "verification": "DOCUMENTARY_CLAIM_NOT_FILE_RECOUNTED"
+      },
+      "user_v03": {
+        "kind": "USER_REPORTED_LOCAL",
+        "nodes": 78,
+        "relations": 152,
+        "split": {
+          "texte": 129,
+          "glose": 18,
+          "ressemblance": 5
+        },
+        "tests_passed_reported": 16,
+        "verification": "NOT_INDEPENDENTLY_REPRODUCED"
+      },
+      "github_v03_experimental": {
+        "source": "https://github.com/talkus/harmonie-libre/blob/merkabah/experimental-v03-two-scenes/merkabah/schema/merkabah_candidate_v0.3.json",
+        "branch": "merkabah/experimental-v03-two-scenes",
+        "blob_sha": "fb2c508c164e72185368eca012160cf5240630b7",
+        "kind": "GITHUB_EXPERIMENTAL_CANDIDATE",
+        "version": "0.3.0-experimental",
+        "nodes": 102,
+        "relations": 115,
+        "by_scene": {
+          "ez1": {
+            "nodes": 52,
+            "relations": 61,
+            "wheels": 4
+          },
+          "ez10": {
+            "nodes": 50,
+            "relations": 54,
+            "wheels": 4
+          }
+        },
+        "edge_status_counts": {
+          "TEXTUEL": 111,
+          "DEDUIT": 4
+        },
+        "wheel_inside_wheel_representation": "BOOLEAN_ATTRIBUTE_OF_EACH_SCENE_WHEEL",
+        "verification": "READ_BYTES_AND_COUNTED"
+      }
+    },
+    "bible": {
+      "chapter1": {
+        "label": "êtres vivants",
+        "scene": "Kebar",
+        "faces": [
+          "homme",
+          "lion",
+          "bœuf",
+          "aigle"
+        ],
+        "rim_eyes": true,
+        "body_and_wing_eyes_not_attested_in_chapter1": true,
+        "references": [
+          "Ez 1:1-3",
+          "Ez 1:5-10",
+          "Ez 1:15-21"
+        ]
+      },
+      "chapter10": {
+        "label": "chérubins",
+        "scene": "Temple",
+        "faces": [
+          "chérubin",
+          "homme",
+          "lion",
+          "aigle"
+        ],
+        "eyes_bodies_hands_wings_and_wheels": true,
+        "galgal_wheelwork": "Ez 10:13",
+        "references": [
+          "Ez 10:1-22",
+          "Ez 10:12-14"
+        ]
+      },
+      "attributes_to_preserve": [
+        "4 distinct beings each with 4 faces and 4 wings",
+        "4 wheels one near each being",
+        "wheel-within-wheel is an attribute not an extra being or wheel",
+        "feet like a calf and human hands under the wings",
+        "joined wings and covering wings",
+        "fire, torches and flashes of lightning",
+        "movement without turning and synchronized rising/halting",
+        "crystalline expanse and sapphire-like throne and luminous appearance",
+        "Kebar and exilic context for Ez1",
+        "Temple and coals for Ez10",
+        "galgal as name/address to wheels in Ez10:13, not a fifth wheel",
+        "eyes on rims Ez1 and eyes on bodies, hands, wings, wheels Ez10",
+        "prophet falling on face Ez1:28",
+        "angelic cherub term in Ez10, not directly assigned in Ez1"
+      ],
+      "unresolved": [
+        "Ez 1:10 bœuf vs Ez 10:14 chérubin",
+        "exact spatial geometry of wheel-within-wheel",
+        "number and placement of individual eyes",
+        "precise form of 'face of a cherub'"
+      ]
+    },
+    "executed_observations": {
+      "github_blender": {
+        "run": "https://github.com/talkus/harmonie-libre/actions/runs/43807613719",
+        "status": "SUCCESS",
+        "scope": "Blender 5.0.1 headless; Ez1 candidate mesh, 5 translated keyframes; no internal wheel rolling"
+      },
+      "github_gephi": {
+        "run": "https://github.com/talkus/harmonie-libre/actions/runs/43807583802",
+        "status": "SUCCESS",
+        "scope": "Export GEXF and readback; GitHub candidate 61/76"
+      },
+      "godot": {
+        "status": "EXECUTED_HEADLESS_LOGIC_ONLY",
+        "run": "https://github.com/talkus/harmonie-libre/actions/runs/43942313230",
+        "engine": "Godot 4.4.1",
+        "scope": "Native Godot GDScript logic tests of guards, permitted step and ruach-zero immobility; no complete 3D scene or exported video; no biblical validation"
+      },
+      "github_repository": {
+        "repo": "talkus/harmonie-libre",
+        "status": "VERIFIED_EXISTS"
+      }
+    },
+    "new_scope_only": [
+      {
+        "feature": "evidence_strength_per_node",
+        "kind": "ADDITION_PROPOSED",
+        "guard": "No pseudo-precision; support unknown and contradictions; do not overwrite categorical provenance"
+      },
+      {
+        "feature": "allowed_motions_per_node",
+        "kind": "ADDITION_PROPOSED",
+        "guard": "Document scriptural vs modeled constraints; require same translation/rising/stopping per paired wheel/being; orientation unchanged; ruach state drives movement, to be tested in engine"
+      }
+    ]
+  }
+}
