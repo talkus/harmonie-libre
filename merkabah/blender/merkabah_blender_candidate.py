@@ -51,7 +51,21 @@ for i,(x,y) in enumerate([(-3,-3),(3,-3),(3,3),(-3,3)],1):
   rig.location = offset
   rig.keyframe_insert(data_path="location",frame=frame,group="Translation_only_candidate")
  if rig.animation_data and rig.animation_data.action:
-  for curve in rig.animation_data.action.fcurves:
+  action = rig.animation_data.action
+  curves = []
+  if hasattr(action, "fcurves"):
+   curves = list(action.fcurves)
+  else:
+   # Blender 4.4+/5 layered actions use channelbags rather than action.fcurves
+   for layer in action.layers:
+    for strip in layer.strips:
+     for slot in action.slots:
+      bag = strip.channelbag(slot)
+      if bag is not None:
+       curves.extend(bag.fcurves)
+  if not curves:
+   raise RuntimeError("No animation curves: cannot guarantee linear movement")
+  for curve in curves:
    for key in curve.keyframe_points:
     key.interpolation = 'LINEAR'
  rig.location = (0,0,0)
