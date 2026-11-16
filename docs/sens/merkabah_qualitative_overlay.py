@@ -28,7 +28,7 @@ MOVEMENT = {
 # Everything else remains explicitly unmodeled, not physically prohibited.
 
 def git_blob_sha(data):
-    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\\0" + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
 
 def load_pinned(path):
     raw = Path(path).read_bytes()
@@ -108,7 +108,7 @@ def main():
     p.add_argument("--out", type=Path)
     a = p.parse_args()
     result = construct_overlay(load_pinned(a.pinned_graph))
-    dumped = json.dumps(result, indent=2, ensure_ascii=False) + "\\n"
+    dumped = json.dumps(result, indent=2, ensure_ascii=False) + "\n"
     if a.out:
         a.out.write_text(dumped, encoding="utf-8")
         print("overlay exported:", a.out)
