@@ -4,6 +4,17 @@
 
 **Statut** : PROPOSED_NOT_VALIDATED. Ce pont ne remplace aucun texte, n'ajoute pas de nouveau CTRL canonique et ne confère aucune autorité à un modèle. Les canons et décisions restent à leurs sièges d'origine.
 
+## 0bis. Rectificatif du 16 novembre — Merkabah et preuves (prioritaire)
+La première version de cette passerelle était trop générale au sujet de Merkabah. **Le principe central n'impose aucune géométrie supplémentaire.** Un nœud doit correspondre à une entité réellement distinguée dans la source; les aspects « roue dans la roue », jantes et yeux sont d'abord des **attributs** des quatre roues, et non des roues supplémentaires. Ne jamais inventer huit roues.
+
+En Ézéchiel 1, les créatures sont d'abord appelées **êtres vivants**; Ézéchiel 10 les identifie comme **chérubins**. En 1:18, les yeux sont sur les jantes; en 10:12, ils sont aussi sur les corps, dos/mains et ailes. La variante de la **face de bœuf** (1:10) et de la **face de chérubin** (10:14) reste ouverte. Les ailes jointives, pieds, mains, feu/torches/éclairs, ruach, étendue, trône, Kebar, cadre du Temple, charbons, « Galgal » (10:13, désignation liée aux roues), mouvement sans demi-tour et Ézéchiel tombant sur sa face (1:28) sont à retrouver dans l'inventaire existant plutôt que dans une liste improvisée.
+
+**États de version distincts, sans les confondre :** GitHub PR #55 v0.3 et v0.4 = 61 nœuds/76 relations (fichiers relus); Drive rapport v0.2 = 85/221 (document déclaratif, octets du graphe non recomptés ici); audit local rapporté par l'utilisateur v0.3 = 78/152 (129 texte, 18 gloses, 5 ressemblances; 16/16 tests), **non reproduit dans les deux sources connectées**. Ces comptes ne sont ni incompatibles par principe, ni interchangeables sans preuve de filiation.
+
+**Rectification de l'exécution :** le dépôt GitHub `talkus/harmonie-libre` existe. Le candidat de la PR #55 a réellement exécuté en CI Blender 5.0.1 (https://github.com/talkus/harmonie-libre/actions/runs/43807613719) et un export GEXF Gephi/NetworkX (https://github.com/talkus/harmonie-libre/actions/runs/43807583802). Godot natif reste non attesté comme exécuté, et la fidélité de la scène au texte n'est pas validée. La réussite du pipeline n'est PAS une preuve herméneutique.
+
+**Ajouts réellement proposés, et non déjà accomplis :** expliciter, par nœud, la force et les limites de la preuve, et les mouvements autorisés. Les attributs de provenance existent déjà, il ne s'agit pas de les dupliquer ni de leur attribuer une confiance numérique arbitraire. Voir `RECTIFICATIF_MERKABAH_SOURCE_ET_SENS.md` et `correspondances_sens_v01.json`.
+
 ## 1. Ce qui existe déjà (ne pas reconstruire)
 - CTRL-33 contient exactement le principe ci-dessus, neuf articulations C33_01..09 et ses preuves documentées.
 - Le recueil CTRL-29–35 le relie à l'anti-conformité, à l'amour libre, aux six garde-fous, à l'élargissement du monde et à la dignité envers soi.
