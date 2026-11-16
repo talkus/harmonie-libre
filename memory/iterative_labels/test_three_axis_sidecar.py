@@ -38,6 +38,8 @@ class TestThreeAxis(unittest.TestCase):
         self.put();self.s.records[0]["value"]="OUVERT"
         self.assertFalse(self.s.audit())
         with self.assertRaises(ValueError):self.s.export_jsonl()
+        with self.assertRaises(ValueError):self.s.current("synthetic-295")
+        with self.assertRaises(ValueError):self.put(value="OUVERT",previous_hash=self.s.records[0]["hash"])
     def test_ascii_export_and_no_source_authority(self):
         self.put()
         self.assertTrue(self.s.audit())
