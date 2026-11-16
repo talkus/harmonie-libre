@@ -40,6 +40,21 @@ for i,(x,y) in enumerate([(-3,-3),(3,-3),(3,3),(-3,3)],1):
  for j in range(12):
   a=2*math.pi*j/12
   sphere(p+f"_symbolic_eye_{j+1}",(wx+.82*math.cos(a),wy,wz+.82*math.sin(a)),(.075,.075,.075),eye)
+ # The whole being and its adjacent wheel form one translating rig.
+ # This path is illustrative and adds NO rotation to the being.
+ rig = bpy.data.objects.new(p+"_rig", None)
+ bpy.context.collection.objects.link(rig)
+ for obj in list(bpy.data.objects):
+  if obj is not rig and obj.name.startswith(p+"_"):
+   obj.parent = rig
+ for frame,offset in [(1,(0,0,0)),(31,(0,-2,0)),(61,(2,-2,0)),(91,(2,0,0)),(121,(0,0,0))]:
+  rig.location = offset
+  rig.keyframe_insert(data_path="location",frame=frame,group="Translation_only_candidate")
+ if rig.animation_data and rig.animation_data.action:
+  for curve in rig.animation_data.action.fcurves:
+   for key in curve.keyframe_points:
+    key.interpolation = 'LINEAR'
+ rig.location = (0,0,0)
 for name,loc,scale,material in [
  ("expanse_placeholder",(0,0,3.8),(8,8,.04),wing),
  ("throne_placeholder",(0,0,5.1),(1.6,1,.3),body)]:
@@ -47,7 +62,11 @@ for name,loc,scale,material in [
  o=bpy.context.object;o.name=name;o.scale=scale;o.data.materials.append(material)
 bpy.context.scene["STATUS"]="PROPOSED_NOT_VALIDATED"
 bpy.context.scene["EZ10_14"]="UNCERTAIN: Ez 10:14 lists cherub, human, lion, eagle; Ez 1:10 lists human, lion, ox, eagle. Do not infer identity."
-bpy.context.scene["MOTION"]="NOT IMPLEMENTED"
+bpy.context.scene["MOTION"]="TRANSLATION_ONLY_CANDIDATE"
+bpy.context.scene["WHEEL_INTERNAL_ROLLING"]="NOT_IMPLEMENTED"
+bpy.context.scene.frame_start=1
+bpy.context.scene.frame_end=121
+bpy.context.scene.frame_set(1)
 bpy.context.scene["SCENE_RENDERED"]="EZEKIEL_1_ONLY"
 bpy.context.scene["EYES_EZ10_12"]="BODY_AND_WING_EYES_NOT_IMPLEMENTED"
 bpy.context.scene["GEOMETRIC_STATUS"]="INTERPRETATION; sizes and face placements illustrative"
@@ -55,4 +74,4 @@ bpy.context.scene["WARNING"]="Primitive layout and orientation are illustrative,
 out = Path(__file__).resolve().parent / "generated" / "merkabah_candidate.blend"
 out.parent.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(out))
-print("MERKABAH: draft 3D saved at "+str(out)+"; NO movement and NO exegetical validation")
+print("MERKABAH: draft 3D + translating rigs saved at "+str(out)+"; no internal wheel rolling and NO exegetical validation")
