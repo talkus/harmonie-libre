@@ -22,6 +22,7 @@ jobs:
           git fetch --depth=1 origin merkabah/experimental-v03-two-scenes
           git show FETCH_HEAD:merkabah/schema/merkabah_candidate_v0.3.json > "$RUNNER_TEMP/merkabah-experimental-v03.json"
           python docs/sens/merkabah_qualitative_overlay.py "$RUNNER_TEMP/merkabah-experimental-v03.json"
+          python docs/sens/model_update_recent_research.py "$RUNNER_TEMP/merkabah-experimental-v03.json" --out "$RUNNER_TEMP/merkabah-research-view.json"
           echo "MERKABAH_EXPERIMENTAL_GRAPH=$RUNNER_TEMP/merkabah-experimental-v03.json" >> "$GITHUB_ENV"
       - name: Verify crosswalk and read-only overlay on exact pinned source
         run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
