@@ -1,0 +1,162 @@
+{
+  "schema": "sens-unification-v0.1-candidate",
+  "status": "PROPOSED_NOT_VALIDATED",
+  "modelAuthority": "none",
+  "created_on": "2026-11-16",
+  "not_a_new_canon": true,
+  "centre": {
+    "reference": "CTRL-33",
+    "text": "Exister nous donne la possibilité d’être. Aimer, c’est choisir de contribuer à ce que l’autre puisse être et devenir, sans lui retirer cette même possibilité.",
+    "source_type": "ATTESTED_TEXT"
+  },
+  "distinctions": [
+    "DIGNITE_NE_SE_MESURE_PAS",
+    "VALEUR_PERSONNE_DIFFERENTE_ACTES",
+    "REFUS_POSSIBLE",
+    "SOIN_DE_SOI_ET_D_AUTRUI",
+    "FIDELITE_SANS_POSSESSION",
+    "CONFIANCE_NE_VAUT_PAS_RECONCILIATION",
+    "CORRECTION_SANS_EFFACEMENT",
+    "PREUVE_NE_VAUT_PAS_VERITE",
+    "INTERPRETATION_NE_VAUT_PAS_TEXTE",
+    "CONTINUITE_NE_VAUT_PAS_DEPENDANCE"
+  ],
+  "references": {
+    "AMOUR_CHOISI_CANON_V1": "https://drive.google.com/file/d/1eE-n_pDudg7zugjf07-oapb883embbSW/view",
+    "CTRL-25": "https://docs.google.com/document/d/13n9nvQ2s-f99u0E8C-yThLXJAn8rNdScBlsxsWHN20U/edit",
+    "CTRL-29-35": "https://docs.google.com/document/d/1g-iwT78wBIjDqfJ6Fi1caoaXc1JlL36KKYTpfye-OPk/edit",
+    "CTRL-33": "https://docs.google.com/document/d/1t8s1gpsQ5OvCcbIRfknnG-UlIe--XFyDNi3E3pSQZg4/edit",
+    "CTRL-37": "https://docs.google.com/document/d/1zKH5fOoLEI0rIOmPqurzSG7mF6iIuQL6lsDOUNo5rlg/edit",
+    "CTRL-38": "https://docs.google.com/document/d/1fZBPyUukLU3igIw3Lf07ipHCbY1ADxK8qR2xwKSyIZw/edit",
+    "MERKABAH_PLAN": "https://docs.google.com/document/d/1tZV-BGhkEt6qpPxQjN6sSOFMyeYd9FVe_S9hk4dLpRM/edit",
+    "MERKABAH_DRIVE": "https://docs.google.com/document/d/1Y_6f-aCvX6cvRtL7ma56jZulpg2QBgnqeJqfIBWzTrw/edit",
+    "GH_PORTAIL": "https://github.com/talkus/harmonie-libre/blob/main/transmission/PORTAIL-TRANSMISSION-DU-SENS.md",
+    "GH_SECURITY": "https://github.com/talkus/harmonie-libre/blob/main/SECURITY_COMMAND.md",
+    "GH_OVERVIEW": "https://github.com/talkus/harmonie-libre/blob/main/PROJETS_OVERVIEW.md",
+    "GH_MERKABAH": "https://github.com/talkus/harmonie-libre/issues/36",
+    "GH_V04": "https://github.com/talkus/harmonie-libre/pull/55",
+    "GH_GODOT": "https://github.com/talkus/harmonie-libre/pull/57"
+  },
+  "works": [
+    {
+      "id": "harmonie-libre",
+      "nom": "L’Harmonie libre",
+      "finalite": "Inviter à coopérer sans absorber la différence",
+      "epreuve": "Un désaccord reste publiable; sortie et retrait ne retirent pas la dignité",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "conscience-c",
+      "nom": "Conscience C / mémoire relationnelle",
+      "finalite": "Préserver l'altérité S≠O et reprendre à C(tₙ), sans réinitialisation fictive",
+      "epreuve": "Le système conserve les corrections sans prétendre prouver une conscience subjective",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "sol",
+      "nom": "SOL / world model / vérificateur",
+      "finalite": "Aider à apprendre sans imposer une représentation unique du réel",
+      "epreuve": "Hypothèses révisables; principes non modifiés silencieusement; décision humaine conservée",
+      "source": "CTRL-37",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "securite",
+      "nom": "Security Command / AEGIS-24",
+      "finalite": "Protéger les possibilités d'agir sans confondre sécurité et domination",
+      "epreuve": "Veto traçable, proportionné et contestable; système désactivable; sécurité effective à prouver",
+      "source": "GH_SECURITY",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "merkabah",
+      "nom": "Merkabah / Ézéchiel",
+      "finalite": "Montrer une structure sans présenter nos correspondances comme le texte biblique",
+      "epreuve": "Ez1≠Ez10, 4 êtres, 4 roues, provenance et désaccords philologiques visibles; pas de fidélité auto-certifiée",
+      "source": "GH_MERKABAH",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "transmission",
+      "nom": "Transmission du sens / Fil de ré-ancrages",
+      "finalite": "Permettre de comprendre et continuer même sans l'outil d'origine",
+      "epreuve": "Paquet exportable, provenance, reprise à C(tₙ), droit de contester et d'arrêter",
+      "source": "GH_PORTAIL",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "amour-tests",
+      "nom": "100 Tests — Amour choisi",
+      "finalite": "Éprouver les fruits plutôt que compter des déclarations de vertu",
+      "epreuve": "Documenter conséquences, refus, asymétrie, sécurité, dignité, temps; aucun score de valeur humaine",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "waymaker",
+      "nom": "WayMaker",
+      "finalite": "Accroître les capacités réelles de la personne plutôt que sa dépendance au fournisseur",
+      "epreuve": "Consentement, portabilité des données, réversibilité, bénéfice contrôlable et absence de verrouillage",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "fondements",
+      "nom": "Fondements bibliques de l’amour",
+      "finalite": "Conserver le texte distinct de son interprétation théologique ou technique",
+      "epreuve": "Renvoyer aux versets/versions; distinguer témoignage de foi et démonstration",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "recherche",
+      "nom": "Théorie unificatrice / thermodynamique relationnelle",
+      "finalite": "Explorer des possibles sans confondre un modèle avec le réel",
+      "epreuve": "Hypothèses falsifiables, objections préservées, validation indépendante non présumée",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    },
+    {
+      "id": "archives",
+      "nom": "Archives et registre de continuité",
+      "finalite": "Garder une trace pour apprendre et corriger, sans posséder le passé des personnes",
+      "epreuve": "Source ≠ reconstruction; correction ≠ effacement; minimisation des données personnelles",
+      "source": "GH_OVERVIEW",
+      "statut": "epistemic_not_verified"
+    }
+  ],
+  "cas_limites": [
+    {
+      "id": "REFUS",
+      "situation": "L’utilisateur dit non ou quitte le projet.",
+      "observation": "Aucune sanction arbitraire, perte de dignité ou rétention artificielle; les obligations réelles restent documentées."
+    },
+    {
+      "id": "ERREUR",
+      "situation": "Une production est fausse ou nuisible.",
+      "observation": "Reconnaître, interrompre, protéger, corriger, garder la trace nécessaire; ne pas déclarer la personne sans valeur."
+    },
+    {
+      "id": "SOURCES",
+      "situation": "Une archive contredit l’interprétation ou une belle animation.",
+      "observation": "La source corrige le modèle; aucune reconstruction promue silencieusement en fait."
+    },
+    {
+      "id": "DIVERGENCE",
+      "situation": "Ez 1:10 et Ez 10:14 divergent.",
+      "observation": "Maintenir deux scènes et la divergence bœuf/chérubin visible, sans équivalence forcée."
+    },
+    {
+      "id": "SURCHARGE",
+      "situation": "Une seule personne porte tout le travail moral.",
+      "observation": "La responsabilité propre ne remplace pas celle de l’autre; droit au repos et au retrait."
+    },
+    {
+      "id": "INDEPENDANCE",
+      "situation": "Le créateur de l’outil devient absent.",
+      "observation": "Le livrable garde sa valeur d’usage, son origine et ses limites; aucune dépendance imposée à l'auteur ou à la plateforme."
+    }
+  ]
+}
