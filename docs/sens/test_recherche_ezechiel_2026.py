@@ -27,6 +27,12 @@ class TestRecentEzekielResearch(unittest.TestCase):
         self.assertEqual({n["scene"] for n in self.view["nodes"].values()},{"ez1","ez10"})
         self.assertEqual(Path(os.environ["MERKABAH_EXPERIMENTAL_GRAPH"]).read_bytes(),self.original_bytes)
 
+    def test_portable_graph_is_exact_not_new_ontology(self):
+        original=self.view["original_graph"]
+        self.assertEqual(original["nodes"],self.graph["nodes"])
+        self.assertEqual(original["edges"],self.graph["edges"])
+        self.assertEqual((len(original["nodes"]),len(original["edges"])),(102,115))
+
     def test_scholarly_inferences_never_text_certainties(self):
         self.assertEqual(self.catalog["kind"],"LITERATURE_OVERLAY_NOT_CANON")
         self.assertTrue(self.catalog["rules"]["do_not_promote_scholarly_hypothesis_to_text"])
