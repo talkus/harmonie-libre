@@ -24,6 +24,14 @@ class TestGodotPreflightStatic(unittest.TestCase):
         self.assertIn('active_scene != "Ez_1"', prefix)
         self.assertIn('dt <= 0.0', prefix)
 
+    def test_ruach_zero_stops_before_mutation(self):
+        change = self.step.index("group_position += ")
+        prefix = self.step[:change]
+        self.assertIn('is_zero_approx(omega_ruach)', prefix)
+        self.assertIn('"paused": true', prefix)
+        self.assertIn('"reason": "ruach_zero_no_movement"', prefix)
+        self.assertIn('omega_ruach < 0.0', prefix)
+
     def test_result_has_explicit_success_indicator(self):
         self.assertIn('"ok": true', self.step)
         self.assertIn('"ok": false', self.step)
