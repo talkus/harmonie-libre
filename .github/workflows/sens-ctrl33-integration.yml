@@ -15,5 +15,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
+      - name: Fetch existing v0.3 experimental graph without changing it
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin merkabah/experimental-v03-two-scenes
+          git show FETCH_HEAD:merkabah/schema/merkabah_candidate_v0.3.json > "$RUNNER_TEMP/merkabah-experimental-v03.json"
+          python docs/sens/merkabah_qualitative_overlay.py "$RUNNER_TEMP/merkabah-experimental-v03.json"
+          echo "MERKABAH_EXPERIMENTAL_GRAPH=$RUNNER_TEMP/merkabah-experimental-v03.json" >> "$GITHUB_ENV"
+      - name: Verify crosswalk and read-only overlay on exact pinned source
+        run: python -m unittest discover -s docs/sens -p 'test_*.py' -v
       - run: echo 'Contrôle documentaire seulement — pas de certification morale ni de nouveau canon.'
