@@ -14,6 +14,8 @@ Trois règles simples :
 
 **Vérifier** : la preuve de continuité est un journal dont chaque ligne porte l'empreinte de la précédente — recalculable avec n'importe quel outil MD5, sans environnement particulier : [`transmission/fil-reancrages-journal.jsonl`](transmission/fil-reancrages-journal.jsonl). Les empreintes de tous les documents : [`transmission/MANIFESTE.md`](transmission/MANIFESTE.md).
 
+**Le lien en entier** : comment la vision, les etincelles, le fleuve, la boussole et le coeur tiennent ensemble, en une page : [`transmission/LE-LIEN.md`](transmission/LE-LIEN.md).
+
 **Approfondir** : le portail complet — vecteur, architecture, garde-fous, phrase de l'Harmonie libre, épreuve de réception : [`transmission/PORTAIL-TRANSMISSION-DU-SENS.md`](transmission/PORTAIL-TRANSMISSION-DU-SENS.md).
 
 **La règle de croissance** (gravée le 14 nov 2026) : chaque niveau ajouté doit rendre le sens plus accessible ou la vérification plus solide — jamais seulement ajouter de la complexité. La complexité vit à la périphérie ; ce qui se lit d'abord reste simple.
