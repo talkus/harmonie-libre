@@ -229,5 +229,133 @@
     "genTokens": 30,
     "fixedTokens": 15,
     "width": 16
-  }
+  },
+  "exactTreeAffinity": [
+    {
+      "n": 0,
+      "controllers": 1,
+      "rootFidelity": 0.999598017588335,
+      "squaredFidelity": 0.9991961967665293
+    },
+    {
+      "n": 1,
+      "controllers": 2,
+      "rootFidelity": 0.9976114963842551,
+      "squaredFidelity": 0.9952286977180326
+    },
+    {
+      "n": 2,
+      "controllers": 4,
+      "rootFidelity": 0.9935700251997996,
+      "squaredFidelity": 0.9871813949755305
+    },
+    {
+      "n": 3,
+      "controllers": 8,
+      "rootFidelity": 0.985455188976823,
+      "squaredFidelity": 0.971121929481346
+    },
+    {
+      "n": 4,
+      "controllers": 16,
+      "rootFidelity": 0.9693432214246266,
+      "squaredFidelity": 0.9396262809218726
+    },
+    {
+      "n": 5,
+      "controllers": 32,
+      "rootFidelity": 0.9378267545545877,
+      "squaredFidelity": 0.879519021558391
+    },
+    {
+      "n": 6,
+      "controllers": 64,
+      "rootFidelity": 0.8777610342991413,
+      "squaredFidelity": 0.7704644333338984
+    },
+    {
+      "n": 7,
+      "controllers": 128,
+      "rootFidelity": 0.7688602901213142,
+      "squaredFidelity": 0.5911461457254314
+    },
+    {
+      "n": 8,
+      "controllers": 256,
+      "rootFidelity": 0.5898667215179114,
+      "squaredFidelity": 0.34794274915428924
+    },
+    {
+      "n": 9,
+      "controllers": 512,
+      "rootFidelity": 0.34716162235027953,
+      "squaredFidelity": 0.1205211920328781
+    },
+    {
+      "n": 10,
+      "controllers": 1024,
+      "rootFidelity": 0.12024117050088724,
+      "squaredFidelity": 0.014457939083423436
+    },
+    {
+      "n": 11,
+      "controllers": 2048,
+      "rootFidelity": 0.014423255499359923,
+      "squaredFidelity": 0.00020803029919981626
+    },
+    {
+      "n": 12,
+      "controllers": 4096,
+      "rootFidelity": 0.00020751629789853408,
+      "squaredFidelity": 4.306301389351314e-8
+    },
+    {
+      "n": 13,
+      "controllers": 8192,
+      "rootFidelity": 4.295370685978001e-8,
+      "squaredFidelity": 1.8450209329959127e-15
+    },
+    {
+      "n": 14,
+      "controllers": 16384,
+      "rootFidelity": 1.840222567547829e-15,
+      "squaredFidelity": 3.386419098112325e-30
+    },
+    {
+      "n": 15,
+      "controllers": 32768,
+      "rootFidelity": 3.3774203792928346e-30,
+      "squaredFidelity": 1.1406968418462554e-59
+    },
+    {
+      "n": 16,
+      "controllers": 65536,
+      "rootFidelity": 1.1376085622762548e-59,
+      "squaredFidelity": 1.2941532409642474e-118
+    },
+    {
+      "n": 17,
+      "controllers": 131072,
+      "rootFidelity": 1.2905939981842552e-118,
+      "squaredFidelity": 1.6656328681492214e-236
+    },
+    {
+      "n": 18,
+      "controllers": 262144,
+      "rootFidelity": 1.660993499383501e-236,
+      "squaredFidelity": 0
+    },
+    {
+      "n": 19,
+      "controllers": 524288,
+      "rootFidelity": 0,
+      "squaredFidelity": 0
+    },
+    {
+      "n": 20,
+      "controllers": 1048576,
+      "rootFidelity": 0,
+      "squaredFidelity": 0
+    }
+  ]
 }
