@@ -34,3 +34,6 @@ Critères de test : un exemple valide établit une existence ; une recherche inf
 | T21 | Recrutement nécessaire pour réduire le retard à débit fixé | contre-exemple à créneaux ; énumération de 714624 trajectoires |
 
 Voir [U15.4.3](U15_4_3.md). Ces ajouts ne modifient pas les preuves ni les archives historiques.
+
+## Complément de revue (18 novembre 2026)
+Les protocoles T1–T6 de la note de travail ont leur propre numérotation et sont détaillés dans [COMPLEMENT_METHODOLOGIQUE.md](COMPLEMENT_METHODOLOGIQUE.md#3-protocoles-t1t6-de-la-note-revue). Le témoin T3 à budget (3,3), deux cibles, I final nul est démontré dans l'alphabet restreint de U15.3 ; la version U14 à support fini et les tests matériels restent ouverts. Aucun statut historique ne change.
