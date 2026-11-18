@@ -3,6 +3,10 @@
 > **État courant : 25 septembre 2026.**  
 > Le bloc « Exécution autonome du 11 septembre 2026 » plus bas est conservé comme **instantané historique**. Il ne doit plus être lu comme l'état actuel.
 
+## Cartographie transversale — 18 novembre 2026
+
+[Du Sens aux devenirs possibles — cartographie publique](CARTOGRAPHIE_TRANSVERSALE_2026-11-18.md) : 50 liens typés, 16 épreuves proposées, généalogie de février à novembre, six chaînes de dépendances et corrections scientifiques. Synthèse révisable ; ne remplace ni les sources ni les statuts historiques. Les archives privées ne sont pas publiées.
+
 ## Mise à jour de continuité — 24 septembre 2026
 
 ### Blocages documentaires désormais levés
