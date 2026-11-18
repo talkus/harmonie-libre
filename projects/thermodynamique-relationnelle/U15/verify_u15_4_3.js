@@ -50,4 +50,26 @@ function verifyU1543(){
  check(witness.genTime===54&&witness.fixedTime===60&&witness.genTime<witness.fixedTime,"conditional example");
  return {counts:rows,poisson:{lambda,T,M,lower,upper:lambda*T*T/2},affinity,slotted:{slots,histories,paths},witness};
 }
-console.log(JSON.stringify(verifyU1543(),null,2));
+function exactTreeAffinity(){
+ const q=.1,p=.25,e=q/(1-p+q);
+ let A=[Math.sqrt(1-e),Math.sqrt(e)];
+ const initial=[Math.sqrt(1-q),Math.sqrt(q)],out=[];
+ for(let n=0;n<=20;n++){
+  const value=initial[0]*A[0]+initial[1]*A[1];
+  out.push({n,controllers:2**n,rootFidelity:value,squaredFidelity:value*value});
+  const next=[q,p].map((c,x)=>A[x]*(Math.sqrt(1-c)*A[0]+Math.sqrt(c)*A[1]));
+  A=next;
+ }
+ // independent enumeration of all 16 bitstrings for n=2:
+ let brute=0;
+ for(let m=0;m<16;m++){
+  const b=Array.from({length:4},(_,i)=>(m>>i)&1);
+  const bern=(x,r)=>x?r:1-r;
+  const P=bern(b[0],q)*bern(b[1],b[0]?p:q)*bern(b[2],b[0]?p:q)*bern(b[3],b[1]?p:q);
+  const Q=b.reduce((acc,x)=>acc*bern(x,e),1);
+  brute+=Math.sqrt(P*Q);
+ }
+ if(Math.abs(brute-out[2].rootFidelity)>1e-12)throw Error("tree affinity recursion");
+ return out;
+}
+console.log(JSON.stringify({...verifyU1543(), exactTreeAffinity:exactTreeAffinity()},null,2));
