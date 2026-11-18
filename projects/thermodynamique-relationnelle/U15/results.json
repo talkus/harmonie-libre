@@ -1,0 +1,137 @@
+{
+  "rows": [
+    {
+      "m": 1,
+      "reference": [
+        [
+          1,
+          2
+        ]
+      ],
+      "prepared": [
+        [
+          2,
+          2
+        ]
+      ],
+      "states": 43,
+      "error_H0": 0.004,
+      "error_Hnonzero": 0.002
+    },
+    {
+      "m": 2,
+      "reference": [
+        [
+          2,
+          4
+        ]
+      ],
+      "prepared": [
+        [
+          3,
+          3
+        ]
+      ],
+      "states": 286,
+      "error_H0": 0.005600000000000001,
+      "error_Hnonzero": 0.0032
+    },
+    {
+      "m": 3,
+      "reference": [
+        [
+          3,
+          6
+        ]
+      ],
+      "prepared": [
+        [
+          4,
+          4
+        ]
+      ],
+      "states": 1572,
+      "error_H0": 0.006040000000000001,
+      "error_Hnonzero": 0.0038600000000000006
+    },
+    {
+      "m": 4,
+      "reference": [
+        [
+          4,
+          8
+        ]
+      ],
+      "prepared": [
+        [
+          5,
+          5
+        ]
+      ],
+      "states": 8058,
+      "error_H0": 0.006352,
+      "error_Hnonzero": 0.00416
+    },
+    {
+      "m": 5,
+      "reference": [
+        [
+          5,
+          10
+        ]
+      ],
+      "prepared": [
+        [
+          6,
+          6
+        ]
+      ],
+      "states": 39910,
+      "error_H0": 0.007310400000000001,
+      "error_Hnonzero": 0.0042242
+    }
+  ],
+  "visited": 49869,
+  "therm": {
+    "beta": 1,
+    "gap": 0.8472978603872037,
+    "p": 0.3,
+    "q": 0.1,
+    "eta": 0.01,
+    "m": 4,
+    "trace_error": 0.00416,
+    "reference_error_lower_bound": 0.05999999999999999,
+    "resource_free_energy_over_kBT": 0.7744334145317755,
+    "controller_reverse_relative_entropy": 0.777721988838985,
+    "controller_support": 3.4011973816621555
+  },
+  "growth": [
+    {
+      "exponent": 0,
+      "k": 2560,
+      "exported": 2550,
+      "depth": 5100,
+      "pure_inputs": 5100,
+      "targets_per_depth": 0.5,
+      "export_per_input": 0.5
+    },
+    {
+      "exponent": 0.5,
+      "k": 2560,
+      "exported": 2550,
+      "depth": 242,
+      "pure_inputs": 5100,
+      "targets_per_depth": 10.537190082644628,
+      "export_per_input": 0.5
+    },
+    {
+      "exponent": 1,
+      "k": 2560,
+      "exported": 2550,
+      "depth": 16,
+      "pure_inputs": 5100,
+      "targets_per_depth": 159.375,
+      "export_per_input": 0.5
+    }
+  ]
+}
