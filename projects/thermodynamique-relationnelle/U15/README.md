@@ -18,3 +18,6 @@ Provenance : reconstruction scientifique consolidée à partir des échanges du 
 ## Mise à jour U15.4.3 — audit des livrables 18–23
 - [Note corrective](U15_4_3.md) : théorème négatif de streaming à budget non renouvelé, temps corrigé, fidélité globale et témoin conditionnel à surcoût de couche.
 - [Vérification reproductible](verify_u15_4_3.js) et [résultats](results_u15_4_3.json). Exécuter `node verify_u15_4_3.js`. Aucun résultat expérimental.
+
+## Complément méthodologique (18 novembre 2026)
+- [Hypothèse H, anticipation récursive et protocoles de la revue T1–T6](COMPLEMENT_METHODOLOGIQUE.md) : composition ordonnée, non-négation et conservation des erreurs, témoin T3 exact à deux cibles. Les numéros historiques sont distingués de ceux du registre consolidé.
