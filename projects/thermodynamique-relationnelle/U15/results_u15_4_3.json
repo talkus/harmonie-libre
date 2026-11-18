@@ -1,0 +1,361 @@
+{
+  "counts": [
+    {
+      "n": 1,
+      "controllers": 2,
+      "exports": 1,
+      "gates": 2,
+      "layers": 2,
+      "timeRatio": 2
+    },
+    {
+      "n": 2,
+      "controllers": 4,
+      "exports": 3,
+      "gates": 6,
+      "layers": 4,
+      "timeRatio": 2
+    },
+    {
+      "n": 3,
+      "controllers": 8,
+      "exports": 7,
+      "gates": 14,
+      "layers": 6,
+      "timeRatio": 2
+    },
+    {
+      "n": 4,
+      "controllers": 16,
+      "exports": 15,
+      "gates": 30,
+      "layers": 8,
+      "timeRatio": 2
+    },
+    {
+      "n": 5,
+      "controllers": 32,
+      "exports": 31,
+      "gates": 62,
+      "layers": 10,
+      "timeRatio": 2
+    },
+    {
+      "n": 6,
+      "controllers": 64,
+      "exports": 63,
+      "gates": 126,
+      "layers": 12,
+      "timeRatio": 2
+    },
+    {
+      "n": 7,
+      "controllers": 128,
+      "exports": 127,
+      "gates": 254,
+      "layers": 14,
+      "timeRatio": 2
+    },
+    {
+      "n": 8,
+      "controllers": 256,
+      "exports": 255,
+      "gates": 510,
+      "layers": 16,
+      "timeRatio": 2
+    },
+    {
+      "n": 9,
+      "controllers": 512,
+      "exports": 511,
+      "gates": 1022,
+      "layers": 18,
+      "timeRatio": 2
+    },
+    {
+      "n": 10,
+      "controllers": 1024,
+      "exports": 1023,
+      "gates": 2046,
+      "layers": 20,
+      "timeRatio": 2
+    },
+    {
+      "n": 11,
+      "controllers": 2048,
+      "exports": 2047,
+      "gates": 4094,
+      "layers": 22,
+      "timeRatio": 2
+    },
+    {
+      "n": 12,
+      "controllers": 4096,
+      "exports": 4095,
+      "gates": 8190,
+      "layers": 24,
+      "timeRatio": 2
+    },
+    {
+      "n": 13,
+      "controllers": 8192,
+      "exports": 8191,
+      "gates": 16382,
+      "layers": 26,
+      "timeRatio": 2
+    },
+    {
+      "n": 14,
+      "controllers": 16384,
+      "exports": 16383,
+      "gates": 32766,
+      "layers": 28,
+      "timeRatio": 2
+    },
+    {
+      "n": 15,
+      "controllers": 32768,
+      "exports": 32767,
+      "gates": 65534,
+      "layers": 30,
+      "timeRatio": 2
+    },
+    {
+      "n": 16,
+      "controllers": 65536,
+      "exports": 65535,
+      "gates": 131070,
+      "layers": 32,
+      "timeRatio": 2
+    },
+    {
+      "n": 17,
+      "controllers": 131072,
+      "exports": 131071,
+      "gates": 262142,
+      "layers": 34,
+      "timeRatio": 2
+    },
+    {
+      "n": 18,
+      "controllers": 262144,
+      "exports": 262143,
+      "gates": 524286,
+      "layers": 36,
+      "timeRatio": 2
+    },
+    {
+      "n": 19,
+      "controllers": 524288,
+      "exports": 524287,
+      "gates": 1048574,
+      "layers": 38,
+      "timeRatio": 2
+    },
+    {
+      "n": 20,
+      "controllers": 1048576,
+      "exports": 1048575,
+      "gates": 2097150,
+      "layers": 40,
+      "timeRatio": 2
+    }
+  ],
+  "poisson": {
+    "lambda": 1000,
+    "T": 1000,
+    "M": 10000,
+    "lower": 490050000,
+    "upper": 500000000
+  },
+  "affinity": [
+    {
+      "n": 1,
+      "bound": 1
+    },
+    {
+      "n": 2,
+      "bound": 1
+    },
+    {
+      "n": 4,
+      "bound": 1
+    },
+    {
+      "n": 8,
+      "bound": 1
+    },
+    {
+      "n": 16,
+      "bound": 1
+    },
+    {
+      "n": 32,
+      "bound": 1
+    },
+    {
+      "n": 64,
+      "bound": 1
+    },
+    {
+      "n": 128,
+      "bound": 0.9467145634799348
+    },
+    {
+      "n": 256,
+      "bound": 0.8624753503204382
+    },
+    {
+      "n": 512,
+      "bound": 0.7723177058355697
+    },
+    {
+      "n": 1024,
+      "bound": 0.6285165560208763
+    }
+  ],
+  "slotted": {
+    "slots": 6,
+    "histories": 4096,
+    "paths": 714624
+  },
+  "witness": {
+    "n": 4,
+    "G": 15,
+    "a": 1,
+    "s": 3,
+    "genTime": 54,
+    "fixedTime": 60,
+    "genTokens": 30,
+    "fixedTokens": 15,
+    "width": 16
+  },
+  "exactTreeAffinity": [
+    {
+      "n": 0,
+      "controllers": 1,
+      "rootFidelity": 0.999598017588335,
+      "squaredFidelity": 0.9991961967665293
+    },
+    {
+      "n": 1,
+      "controllers": 2,
+      "rootFidelity": 0.9976114963842551,
+      "squaredFidelity": 0.9952286977180326
+    },
+    {
+      "n": 2,
+      "controllers": 4,
+      "rootFidelity": 0.9935700251997996,
+      "squaredFidelity": 0.9871813949755305
+    },
+    {
+      "n": 3,
+      "controllers": 8,
+      "rootFidelity": 0.985455188976823,
+      "squaredFidelity": 0.971121929481346
+    },
+    {
+      "n": 4,
+      "controllers": 16,
+      "rootFidelity": 0.9693432214246266,
+      "squaredFidelity": 0.9396262809218726
+    },
+    {
+      "n": 5,
+      "controllers": 32,
+      "rootFidelity": 0.9378267545545877,
+      "squaredFidelity": 0.879519021558391
+    },
+    {
+      "n": 6,
+      "controllers": 64,
+      "rootFidelity": 0.8777610342991413,
+      "squaredFidelity": 0.7704644333338984
+    },
+    {
+      "n": 7,
+      "controllers": 128,
+      "rootFidelity": 0.7688602901213142,
+      "squaredFidelity": 0.5911461457254314
+    },
+    {
+      "n": 8,
+      "controllers": 256,
+      "rootFidelity": 0.5898667215179114,
+      "squaredFidelity": 0.34794274915428924
+    },
+    {
+      "n": 9,
+      "controllers": 512,
+      "rootFidelity": 0.34716162235027953,
+      "squaredFidelity": 0.1205211920328781
+    },
+    {
+      "n": 10,
+      "controllers": 1024,
+      "rootFidelity": 0.12024117050088724,
+      "squaredFidelity": 0.014457939083423436
+    },
+    {
+      "n": 11,
+      "controllers": 2048,
+      "rootFidelity": 0.014423255499359923,
+      "squaredFidelity": 0.00020803029919981626
+    },
+    {
+      "n": 12,
+      "controllers": 4096,
+      "rootFidelity": 0.00020751629789853408,
+      "squaredFidelity": 4.306301389351314e-8
+    },
+    {
+      "n": 13,
+      "controllers": 8192,
+      "rootFidelity": 4.295370685978001e-8,
+      "squaredFidelity": 1.8450209329959127e-15
+    },
+    {
+      "n": 14,
+      "controllers": 16384,
+      "rootFidelity": 1.840222567547829e-15,
+      "squaredFidelity": 3.386419098112325e-30
+    },
+    {
+      "n": 15,
+      "controllers": 32768,
+      "rootFidelity": 3.3774203792928346e-30,
+      "squaredFidelity": 1.1406968418462554e-59
+    },
+    {
+      "n": 16,
+      "controllers": 65536,
+      "rootFidelity": 1.1376085622762548e-59,
+      "squaredFidelity": 1.2941532409642474e-118
+    },
+    {
+      "n": 17,
+      "controllers": 131072,
+      "rootFidelity": 1.2905939981842552e-118,
+      "squaredFidelity": 1.6656328681492214e-236
+    },
+    {
+      "n": 18,
+      "controllers": 262144,
+      "rootFidelity": 1.660993499383501e-236,
+      "squaredFidelity": 0
+    },
+    {
+      "n": 19,
+      "controllers": 524288,
+      "rootFidelity": 0,
+      "squaredFidelity": 0
+    },
+    {
+      "n": 20,
+      "controllers": 1048576,
+      "rootFidelity": 0,
+      "squaredFidelity": 0
+    }
+  ]
+}

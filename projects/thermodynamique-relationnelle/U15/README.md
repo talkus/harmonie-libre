@@ -14,3 +14,10 @@ Exécuter : `node verify.js` (Node.js, aucune dépendance). Les résultats sont 
 Ce dossier préserve les objections, distingue les définitions des preuves et ne confond pas les propositions du programme avec des connaissances validées indépendamment. Voir aussi [protocole existant](../VALIDATION_EXTERNE.md).
 
 Provenance : reconstruction scientifique consolidée à partir des échanges du 17 novembre 2026, y compris les revues critiques U15–U15.4 fournies par le porteur du projet. Les sources U0–U14.3 originales ne sont pas reproduites intégralement dans ce dossier. Les comptes rendus de versions antérieures ne sont pas des fac-similés.
+
+## Mise à jour U15.4.3 — audit des livrables 18–23
+- [Note corrective](U15_4_3.md) : théorème négatif de streaming à budget non renouvelé, temps corrigé, fidélité globale et témoin conditionnel à surcoût de couche.
+- [Vérification reproductible](verify_u15_4_3.js) et [résultats](results_u15_4_3.json). Exécuter `node verify_u15_4_3.js`. Aucun résultat expérimental.
+
+## Complément méthodologique (18 novembre 2026)
+- [Hypothèse H, anticipation récursive et protocoles de la revue T1–T6](COMPLEMENT_METHODOLOGIQUE.md) : composition ordonnée, non-négation et conservation des erreurs, témoin T3 exact à deux cibles. Les numéros historiques sont distingués de ceux du registre consolidé.
